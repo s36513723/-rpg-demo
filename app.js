@@ -6,7 +6,7 @@ function fillCharSelect(){
     o.value=u.id;
     const done=!!u.queued;
     o.textContent=`${done?"✓ ":""}${u.name}｜${u.style}`;
-    o.disabled=done || !u.alive || phase!=="command";
+    o.disabled=!u.alive || !["command","ready"].includes(phase);
     E.charSelect.appendChild(o);
   });
   const cur=current();
@@ -41,11 +41,11 @@ function adv(){
 }
 function enough(a,s){return !s.costType|| (s.costType==="SP"?a.sp>=s.cost:a.mp>=s.cost)}
 function spend(a,s){if(s.costType==="SP")a.sp-=s.cost;if(s.costType==="MP")a.mp-=s.cost}
-function queue(){const a=current(),act=selected();if(!a||!act)return;const list=act.target==="ally"?party:enemies,t=list.find(x=>x.id===E.target.value);if(!t){lg("有効な対象がありません。","bad");return}if(act.target!=="ally"&&!reach(a,t,act.range)){lg("その対象には届きません。","bad");return}if(act.kind!=="attack"&&!enough(a,act)){lg(`${a.name}は${act.costType}不足。`,"bad");return}if(act.kind!=="attack")spend(a,act);a.queued={type:act.kind==="attack"?"attack":"skill",action:act,targetId:t.id};lg(`${a.name}: ${act.kind==="attack"?a.weapon.name:act.name} → ${t.name}`);adv()}
+function queue(){const a=current(),act=selected();if(!a||!act)return;const list=act.target==="ally"?party:enemies,t=list.find(x=>x.id===E.target.value);if(!t){lg("有効な対象がありません。","bad");return}if(act.target!=="ally"&&!reach(a,t,act.range)){lg("その対象には届きません。","bad");return}if(act.kind!=="attack"&&!enough(a,act)){lg(`${a.name}は${act.costType}不足。`,"bad");return}a.defending=false;a.queued={type:act.kind==="attack"?"attack":"skill",action:act,targetId:t.id};lg(`${a.name}: ${act.kind==="attack"?a.weapon.name:act.name} → ${t.name}`);adv()}
 function defend(){const a=current();if(!a)return;a.defending=true;a.queued={type:"defend"};lg(`${a.name}は防御。`);adv()}
-function wait(){const a=current();if(!a)return;a.queued={type:"wait"};lg(`${a.name}は待機。`);adv()}
-function escape(){const a=current();if(!a)return;if(a.status.legBind>0){lg("脚封じで逃走できません。","bad");return}a.queued={type:"escape"};lg(`${a.name}は逃走を試みる。`);adv()}
-function swap(){const a=current(),b=party.find(x=>x.id===E.swapSel.value);if(!a||!b)return;if(a.status.legBind>0){lg("脚封じで列変更できません。","bad");return}a.queued={type:"swap",swapId:b.id};lg(`${a.name}は${b.name}との列変更を予約。`);adv()}
+function wait(){const a=current();if(!a)return;a.defending=false;a.queued={type:"wait"};lg(`${a.name}は待機。`);adv()}
+function escape(){const a=current();if(!a)return;if(a.status.legBind>0){lg("脚封じで逃走できません。","bad");return}a.defending=false;a.queued={type:"escape"};lg(`${a.name}は逃走を試みる。`);adv()}
+function swap(){const a=current(),b=party.find(x=>x.id===E.swapSel.value);if(!a||!b)return;if(a.status.legBind>0){lg("脚封じで列変更できません。","bad");return}a.defending=false;a.queued={type:"swap",swapId:b.id};lg(`${a.name}は${b.name}との列変更を予約。`);adv()}
 function sw(){const a=current();if(!a)return;a.wi=a.wi?0:1;a.weapon=W[a.weapons[a.wi]];lg(`${a.name}は${a.weapon.name}へ換装。`,"sys");render()}
 function am(t,a){if(t.weak?.[a])return t.weak[a];if(t.resist?.[a])return t.resist[a];return 1}
 function hit(att,t,act,weaponBased){if(t.status?.legBind>0)return 100;let h=90+(att.SKL-t.SKL)*.5+(act.hit||0);if(weaponBased)h+=(att.weapon.hit||0)+terrain.wHit(att.weapon);return Math.max(30,Math.min(100,h))}
@@ -56,8 +56,9 @@ function statuses(a,t,s){[["poison","猛毒",s.poison,3],["stun","気絶",s.stun
 function death(u){if(u.hp<=0&&u.alive){u.hp=0;u.alive=false;lg(`${u.name}は戦闘不能。`,"sys")}}
 function heroAct(a){const q=a.queued;if(!q||!a.alive)return;if(a.status.stun>0){lg(`${a.name}は気絶して動けない。`,"bad");return}if(["defend","wait","swap"].includes(q.type))return;if(q.type==="escape"){const p=alive(party),e=alive(enemies),ap=p.reduce((s,x)=>s+x.SKL,0)/p.length,ae=e.reduce((s,x)=>s+x.SKL,0)/e.length,c=Math.max(20,Math.min(90,55+(ap-ae)*.7));if(Math.random()*100<c){finish("escape");return}lg(`${a.name}の逃走は失敗。`,"bad");return}
 const act=q.type==="attack"?{kind:"attack",range:a.weapon.range,target:"enemy",hit:0,speed:0}:q.action;
-if(act.heal){const t=party.find(x=>x.id===q.targetId&&x.alive);if(!t)return;const n=Math.floor(12+a.MND*.8);t.hp=Math.min(t.maxHp,t.hp+n);lg(`${a.name}の${act.name}。${t.name}が${n}回復。`,"ok");return}
 if(a.status.headBind>0&&act.kind==="spell"){lg(`${a.name}は頭封じで${act.name}を使えない。`,"bad");return}
+if(q.type==="skill"){if(!enough(a,act)){lg(`${a.name}は${act.costType}不足で${act.name}を使えない。`,"bad");return}spend(a,act)}
+if(act.heal){const t=party.find(x=>x.id===q.targetId&&x.alive);if(!t)return;const n=Math.floor(12+a.MND*.8);t.hp=Math.min(t.maxHp,t.hp+n);lg(`${a.name}の${act.name}。${t.name}が${n}回復。`,"ok");return}
 let t=enemies.find(x=>x.id===q.targetId&&x.alive);if(!t||!reach(a,t,act.range))t=alive(enemies).find(e=>reach(a,e,act.range));if(!t){lg(`${a.name}には有効な対象がない。`,"bad");return}
 const wb=act.kind==="attack"||act.kind==="skill";if(Math.random()*100>hit(a,t,act,wb)){lg(`${a.name}の${act.kind==="attack"?a.weapon.name:act.name}は外れた。`,"bad");return}
 const r=damage(a,t,act);t.hp-=r.d;lg(`${a.name}の${act.kind==="attack"?a.weapon.name:act.name} → ${t.name} ${r.d}ダメージ${r.cr?" CRITICAL":""}${r.weak?" 弱点":""}`,r.weak?"ok":"");if(act.kind!=="attack")statuses(a,t,act);death(t)}
@@ -75,14 +76,15 @@ E.defend.addEventListener("click",defend);
 E.wait.addEventListener("click",wait);
 E.escape.addEventListener("click",escape);
 E.swap.addEventListener("click",swap);
+E.prev.addEventListener("click",()=>{if(over||!["command","ready"].includes(phase))return;for(let step=1;step<=party.length;step++){const ni=(idx-step+party.length)%party.length;if(party[ni].alive){idx=ni;phase="command";render();return}}});
 E.switch.addEventListener("click",sw);
 E.resolve.addEventListener("click",resolve);
 E.newB.addEventListener("click",fresh);
 E.clear.addEventListener("click",()=>E.log.innerHTML="");
 E.charSelect.addEventListener("change",()=>{
-  if(phase!=="command")return;
-  const ni=party.findIndex(x=>x.id===E.charSelect.value && x.alive && !x.queued);
-  if(ni>=0){idx=ni;render();}
+  if(!["command","ready"].includes(phase))return;
+  const ni=party.findIndex(x=>x.id===E.charSelect.value && x.alive);
+  if(ni>=0){idx=ni;phase="command";render();}
 });
 [E.pf,E.pb].forEach(box=>{
   box.addEventListener("click",ev=>{
@@ -90,9 +92,8 @@ E.charSelect.addEventListener("change",()=>{
     if(!c)return;
     const ni=party.findIndex(x=>x.id===c.dataset.charId);
     if(ni<0)return;
-    if(phase==="command"&&party[ni].alive&&!party[ni].queued){
-      idx=ni;
-      render();
+    if(["command","ready"].includes(phase)&&party[ni].alive){
+      idx=ni;phase="command";render();
     }else{
       renderCharDetail(party[ni].id);
     }
@@ -104,9 +105,8 @@ E.charSelect.addEventListener("change",()=>{
     ev.preventDefault();
     const ni=party.findIndex(x=>x.id===c.dataset.charId);
     if(ni<0)return;
-    if(phase==="command"&&party[ni].alive&&!party[ni].queued){
-      idx=ni;
-      render();
+    if(["command","ready"].includes(phase)&&party[ni].alive){
+      idx=ni;phase="command";render();
     }else{
       renderCharDetail(party[ni].id);
     }
