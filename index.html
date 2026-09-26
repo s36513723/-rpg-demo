@@ -1,72 +1,53 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>6人パーティ戦闘デモ</title><link rel="stylesheet" href="style-v2.css"></head><body><main>
-<div class="top"><div><h1>6人パーティ戦闘デモ</h1><div class="muted">1ファイルHTML。前後列・射程・弱点・SP/MP・状態異常・換装を試せます。</div></div>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>6人パーティ戦闘デモ</title><link rel="stylesheet" href="style-v3.css"></head><body><main>
+<div class="top"><div><h1>6人パーティ戦闘デモ</h1><div class="muted">前後列・射程・弱点・SP/MP・状態異常・換装を試せます。</div></div>
 <div class="pills"><span id="engineStatus" class="pill" style="color:var(--warn)">JavaScript未実行</span><span id="round" class="pill">Round 1</span><span id="terrain" class="pill">地形: 読込前</span><span id="phase" class="pill">待機</span></div></div>
 
-<div class="rowtitle"><span>敵 後列</span><span>④－⑤－⑥</span></div><div id="eb" class="row">
-<div class="unit"><div class="name">弓兵</div><div class="muted">敵・後列</div></div>
-<div class="unit"><div class="name">魔術師</div><div class="muted">敵・後列</div></div>
-</div>
-<div class="rowtitle"><span>敵 前列</span><span>①－②－③</span></div><div id="ef" class="row">
-<div class="unit"><div class="name">重装兵A</div><div class="muted">敵・前列</div></div>
-<div class="unit"><div class="name">重装兵B</div><div class="muted">敵・前列</div></div>
-</div>
+<div class="rowtitle"><span>敵 後列</span><span>④－⑤－⑥</span></div><div id="eb" class="row"></div>
+<div class="rowtitle"><span>敵 前列</span><span>①－②－③</span></div><div id="ef" class="row"></div>
 <div class="divider"></div>
-<div class="rowtitle"><span>味方 前列</span><span>①－②－③</span></div><div id="pf" class="row">
-<div class="unit"><div class="name">ガルド</div><div class="muted">ウォーリアー・前列</div></div>
-<div class="unit"><div class="name">リゼ</div><div class="muted">ローグ・前列</div></div>
-<div class="unit"><div class="name">エルン</div><div class="muted">ルーンフェンサー・前列</div></div>
-</div>
-<div class="rowtitle"><span>味方 後列</span><span>④－⑤－⑥</span></div><div id="pb" class="row">
-<div class="unit"><div class="name">セナ</div><div class="muted">レンジャー・後列</div></div>
-<div class="unit"><div class="name">ミレア</div><div class="muted">アルカニスト・後列</div></div>
-<div class="unit"><div class="name">ユナ</div><div class="muted">ミスティック・後列</div></div>
-</div>
+<div class="rowtitle"><span>味方 前列</span><span>①－②－③</span></div><div id="pf" class="row"></div>
+<div class="rowtitle"><span>味方 後列</span><span>④－⑤－⑥</span></div><div id="pb" class="row"></div>
 
-<section class="panel">
-<div class="top"><div><strong>行動入力キャラ / キャラクターデータ</strong><div class="muted">選んだキャラに行動欄が即切り替わります。入力済みキャラにも戻って行動を変更できます。</div></div><select id="charSelect" style="max-width:260px">
-<option value="war">ガルド｜ウォーリアー</option>
-<option value="rog">リゼ｜ローグ</option>
-<option value="run">エルン｜ルーンフェンサー</option>
-<option value="ran">セナ｜レンジャー</option>
-<option value="arc">ミレア｜アルカニスト</option>
-<option value="mys">ユナ｜ミスティック</option>
-</select></div>
-<div id="charDetail" style="margin-top:10px"></div>
-</section>
+<section class="panel command-panel">
+  <div class="command-head">
+    <div>
+      <div class="muted">現在の入力</div>
+      <div id="actor" class="actor-name">-</div>
+      <div id="ainfo" class="muted">味方カードをタップすると入力キャラを変更できます。</div>
+    </div>
+    <div class="pills"><button id="new" class="secondary" type="button">新しい戦闘</button><button id="resolve" class="primary" type="button" disabled>ラウンド開始</button></div>
+  </div>
 
-<section class="panel">
-<div class="top"><div><div class="muted">現在の入力</div><div id="actor" style="font-weight:800">-</div><div id="ainfo" class="muted"></div></div>
-<div class="pills"><button id="prev" class="secondary" type="button">← 前のキャラ</button><button id="switch" class="secondary" type="button">換装</button><button id="new" class="secondary" type="button">新しい戦闘</button><button id="resolve" class="primary" type="button" disabled>ラウンド開始</button></div></div>
-<div class="actiongrid">
-<div class="box">
-<label for="action">行動</label><select id="action">
-<option value="attack">通常攻撃：戦槌</option>
-<option value="0">破砕撃（SP10 / 近）</option>
-<option value="1">震撃（SP15 / 近）</option>
-</select>
-<label for="target" style="margin-top:8px">対象</label><select id="target">
-<option value="g1">重装兵A（前 / HP155）</option>
-<option value="g2">重装兵B（前 / HP145）</option>
-</select>
-<div class="btngrid"><button id="queue" class="primary" type="button">この行動で決定</button><button id="defend" class="secondary" type="button">防御</button></div>
-</div>
-<div class="box">
-<label for="swapSel">列変更</label><select id="swapSel">
-<option value="ran">セナと交代</option>
-<option value="arc">ミレアと交代</option>
-<option value="mys">ユナと交代</option>
-</select>
-<div class="btngrid three"><button id="swap" class="secondary" type="button">交代</button><button id="escape" class="secondary" type="button">逃走</button><button id="wait" class="secondary" type="button">待機</button></div>
-<div class="notice">魔術・符術の射程は武器とは独立。杖が近距離でも「火球」「大火炎」「頭封じの符」は遠距離として敵後列を指定できます。</div>
-</div>
-</div>
+  <div class="command-stack">
+    <label for="weaponSelect">換装</label>
+    <select id="weaponSelect"></select>
+    <button id="switch" class="secondary full" type="button">換装</button>
+
+    <label for="action">行動</label>
+    <select id="action"></select>
+
+    <label for="target">対象</label>
+    <select id="target"></select>
+
+    <label for="swapSel">列変更</label>
+    <select id="swapSel"></select>
+
+    <div class="command-buttons">
+      <button id="defend" class="secondary" type="button">防御</button>
+      <button id="escape" class="secondary" type="button">逃走</button>
+    </div>
+
+    <div class="command-buttons">
+      <button id="queue" class="primary" type="button">行動決定</button>
+      <button id="swap" class="secondary" type="button">列変更</button>
+    </div>
+  </div>
 </section>
 
 <div id="jsWarning" class="panel" style="border-color:#8b6b2d;background:#211b10">
 <strong>操作できない場合</strong>
-<div class="muted" style="margin-top:5px">この画面が残っている場合、HTMLプレビューでJavaScriptが実行されていません。ファイル自体は通常のブラウザでは動作します。PCのChrome / Edge / Safari等で開くか、Web上に公開したURLから開いてください。</div>
+<div class="muted" style="margin-top:5px">この表示が残っている場合、JavaScriptが実行されていません。</div>
 </div>
 <section class="panel"><div class="top"><strong>戦闘ログ</strong><button id="clear" class="secondary" type="button">ログ消去</button></div><div id="log" class="log" aria-live="polite"></div></section>
 <div id="result" class="result hidden"><div id="rtitle" style="font-size:20px;font-weight:800"></div><div id="rtext" class="muted" style="margin-top:4px"></div></div>
-
-<script src="data-v2.js"></script><script src="app-v2.js"></script></main></body></html>
+<script src="data-v3.js"></script><script src="app-v3.js"></script></main></body></html>
