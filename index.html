@@ -23,7 +23,7 @@
 </div>
 
 <section class="panel">
-<div class="top"><div><strong>行動入力キャラ / キャラクターデータ</strong><div class="muted">選んだキャラに行動欄が即切り替わります。行動決定後は次の未入力キャラへ自動移動します。</div></div><select id="charSelect" style="max-width:260px">
+<div class="top"><div><strong>行動入力キャラ / キャラクターデータ</strong><div class="muted">選んだキャラに行動欄が即切り替わります。入力済みキャラにも戻って行動を変更できます。</div></div><select id="charSelect" style="max-width:260px">
 <option value="war">ガルド｜ウォーリアー</option>
 <option value="rog">リゼ｜ローグ</option>
 <option value="run">エルン｜ルーンフェンサー</option>
@@ -36,7 +36,7 @@
 
 <section class="panel">
 <div class="top"><div><div class="muted">現在の入力</div><div id="actor" style="font-weight:800">-</div><div id="ainfo" class="muted"></div></div>
-<div class="pills"><button id="switch" class="secondary" type="button">換装</button><button id="new" class="secondary" type="button">新しい戦闘</button><button id="resolve" class="primary" type="button" disabled>ラウンド開始</button></div></div>
+<div class="pills"><button id="prev" class="secondary" type="button">← 前のキャラ</button><button id="switch" class="secondary" type="button">換装</button><button id="new" class="secondary" type="button">新しい戦闘</button><button id="resolve" class="primary" type="button" disabled>ラウンド開始</button></div></div>
 <div class="actiongrid">
 <div class="box">
 <label for="action">行動</label><select id="action">
