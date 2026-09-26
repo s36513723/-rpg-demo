@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>6人パーティ戦闘デモ</title><link rel="stylesheet" href="style-v12.css"></head><body><main>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>6人パーティ戦闘デモ</title><link rel="stylesheet" href="style-v13.css"></head><body><main>
 <div class="title-row"><h1>6人パーティ戦闘デモ</h1><span id="engineStatus" class="js-status" style="color:var(--warn)">JavaScript未実行</span></div>
 
 <div id="eb" class="row battlefield-row"></div>
@@ -11,8 +11,8 @@
   <div class="command-head"><div id="actor" class="actor-name">-</div><div class="command-main-actions"><span id="round" class="round-inline">Round 1</span><button id="new" class="secondary" type="button">新しい戦闘</button><button id="resolve" class="primary" type="button" disabled>ラウンド開始</button></div></div>
 
   <div class="command-stack">
-    <div class="terrain-switch-row"><button id="switch" class="secondary" type="button">換装</button><div id="terrainEffect" class="terrain-effect"></div></div>
-    <div class="field-row"><label for="action">行動</label><select id="action"></select></div>
+    <div id="terrainEffect" class="terrain-effect plain"></div>
+    <div class="field-row action-row"><button id="switch" class="secondary" type="button">換装</button><select id="action"></select></div>
 
     <select id="target" class="target-state" tabindex="-1" aria-hidden="true"></select>
 
@@ -31,4 +31,4 @@
 </div>
 <section class="panel log-panel"><div id="log" class="log" aria-live="polite"></div></section>
 <div id="result" class="result hidden"><div id="rtitle" style="font-size:20px;font-weight:800"></div><div id="rtext" class="muted" style="margin-top:4px"></div></div>
-<script src="data-v10.js"></script><script src="app-v12.js"></script></main></body></html>
+<script src="data-v10.js"></script><script src="app-v13.js"></script></main></body></html>
