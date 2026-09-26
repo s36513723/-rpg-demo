@@ -1,8 +1,7 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>6人パーティ戦闘デモ</title><link rel="stylesheet" href="style-v7.css"></head><body><main>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>6人パーティ戦闘デモ</title><link rel="stylesheet" href="style-v8.css"></head><body><main>
 <div class="top"><div><h1>6人パーティ戦闘デモ</h1></div>
 <div class="pills"><span id="engineStatus" class="pill" style="color:var(--warn)">JavaScript未実行</span><span id="round" class="pill">Round 1</span><span id="terrain" class="pill">地形: 読込前</span><span id="phase" class="pill">待機</span></div></div>
 
-<div class="battle-actions"><button id="new" class="secondary" type="button">新しい戦闘</button><button id="resolve" class="primary" type="button" disabled>ラウンド開始</button></div>
 <div id="eb" class="row battlefield-row"></div>
 <div id="ef" class="row battlefield-row"></div>
 <div class="divider"></div>
@@ -10,10 +9,10 @@
 <div id="pb" class="row battlefield-row"></div>
 
 <section class="panel command-panel">
-  <div class="command-head"><div id="actor" class="actor-name">-</div></div>
+  <div class="command-head"><div id="actor" class="actor-name">-</div><div class="command-main-actions"><button id="new" class="secondary" type="button">新しい戦闘</button><button id="resolve" class="primary" type="button" disabled>ラウンド開始</button></div></div>
 
   <div class="command-stack">
-    <div class="terrain-switch-row"><div id="terrainEffect" class="terrain-effect"></div><button id="switch" class="secondary" type="button">換装</button></div>
+    <div class="terrain-switch-row"><button id="switch" class="secondary" type="button">換装</button><div id="terrainEffect" class="terrain-effect"></div></div>
     <div class="field-row"><label for="action">行動</label><select id="action"></select></div>
 
     <div class="field-row"><label for="target">対象</label><select id="target"></select></div>
