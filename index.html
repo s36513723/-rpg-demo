@@ -1,34 +1,56 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>6人パーティ戦闘デモ</title><link rel="stylesheet" href="style-v19.css"></head><body><main>
-<div class="title-row"><div class="title-main"><h1>6人パーティ戦闘デモ</h1><span id="engineStatus" class="js-status" style="color:var(--warn)">JavaScript未実行</span></div><button id="new" class="secondary title-new" type="button">新しい戦闘</button></div>
-
-<div id="eb" class="row battlefield-row"></div>
-<div id="ef" class="row battlefield-row"></div>
-<div class="divider"></div>
-<div id="pf" class="row battlefield-row"></div>
-<div id="pb" class="row battlefield-row"></div>
-
-<section class="panel command-panel">
-  <div class="command-head"><div id="actor" class="actor-name">-</div><div class="command-main-actions"><span id="round" class="round-inline">Round 1</span><button id="resolve" class="primary" type="button" disabled>ラウンド開始</button><button id="auto" class="secondary auto-button" type="button">Auto</button></div></div>
-  <div id="battleMessage" class="battle-message" aria-live="assertive"><div id="battleMessageText" class="battle-message-text"></div></div>
-
-  <div class="command-stack">
-    <div id="terrainEffect" class="terrain-effect plain"></div>
-    <div class="field-row action-row"><button id="switch" class="secondary" type="button">換装</button><select id="action"></select></div>
-
-    <select id="target" class="target-state" tabindex="-1" aria-hidden="true"></select>
-
-    <div class="command-buttons four">
-      <button id="queue" class="primary" type="button">決定</button>
-      <button id="swap" class="secondary" type="button">交代</button>
-      <button id="defend" class="secondary" type="button">防御</button>
-      <button id="escape" class="secondary" type="button">逃走</button>
+<!doctype html>
+<html lang="ja" data-build="29">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10151c">
+<title>6人パーティ戦闘デモ</title>
+<link rel="stylesheet" href="ui-v29.css">
+<script src="battle-v29.js" defer></script>
+</head>
+<body>
+<main id="game">
+  <header class="masthead">
+    <div class="brand"><h1>6人パーティ戦闘デモ</h1><span id="engineStatus" class="engine-status" title="JavaScript読込中">JS <i></i></span></div>
+    <button id="new" class="quiet" type="button">新しい戦闘</button>
+  </header>
+  <section id="battlefield" class="battlefield" aria-label="戦闘配置">
+    <div id="eb" class="row enemy-row" role="group" aria-label="敵・後列"></div>
+    <div id="ef" class="row enemy-row" role="group" aria-label="敵・前列"></div>
+    <div class="battle-divider" aria-hidden="true"><span>◇</span></div>
+    <div id="pf" class="row ally-row" role="group" aria-label="味方・前列"></div>
+    <div id="pb" class="row ally-row" role="group" aria-label="味方・後列"></div>
+  </section>
+  <section id="commandPanel" class="command-panel" aria-label="コマンド">
+    <div class="command-head">
+      <button id="actor" class="actor-button" type="button" aria-label="操作するメンバーを変更" aria-haspopup="dialog"><span id="actorName">ガルド</span><small id="actorJob"></small><span class="chevron">⌄</span></button>
+      <div class="round-actions"><span id="round" class="round">R<span>1</span></span><button id="resolve" type="button" class="round-start" disabled>ラウンド開始</button><button id="auto" type="button" class="quiet" title="未入力の行動を決め、このラウンドだけ自動戦闘">Auto</button></div>
     </div>
-  </div>
-</section>
-
-<div id="jsWarning" class="panel" style="border-color:#8b6b2d;background:#211b10">
-<strong>操作できない場合</strong>
-<div class="muted" style="margin-top:5px">この表示が残っている場合、JavaScriptが実行されていません。</div>
-</div>
-<section class="panel log-panel"><div id="log" class="log" aria-live="polite"></div></section>
-<script src="data-v17.js"></script><script src="app-v20.js"></script></main></body></html>
+    <div class="command-body">
+      <div id="commandInput" class="command-input">
+        <p id="terrainEffect" class="terrain-text"></p>
+        <div class="action-row"><button id="switch" class="quiet" type="button">換装</button><button id="actionButton" class="action-picker" type="button" aria-haspopup="dialog"><span><b id="actionName">通常攻撃</b><small id="actionMeta"></small></span><span class="chevron">⌃</span></button></div>
+        <div id="targetHint" class="target-hint" aria-live="polite"></div>
+        <div class="command-buttons"><button id="queue" class="confirm" type="button">決定</button><button id="swap" class="quiet" type="button">交代</button><button id="defend" class="quiet" type="button">防御</button><button id="escape" class="quiet" type="button">逃走</button></div>
+      </div>
+      <div id="battleMessage" class="battle-message" hidden>
+        <div class="playback-tools"><span id="playbackTitle">行動中</span><div><button id="pace" type="button">ゆっくり</button><button id="pause" type="button" aria-pressed="false">一時停止</button></div></div>
+        <p id="battleMessageText" role="status" aria-live="polite"></p>
+        <button id="nextMessage" class="next-message" type="button">次へ <span aria-hidden="true">›</span></button>
+      </div>
+    </div>
+  </section>
+  <details id="history" class="history">
+    <summary><span>履歴 <small id="logCount">0</small></span><span id="lastLog" class="last-log"></span><span class="chevron">⌄</span></summary>
+    <div id="log" class="log" role="log" aria-live="off" tabindex="0" aria-label="戦闘の履歴"></div>
+  </details>
+  <div id="notice" role="status" class="notice" hidden></div>
+  <noscript>ゲームを遊ぶにはJavaScriptを有効にしてください。</noscript>
+</main>
+<dialog id="choiceSheet" class="choice-sheet" aria-labelledby="sheetTitle">
+  <div class="sheet-handle" aria-hidden="true"></div>
+  <header class="sheet-head"><div><small id="sheetKicker">SKILLS</small><h2 id="sheetTitle">行動を選択</h2></div><button id="closeSheet" class="quiet" type="button" aria-label="閉じる">×</button></header>
+  <div id="sheetList" class="sheet-list"></div>
+</dialog>
+</body>
+</html>
