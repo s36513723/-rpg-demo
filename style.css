@@ -28,4 +28,4 @@ button{min-height:42px;border-radius:9px;padding:8px 11px}.primary{border:0;back
 .unit.inspectable{cursor:pointer}
 .unit.inspectable:hover{border-color:var(--ac)}
 @media(max-width:700px){.char-head{grid-template-columns:1fr}.char-stats{grid-template-columns:repeat(2,1fr)}.char-res{grid-template-columns:repeat(2,1fr)}.equip-grid{grid-template-columns:1fr}}
-@media(max-width:700px){.row,.actiongrid{grid-template-columns:1fr}.btngrid.three{grid-template-columns:1fr}}
+@media(max-width:700px){.actiongrid{grid-template-columns:1fr}.btngrid.three{grid-template-columns:1fr}.row{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.unit{padding:7px;border-radius:9px}.name{font-size:12px}.unit .muted{font-size:10px}.unit .tag{font-size:10px;padding:2px 5px}.res{grid-template-columns:1fr;gap:3px}.bar{height:5px}}
