@@ -1,25 +1,19 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>6人パーティ戦闘デモ</title><link rel="stylesheet" href="style-v6.css"></head><body><main>
-<div class="top"><div><h1>6人パーティ戦闘デモ</h1><div class="muted">前後列・射程・弱点・SP/MP・状態異常・換装を試せます。</div></div>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>6人パーティ戦闘デモ</title><link rel="stylesheet" href="style-v7.css"></head><body><main>
+<div class="top"><div><h1>6人パーティ戦闘デモ</h1></div>
 <div class="pills"><span id="engineStatus" class="pill" style="color:var(--warn)">JavaScript未実行</span><span id="round" class="pill">Round 1</span><span id="terrain" class="pill">地形: 読込前</span><span id="phase" class="pill">待機</span></div></div>
 
-<div class="rowtitle"><span>敵 後列</span><span>④－⑤－⑥</span></div><div id="eb" class="row"></div>
-<div class="rowtitle"><span>敵 前列</span><span>①－②－③</span></div><div id="ef" class="row"></div>
+<div class="battle-actions"><button id="new" class="secondary" type="button">新しい戦闘</button><button id="resolve" class="primary" type="button" disabled>ラウンド開始</button></div>
+<div id="eb" class="row battlefield-row"></div>
+<div id="ef" class="row battlefield-row"></div>
 <div class="divider"></div>
-<div class="rowtitle"><span>味方 前列</span><span>①－②－③</span></div><div id="pf" class="row"></div>
-<div class="rowtitle"><span>味方 後列</span><span>④－⑤－⑥</span></div><div id="pb" class="row"></div>
+<div id="pf" class="row battlefield-row"></div>
+<div id="pb" class="row battlefield-row"></div>
 
 <section class="panel command-panel">
-  <div class="command-head">
-    <div>
-      <div class="muted">現在の入力</div>
-      <div id="actor" class="actor-name">-</div>
-      <div id="ainfo" class="muted">味方カードをタップすると入力キャラを変更できます。</div>
-    </div>
-    <div class="pills"><button id="switch" class="secondary" type="button">換装</button><button id="new" class="secondary" type="button">新しい戦闘</button><button id="resolve" class="primary" type="button" disabled>ラウンド開始</button></div>
-  </div>
+  <div class="command-head"><div id="actor" class="actor-name">-</div></div>
 
   <div class="command-stack">
-    <div id="terrainEffect" class="terrain-effect"></div>
+    <div class="terrain-switch-row"><div id="terrainEffect" class="terrain-effect"></div><button id="switch" class="secondary" type="button">換装</button></div>
     <div class="field-row"><label for="action">行動</label><select id="action"></select></div>
 
     <div class="field-row"><label for="target">対象</label><select id="target"></select></div>
@@ -39,4 +33,4 @@
 </div>
 <section class="panel"><div class="top"><strong>戦闘ログ</strong><button id="clear" class="secondary" type="button">ログ消去</button></div><div id="log" class="log" aria-live="polite"></div></section>
 <div id="result" class="result hidden"><div id="rtitle" style="font-size:20px;font-weight:800"></div><div id="rtext" class="muted" style="margin-top:4px"></div></div>
-<script src="data-v7.js"></script><script src="app-v5.js"></script></main></body></html>
+<script src="data-v7.js"></script><script src="app-v6.js"></script></main></body></html>
