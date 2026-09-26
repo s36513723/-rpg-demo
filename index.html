@@ -1,4 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>6人パーティ戦闘デモ</title><link rel="stylesheet" href="style-v5.css"></head><body><main>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>6人パーティ戦闘デモ</title><link rel="stylesheet" href="style-v6.css"></head><body><main>
 <div class="top"><div><h1>6人パーティ戦闘デモ</h1><div class="muted">前後列・射程・弱点・SP/MP・状態異常・換装を試せます。</div></div>
 <div class="pills"><span id="engineStatus" class="pill" style="color:var(--warn)">JavaScript未実行</span><span id="round" class="pill">Round 1</span><span id="terrain" class="pill">地形: 読込前</span><span id="phase" class="pill">待機</span></div></div>
 
@@ -24,14 +24,11 @@
 
     <div class="field-row"><label for="target">対象</label><select id="target"></select></div>
 
-    <div class="command-buttons">
+    <div class="command-buttons four">
+      <button id="queue" class="primary" type="button">攻撃</button>
+      <button id="swap" class="secondary" type="button">交代</button>
       <button id="defend" class="secondary" type="button">防御</button>
       <button id="escape" class="secondary" type="button">逃走</button>
-    </div>
-
-    <div class="command-buttons">
-      <button id="queue" class="primary" type="button">行動決定</button>
-      <button id="swap" class="secondary" type="button">列変更</button>
     </div>
   </div>
 </section>
@@ -42,4 +39,4 @@
 </div>
 <section class="panel"><div class="top"><strong>戦闘ログ</strong><button id="clear" class="secondary" type="button">ログ消去</button></div><div id="log" class="log" aria-live="polite"></div></section>
 <div id="result" class="result hidden"><div id="rtitle" style="font-size:20px;font-weight:800"></div><div id="rtext" class="muted" style="margin-top:4px"></div></div>
-<script src="data-v6.js"></script><script src="app-v5.js"></script></main></body></html>
+<script src="data-v7.js"></script><script src="app-v5.js"></script></main></body></html>
