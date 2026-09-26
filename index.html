@@ -15,22 +15,15 @@
       <div id="actor" class="actor-name">-</div>
       <div id="ainfo" class="muted">味方カードをタップすると入力キャラを変更できます。</div>
     </div>
-    <div class="pills"><button id="new" class="secondary" type="button">新しい戦闘</button><button id="resolve" class="primary" type="button" disabled>ラウンド開始</button></div>
+    <div class="pills"><button id="switch" class="secondary" type="button">換装</button><button id="new" class="secondary" type="button">新しい戦闘</button><button id="resolve" class="primary" type="button" disabled>ラウンド開始</button></div>
   </div>
 
   <div class="command-stack">
-    <label for="weaponSelect">換装</label>
-    <select id="weaponSelect"></select>
-    <button id="switch" class="secondary full" type="button">換装</button>
-
     <label for="action">行動</label>
     <select id="action"></select>
 
     <label for="target">対象</label>
     <select id="target"></select>
-
-    <label for="swapSel">列変更</label>
-    <select id="swapSel"></select>
 
     <div class="command-buttons">
       <button id="defend" class="secondary" type="button">防御</button>
@@ -50,4 +43,4 @@
 </div>
 <section class="panel"><div class="top"><strong>戦闘ログ</strong><button id="clear" class="secondary" type="button">ログ消去</button></div><div id="log" class="log" aria-live="polite"></div></section>
 <div id="result" class="result hidden"><div id="rtitle" style="font-size:20px;font-weight:800"></div><div id="rtext" class="muted" style="margin-top:4px"></div></div>
-<script src="data-v3.js"></script><script src="app-v3.js"></script></main></body></html>
+<script src="data-v4.js"></script><script src="app-v4.js"></script></main></body></html>
