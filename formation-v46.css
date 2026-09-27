@@ -1,0 +1,52 @@
+/* v46 — Safari-safe six-enemy formation. No multiplication inside calc(). */
+
+/* Center each unit on its percentage coordinate using the individual translate property.
+   This stays independent from the FLIP animation's transform property. */
+.enemy-unit{
+  left:var(--x);
+  translate:-50% 0;
+  width:29%;
+  max-width:148px;
+  min-width:92px;
+  top:calc(var(--feet) - var(--figure-size) - 28px);
+  height:calc(var(--figure-size) + 28px);
+}
+
+/* A plausible two-rank formation.
+   Front: shallow arc. Rear: one clear step behind, visible between front bodies. */
+#eb>.enemy-unit[style*="grid-column: 1"]{--x:28%;--feet:43%;z-index:115}
+#eb>.enemy-unit[style*="grid-column: 2"]{--x:50%;--feet:41%;z-index:110}
+#eb>.enemy-unit[style*="grid-column: 3"]{--x:72%;--feet:43%;z-index:115}
+
+#ef>.enemy-unit[style*="grid-column: 1"]{--x:19%;--feet:70%;z-index:220}
+#ef>.enemy-unit[style*="grid-column: 2"]{--x:50%;--feet:73%;z-index:230}
+#ef>.enemy-unit[style*="grid-column: 3"]{--x:81%;--feet:70%;z-index:220}
+
+/* Explicit rank traces stay tactical but very quiet. */
+.rear-trace{top:42%;left:19%;right:19%;opacity:.48}
+.front-trace{top:69%;left:7%;right:7%;opacity:.38}
+.rear-trace::before{left:1%;bottom:-4px}
+.front-trace::before{left:1%;bottom:-4px}
+
+/* Give the battlefield more visual weight near the actual formation instead of an empty upper half. */
+.stone-plane{top:15%;height:84%}
+
+/* Rear row stays full size; only tone distinguishes depth. */
+#eb .enemy-sprite{filter:brightness(.90) saturate(.82) drop-shadow(0 5px 3px #0009)}
+#ef .enemy-sprite{filter:drop-shadow(1px 5px 3px #000b)}
+
+/* Keep labels and bars readable when figures overlap slightly. */
+#eb .enemy-name,#eb .enemy-hp{position:relative;z-index:8}
+#ef .enemy-name,#ef .enemy-hp{position:relative;z-index:8}
+
+@media(max-height:700px){
+  #eb>.enemy-unit[style*="grid-column: 1"]{--feet:41%}
+  #eb>.enemy-unit[style*="grid-column: 2"]{--feet:39%}
+  #eb>.enemy-unit[style*="grid-column: 3"]{--feet:41%}
+  #ef>.enemy-unit[style*="grid-column: 1"]{--feet:68%}
+  #ef>.enemy-unit[style*="grid-column: 2"]{--feet:71%}
+  #ef>.enemy-unit[style*="grid-column: 3"]{--feet:68%}
+}
+@media(max-width:350px){
+  .enemy-unit{width:30%;min-width:82px}
+}
