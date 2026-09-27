@@ -38,8 +38,10 @@ const showUI=html=>{
  const temp=document.createElement('div');temp.innerHTML=html;const title=temp.querySelector('h2'),heading=title?.textContent||'メニュー';if(title)title.remove();
  // Close belongs to the fixed header, not a second card at the foot of every list.
  temp.querySelectorAll('.actions').forEach(a=>{const bs=[...a.querySelectorAll('button')];if(bs.length&&bs.every(b=>b.dataset.hub==='closeM'||['閉じる','戻る','一覧へ','一覧','ギルドへ','市場へ','編成へ','宿・酒場へ','加工へ'].includes(b.textContent.trim()))&&U.stack.length)a.remove()});
+ const hero=temp.querySelector('.actor-hero');const heroMarkup=hero?.outerHTML||'';hero?.remove();
+ panel.classList.toggle('actor-panel',!!heroMarkup);
  const trade=/market|Shop|Quantity|gearDetail|recipe|Recipe|craft|upgrade|trait|sell|storage|deposit|appraise|Appraise|merchant/.test(r.name);
- panel.innerHTML='<div class="panel-head"><button class="icon-button panel-back" data-hub="uiBack" aria-label="前の画面へ"'+(!U.stack.length?' hidden':'')+'>‹</button><h2 id="panelTitle" tabindex="-1">'+hesc(heading)+'</h2>'+(trade?'<span class="panel-money">'+moneyText(gold)+'</span>':'')+'<button class="modal-x" data-hub="closeM" aria-label="閉じる">×</button></div><div class="panel-body">'+temp.innerHTML+'</div>';
+ panel.innerHTML='<div class="panel-head"><button class="icon-button panel-back" data-hub="uiBack" aria-label="前の画面へ"'+(!U.stack.length?' hidden':'')+'>‹</button><h2 id="panelTitle" tabindex="-1">'+hesc(heading)+'</h2>'+(trade?'<span class="panel-money">'+moneyText(gold)+'</span>':'')+'<button class="modal-x" data-hub="closeM" aria-label="閉じる">×</button></div>'+heroMarkup+'<div class="panel-body">'+temp.innerHTML+'</div>';
  panel.setAttribute('aria-labelledby','panelTitle');document.getElementById('modal').classList.add('on');document.getElementById('app').inert=true;panel.scrollTop=0;const body=panel.querySelector('.panel-body');if(same)body.scrollTop=scroll;navState(r.name);const nextFocus=same&&focusAction?[...panel.querySelectorAll('[data-hub]')].find(e=>e.dataset.hub===focusAction&&e.dataset.args===focusArgs&&!e.disabled):null;(nextFocus||panel.querySelector('#panelTitle')).focus({preventScroll:true});
 };
 const closeUI=()=>{document.getElementById('modal').classList.remove('on');document.getElementById('app').inert=false;U.route=null;U.stack=[];U.formationSelected=null;if(hubBooted){renderRoster();if(!activeRun())window.town();else navState('town')}const target=U.opener;U.opener=null;const fallback=target?.dataset?.hub?[...document.querySelectorAll('#app [data-hub]')].find(e=>e.dataset.hub===target.dataset.hub&&e.dataset.args===target.dataset.args):null;(target?.isConnected?target:fallback||document.querySelector('#app nav .current'))?.focus({preventScroll:true})};
@@ -56,7 +58,7 @@ const uiActions={
  uiQuestList(){questMenu('active')},
  uiInventory(t){U.inventory=t;itemCategory(t)},
  uiSearchSkills(value){if(U.route?.name==='skills')U.search[U.route.args[0]]=value;filterSkillRows(value)},
- uiEquipPreview(i,k,n){if(!Number.isInteger(i)||!Number.isInteger(k))return;views.equipChoice(i,k,n);const b=document.querySelector('#panel .panel-body');if(b)b.scrollTop=0},
+ uiEquipPreview(i,k,n){if(!Number.isInteger(i)||!Number.isInteger(k))return;window.equipChoice(i,k,n);const b=document.querySelector('#panel .panel-body');if(b)b.scrollTop=0},
  uiNotify(text){toast(String(text))}
 };
 Object.assign(window,uiActions);

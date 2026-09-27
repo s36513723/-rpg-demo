@@ -139,3 +139,17 @@
 .sortie-page>.ui-tabs{flex:0 0 auto}
 .sortie-page>.formation-board,.sortie-page>.people-select-grid{flex:1;min-height:0}
 .room-page{overflow:hidden!important}
+
+/* UI31: one stable window size, fixed character art and equal command rows. */
+#modal{padding:0;align-items:stretch;background:var(--bg)}
+#panel{width:min(100%,620px);height:100dvh;max-height:100dvh;border-radius:0;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);box-shadow:none}
+#panel>.panel-head{flex:0 0 auto}
+#panel>.actor-hero{flex:0 0 clamp(150px,24dvh,240px);height:clamp(150px,24dvh,240px);min-height:0;margin:0 12px 8px}
+#panel>.actor-hero .actor-hero-copy{height:100%;min-height:0;padding-top:12px;padding-bottom:12px}
+#panel>.actor-hero .actor-hero-art img{transform:none}
+#panel.actor-panel>.panel-body{padding-top:0}
+.facility-action-deck{grid-template-rows:repeat(2,minmax(0,1fr));align-content:stretch}
+.facility-action-deck>.row{height:100%;min-height:0;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.facility-action-deck>.row b{flex:0 0 auto}
+.facility-action-deck>.row .small{line-height:1.35}
+@media(max-height:640px){#panel>.actor-hero{flex-basis:142px;height:142px}.facility-action-deck>.row{min-height:0}}
