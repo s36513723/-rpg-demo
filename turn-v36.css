@@ -1,0 +1,41 @@
+/* v36 — larger turn portraits + ~1cm total bottom breathing room. */
+.order{
+  display:flex;
+  grid-template-columns:none;
+  gap:4px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:3px 2px 5px;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;
+  mask-image:linear-gradient(to right,#000 0,#000 94%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to right,#000 0,#000 94%,transparent 100%);
+}
+.order::-webkit-scrollbar{display:none}
+.order-face{
+  flex:0 0 36px;
+  width:36px;
+  height:38px;
+  min-width:36px;
+  scroll-snap-align:center;
+  clip-path:polygon(4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%,0 4px);
+}
+.order-face img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 18%;
+}
+.order-face .order-side{width:4px;height:4px;top:2px;right:2px}
+.order-face.is-active{transform:translateY(-1px) scale(1.04)}
+#game{
+  padding-bottom:max(1cm,env(safe-area-inset-bottom));
+}
+@media(max-width:375px){
+  .order{gap:3px}
+  .order-face{flex-basis:33px;width:33px;min-width:33px;height:35px}
+}
+@media(max-height:665px) and (orientation:portrait){
+  #game{padding-bottom:max(1cm,env(safe-area-inset-bottom))}
+}
