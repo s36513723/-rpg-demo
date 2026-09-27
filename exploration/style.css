@@ -36,3 +36,9 @@
 .formation-member.selected .formation-pick:after{content:'選択中';position:absolute;left:4px;top:4px;background:#d9c582;color:#142119;border-radius:4px;padding:2px 4px;font-size:7px;font-weight:700}
 @media(max-width:350px){.formation-row{grid-template-columns:30px 1fr;gap:5px}.formation-slots{gap:4px}.formation-pick{min-height:80px;grid-template-rows:39px auto auto}.formation-pick img{height:39px}.formation-pick b{font-size:9px}.formation-pick small{font-size:7px}}
 @media(min-width:600px){.formation-row{grid-template-columns:48px 1fr;gap:10px}.formation-slots{gap:10px}.formation-pick{min-height:102px;grid-template-rows:56px auto auto}.formation-pick img{height:56px}.formation-pick b{font-size:12px}.formation-pick small{font-size:9px}.formation-config{font-size:10px;min-height:34px}}
+
+.formation-empty{min-height:116px;border:1px dashed #5f685f;border-radius:9px;background:#101a15;color:#728078;font-size:18px;display:grid;place-items:center}
+.formation-empty:hover,.formation-empty:focus-visible{border-color:#9d9168;color:#cdbf93}
+.formation-note{margin:8px 0 0;text-align:center}
+@media(max-width:350px){.formation-empty{min-height:110px}}
+@media(min-width:600px){.formation-empty{min-height:136px}}
