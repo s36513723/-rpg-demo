@@ -50,7 +50,7 @@
 @media(max-height:720px){.scene-event .scene-art,.scene-theme .scene-art{height:56px}.scene-merchant .scene-art,.scene-enemy .scene-art{height:58px}}
 
 /* UI17: NPC dialogue is a fixed, non-scrolling visual scene. */
-.npc-conversation-page{padding:0!important;overflow:hidden!important;display:grid!important;grid-template-rows:minmax(0,1fr) auto;background:linear-gradient(180deg,#101914,#0b120f)}
+.npc-conversation-page{padding:0!important;overflow:hidden!important;display:grid!important;grid-template-rows:minmax(0,1fr) 132px;background:linear-gradient(180deg,#101914,#0b120f)}
 .npc-stage{position:relative;min-height:0;overflow:hidden;background:radial-gradient(circle at 50% 34%,#43544355,transparent 56%),linear-gradient(180deg,#17231d,#0f1713)}
 .npc-stage-art{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
 .npc-stand{display:block;height:100%;width:auto;max-width:88%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 10px 18px #0008)}
@@ -59,7 +59,7 @@
 .npc-identity small{display:block;margin-top:3px;font-size:9px;line-height:1.4;color:#aeb7aa}
 .npc-speech{position:absolute;left:10px;right:10px;bottom:8px;z-index:3;max-height:34%;overflow:hidden;padding:10px 12px;border:1px solid #8a795660;border-radius:10px;background:#0a110ed9;box-shadow:0 7px 22px #0007;backdrop-filter:blur(5px)}
 .npc-speech p{margin:0;font-size:13px;line-height:1.75;color:#f0ece0;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-.npc-action-deck{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:8px 10px 10px;border-top:1px solid #435343;background:#111a15}
+.npc-action-deck{height:132px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;align-content:center;padding:8px 10px 10px;border-top:1px solid #435343;background:#111a15}.npc-action-deck.single{grid-template-columns:1fr}
 .npc-action-deck>.row,.npc-action-deck>button{min-height:44px;margin:0;padding:7px 9px}
 .npc-action-deck>.row b,.npc-action-deck>button b{font-size:11px;line-height:1.35}
 .npc-action-deck>.row .small,.npc-action-deck>button .small{font-size:8px;line-height:1.45}
@@ -78,6 +78,7 @@
  .npc-list-page{gap:5px;padding:6px 7px 9px!important}.npc-list-page .person-tile{min-height:82px;padding-left:51px}.npc-list-page .person-tile .row-visual{left:6px;width:38px}.npc-list-page .person-tile .row-visual img{width:38px;height:47px}
 }
 @media(max-height:640px){
+ .npc-conversation-page{grid-template-rows:minmax(0,1fr) 104px}.npc-action-deck{height:104px}
  .npc-speech{max-height:37%}.npc-speech p{font-size:11px;line-height:1.55;-webkit-line-clamp:3}
  .npc-action-deck>.row,.npc-action-deck>button{min-height:38px}
  .npc-list-page .person-tile{min-height:78px}
@@ -101,7 +102,7 @@
 @media(min-width:600px){.facility-menu-page{gap:9px}.facility-menu-page>button.row{min-height:64px}.facility-menu-page>button.row b{font-size:12px}}
 
 /* UI19: each facility is one standing NPC plus four choices. */
-.facility-stage-page{padding:0!important;overflow:hidden!important;display:grid!important;grid-template-rows:minmax(0,1fr) auto;background:linear-gradient(180deg,#101914,#0b120f)}
+.facility-stage-page{padding:0!important;overflow:hidden!important;display:grid!important;grid-template-rows:minmax(0,1fr) 132px;background:linear-gradient(180deg,#101914,#0b120f)}
 .facility-stage{position:relative;min-height:0;overflow:hidden;background:radial-gradient(circle at 50% 34%,#42514144,transparent 58%),linear-gradient(180deg,#17231d,#0f1713)}
 .facility-host{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;padding:0;overflow:hidden}
 .facility-stand{display:block;height:100%;width:auto;max-width:88%;margin:0 auto;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 10px 18px #0008)}
@@ -110,7 +111,7 @@
 .facility-identity small{display:block;margin-top:3px;font-size:9px;color:#aeb7aa}
 .facility-talk{position:absolute;right:12px;bottom:10px;display:flex;align-items:center;gap:5px;padding:6px 8px;border:1px solid #8b79545c;border-radius:8px;background:#0b120ed6;color:#e6d19a;font-size:10px}
 .facility-talk .ui-icon{width:16px;height:16px}
-.facility-action-deck{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:8px 10px 10px;border-top:1px solid #435343;background:#111a15}
+.facility-action-deck{height:132px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;align-content:center;padding:8px 10px 10px;border-top:1px solid #435343;background:#111a15}
 .facility-action-deck>.row{min-height:52px;margin:0;padding:8px 10px}
 .facility-action-deck>.row b{font-size:11px;line-height:1.35}
 .facility-action-deck>.row .small{font-size:8px;line-height:1.45}
@@ -120,6 +121,7 @@
  .facility-action-deck{gap:4px;padding:6px 7px 8px}.facility-action-deck>.row{min-height:46px;padding:6px 7px}
 }
 @media(max-height:640px){
+ .facility-stage-page{grid-template-rows:minmax(0,1fr) 104px}.facility-action-deck{height:104px}
  .facility-action-deck>.row{min-height:42px}
  .facility-stand{max-width:82%}
 }
