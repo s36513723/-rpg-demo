@@ -31,8 +31,8 @@ async def layouts(page):
   for alerts in [False,True]:
    await page.set_viewport_size({'width':width,'height':height})
    await page.evaluate("""({base,alerts})=>{installSave(base);H.run=null;for(const q of hc().quests)H.quests[q.id]={state:0,progress:0};loot.古器=alerts?2:0;H.story.pending=alerts?['古代迷宮']:[];const q=hc().quests[0];H.quests[q.id]={state:alerts?2:0,progress:alerts?q.target:0};H.tracked=alerts?q.id:null;town()}""",{'base':baseline,'alerts':alerts})
-   dims=await page.evaluate("""()=>{const s=document.querySelector('#screen'),a=document.querySelector('.primary-action'),f=document.querySelector('#app nav');return {overflow:s.scrollHeight-s.clientHeight,wide:document.documentElement.scrollWidth>innerWidth,actionVisible:a.getBoundingClientRect().bottom<=s.getBoundingClientRect().bottom,foot:innerHeight-f.getBoundingClientRect().bottom}}""")
-   results.append({'name':f'UI8 viewport {width}x{height} alerts={alerts}','ok':dims['overflow']<=1 and not dims['wide'] and dims['actionVisible'] and dims['foot']>=20,'measurements':dims})
+   dims=await page.evaluate("""()=>{const s=document.querySelector('#screen'),f=document.querySelector('#app nav'),places=[...document.querySelectorAll('.town-scene .place')];return {overflow:s.scrollHeight-s.clientHeight,wide:document.documentElement.scrollWidth>innerWidth,facilities:places.length,facilitiesVisible:places.every(x=>x.getBoundingClientRect().bottom<=s.getBoundingClientRect().bottom),foot:innerHeight-f.getBoundingClientRect().bottom}}""")
+   results.append({'name':f'UI19 viewport {width}x{height} alerts={alerts}','ok':dims['overflow']<=1 and not dims['wide'] and dims['facilities']==3 and dims['facilitiesVisible'] and dims['foot']>=20,'measurements':dims})
  for width,height in [(320,568),(375,667),(390,844),(430,932),(768,1024)]:
   await page.set_viewport_size({'width':width,'height':height})
   await page.evaluate('base=>{installSave(base);H.run=null;closeM();town()}',baseline)
