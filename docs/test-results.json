@@ -1,0 +1,299 @@
+{
+  "mode": "native Chromium HTTP",
+  "tests": [
+    {
+      "name": "hub has 6 characters and correct formulas",
+      "ok": true
+    },
+    {
+      "name": "all 31 Masteries registered",
+      "ok": true
+    },
+    {
+      "name": "Mastery training costs 1 point for +5",
+      "ok": true
+    },
+    {
+      "name": "Mastery rank cap50",
+      "ok": true
+    },
+    {
+      "name": "insufficient training points cannot go negative",
+      "ok": true
+    },
+    {
+      "name": "source maximum1 enforced",
+      "ok": true
+    },
+    {
+      "name": "arts maximum2 enforced",
+      "ok": true
+    },
+    {
+      "name": "learning checks both rank and stat",
+      "ok": true
+    },
+    {
+      "name": "learning is not automatic equipping",
+      "ok": true
+    },
+    {
+      "name": "learning duplicate does not spend points",
+      "ok": true
+    },
+    {
+      "name": "passive and active share Cost budget",
+      "ok": true
+    },
+    {
+      "name": "removing capacity cannot leave an overbudget set",
+      "ok": true
+    },
+    {
+      "name": "unselected exploration skill does not work",
+      "ok": true
+    },
+    {
+      "name": "Mastery rank persists through reload",
+      "ok": true
+    },
+    {
+      "name": "legacy learned skills survive schema migration",
+      "ok": true
+    },
+    {
+      "name": "empty selected set not replaced on current save reload",
+      "ok": true
+    },
+    {
+      "name": "rare gear definitions persist",
+      "ok": true
+    },
+    {
+      "name": "main/offhand sets swap together",
+      "ok": true
+    },
+    {
+      "name": "camp does not revive; recovers35/35/25 and cures statuses",
+      "ok": true
+    },
+    {
+      "name": "antidote works in exploration without a round ticking",
+      "ok": true
+    },
+    {
+      "name": "full-health item use does not consume",
+      "ok": true
+    },
+    {
+      "name": "derived resource growth is reflected on stat spend",
+      "ok": true
+    },
+    {
+      "name": "merchant purchases work without free-variable onclick",
+      "ok": true
+    },
+    {
+      "name": "menus and generated onclick handlers all parse",
+      "ok": true
+    },
+    {
+      "name": "hub runtime console errors",
+      "ok": true,
+      "errors": []
+    },
+    {
+      "name": "6 members and derived HP/SP/MP",
+      "ok": true
+    },
+    {
+      "name": "defend replaces queued attack, not a second action",
+      "ok": true
+    },
+    {
+      "name": "choosing attack cancels defense",
+      "ok": true
+    },
+    {
+      "name": "defense halves damage immediately",
+      "ok": true
+    },
+    {
+      "name": "defender can still manually swap without bonus action",
+      "ok": true
+    },
+    {
+      "name": "manual swap unbounded and no cost",
+      "ok": true
+    },
+    {
+      "name": "arm bind prevents swap",
+      "ok": true
+    },
+    {
+      "name": "weight ignores reserve and updates main/off together",
+      "ok": true
+    },
+    {
+      "name": "current weapon gate rejects reserve technique",
+      "ok": true
+    },
+    {
+      "name": "learned but unselected passive has no effect",
+      "ok": true
+    },
+    {
+      "name": "equipped passive works and consumes Cost",
+      "ok": true
+    },
+    {
+      "name": "empty skill set remains empty (no demo skills)",
+      "ok": true
+    },
+    {
+      "name": "near cannot target back behind live front",
+      "ok": true
+    },
+    {
+      "name": "damage immunity is exactly zero and compound is average",
+      "ok": true
+    },
+    {
+      "name": "hit minimum and maximum",
+      "ok": true
+    },
+    {
+      "name": "sleep first hit boost and wake on damage",
+      "ok": true
+    },
+    {
+      "name": "status success adds resistance; round decays 10",
+      "ok": true
+    },
+    {
+      "name": "status failure adds 10",
+      "ok": true
+    },
+    {
+      "name": "boss instant death capped at 5%",
+      "ok": true
+    },
+    {
+      "name": "item is queued; HP unchanged before action",
+      "ok": true
+    },
+    {
+      "name": "only actual item execution spends stock",
+      "ok": true
+    },
+    {
+      "name": "shared inventory cannot go below zero",
+      "ok": true
+    },
+    {
+      "name": "throwing command uses equipped ammo",
+      "ok": true
+    },
+    {
+      "name": "cast starts now and completes once without double MP cost",
+      "ok": true
+    },
+    {
+      "name": "new command cancels casting and does not refund",
+      "ok": true
+    },
+    {
+      "name": "head bind interrupts casting",
+      "ok": true
+    },
+    {
+      "name": "summon appears and expires after three rounds",
+      "ok": true
+    },
+    {
+      "name": "recasting summon replaces same-owner summon",
+      "ok": true
+    },
+    {
+      "name": "revival actually revives a dead target",
+      "ok": true
+    },
+    {
+      "name": "range scopes: row/all/pierce/adjacent/random",
+      "ok": true
+    },
+    {
+      "name": "swap preserves the partner action",
+      "ok": true
+    },
+    {
+      "name": "forced movement swaps matching slot when full",
+      "ok": true
+    },
+    {
+      "name": "boss has independent parts and break stops a move",
+      "ok": true
+    },
+    {
+      "name": "attack selected boss part damages part and body",
+      "ok": true
+    },
+    {
+      "name": "broken part cannot yield repeat break rewards",
+      "ok": true
+    },
+    {
+      "name": "boss phase changes at 70/40 percent",
+      "ok": true
+    },
+    {
+      "name": "pull-push combo needs a different ally",
+      "ok": true
+    },
+    {
+      "name": "fire-wind combo consumes a setup once",
+      "ok": true
+    },
+    {
+      "name": "expired combo does not trigger",
+      "ok": true
+    },
+    {
+      "name": "same buff does not stack and expires",
+      "ok": true
+    },
+    {
+      "name": "buff aggregate bounded to plus/minus40%",
+      "ok": true
+    },
+    {
+      "name": "counter max one per round",
+      "ok": true
+    },
+    {
+      "name": "MP recovery passive is limited to once",
+      "ok": true
+    },
+    {
+      "name": "once-per-battle support cannot create infinite SP",
+      "ok": true
+    },
+    {
+      "name": "state carry retains poison power and removes binds/stun",
+      "ok": true
+    },
+    {
+      "name": "full round runtime check",
+      "ok": true
+    },
+    {
+      "name": "all explicit active skill definitions execute without runtime exceptions",
+      "ok": true
+    },
+    {
+      "name": "battle runtime console errors",
+      "ok": true,
+      "errors": []
+    }
+  ]
+}
