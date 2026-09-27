@@ -99,3 +99,32 @@
 .facility-menu-page>.actions,.facility-menu-page>details{grid-column:1/-1}
 @media(max-width:350px){.facility-menu-page{gap:5px}.facility-menu-page>button.row{min-height:52px;padding-top:6px;padding-bottom:6px}.facility-menu-page>button.row b{font-size:10px}}
 @media(min-width:600px){.facility-menu-page{gap:9px}.facility-menu-page>button.row{min-height:64px}.facility-menu-page>button.row b{font-size:12px}}
+
+/* UI19: each facility is one standing NPC plus four choices. */
+.facility-stage-page{padding:0!important;overflow:hidden!important;display:grid!important;grid-template-rows:minmax(0,1fr) auto;background:linear-gradient(180deg,#101914,#0b120f)}
+.facility-stage{position:relative;min-height:0;overflow:hidden;background:radial-gradient(circle at 50% 34%,#42514144,transparent 58%),linear-gradient(180deg,#17231d,#0f1713)}
+.facility-host{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;padding:0;overflow:hidden}
+.facility-stand{display:block;height:100%;width:auto;max-width:88%;margin:0 auto;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 10px 18px #0008)}
+.facility-identity{position:absolute;left:12px;top:10px;padding:7px 10px;border-left:2px solid var(--gold);background:#0d1511b8;text-align:left;backdrop-filter:blur(4px)}
+.facility-identity b{display:block;font:600 17px/1.25 'Yu Mincho',Georgia,serif;color:#f1dfb5}
+.facility-identity small{display:block;margin-top:3px;font-size:9px;color:#aeb7aa}
+.facility-talk{position:absolute;right:12px;bottom:10px;display:flex;align-items:center;gap:5px;padding:6px 8px;border:1px solid #8b79545c;border-radius:8px;background:#0b120ed6;color:#e6d19a;font-size:10px}
+.facility-talk .ui-icon{width:16px;height:16px}
+.facility-action-deck{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:8px 10px 10px;border-top:1px solid #435343;background:#111a15}
+.facility-action-deck>.row{min-height:52px;margin:0;padding:8px 10px}
+.facility-action-deck>.row b{font-size:11px;line-height:1.35}
+.facility-action-deck>.row .small{font-size:8px;line-height:1.45}
+@media(max-width:350px){
+ .facility-identity{left:8px;top:7px;padding:5px 8px}.facility-identity b{font-size:15px}
+ .facility-talk{right:8px;bottom:7px}
+ .facility-action-deck{gap:4px;padding:6px 7px 8px}.facility-action-deck>.row{min-height:46px;padding:6px 7px}
+}
+@media(max-height:640px){
+ .facility-action-deck>.row{min-height:42px}
+ .facility-stand{max-width:82%}
+}
+@media(min-width:600px){
+ .facility-stand{max-width:74%}.facility-identity{left:18px;top:16px;padding:9px 13px}.facility-identity b{font-size:20px}
+ .facility-talk{right:18px;bottom:14px;font-size:11px}
+ .facility-action-deck{gap:8px;padding:10px 14px 14px}.facility-action-deck>.row{min-height:58px}
+}
