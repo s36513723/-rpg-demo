@@ -1,7 +1,7 @@
 async () => {
  const out=[],base=collectSave(),V=HUB_VISUAL;
  const assert=(condition,message='assertion failed')=>{if(!condition)throw Error(message)};
- const test=async(name,fn)=>{try{await fn();out.push({name:'UI10 '+name,ok:true})}catch(e){out.push({name:'UI10 '+name,ok:false,error:e.message})}};
+ const test=async(name,fn)=>{try{await fn();out.push({name:'UI11 '+name,ok:true})}catch(e){out.push({name:'UI11 '+name,ok:false,error:e.message})}};
  const reset=()=>{installSave(cp(base));H.run=null;HUB_UI.state.stack=[];HUB_UI.state.route=null;closeM();town()};
  const panel=()=>document.getElementById('panel');
  await test('three bottom destinations, no home button on home',()=>{reset();assert(!document.querySelector('#app nav [data-hub="town"]'));assert(document.querySelectorAll('#app nav button').length===3);assert(document.querySelectorAll('#app nav .ui-icon').length===3)});
@@ -29,6 +29,9 @@ async () => {
  await test('dynamic visuals do not mutate save, gold, inventory or quests',()=>{reset();equip(0);const before=JSON.stringify(collectSave(),(k,v)=>k==='savedAt'?undefined:v);V.decorate(panel(),{name:'equip',args:[0]});assert(before===JSON.stringify(collectSave(),(k,v)=>k==='savedAt'?undefined:v))});
  await test('non-dialogue decoration is idempotent',()=>{const count=panel().querySelectorAll('svg').length;V.decorate(panel(),{name:'equip',args:[0]});assert(count===panel().querySelectorAll('svg').length)});
  await test('map node icons are consistent with their semantic type',()=>{reset();startDungeon();drawDungeon();for(const e of document.querySelectorAll('.map-node'))assert(e.querySelector('.ui-icon'));const node=document.querySelector('[data-hub="routeNode"]');assert(node.getAttribute('aria-label'))});
+ await test('map nodes have themed mini artwork',()=>{reset();startDungeon();drawDungeon();const nodes=[...document.querySelectorAll('.map-node')];assert(nodes.length>=9);assert(nodes.every(e=>e.querySelector('.node-thumb')))});
+ await test('enemy book and detail use enemy thumbnails',()=>{reset();journal.enemies=['古代弓兵','辺境の巨獣','術式魔導師','迷宮守護機'];journal.enemyData={};enemyBook();assert(panel().querySelectorAll('[data-hub="enemyRecord"] img.enemy-thumb').length===4);enemyRecord('迷宮守護機');assert(panel().querySelector('.scene-enemy img').getAttribute('src').includes('enemy_golem'))});
+ await test('field merchant uses a dedicated portrait',()=>{reset();startDungeon();const f=H.run.floors[0],n=f.nodes.find(n=>n.type==='merchant');f.open=[n.id];routeNode(n.id);assert(panel().querySelector('.scene-merchant img').getAttribute('src').includes('npc_merchant'))});
  await test('back navigation still works with icon-enhanced buttons',()=>{reset();market();toolShop();toolQuantity('回復薬');uiBack();assert(panel().textContent.includes('道具屋'));uiBack();assert(panel().querySelector('.host-card'));assert(panel().querySelector('.modal-x').textContent==='拠点へ')});
  reset();return out;
 }
