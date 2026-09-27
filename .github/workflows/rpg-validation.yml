@@ -4,6 +4,17 @@ on:
     branches: [main]
     paths:
       - 'battle-v29.js'
+      - 'index.html'
+      - 'ui-v29.css'
+      - 'exploration/**'
+      - 'rpg-*.js'
+      - 'tests/**'
+      - '.github/workflows/rpg-validation.yml'
+  pull_request:
+    paths:
+      - 'battle-v29.js'
+      - 'index.html'
+      - 'ui-v29.css'
       - 'exploration/**'
       - 'rpg-*.js'
       - 'tests/**'
@@ -14,32 +25,26 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Check battle and exploration syntax
-        run: |
-          node --check battle-v29.js
-          node <<'JS'
-          const fs = require('node:fs');
-          const vm = require('node:vm');
-          for (const path of ['exploration/index.html', 'index.html']) {
-            const html = fs.readFileSync(path, 'utf8');
-            for (const [i, match] of [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].entries()) {
-              new vm.Script(match[1], { filename: path + ':' + i });
-            }
-          }
-          console.log('All embedded JavaScript parsed successfully');
-          JS
-      - uses: actions/upload-artifact@v4
+      - uses: actions/setup-python@v5
         with:
-          name: rpg-validation-source
-          path: |
-            battle-v29.js
-            index.html
-            ui-v29.css
-            exploration/
-            images/
-          retention-days: 3
+          python-version: '3.12'
+      - name: Check JavaScript syntax and skill catalog
+        run: node tests/syntax.cjs
+      - name: Install browser test runtime
+        run: |
+          python -m pip install playwright==1.55.0
+          python -m playwright install --with-deps chromium
+      - name: Native browser regression
+        run: python tests/browser.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rpg-regression-results
+          path: test-results.json
+          retention-days: 7
