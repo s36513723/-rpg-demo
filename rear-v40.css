@@ -1,0 +1,17 @@
+/* v40 — compensate transparent headroom inside rear-row body sprites. */
+/* The layout box was already directly below HP; the visible character inside the asset was not. */
+.enemy-back-lane .enemy-visual{
+  transform:translateY(-34px);
+  transform-origin:50% 0;
+}
+.enemy-back-lane .enemy-visual img{
+  object-position:center top;
+}
+
+/* Keep target/status markers tied to the visible rear figure. */
+.enemy-back-lane .target-pointer{top:18px}
+.enemy-back-lane .enemy-unit .card-status{top:21px}
+
+@media(max-height:720px) and (orientation:portrait){
+  .enemy-back-lane .enemy-visual{transform:translateY(-28px)}
+}
