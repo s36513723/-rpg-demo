@@ -1,0 +1,57 @@
+/* v37 — portrait may reach the bottom; back-row enemy labels hug the art. */
+
+/* Keep controls above the safe-area, but let only the active ally art bleed into that breathing room. */
+.command-panel{overflow:visible}
+.actor-art{
+  top:-5px;
+  bottom:calc(-1cm - env(safe-area-inset-bottom) - 8px);
+  height:auto;
+  overflow:hidden;
+  mask-image:linear-gradient(to right,#000 72%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to right,#000 72%,transparent 100%);
+}
+.actor-art img{
+  height:100%;
+  width:100%;
+  object-fit:cover;
+  object-position:50% 8%;
+}
+@media(max-height:665px) and (orientation:portrait){
+  .actor-art{
+    top:-3px;
+    bottom:calc(-1cm - env(safe-area-inset-bottom) - 6px);
+    height:auto;
+    width:29%;
+    left:-7px;
+    mask-image:linear-gradient(to right,#000 72%,transparent 100%);
+    -webkit-mask-image:linear-gradient(to right,#000 72%,transparent 100%);
+  }
+  .actor-art img{object-position:50% 10%}
+}
+
+/* Back row: bring the silhouette and its HP/name cluster together. */
+.enemy-back-lane .enemy-name{
+  top:8px;
+}
+.enemy-back-lane .enemy-hp{
+  top:23px;
+  width:66%;
+  left:17%;
+}
+.enemy-back-lane .enemy-visual{
+  transform:translateY(-10px) scale(1.07);
+  transform-origin:50% 100%;
+}
+.enemy-back-lane .enemy-unit .card-status{
+  top:31px;
+}
+.enemy-back-lane .target-pointer{
+  top:30px;
+}
+
+/* On shorter screens, use a smaller shift so rear units do not collide with the HUD. */
+@media(max-height:720px) and (orientation:portrait){
+  .enemy-back-lane .enemy-name{top:6px}
+  .enemy-back-lane .enemy-hp{top:20px}
+  .enemy-back-lane .enemy-visual{transform:translateY(-7px) scale(1.05)}
+}
