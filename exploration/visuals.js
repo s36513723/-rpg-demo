@@ -202,7 +202,7 @@ const dialoguePage=(panel,route)=>{
  if(['storyMenu','readStory','epilogue'].includes(name))body.querySelectorAll('.message').forEach(e=>e.classList.add('scene-narration'));
  if(['inn','guild','market'].includes(name)){
   const id={inn:'宿主',guild:'受付',market:'鍛冶師'}[name],host=person('npc',id),deck=document.createElement('div');deck.className='facility-action-deck';
-  [...body.children].forEach(el=>{if(el.matches('button.row'))deck.append(el);else if(el.classList.contains('actions')){[...el.querySelectorAll('button.row')].forEach(b=>deck.append(b));el.remove()}});
+  [...body.children].forEach(el=>{if(el.matches('button.row')){if(el.dataset.hub==='closeM')el.remove();else deck.append(el)}else if(el.classList.contains('actions')){[...el.querySelectorAll('button.row')].forEach(b=>{if(b.dataset.hub!=='closeM')deck.append(b)});el.remove()}});
   body.insertAdjacentHTML('afterbegin',facilityStage(host,id));body.append(deck);body.classList.add('facility-stage-page');
  }
 };
