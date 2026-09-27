@@ -12,9 +12,9 @@ async def main():
   errors=[];logs=[]
   page.on('pageerror',lambda e:errors.append(str(e)))
   page.on('console',lambda m: logs.append(m.text) if m.type=='error' else None)
-  await page.goto('http://127.0.0.1:8140/play-plan-v3.html',wait_until='load')
+  await page.goto('http://127.0.0.1:8140/play-plan-v4.html',wait_until='load')
   await page.wait_for_timeout(1500)
-  data=await page.evaluate("""()=>({presentation:document.documentElement.dataset.presentation,enemy:document.querySelectorAll('.enemy-unit').length,cards:document.querySelectorAll('.ally-unit').length,order:document.querySelectorAll('.order-face').length,api:!!window.RPGDemo,boot:!!document.querySelector('#bootStatus')})""")
+  data=await page.evaluate("""()=>{const portrait=document.querySelector('#actorArt').getBoundingClientRect(),board=document.querySelector('#allies').getBoundingClientRect(),face=getComputedStyle(document.querySelector('.ally-face-wrap'));const card=document.querySelector('.ally-unit'),hp=card.querySelector('[data-resource=hp]').getBoundingClientRect(),sp=card.querySelector('[data-resource=sp]').getBoundingClientRect();return {presentation:document.documentElement.dataset.presentation,enemy:document.querySelectorAll('.enemy-unit').length,cards:document.querySelectorAll('.ally-unit').length,order:document.querySelectorAll('.order-face').length,api:!!window.RPGDemo,boot:!!document.querySelector('#bootStatus'),faceHidden:face.display==='none',portraitLeft:portrait.right<=board.left+2,hpSpSideBySide:Math.abs(hp.top-sp.top)<3&&hp.right<=sp.left+8}}""")
   pathlib.Path('plan-debug.json').write_text(json.dumps({'data':data,'errors':errors,'console':logs},ensure_ascii=False,indent=2))
   print(json.dumps({'data':data,'errors':errors,'console':logs},ensure_ascii=False))
   await browser.close()
