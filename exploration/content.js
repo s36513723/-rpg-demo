@@ -7,9 +7,18 @@ var HUB_CONTENT = (() => {
   '沈黙の砂都': {chapter:4,title:'夜明けの王墓',intro:'最後の封印は砂に埋もれた王墓にある。日陰と水場を選び、四つの記録を一つにする。',boss:'黄金王墓の番人',themes:['砂漠遺跡','地下神殿','廃墟都市','洞窟'],mechanism:'星盤',meter:'熱気',item:'清水',material:'日輪金砂',clue:'四封の原典',color:'#9a8256',ending:'四つの封印は再びつながった。何を残すかは、王ではなく、この道を歩いた者たちが決める。',next:null}
  };
  const tools = {
-  '回復薬':{price:120,desc:'味方1人のHPを35%回復',field:'hp',battle:true},'解毒薬':{price:100,desc:'味方1人の猛毒を解除',field:'poison',battle:true},'薬瓶':{price:240,desc:'味方1人のHP15・SP10を回復',field:'mixed',battle:true},
-  '爆弾':{price:280,desc:'戦闘用の攻撃道具',battle:true},'煙玉':{price:220,desc:'戦闘用。探索では隠密通過にも使用',battle:true},'投げナイフ':{price:70,desc:'投擲用携行具',battle:true},'鉄針':{price:55,desc:'投擲用携行具',battle:true},'投石':{price:30,desc:'投擲用携行具',battle:true},
-  '解錠具':{price:160,desc:'探索用。封印回路や施錠を安全に調査',field:'region'},'登攀縄':{price:160,desc:'探索用。断崖の迂回路を開く',field:'region'},'浄化香':{price:160,desc:'探索用。樹海の瘴気を取り除く',field:'region'},'清水':{price:100,desc:'探索用。砂都の熱気を取り除く',field:'region'}
+  '回復薬':{price:120,desc:'傷を素早く治す基本薬。味方1人のHPを35%回復する。',field:'hp',battle:true},
+  '解毒薬':{price:100,desc:'猛毒を受けた仲間を治療する解毒剤。味方1人の猛毒を解除する。',field:'poison',battle:true},
+  '薬瓶':{price:240,desc:'HPとSPを同時に少量回復する携行薬。長期戦の立て直しに向く。',field:'mixed',battle:true},
+  '爆弾':{price:280,desc:'敵へ投げ込む攻撃用の携行具。投擲系の攻撃に使う。',battle:true},
+  '煙玉':{price:220,desc:'視界を遮る携行具。戦闘だけでなく探索の隠密通過にも使える。',battle:true},
+  '投げナイフ':{price:70,desc:'扱いやすい軽量投擲具。投擲スキルを使うために携行する。',battle:true},
+  '鉄針':{price:55,desc:'小型で携行しやすい投擲具。投擲スキルを使うために携行する。',battle:true},
+  '投石':{price:30,desc:'安価な投擲具。投擲スキルを使うための最低限の携行品。',battle:true},
+  '解錠具':{price:160,desc:'封印回路や施錠を安全に調べる探索道具。古代迷宮で役立つ。',field:'region'},
+  '登攀縄':{price:160,desc:'崖や高低差を越える探索道具。辺境遺跡の迂回路を開ける。',field:'region'},
+  '浄化香':{price:160,desc:'瘴気や有害な空気を弱める探索道具。深淵の樹海で役立つ。',field:'region'},
+  '清水':{price:100,desc:'熱気と乾燥をしのぐ探索用品。沈黙の砂都での行動を助ける。',field:'region'}
  };
  const materialPrices={'皮':90,'結晶':280,'封文片':160,'風晶石':180,'霊樹液':180,'日輪金砂':220};
  const labels={'皮':'森獣の皮','結晶':'魔力結晶','古器':'未鑑定の古器'};
