@@ -225,6 +225,17 @@ try{
  }
  new MutationObserver(ensureConceptMoveLayer).observe($('partyStrip'),{childList:true});ensureConceptMoveLayer();
  const itemBtn=$('swap');if(itemBtn)itemBtn.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();const sheet=$('choiceSheet'),list=$('sheetList');$('sheetKicker').textContent='';$('sheetTitle').textContent='道具';$('sheetHint').textContent='';list.replaceChildren();for(const [name,desc,fn] of [['回復薬','HPを40回復',()=>sheet.close()],['解毒薬','猛毒を解除',()=>sheet.close()],['換装','予備武器に持ち替える',()=>{sheet.close();$('switch').click()}]]){const b=document.createElement('button');b.type='button';b.className='menu-action';b.innerHTML='<span>'+name+'<small>'+desc+'</small></span>';b.addEventListener('click',fn);list.append(b)}if(!sheet.open)sheet.showModal()},true);
+ const bookBtn=$('historyButton');
+ if(bookBtn)bookBtn.addEventListener('click',e=>{
+  e.preventDefault();e.stopImmediatePropagation();
+  const sheet=$('choiceSheet'),list=$('sheetList');$('sheetKicker').textContent='';$('sheetTitle').textContent='BOOK';$('sheetHint').textContent='';list.replaceChildren();
+  const help=document.createElement('button');help.type='button';help.className='menu-action';help.innerHTML='<span>操作の説明<small>戦闘操作・移動・対象選択</small></span>';
+  help.addEventListener('click',()=>{list.innerHTML='<div class="concept-help"><b>基本操作</b><p>カードをタップして操作キャラを選択。空きマスをタップすると移動、別の味方カードをタップすると位置交換します。</p><p>ATTACK＝攻撃 / SKILL＝技 / ITEM＝道具・換装 / DEFEND＝防御。対象選択中は光る敵・味方をタップします。</p></div>'});
+  const log=document.createElement('button');log.type='button';log.className='menu-action';log.innerHTML='<span>戦闘履歴<small>これまでの行動を確認</small></span>';
+  log.addEventListener('click',()=>{sheet.close();$('history').open=true});
+  list.append(help,log);if(!sheet.open)sheet.showModal()
+ },true);
+
  const formationSheet=$('formationSheet'),allyFormationBoard=$('allyFormationBoard'),enemyFormationBoard=$('enemyFormationBoard');
  const DISPLAY_NAME={war:'ガルド',rog:'リゼ',run:'エルン',ran:'セナ',arc:'ミレア',mys:'ユナ',g1:'白銀騎士',g2:'聖域の番兵',g3:'月影の獣',arch:'翼竜A',arch2:'翼竜B',mage:'星詠み'};
  const ICON_SRC={war:'images/gald.svg',rog:'images/lize.svg',run:'images/ern.svg',ran:'images/sena.svg',arc:'images/mirea.svg',mys:'images/yuna.svg',g1:'images/enemy_guard.svg',g2:'images/enemy_guard.svg',g3:'images/enemy_guard.svg',arch:'images/enemy_archer.svg',arch2:'images/enemy_archer.svg',mage:'images/enemy_mage.svg'};
