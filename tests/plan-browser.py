@@ -10,7 +10,7 @@ async def main():
   browser=await p.chromium.launch(headless=True,args=['--no-sandbox'])
   page=await browser.new_page(viewport={'width':390,'height':844})
   errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
-  await page.goto('http://127.0.0.1:8140/play-plan-v8.html',wait_until='load')
+  await page.goto('http://127.0.0.1:8140/play-plan-v9.html',wait_until='load')
   await page.wait_for_timeout(1200)
   data=await page.evaluate("""()=>{const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];const cards=qa('.ally-unit'),enemies=qa('.enemy-unit');return {presentation:document.documentElement.dataset.presentation,cards:cards.length,enemies:enemies.length,order:qa('.order-face').length,api:!!window.RPGDemo,labels:['attack','skills','swap','defend'].map(id=>q('#'+id+' b')?.textContent.trim()),iconsHidden:q('#attack .icon')?getComputedStyle(q('#attack .icon')).display==='none':true,terrain:q('#terrainEffect')?.textContent.trim(),formationHidden:q('#formationButton')?getComputedStyle(q('#formationButton')).display==='none':true,facesHidden:q('.ally-face-wrap')?getComputedStyle(q('.ally-face-wrap')).display==='none':true}}""")
   ok=(not errors and data['cards']==6 and data['enemies']==6 and data['order']>0 and data['api'] and data['labels']==['ATTACK','SKILL','ITEM','DEFEND'] and data['iconsHidden'])
