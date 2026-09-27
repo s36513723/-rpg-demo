@@ -192,7 +192,7 @@ function render(){
  $('attack').disabled=!!reason;
  $('attack').title=reason||u.weapon.name+'で通常攻撃';
  $('attack').querySelector('use').setAttribute('href','#i-'+skillIcon(n));
- $('swap').disabled=u.status.legBind>0||!live(party).some(t=>t.row!==u.row&&col(t)===col(u));
+ $('swap').disabled=u.status.legBind>0;
  $('switch').title=u.weapon.name+' → '+W[u.weapons[u.wi?0:1]].name;
  $('targetHint').innerHTML=targetMode?esc(a.name)+' →':t?esc(a.kind==='attack'?u.weapon.name:a.name)+' → '+esc(t.name)+(a.heal?'':affinity(t,a.attr)>1?' <strong>✧</strong>':''):'―';
  highlightTargets();
