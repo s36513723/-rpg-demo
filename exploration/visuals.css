@@ -128,3 +128,12 @@
  .facility-talk{right:18px;bottom:14px;font-size:11px}
  .facility-action-deck{gap:8px;padding:10px 14px 14px}.facility-action-deck>.row{min-height:58px}
 }
+
+/* UI21: selection screens are fixed-height, shared and non-scrolling. */
+.people-select-page{overflow:hidden!important;display:flex!important;flex-direction:column;gap:7px;padding-top:8px!important}
+.people-select-page>.people-select-grid{flex:1;min-height:0}
+.people-select-page>.row{flex:0 0 auto;margin:0}
+.sortie-page{overflow:hidden!important;display:flex!important;flex-direction:column}
+.sortie-page>.ui-tabs{flex:0 0 auto}
+.sortie-page>.formation-board,.sortie-page>.people-select-grid{flex:1;min-height:0}
+.room-page{overflow:hidden!important}
