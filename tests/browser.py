@@ -31,8 +31,8 @@ async def layouts(page):
   for alerts in [False,True]:
    await page.set_viewport_size({'width':width,'height':height})
    await page.evaluate("""({base,alerts})=>{installSave(base);H.run=null;for(const q of hc().quests)H.quests[q.id]={state:0,progress:0};loot.古器=alerts?2:0;H.story.pending=alerts?['古代迷宮']:[];const q=hc().quests[0];H.quests[q.id]={state:alerts?2:0,progress:alerts?q.target:0};H.tracked=alerts?q.id:null;town()}""",{'base':baseline,'alerts':alerts})
-   dims=await page.evaluate("""()=>{const s=document.querySelector('#screen'),f=document.querySelector('#app nav'),places=[...document.querySelectorAll('.town-scene .place')];return {overflow:s.scrollHeight-s.clientHeight,wide:document.documentElement.scrollWidth>innerWidth,facilities:places.length,facilitiesVisible:places.every(x=>x.getBoundingClientRect().bottom<=s.getBoundingClientRect().bottom),foot:innerHeight-f.getBoundingClientRect().bottom}}""")
-   results.append({'name':f'UI19 viewport {width}x{height} alerts={alerts}','ok':dims['overflow']<=1 and not dims['wide'] and dims['facilities']==3 and dims['facilitiesVisible'] and dims['foot']>=20,'measurements':dims})
+   dims=await page.evaluate("""()=>{const s=document.querySelector('#screen'),f=document.querySelector('#app nav'),home=document.querySelector('.town-home');return {overflow:s.scrollHeight-s.clientHeight,wide:document.documentElement.scrollWidth>innerWidth,background:!!home&&getComputedStyle(home).backgroundImage.includes('town_lexia'),tabs:document.querySelectorAll('#app nav button').length,foot:innerHeight-f.getBoundingClientRect().bottom}}""")
+   results.append({'name':f'UI21 viewport {width}x{height} alerts={alerts}','ok':dims['overflow']<=1 and not dims['wide'] and dims['background'] and dims['tabs']==3 and dims['foot']>=20,'measurements':dims})
  for width,height in [(320,568),(375,667),(390,844),(430,932),(768,1024)]:
   await page.set_viewport_size({'width':width,'height':height})
   await page.evaluate('base=>{installSave(base);H.run=null;closeM();town()}',baseline)
@@ -41,9 +41,14 @@ async def layouts(page):
    dims=await page.evaluate("""()=>{const panel=document.querySelector('#panel'),body=panel.querySelector('.panel-body'),close=panel.querySelector('.modal-x');const pr=panel.getBoundingClientRect(),cr=close.getBoundingClientRect();return {wide:body.scrollWidth>body.clientWidth+1,scroll:body.scrollHeight-body.clientHeight,exit:cr.right<=innerWidth&&cr.top>=0,fit:pr.bottom<=innerHeight&&pr.top>=0,portrait:!!panel.querySelector('img,.role-emblem'),stand:!!panel.querySelector('.npc-stand')}}""")
    npc=action.startswith('npcTalk')
    results.append({'name':f'UI17 dialogue/equipment layout {width}x{height} {action}','ok':not dims['wide'] and dims['exit'] and dims['fit'] and dims['portrait'] and (not npc or (dims['stand'] and dims['scroll']<=1)),'measurements':dims})
-  await page.evaluate('npcMenu()')
-  dims=await page.evaluate("""()=>{const body=document.querySelector('#panel .panel-body');return {scroll:body.scrollHeight-body.clientHeight,tiles:body.querySelectorAll('.person-tile').length,wide:body.scrollWidth>body.clientWidth+1}}""")
-  results.append({'name':f'UI17 NPC list fits {width}x{height}','ok':dims['scroll']<=1 and not dims['wide'] and dims['tiles']==6,'measurements':dims})
+  for selector in ['conversation()','npcMenu()']:
+   await page.evaluate(selector)
+   dims=await page.evaluate("""()=>{const body=document.querySelector('#panel .panel-body');return {scroll:body.scrollHeight-body.clientHeight,cards:body.querySelectorAll('.person-select-card').length,wide:body.scrollWidth>body.clientWidth+1,same:body.classList.contains('people-select-page')}}""")
+   results.append({'name':f'UI21 people selector fits {width}x{height} {selector}','ok':dims['scroll']<=1 and not dims['wide'] and dims['cards']>=6 and dims['same'],'measurements':dims})
+  for tab in ['formation','members','destination']:
+   await page.evaluate(f"partyMenu('{tab}')")
+   dims=await page.evaluate("""()=>{const body=document.querySelector('#panel .panel-body');return {scroll:body.scrollHeight-body.clientHeight,wide:body.scrollWidth>body.clientWidth+1,fixed:body.classList.contains('sortie-page'),tabs:body.querySelectorAll('.ui-tabs button').length}}""")
+   results.append({'name':f'UI21 sortie tab fits {width}x{height} {tab}','ok':dims['scroll']<=1 and not dims['wide'] and dims['fixed'] and dims['tabs']==3,'measurements':dims})
   for facility in ['inn()','guild()','market()']:
    await page.evaluate(facility)
    dims=await page.evaluate("""()=>{const body=document.querySelector('#panel .panel-body');return {scroll:body.scrollHeight-body.clientHeight,wide:body.scrollWidth>body.clientWidth+1,stand:!!body.querySelector('.facility-stand'),choices:body.querySelectorAll('.facility-action-deck button.row').length}}""")
