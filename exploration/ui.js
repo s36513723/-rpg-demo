@@ -18,7 +18,7 @@ function applyPreset(i){if(H.run?.battle)return;const p=H.presets[i];if(!p)retur
 function settings(){show('<h2>設定・セーブ</h2>'+HT(hubSaveError?'保存に注意が必要です':'自動保存',hubSaveError||'操作ごとに保存します。探索中の地点・報酬待ちも再開できます。')+HB('手動セーブ','','manualSave')+HB('文字サイズ',H.settings.text,'cycleText')+HB('重要操作の確認',H.settings.confirm?'ON':'OFF','toggleConfirm')+HB('セーブを書き出す','JSONファイルとして手元に保存','exportSave')+HB('セーブを読み込む','現在のデータは確認後に置き換え','chooseImport')+HB('前のバックアップを復元','読込前のデータを保持しています','askRestore',[],!RPG_STORE.getItem(HUB_BACKUP))+HB('最初から始める','現在の進行を初期化','resetSave')+back())}
 function manualSave(){note(saveGame()?'セーブしました。':'保存できません。書き出しを利用してください。')}
 function cycleText(){const a=['標準','大','小'];H.settings.text=a[(a.indexOf(H.settings.text)+1)%3];applyHubSettings();persist();settings()}
-function toggleCompact(){return cycleText()}
+function toggleCompact(){H.settings.density=H.settings.density==='コンパクト'?'標準':'コンパクト';applyHubSettings();persist();settings()}
 function toggleConfirm(){H.settings.confirm=!H.settings.confirm;ui.confirm=H.settings.confirm;persist();settings()}
 function exportSave(){const raw=JSON.stringify(collectSave(),null,2),blob=new Blob([raw],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='rpg-save-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 function chooseImport(){const input=document.createElement('input');input.type='file';input.accept='.json,application/json';input.onchange=async()=>{const file=input.files?.[0];if(!file)return;if(file.size>2500000)return note('ファイルが大きすぎます');try{previewImport(await file.text())}catch(e){note('読み込めません：'+e.message)}};input.click()}
