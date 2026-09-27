@@ -4,3 +4,14 @@
 @media(max-height:640px){.town-scene{min-height:0;gap:7px}.places{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:minmax(55px,1fr);gap:5px;border:0}.place{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:55px;border:1px solid var(--edge)!important;border-radius:7px;padding:5px 2px}.place:after{display:none}.place b{font-size:12px}.place i{font-size:19px}.place .small{font-size:8px}.home-objective .row{padding-bottom:8px;min-height:32px}.home-objective .row b{font-size:13px}.attention-strip .row{min-width:0;white-space:normal;padding:5px}.tracked-objective .row{min-height:32px}.tracked-objective .row b{font-size:11px}.tracked-objective .row .small{font-size:9px}.departure-bottom .primary-action{font-size:13px}}
 @media(min-height:641px) and (max-height:720px){.places{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:minmax(62px,1fr);gap:6px;border:0}.place{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:1px solid var(--edge)!important;border-radius:7px;min-height:62px;padding:7px 3px}.place:after{display:none}.place .small{font-size:9px}.place i{font-size:22px}.town-scene{min-height:0}}
 @media(max-height:640px){.town-scene{gap:4px;padding:8px}.home-objective .row{margin-top:2px}.attention-strip .row{min-height:39px}.tracked-objective .row{padding-top:2px;padding-bottom:2px}.region-select{padding-bottom:5px}}
+
+/* UI12: density is independent from text size. */
+.compact-ui .panel-body{padding-top:7px;padding-bottom:12px}
+.compact-ui .row{min-height:38px;margin:4px 0;padding-top:8px;padding-bottom:8px}
+.compact-ui .ui-section{margin-top:11px;margin-bottom:7px}
+.compact-ui .party-member{min-height:60px;padding-top:6px;padding-bottom:6px}
+.compact-ui .resource-grid{padding:8px 0}
+.compact-ui .ui-tabs{margin-bottom:8px}
+.compact-ui .ui-tabs button{min-height:38px}
+.compact-ui .toolbar,.compact-ui .actions{margin:7px 0}
+.compact-ui .dialogue-block{margin-bottom:12px;padding-top:12px;padding-bottom:12px}
