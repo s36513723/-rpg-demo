@@ -178,7 +178,7 @@ const decorateScene=(root,route)=>{
   const scene=root.querySelector?.('.town-scene');
   if(scene&&!scene.dataset.heroVisual){
    scene.dataset.heroVisual='1';
-   scene.querySelectorAll('.place').forEach(e=>{if(e.querySelector('.place-art'))return;const name=e.dataset.hub;if(facilityArt[name])e.insertAdjacentHTML('afterbegin','<img class="place-art" src="'+facilityArt[name]+'" alt="">')});
+   scene.querySelectorAll('.place').forEach(e=>{if(e.querySelector('.place-art'))return;const name=e.dataset.hub,src=name==='partyMenu'?regionArt[H.selected||dungeonId]:facilityArt[name];if(src)e.insertAdjacentHTML('afterbegin','<img class="place-art" src="'+src+'" alt="">')});
    const select=scene.querySelector('.region-select');
    if(select&&!select.querySelector('.region-preview')){const region=H.selected||dungeonId;if(regionArt[region])select.insertAdjacentHTML('afterbegin','<img class="region-preview" src="'+regionArt[region]+'" alt="">')}
   }
@@ -219,7 +219,7 @@ const decorate=(root,route={name:'town',args:[]})=>{
  }
  dialoguePage(root,route);
  decorateScene(root,route);
- root.querySelectorAll('.place').forEach(e=>{const i=e.querySelector('i');if(i)i.innerHTML=glyph(actions[e.dataset.hub]||'compass')});
+ root.querySelectorAll('.place').forEach(e=>{const i=e.querySelector('i');if(i)i.innerHTML=glyph(e.dataset.hub==='partyMenu'?'map':actions[e.dataset.hub]||'compass')});
  root.querySelectorAll('button[data-hub]').forEach(markRow);
  root.querySelectorAll('.region-select').forEach(e=>{const region=H.selected||dungeonId;if(!e.querySelector('.region-emblem'))e.insertAdjacentHTML('afterbegin','<span class="region-emblem" aria-hidden="true">'+glyph(regionIcon(region))+'</span>');if(regionArt[region]&&!e.querySelector('.region-preview'))e.insertAdjacentHTML('afterbegin','<img class="region-preview" src="'+regionArt[region]+'" alt="">')});
  root.querySelectorAll('.map-node').forEach(e=>{const node=H.run?.floors[H.run.floor-1]?.nodes.find(n=>n.id===readArgs(e)[0]);const i=e.querySelector('i');if(i&&node)i.innerHTML=glyph(nodeGlyph(node.type));if(node&&!e.querySelector('.node-thumb')){const theme=H.run?.themes?.[H.run.floor-1]||'',src=node.type==='merchant'?merchantImage:node.type==='forge'?facilityArt.market:(themeArt[theme]||regionArt[H.run?.dungeon]);if(src)e.insertAdjacentHTML('afterbegin','<img class="node-thumb" src="'+src+'" alt="">')}});
@@ -231,13 +231,13 @@ const chrome=()=>{
  document.querySelectorAll('#app>nav button').forEach(e=>{const icon=e.querySelector('.ico');if(icon)icon.innerHTML=glyph(actions[e.dataset.hub]||'compass')});
  const gear=document.querySelector('.header-tools [data-hub="settings"]');if(gear)gear.innerHTML=glyph('settings');
 };
-window.HUB_VISUAL={version:21,glyph,decorate,chrome,person,portrait,itemIcon,masteryIcon,regionIcon,actionIcon,npcStand};
+window.HUB_VISUAL={version:23,glyph,decorate,chrome,person,portrait,itemIcon,masteryIcon,regionIcon,actionIcon,npcStand};
 // Adapt the existing presentation layer without duplicating its navigation or game actions.
 const showBase=window.show,townBase=window.town,mapBase=window.drawDungeon,closeBase=window.closeM;
 window.show=html=>{showBase(html);const panel=document.getElementById('panel'),route=HUB_UI.state.route||{name:'note',args:[]};decorate(panel,route);const exit=panel.querySelector('.modal-x');if(exit){exit.setAttribute('aria-label',activeRun()?'地図へ戻る':'拠点へ戻る');exit.innerHTML=glyph(activeRun()?'map':'home')+'<span>'+(activeRun()?'地図へ':'拠点へ')+'</span>'}const back=panel.querySelector('.panel-back');if(back)back.innerHTML=glyph('back');chrome()};
 window.town=(...args)=>{const value=townBase(...args);if(!activeRun())decorate(document.getElementById('screen'),{name:'town',args:[]});chrome();return value};
 window.drawDungeon=(...args)=>{const value=mapBase(...args);decorate(document.querySelector('.expedition'),{name:'drawDungeon',args:[]});chrome();return value};
 window.closeM=(...args)=>{const value=closeBase(...args);if(document.activeElement?.closest('#modal'))document.querySelector('#app nav button')?.focus({preventScroll:true});return value};
-HUB_UI.version=21;
+HUB_UI.version=23;
 
 })();
