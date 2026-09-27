@@ -4,3 +4,6 @@
 .scene-ally-sub{grid-template-columns:minmax(0,1fr)!important}
 
 .resource-list{grid-template-columns:1fr!important}
+
+#game .ally-unit .resource[data-resource="mp"],#game .scene-gauge-mp{display:none!important}
+#game .ally-unit .resource[data-resource="sp"]{left:10px!important;right:9px!important;width:auto!important;grid-column:1/-1!important}

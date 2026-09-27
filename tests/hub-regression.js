@@ -6,7 +6,7 @@ async () => {
  function run(reg='古代迷宮'){reset();addUnique(unlocked,reg);dungeonId=reg;startDungeon();return H.run}
  function enter(type,floor=1){const r=H.run;r.floor=floor;r.pending=null;r.phase=null;r.battle=null;const f=r.floors[floor-1],n=f.nodes.find(n=>n.type===type);assert(n,'fixture '+type);n.done=false;n.hidden=false;f.open=[n.id];routeNode(n.id);return n}
  function returnResult(result='win'){const c=prepareBattle();assert(c,'prepare context');c.result=result;c.vitals=cp(vitals);c.usedCarry={回復薬:1};RPG_STORE.setItem('rpg.exploreBattle',JSON.stringify(c));assert(resumeBattle(),'resume result');return c}
- await test('six members and initial derived resources',()=>{assert(names.length===6&&vitals[0].hp===215&&vitals[4].mp===105)});
+ await test('six members and initial derived resources',()=>{assert(names.length===6&&vitals[0].hp===215&&vitals[4].sp===125&&vitals[4].mp===0)});
  await test('prologue is an optional one-time scene',()=>{reset();startStory();assert(H.story.intro);const money=gold;startStory();assert(gold===money)});
  await test('24 regional events, 24 quests, 12 craft recipes, 4 secrets',()=>{assert(hc().events.length===24&&hc().quests.length===24&&hc().recipes.length===12&&hc().secrets.length===4)});
  await test('seeded map has exactly 3 floors with valid reachable exits',()=>{run();for(const f of H.run.floors){const reachable=new Set([0,1]);for(let i=0;i<9;i++)if(reachable.has(i))f.nodes[i].links.forEach(j=>reachable.add(j));assert(reachable.has(8));assert(f.nodes.every(n=>n.links.every(id=>f.nodes.some(x=>x.id===id))))}});
