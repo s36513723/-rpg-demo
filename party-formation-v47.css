@@ -1,0 +1,174 @@
+/* v47 — six-person party mapped onto a 3×3 FRONT / MID / REAR formation. */
+.formation-dock{
+  flex:0 0 108px;
+  grid-template-rows:repeat(3,34px);
+  gap:2px;
+  padding-top:2px;
+  border-top:1px solid #d8c49a3b;
+}
+.formation-dock .ally-row{
+  position:relative;
+  min-height:34px;
+  height:34px;
+  padding-left:13px;
+  gap:2px;
+  background:
+    linear-gradient(90deg,transparent 13px,#b6c2c51b 13px 14px,transparent 14px),
+    linear-gradient(90deg,#0d1b29f2,#0b1825f8);
+  border-bottom:1px solid #c7b48522;
+}
+.formation-dock .ally-row::before{
+  content:attr(data-rank);
+  position:absolute;
+  left:2px;
+  top:50%;
+  translate:0 -50%;
+  font:8px/1 Georgia,'Times New Roman',serif;
+  letter-spacing:.08em;
+  color:#9daab0;
+  opacity:.7;
+}
+.formation-dock .ally-unit{
+  height:34px;
+  min-height:34px;
+  padding:3px 5px 2px;
+  border-right:1px solid #b1bdc218;
+  border-bottom:0;
+  background:linear-gradient(100deg,#132433b8,#0b1723d6);
+}
+.formation-dock .ally-unit .card-name{
+  font-size:10px;
+  line-height:11px;
+  height:11px;
+  max-width:calc(100% - 31px);
+}
+.formation-dock .resource-list{
+  margin-top:2px;
+  gap:1px 5px;
+}
+.formation-dock .resource-value{font-size:8px;line-height:8px}
+.formation-dock .resource-value span{font-size:6px}
+.formation-dock .resource-value b{font-size:8px}
+.formation-dock .resource[data-resource="hp"] .resource-value{
+  top:3px;
+  right:4px;
+}
+.formation-dock .resource[data-resource="hp"] .resource-value span{display:none}
+.formation-dock .resource[data-resource="hp"] .resource-value b{font-size:9px}
+.formation-dock .resource[data-resource="hp"] .bar{height:2px}
+.formation-dock .resource .sp,.formation-dock .resource .mp{height:1px}
+.formation-dock .queued-mark{bottom:1px;right:2px;font-size:7px}
+.formation-dock .ally-unit.active{
+  background:linear-gradient(110deg,#bea05b35,#152637df);
+  box-shadow:inset 0 1px #d8c297,inset 0 -1px #d8c29733;
+}
+/* Empty tactical cells remain subtly visible even without a unit card. */
+.formation-dock .ally-row{
+  background-image:
+    linear-gradient(90deg,transparent 13px,#b6c2c51b 13px 14px,transparent 14px),
+    linear-gradient(90deg,
+      transparent 0 calc(33.333% - 1px),#b7c2c516 calc(33.333% - 1px) 33.333%,
+      transparent 33.333% calc(66.666% - 1px),#b7c2c516 calc(66.666% - 1px) 66.666%,
+      transparent 66.666%),
+    linear-gradient(90deg,#0d1b29f2,#0b1825f8);
+}
+
+/* Command overlay stays pinned immediately above the 3-rank formation. */
+.command-panel,.command-panel.resolving{
+  bottom:calc(var(--bottom-gap) + 108px);
+}
+.actor-art{
+  bottom:calc(-108px - var(--bottom-gap));
+}
+.history[open]{inset:auto 10px calc(112px + var(--bottom-gap))}
+
+/* 3×3 formation picker shown only after SHIFT. */
+.formation-editor{
+  display:grid;
+  gap:5px;
+  padding:3px 0 5px;
+}
+.formation-line{
+  display:grid;
+  grid-template-columns:46px minmax(0,1fr);
+  align-items:stretch;
+  gap:6px;
+}
+.formation-label{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  padding-right:4px;
+  font:8px/1 Georgia,'Times New Roman',serif;
+  letter-spacing:.12em;
+  color:#aeb8be;
+}
+.formation-cells{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:5px;
+}
+.formation-cell{
+  height:58px;
+  min-width:0;
+  position:relative;
+  border:1px solid #aab7bf2f;
+  background:linear-gradient(145deg,#132536cc,#091724d9);
+  color:#dce0df;
+  border-radius:2px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  overflow:hidden;
+}
+.formation-cell img{
+  width:34px;
+  height:34px;
+  object-fit:cover;
+  border-radius:50%;
+  filter:saturate(.82);
+}
+.formation-cell span:not(.formation-plus){
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font:9px/11px var(--serif);
+}
+.formation-cell.empty{
+  background:#0a17224f;
+  border-style:dashed;
+}
+.formation-plus{
+  font:300 19px/1 Georgia,serif;
+  color:#a6b2b75f;
+}
+.formation-cell.current{
+  border-color:#dcc38d;
+  box-shadow:inset 0 0 0 1px #dcc38d55,0 0 10px #d7ba7820;
+}
+.formation-cell.current::after{
+  content:'ACTIVE';
+  position:absolute;
+  top:2px;right:3px;
+  font:6px/1 Georgia,serif;
+  letter-spacing:.08em;
+  color:#e0c995;
+}
+.formation-cell:active:not(:disabled){background:#c8b27d18}
+.formation-cell:disabled{opacity:.4}
+.sheet-hint:not(:empty){
+  margin:7px 0 2px;
+  font:8px/1 Georgia,'Times New Roman',serif;
+  letter-spacing:.12em;
+  color:#aeb7ba;
+  text-align:right;
+}
+@media(max-height:650px){
+  .formation-dock{flex-basis:99px;grid-template-rows:repeat(3,31px)}
+  .formation-dock .ally-row,.formation-dock .ally-unit{height:31px;min-height:31px}
+  .command-panel,.command-panel.resolving{bottom:calc(var(--bottom-gap) + 99px)}
+  .actor-art{bottom:calc(-99px - var(--bottom-gap))}
+}
