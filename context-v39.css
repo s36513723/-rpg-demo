@@ -1,0 +1,95 @@
+/* v39 — rear enemy art sits directly below HP; ally command dock is contextual. */
+
+/* Rear row: HP bar and body read as one unit. */
+.enemy-back-lane .enemy-name{top:0}
+.enemy-back-lane .enemy-hp{
+  top:14px;
+  left:17%;
+  width:66%;
+}
+.enemy-back-lane .enemy-visual{
+  inset:18px 0 12px;
+}
+.enemy-back-lane .enemy-visual img{
+  object-position:center top;
+}
+.enemy-back-lane .target-pointer{top:20px}
+.enemy-back-lane .enemy-unit .card-status{top:22px}
+
+/* Default battlefield state: no portrait, no command dock. */
+.command-panel.command-closed{
+  height:0;
+  min-height:0;
+  padding:0;
+  margin:0;
+  border:0;
+  background:none;
+}
+.command-panel.command-closed::before,
+.command-panel.command-closed::after,
+.command-panel.command-closed .actor-art,
+.command-panel.command-closed .command-content{
+  display:none;
+}
+
+/* A party card tap opens the selected hero's portrait + commands. */
+.command-panel.command-open{
+  visibility:visible;
+}
+.command-panel.command-open .actor-art,
+.command-panel.command-open .command-content{
+  display:block;
+}
+
+/* Once all allies have commands, keep only the final round-start action. */
+.command-panel.ready-only{
+  height:34px;
+  min-height:34px;
+  padding:2px 0 0;
+  margin:0;
+  border-top:1px solid #d4b9782f;
+  background:linear-gradient(90deg,transparent,#0a131ddb 35%,#0a131ddb 100%);
+}
+.command-panel.ready-only::before{display:none}
+.command-panel.ready-only .actor-art,
+.command-panel.ready-only .actor-button,
+.command-panel.ready-only .target-line,
+.command-panel.ready-only .command:not(.round-start){
+  display:none;
+}
+.command-panel.ready-only .command-content{
+  display:block;
+  width:100%;
+  padding:0;
+  margin:0;
+}
+.command-panel.ready-only .command-buttons{
+  display:flex;
+  justify-content:flex-end;
+  border:0;
+  padding:0;
+  margin:0;
+}
+.command-panel.ready-only .command.round-start{
+  position:static;
+  width:112px;
+  height:30px;
+  min-height:30px;
+  flex:none;
+}
+
+/* Playback still uses the same area, with portrait only on an ally's actual action. */
+.command-panel.resolving{
+  min-height:69px;
+}
+.command-panel.resolving.enemy-action .actor-art{opacity:0}
+
+/* No persistent selection glow when the lower command dock is closed. */
+.command-panel.command-closed + .history{margin-top:0}
+
+@media(max-height:720px) and (orientation:portrait){
+  .enemy-back-lane .enemy-hp{top:13px}
+  .enemy-back-lane .enemy-visual{inset:17px 0 11px}
+  .command-panel.ready-only{height:32px;min-height:32px}
+  .command-panel.ready-only .command.round-start{height:28px;min-height:28px}
+}
