@@ -33,3 +33,7 @@ dialog.touch-dialog button:not(.formation-cell):not(.form-cell){min-height:44px}
 
 #game .ally-unit .resource[data-resource="mp"],#game .scene-gauge-mp{display:none!important}
 #game .ally-unit .resource[data-resource="sp"]{left:10px!important;right:9px!important;width:auto!important;grid-column:1/-1!important}
+
+#choiceSheet.touch-dialog .sheet-head{display:flex!important}
+#choiceSheet.touch-dialog .sheet-hint{display:block!important;margin:10px 0!important;font-size:12px!important;line-height:1.65!important}
+#choiceSheet.touch-dialog .sheet-hint:empty{display:none!important}
