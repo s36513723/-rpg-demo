@@ -20,5 +20,6 @@ try{
  cancel.click();
  results.push({name:'Bottom cancel restores previous screen without purchase',ok:gold===before&&document.querySelector('#modal').classList.contains('on')&&HUB_UI.state.route.name==='toolShop'});
 }catch(e){results.push({name:'Bottom cancel',ok:false,error:String(e)})}
+try{closeM();equipChoice(0,0,'長槍');const panel=document.querySelector('#panel'),body=panel.querySelector('.panel-body'),hero=panel.querySelector('.fitting-hero'),controls=panel.querySelector('.fitting-controls'),footer=panel.querySelector('.panel-footer');const top=hero.getBoundingClientRect().top;body.scrollTop=body.scrollHeight;const after=hero.getBoundingClientRect();results.push({name:'Pinned equipment comparison and bottom confirmation '+innerWidth,ok:after.top===top&&controls.getBoundingClientRect().bottom<=body.getBoundingClientRect().top+1&&body.clientHeight>=65&&!!footer.querySelector('[data-hub="fittingCancel"]')&&!!footer.querySelector('[data-hub="fittingApply"]')&&body.scrollWidth<=body.clientWidth+1});}catch(e){results.push({name:'Pinned fitting',ok:false,error:String(e)})}
 installSave(saved);closeM();town();return results;
 })();
