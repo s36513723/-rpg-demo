@@ -26,4 +26,17 @@ function initializeProgression(d){for(const [g,data] of Object.entries(rules().m
  rebuildSkillWeaponMap()
 }
 function trainMastery(i,g){const def=rules().masteries[g];if(!def)return;if(mp[i]<1)return note('Mastery Pt不足');const r=ranksFor(i)[g]||0;if(r>=50)return note('Masteryは50が上限');if(['源泉','術法','技能'].includes(def.category)){const own=masteryOwned[i][def.category],limit=def.category==='源泉'?1:2;if(!own.includes(g)){if(own.length>=limit)return note(def.category+'は'+limit+'系統まで');own.push(g)}}ranksFor(i)[g]=Math.min(50,r+5);mp[i]--;persist();growMastery(i,g)}
+var WEAPON_HELP={
+ '拳甲':'拳と蹴りの連撃や反撃を活かす近距離の壊武器。','短剣':'スルー攻撃と毒・盲目で前衛の奥を崩す軽量武器。','王国剣':'単体斬撃と横薙ぎを両立する扱いやすい近距離武器。',
+ '戦槌':'壊属性で前衛を崩し、気絶や動揺を狙う重量武器。','戦斧':'高威力の斬撃と横範囲を得意とする重量武器。','長槍':'中距離から正面の敵列を縦に貫く突武器。',
+ '鞭':'中距離からスルー・封じ・引寄せを行う技巧武器。','鎌':'スルーや後方へ圧力をかけ、処刑・吸収を扱う斬武器。','刀':'居合・先制・反撃を活かす技巧型の近距離斬武器。',
+ '長弓':'遠距離から最後尾や飛行敵を狙いやすい突武器。','銃':'横指定・最後尾・貫通に強い精密な遠距離突武器。','短杖':'術威力や詠唱を支える軽量な術者向け武器。',
+ '小盾':'挑発・庇護・反撃で味方を守る副手装備。','回刃':'遠距離からスルーや範囲攻撃を行う投擲武器。','呪符':'符術などの術法運用を支える軽量な術具。'
+};
+var ARMOR_HELP={'魔装':'魔防・属性対策・状態耐性を重視する術者向け防具。','軽装':'回避・速度・機動力を重視する中軽量防具。','重装':'物防・不動・庇護を重視する前衛向け防具。'};
+function weaponDescription(n){return WEAPON_HELP[n]||WEAPON_HELP[typeof weaponKind==='function'?weaponKind(n):n]||'装備する武器によって属性・射程・使えるスキルが変わります。'}
+function armorDescription(n){return ARMOR_HELP[n]||'防御性能と重量のバランスが異なる防具。'}
+function toolDescription(n){return hc().tools[n]?.desc||'探索や戦闘で使う携行品。'}
+function masteryDescription(n){return rules().masteryDescription?.(n)||'この系統の戦い方を伸ばすMastery。'}
+function skillExplanation(d){return rules().skillExplain?.(d)||skillDescription(d)}
 function skillDescription(d){if(d.mode==='Passive')return d.description;const targeting=rules().targetingText?.(d)||'',s=[targeting,d.mult>0?'威力'+d.mult+(d.hits?'（'+d.hits+'段合計）':''):'',d.stat,d.cast?'詠唱1ラウンド':'',d.once?'1戦1回':'',d.push?'吹飛ばし':d.pull?'引寄せ':'',d.heal?'HP回復':'',d.summon?'召喚3ラウンド':''];return s.filter(Boolean).join(' / ')}
