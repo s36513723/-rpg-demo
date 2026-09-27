@@ -8,7 +8,7 @@ function canEquip(i,k,n){if(!Number.isInteger(i)||i<0||i>=6||![0,1,2,3,4,8,9].in
 function candidateWeight(i,k,n){const old=eq[i].slice();const label=old[k].split('：')[0];eq[i][k]=label+'：'+n;if(k===4)for(let z=5;z<=7;z++)eq[i][z]=old[z].split('：')[0]+'：'+n;if((k===0||k===2)&&isTwoHanded(n))eq[i][k+1]=old[k+1].split('：')[0]+'：なし';const w=weightInfo(i);eq[i]=old;return w}
 function equipmentSnapshot(i){
  const a=stats[i],d=rules().derived(a),armor=ARM[eq[i][4].split('：')[1]]||[0,'',0,0],w=weightInfo(i),main=eq[i][0].split('：')[1],weapon=WM[main],set=skillSet[i].filter(n=>rules().meta(n)?.mode==='Active'),usable=set.filter(n=>skillUsable(i,n)).length;
- return {hp:d.hp,sp:d.sp,mp:d.mp,pdef:a[0]+(armor[2]||0),mdef:a[2]+a[3]+(armor[3]||0),weight:w.weight,limit:w.limit,weightLevel:w.level,weightText:w.text,attack:weapon?weapon[0]+'・'+weapon[1]:'壊・近',usable,setCount:set.length};
+ return {hp:d.hp,sp:d.sp,mp:d.mp,pdef:a[0]+(armor[2]||0),mdef:a[2]+a[3]+(armor[3]||0),weight:w.weight,limit:w.limit,weightLevel:w.level,weightText:w.text,attack:weapon?weapon[0]+'・'+weapon[1]:'壊・近',usable,setCount:set.length,stance:stanceInfo(i).name};
 }
 function candidateEquipmentSnapshot(i,k,n){
  const old=eq[i].slice(),label=old[k].split('：')[0];
@@ -23,12 +23,18 @@ function equipmentCompareText(i,k,n){
  if(a.mdef!==b.mdef)parts.push('魔防 '+a.mdef+'→'+b.mdef);
  if(a.weight!==b.weight)parts.push('重量 '+a.weight+'→'+b.weight);
  if(a.attack!==b.attack)parts.push('攻撃 '+a.attack+'→'+b.attack);
- if(a.usable!==b.usable)parts.push('セット技 '+a.usable+'/'+a.setCount+'→'+b.usable+'/'+b.setCount);
- return parts.join(' / ')||'現在の戦闘値は変わりません';
+ if(a.stance!==b.stance)parts.push('構え '+a.stance+'→'+b.stance);
+ if(a.usable!==b.usable)parts.push('使用可能技 '+a.usable+'/'+a.setCount+'→'+b.usable+'/'+b.setCount);
+ return parts.join(' / ')||'主要戦闘値は変わりません';
 }
 function equipmentComparePanel(i,k,n){
- const a=equipmentSnapshot(i),b=candidateEquipmentSnapshot(i,k,n),metric=(label,x,y)=>'<span class="'+(x===y?'same':y>x?'up':'down')+'"><small>'+label+'</small><b>'+x+'</b><i>›</i><b>'+y+'</b></span>',now=eq[i][k].split('：')[1],profile=k<4?'<div class="equip-profile"><small>武器特性</small><b>'+hesc(WM[now]?.[0]||'—')+'・'+hesc(WM[now]?.[1]||'—')+'</b><i>›</i><b>'+hesc(WM[n]?.[0]||'—')+'・'+hesc(WM[n]?.[1]||'—')+'</b></div>':'';
- return '<section class="equip-compare"><div class="equip-compare-head"><b>'+hesc(n)+'</b><small>現在 → 装備後</small></div><div class="equip-compare-grid">'+metric('物防',a.pdef,b.pdef)+metric('魔防',a.mdef,b.mdef)+metric('重量',a.weight,b.weight)+metric('セット技',a.usable+'/'+a.setCount,b.usable+'/'+b.setCount)+'</div>'+profile+(b.weightLevel?'<p class="inline-warning">'+hesc(b.weightText)+'</p>':'')+'</section>';
+ const a=equipmentSnapshot(i),b=candidateEquipmentSnapshot(i,k,n),now=eq[i][k].split('：')[1],slots={0:'主武器',1:'副手',2:'予備主武器',3:'予備副手',4:'防具一式',8:'装飾',9:'携行具'};
+ const metric=(label,x,y,dir=1,sx=x,sy=y)=>{const cls=sx===sy?'same':((sy-sx)*dir>0?'up':'down');return '<span class="'+cls+'"><small>'+label+'</small><b>'+x+'</b><i>›</i><b>'+y+'</b></span>'};
+ const profile=k<4?'<div class="equip-profile"><small>属性・射程</small><b>'+hesc(WM[now]?.[0]||'—')+'・'+hesc(WM[now]?.[1]||'—')+'</b><i>›</i><b>'+hesc(WM[n]?.[0]||'—')+'・'+hesc(WM[n]?.[1]||'—')+'</b></div>':'';
+ const stance=a.stance!==b.stance?'<div class="equip-profile"><small>構え</small><b>'+hesc(a.stance)+'</b><i>›</i><b>'+hesc(b.stance)+'</b></div>':'';
+ const unchanged=a.pdef===b.pdef&&a.mdef===b.mdef&&a.weight===b.weight&&a.attack===b.attack&&a.usable===b.usable&&a.stance===b.stance;
+ const note=unchanged?'<p class="equip-nochange">'+(k===2||k===3?'予備装備のため、換装するまでは現在の戦闘値に反映されません。':'主要戦闘値の変化はありません。')+'</p>':'';
+ return '<section class="equip-compare" aria-live="polite"><div class="equip-compare-head"><div><small>選択中 · '+hesc(slots[k]||'装備')+'</small><b>'+hesc(n)+'</b></div><span>現在 → 装備後</span></div><div class="equip-change-items"><b>'+hesc(now)+'</b><i>→</i><b>'+hesc(n)+'</b></div><div class="equip-compare-grid">'+metric('物防',a.pdef,b.pdef)+metric('魔防',a.mdef,b.mdef)+metric('重量',a.weight,b.weight,-1)+metric('使用可能技',a.usable+'/'+a.setCount,b.usable+'/'+b.setCount,1,a.usable,b.usable)+'</div>'+profile+stance+note+(b.weightLevel?'<p class="inline-warning">'+hesc(b.weightText)+'</p>':a.weightLevel&&!b.weightLevel?'<p class="equip-improved">重量超過が解消されます。</p>':'')+'</section>';
 }
 function equipChoice(i,k){if(H.run?.battle)return pendingBattleMenu();const list=k<4?['なし',...inventory.weapons]:k===4?inventory.armor:k===9?['なし',...Object.keys(hc().tools).filter(n=>hc().tools[n].battle)]:['なし','護符'];const current=eq[i][k].split('：')[1];show('<h2>'+hesc(names[i])+' / 装備候補</h2>'+HT('現在：'+current,'装備後の重量を表示。要求不足のものは選べません。')+list.map(n=>{const m=WM[n],w=candidateWeight(i,k,n);return HB((n===current?'✓ ':'')+n,(m?m[0]+' / '+m[1]+' / '+m[3]+' '+m[4]+' / ':'')+'装備後 '+w.weight+'/'+w.limit+(k===9?' / 所持 '+(inventory.tools[n]||0):''),'setEquip',[i,k,n],!canEquip(i,k,n))}).join('')+ha(HB('戻る','','equip',[i])))}
 function setEquip(i,k,n){if(H.run?.battle||!canEquip(i,k,n))return;const label=eq[i][k].split('：')[0];eq[i][k]=label+'：'+n;if(k===4)for(let z=5;z<=7;z++)eq[i][z]=eq[i][z].split('：')[0]+'：'+n;if((k===0||k===2)&&isTwoHanded(n))eq[i][k+1]=eq[i][k+1].split('：')[0]+'：なし';persist();equip(i)}
