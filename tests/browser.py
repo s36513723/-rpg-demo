@@ -38,8 +38,12 @@ async def layouts(page):
   await page.evaluate('base=>{installSave(base);H.run=null;closeM();town()}',baseline)
   for action in ['memberTalk(0)','npcTalk("受付")','equip(0)']:
    await page.evaluate(action)
-   dims=await page.evaluate("""()=>{const panel=document.querySelector('#panel'),body=panel.querySelector('.panel-body'),close=panel.querySelector('.modal-x');const pr=panel.getBoundingClientRect(),cr=close.getBoundingClientRect();return {wide:body.scrollWidth>body.clientWidth+1,exit:cr.right<=innerWidth&&cr.top>=0,fit:pr.bottom<=innerHeight&&pr.top>=0,portrait:!!panel.querySelector('img,.role-emblem')}}""")
-   results.append({'name':f'UI9 dialogue/equipment layout {width}x{height} {action}','ok':not dims['wide'] and dims['exit'] and dims['fit'] and dims['portrait'],'measurements':dims})
+   dims=await page.evaluate("""()=>{const panel=document.querySelector('#panel'),body=panel.querySelector('.panel-body'),close=panel.querySelector('.modal-x');const pr=panel.getBoundingClientRect(),cr=close.getBoundingClientRect();return {wide:body.scrollWidth>body.clientWidth+1,scroll:body.scrollHeight-body.clientHeight,exit:cr.right<=innerWidth&&cr.top>=0,fit:pr.bottom<=innerHeight&&pr.top>=0,portrait:!!panel.querySelector('img,.role-emblem'),stand:!!panel.querySelector('.npc-stand')}}""")
+   npc=action.startswith('npcTalk')
+   results.append({'name':f'UI17 dialogue/equipment layout {width}x{height} {action}','ok':not dims['wide'] and dims['exit'] and dims['fit'] and dims['portrait'] and (not npc or (dims['stand'] and dims['scroll']<=1)),'measurements':dims})
+  await page.evaluate('npcMenu()')
+  dims=await page.evaluate("""()=>{const body=document.querySelector('#panel .panel-body');return {scroll:body.scrollHeight-body.clientHeight,tiles:body.querySelectorAll('.person-tile').length,wide:body.scrollWidth>body.clientWidth+1}}""")
+  results.append({'name':f'UI17 NPC list fits {width}x{height}','ok':dims['scroll']<=1 and not dims['wide'] and dims['tiles']==6,'measurements':dims})
  await page.evaluate('base=>{installSave(base);closeM();town()}',baseline)
  await page.set_viewport_size({'width':390,'height':844})
  return results
@@ -66,7 +70,9 @@ async def main():
     if not OFFLINE:
      await page.evaluate('conversation()')
      loaded=await page.evaluate("""async()=>{const images=[...document.querySelectorAll('#party img,#panel img')];await Promise.all(images.map(i=>i.decode().catch(()=>{})));return images.length>=12&&images.every(i=>i.naturalWidth>0)}""")
-     out.append({'name':'UI9 existing portrait assets load on HTTP origin','ok':loaded})
+     out.append({'name':'UI17 existing portrait assets load on HTTP origin','ok':loaded})
+     stands=await page.evaluate("""async()=>{const src=[...Object.values(HUB_VISUAL.npcStand||{})];const images=src.map(s=>{const i=new Image();i.src=s;return i});await Promise.all(images.map(i=>i.decode().catch(()=>{})));return src.length===6&&images.every(i=>i.naturalWidth>0&&i.naturalHeight>0)}""")
+     out.append({'name':'UI17 six NPC standing assets load on HTTP origin','ok':stands})
    out.append({'name':case+' runtime console errors','ok':not errors,'errors':errors})
    await page.close()
   await browser.close()
