@@ -6,6 +6,30 @@ function stanceInfo(i){const m=eq[i][0].split('：')[1],o=eq[i][1].split('：')[
 function equip(i){const w=weightInfo(i);show('<h2>'+hesc(names[i])+' / 装備</h2>'+HT(stanceInfo(i).name,'重量 '+w.weight+'/'+w.limit+' / '+w.text)+[0,1,2,3,4,8,9].map(k=>HB(k===4?'防具一式：'+eq[i][4].split('：')[1]:eq[i][k],'候補を比較','equipChoice',[i,k])).join('')+HB('主副セット ⇄ 予備セット','主武器と副手を同時に交換','swapMain',[i])+ha(HB('キャラクターへ','','character',[i])))}
 function canEquip(i,k,n){if(!Number.isInteger(i)||i<0||i>=6||![0,1,2,3,4,8,9].includes(k))return false;if(k<4){if(n==='なし')return true;if(!inventory.weapons.includes(n)||!WM[n])return false;const m=WM[n],j={PHY:0,SKL:1,ARC:2,MND:3}[m[3]];if(m[3]!=='―'&&stats[i][j]<m[4])return false;if((k===1||k===3)&&(isTwoHanded(n)||isTwoHanded(eq[i][k-1].split('：')[1])||(!n.includes('盾')&&stats[i][1]<30)))return false;return true}if(k===4)return inventory.armor.includes(n);if(k===8)return ['なし','護符'].includes(n);return n==='なし'||!!hc().tools[n]?.battle}
 function candidateWeight(i,k,n){const old=eq[i].slice();const label=old[k].split('：')[0];eq[i][k]=label+'：'+n;if(k===4)for(let z=5;z<=7;z++)eq[i][z]=old[z].split('：')[0]+'：'+n;if((k===0||k===2)&&isTwoHanded(n))eq[i][k+1]=old[k+1].split('：')[0]+'：なし';const w=weightInfo(i);eq[i]=old;return w}
+function equipmentSnapshot(i){
+ const a=stats[i],d=rules().derived(a),armor=ARM[eq[i][4].split('：')[1]]||[0,'',0,0],w=weightInfo(i),main=eq[i][0].split('：')[1],weapon=WM[main],set=skillSet[i].filter(n=>rules().meta(n)?.mode==='Active'),usable=set.filter(n=>skillUsable(i,n)).length;
+ return {hp:d.hp,sp:d.sp,mp:d.mp,pdef:a[0]+(armor[2]||0),mdef:a[2]+a[3]+(armor[3]||0),weight:w.weight,limit:w.limit,weightLevel:w.level,weightText:w.text,attack:weapon?weapon[0]+'・'+weapon[1]:'壊・近',usable,setCount:set.length};
+}
+function candidateEquipmentSnapshot(i,k,n){
+ const old=eq[i].slice(),label=old[k].split('：')[0];
+ eq[i][k]=label+'：'+n;
+ if(k===4)for(let z=5;z<=7;z++)eq[i][z]=old[z].split('：')[0]+'：'+n;
+ if((k===0||k===2)&&isTwoHanded(n))eq[i][k+1]=old[k+1].split('：')[0]+'：なし';
+ const out=equipmentSnapshot(i);eq[i]=old;return out;
+}
+function equipmentCompareText(i,k,n){
+ const a=equipmentSnapshot(i),b=candidateEquipmentSnapshot(i,k,n),parts=[];
+ if(a.pdef!==b.pdef)parts.push('物防 '+a.pdef+'→'+b.pdef);
+ if(a.mdef!==b.mdef)parts.push('魔防 '+a.mdef+'→'+b.mdef);
+ if(a.weight!==b.weight)parts.push('重量 '+a.weight+'→'+b.weight);
+ if(a.attack!==b.attack)parts.push('攻撃 '+a.attack+'→'+b.attack);
+ if(a.usable!==b.usable)parts.push('セット技 '+a.usable+'/'+a.setCount+'→'+b.usable+'/'+b.setCount);
+ return parts.join(' / ')||'現在の戦闘値は変わりません';
+}
+function equipmentComparePanel(i,k,n){
+ const a=equipmentSnapshot(i),b=candidateEquipmentSnapshot(i,k,n),metric=(label,x,y)=>'<span class="'+(x===y?'same':y>x?'up':'down')+'"><small>'+label+'</small><b>'+x+'</b><i>›</i><b>'+y+'</b></span>',now=eq[i][k].split('：')[1],profile=k<4?'<div class="equip-profile"><small>武器特性</small><b>'+hesc(WM[now]?.[0]||'—')+'・'+hesc(WM[now]?.[1]||'—')+'</b><i>›</i><b>'+hesc(WM[n]?.[0]||'—')+'・'+hesc(WM[n]?.[1]||'—')+'</b></div>':'';
+ return '<section class="equip-compare"><div class="equip-compare-head"><b>'+hesc(n)+'</b><small>現在 → 装備後</small></div><div class="equip-compare-grid">'+metric('物防',a.pdef,b.pdef)+metric('魔防',a.mdef,b.mdef)+metric('重量',a.weight,b.weight)+metric('セット技',a.usable+'/'+a.setCount,b.usable+'/'+b.setCount)+'</div>'+profile+(b.weightLevel?'<p class="inline-warning">'+hesc(b.weightText)+'</p>':'')+'</section>';
+}
 function equipChoice(i,k){if(H.run?.battle)return pendingBattleMenu();const list=k<4?['なし',...inventory.weapons]:k===4?inventory.armor:k===9?['なし',...Object.keys(hc().tools).filter(n=>hc().tools[n].battle)]:['なし','護符'];const current=eq[i][k].split('：')[1];show('<h2>'+hesc(names[i])+' / 装備候補</h2>'+HT('現在：'+current,'装備後の重量を表示。要求不足のものは選べません。')+list.map(n=>{const m=WM[n],w=candidateWeight(i,k,n);return HB((n===current?'✓ ':'')+n,(m?m[0]+' / '+m[1]+' / '+m[3]+' '+m[4]+' / ':'')+'装備後 '+w.weight+'/'+w.limit+(k===9?' / 所持 '+(inventory.tools[n]||0):''),'setEquip',[i,k,n],!canEquip(i,k,n))}).join('')+ha(HB('戻る','','equip',[i])))}
 function setEquip(i,k,n){if(H.run?.battle||!canEquip(i,k,n))return;const label=eq[i][k].split('：')[0];eq[i][k]=label+'：'+n;if(k===4)for(let z=5;z<=7;z++)eq[i][z]=eq[i][z].split('：')[0]+'：'+n;if((k===0||k===2)&&isTwoHanded(n))eq[i][k+1]=eq[i][k+1].split('：')[0]+'：なし';persist();equip(i)}
 function swapMain(i){if(H.run?.battle)return;const labels=['主武器','副手','予備主','予備副'],v=eq[i].slice(0,4).map(x=>x.split('：')[1]);eq[i][0]=labels[0]+'：'+v[2];eq[i][1]=labels[1]+'：'+v[3];eq[i][2]=labels[2]+'：'+v[0];eq[i][3]=labels[3]+'：'+v[1];persist();equip(i)}
