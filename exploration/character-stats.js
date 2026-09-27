@@ -22,7 +22,8 @@ function characterValues(i){
  const a=stats[i],s=equipmentSnapshot(i),w=characterWeapon(eq[i][0].split('：')[1])||characterWeapon('なし');
  const enabled=skillSet[i].filter(n=>rules().meta(n)?.mode==='Passive'&&skillUsable(i,n)),effect=k=>rules().effect(enabled,k),pen=[0,5,15,30][s.weightLevel];
  const attack=(w.power+(w.throwing?a[1]:w.skillNormal?a[0]*.4+a[1]*.7:a[0]))*[1,.95,.9,.8][s.weightLevel];
- return {...s,phy:a[0],skl:a[1],arc:a[2],mnd:a[3],total:a.reduce((x,y)=>x+y,0),physical:Math.round(attack*10)/10,magicArc:a[2]+14,magicMind:a[3]+14,accuracy:a[1]+(w.hit||0),evade:a[1]+effect('evade')-pen,speed:a[1]+(w.speed||0)-pen,castSpeed:a[1]+effect('castSpeed')-pen,crit:Math.min(50,Math.max(0,5+(w.crit||0)+effect('crit'))),power:w.power,upgrade:(upgrades[eq[i][0].split('：')[1]]||0)*4,capacity:skillCap(i),cost:skillCost(i),resistance:calcResist(i),enabled};
+ const off=eq[i][1].split('：')[1],guard=Math.round((1-Math.max(.3,.5-(/盾/.test(off)?.1:0)-effect('guard')))*100);
+ return {...s,guard,offhand:off,phy:a[0],skl:a[1],arc:a[2],mnd:a[3],total:a.reduce((x,y)=>x+y,0),physical:Math.round(attack*10)/10,magicArc:a[2]+14,magicMind:a[3]+14,accuracy:a[1]+(w.hit||0),evade:a[1]+effect('evade')-pen,speed:a[1]+(w.speed||0)-pen,castSpeed:a[1]+effect('castSpeed')-pen,crit:Math.min(50,Math.max(0,5+(w.crit||0)+effect('crit'))),power:w.power,upgrade:(upgrades[eq[i][0].split('：')[1]]||0)*4,capacity:skillCap(i),cost:skillCost(i),resistance:calcResist(i),enabled};
 }
 // Allocation is a transient preview. Saving and battle exports use only committed stats.
 let attributeDraft=null;
@@ -52,16 +53,31 @@ function attributeApply(i){
 }
 function actorAttributes(i,tab='basic'){
  if(H.run?.battle)return pendingBattleMenu();const d=attributeSession(i);if(!d)return;
+ if(tab==='combat')tab='basic';
  const before=characterValues(i),s=attributeWith(i,d.values,()=>characterValues(i)),remaining=attributeRemaining(d),dirty=remaining!==d.points;
- const format=v=>hesc(String(v)),compare=(x,y)=>format(x)+(x!==y?'<span class="attribute-change"> → '+format(y)+'</span>':''),cell=(k,x,y=x)=>'<div class="attribute-cell"><small>'+hesc(k)+'</small><b>'+compare(x,y)+'</b></div>';
+ const format=v=>hesc(String(v)),compare=(x,y)=>format(x)+(x!==y?'<span class="attribute-change"> → '+format(y)+'</span>':''),cell=(k,x,y=x)=>'<div class="attribute-cell"><small>'+hesc(({'通常攻撃力':'通常攻撃','魔攻・ARC基準':'魔攻 ARC','魔攻・MND基準':'魔攻 MND','物理防御':'物防','魔法防御':'魔防','通常行動速度':'行動速度','術の行動速度':'術の速度','同SKL相手の会心':'会心率','武器強化補正':'武器強化'})[k]||k)+'</small><b>'+compare(x,y)+'</b></div>';
  const current=(key,snapshot)=>vitals[i][key]+(key==='hp'&&vitals[i].hp<=0?0:snapshot[key]-before[key]);
- const pages={basic:[['HP',vitals[i].hp+' / '+before.hp,current('hp',s)+' / '+s.hp],['SP',vitals[i].sp+' / '+before.sp,current('sp',s)+' / '+s.sp],['総能力値',before.total,s.total],['セットCost',before.cost+' / '+before.capacity,s.cost+' / '+s.capacity],['装備重量',before.weight+' / '+before.limit,s.weight+' / '+s.limit],['使用可能技',before.usable+' / '+before.setCount,s.usable+' / '+s.setCount],['物理防御',before.pdef,s.pdef],['魔法防御',before.mdef,s.mdef]],combat:[['通常攻撃力',before.physical,s.physical],['魔攻・ARC基準',before.magicArc,s.magicArc],['魔攻・MND基準',before.magicMind,s.magicMind],['物理防御',before.pdef,s.pdef],['魔法防御',before.mdef,s.mdef],['命中値',before.accuracy,s.accuracy],['回避値',before.evade,s.evade],['通常行動速度',before.speed,s.speed],['術の行動速度',before.castSpeed,s.castSpeed],['同SKL相手の会心',before.crit+'%',s.crit+'%'],['武器威力',before.power,s.power],['武器強化補正','+'+before.upgrade+'%','+'+s.upgrade+'%']],resist:Object.entries(s.resistance).map(([k,v])=>[k,(v>0?'+':'')+v])};
- const notes={basic:'＋／−で仮割り振り。確定までは振り直せます。画面を離れると未確定分は戻ります。',combat:'魔攻は術威力14の基準値。命中値は％ではなく、技・敵・地形で結果が変わります。',resist:'全属性・状態異常・封じの耐性。＋は耐性、−は弱点、0は標準。',effects:'セットしたパッシブの効果。装備条件を満たしていないものは発動しません。'};
+ const pages={basic:[['最大HP',before.hp,s.hp],['最大SP',before.sp,s.sp],['総能力値',before.total,s.total],['セットCost',before.cost+' / '+before.capacity,s.cost+' / '+s.capacity],['装備重量',before.weight+' / '+before.limit,s.weight+' / '+s.limit],['使用可能技',before.usable+' / '+before.setCount,s.usable+' / '+s.setCount],['物理防御',before.pdef,s.pdef],['魔法防御',before.mdef,s.mdef]],combat:[['通常攻撃力',before.physical,s.physical],['魔攻・ARC基準',before.magicArc,s.magicArc],['魔攻・MND基準',before.magicMind,s.magicMind],['物理防御',before.pdef,s.pdef],['魔法防御',before.mdef,s.mdef],['命中値',before.accuracy,s.accuracy],['回避値',before.evade,s.evade],['通常行動速度',before.speed,s.speed],['術の行動速度',before.castSpeed,s.castSpeed],['同SKL相手の会心',before.crit+'%',s.crit+'%'],['武器威力',before.power,s.power],['武器強化補正','+'+before.upgrade+'%','+'+s.upgrade+'%']],resist:Object.entries(s.resistance).map(([k,v])=>[k,(v>0?'+':'')+v])};
+ pages.basic=pages.basic.concat(pages.combat.filter(([name])=>!pages.basic.some(([existing])=>name===existing)));
+ const notes={basic:'＋／−で仮割り振り。数値を見て確定。魔攻は術威力14、会心は同SKLの敵が基準。',combat:'魔攻は術威力14の基準値。命中値は％ではなく、技・敵・地形で結果が変わります。',resist:'全属性・状態異常・封じの耐性。＋は耐性、−は弱点、0は標準。',effects:'セットしたパッシブの効果。装備条件を満たしていないものは発動しません。'};
  if(!Object.hasOwn(notes,tab))tab='basic';
  const button=(label,action,args,disabled=false,aria=label)=>'<button data-hub="'+action+'" data-args="'+hesc(JSON.stringify(args))+'" aria-label="'+hesc(aria)+'"'+(disabled?' disabled':'')+'>'+label+'</button>';
  const pointbar='<div class="allocation-bar"><b>能力ポイント <span>'+remaining+' Pt</span></b>'+button(tab==='basic'?'割り振りを確定':'仮割り振りを見る',tab==='basic'?'attributeApply':'actorAttributes',tab==='basic'?[i]:[i,'basic'],tab==='basic'&&!dirty)+'</div>';
  const editor=tab==='basic'?'<div class="allocation-grid">'+['PHY','SKL','ARC','MND'].map((k,j)=>'<div class="allocation-stat">'+button('−','attributeAdjust',[i,j,-1],d.values[j]===d.base[j],k+'の仮割り振りを1戻す')+'<span><small>'+k+'</small><b>'+compare(d.base[j],d.values[j])+'</b></span>'+button('＋','attributeAdjust',[i,j,1],remaining<=0,k+'に1ポイント仮割り振り')+'</div>').join('')+'</div>':'';
- const controls='<div class="ui-tabs attribute-heading">'+[['basic','基本'],['combat','戦闘'],['resist','耐性'],['effects','効果']].map(([k,v])=>'<button data-hub="actorAttributes" data-args="'+hesc(JSON.stringify([i,k]))+'" aria-pressed="'+(tab===k)+'">'+v+'</button>').join('')+'</div>';
- const content=tab==='effects'?skillSet[i].filter(n=>rules().meta(n)?.mode==='Passive').map(n=>HT(n+(s.enabled.includes(n)?'':'（装備条件不足）'),skillExplanation(rules().meta(n)))).join('')||HT('パッシブ未設定','スキルタブでセットできます。'):'<div class="attribute-grid '+(tab==='resist'?'resistance-grid':'')+'">'+pages[tab].map(([k,x,y])=>cell(k,x,y)).join('')+'</div>';
+ const controls='<div class="ui-tabs attribute-heading">'+[['basic','能力'],['resist','耐性'],['effects','効果']].map(([k,v])=>'<button data-hub="actorAttributes" data-args="'+hesc(JSON.stringify([i,k]))+'" aria-pressed="'+(tab===k)+'">'+v+'</button>').join('')+'</div>';
+ const content=tab==='effects'?skillSet[i].filter(n=>rules().meta(n)?.mode==='Passive').map(n=>HT(n+(s.enabled.includes(n)?'':'（装備条件不足）'),skillExplanation(rules().meta(n)))).join('')||HT('パッシブ未設定','スキルタブでセットできます。'):'<div class="attribute-grid '+(tab==='resist'?'resistance-grid':tab==='basic'?'combined-attributes':'')+'">'+pages[tab].map(([k,x,y])=>cell(k,x,y)).join('')+'</div>';
  show('<h2>'+hesc(names[i])+' / 能力値</h2>'+controls+pointbar+editor+'<p class="screen-hint">'+notes[tab]+'</p>'+content);
 }
+
+function initializeCharacterProgress(){
+ H.experience=Math.max(0,Math.floor(Number(H.experience)||0));
+ if(!H.flags['character-points-41']){statPt=statPt.map(n=>n+10);H.flags['character-points-41']=true}
+}
+function awardExplorationExperience(r,n){
+ const key='xp:'+r.dungeon+':'+r.floor+':'+n.id;if(H.milestones[key])return;
+ H.milestones[key]=true;const old=H.experience||0;H.experience=old+20;
+ const points=Math.floor(H.experience/100)-Math.floor(old/100);
+ if(points)H.pendingGrowth.stat+=points;
+ logRun('初踏破 EXP +20'+(points?' / 全員 能力 Pt +'+points+'（宿で受取）':''));
+}
+function characterExperience(){const exp=H.experience||0,part=exp%100;return '<div class="character-experience"><div><b>EXP '+part+' / 100</b><small>初踏破で獲得 · 次の能力Ptまで '+(100-part)+'</small></div><div class="experience-track" role="progressbar" aria-label="経験値" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+part+'"><i style="width:'+part+'%"></i></div></div>'}
