@@ -1,0 +1,273 @@
+/* v35 — restrained high-fantasy HUD: fewer boxes, finer lines, stronger hierarchy. */
+:root{
+  --v35-gold:#d8c08f;
+  --v35-gold-soft:#d8c08f45;
+  --v35-ivory:#f2eee4;
+  --v35-panel:#0c1420d9;
+  --v35-line:#bac7d022;
+}
+
+/* Keep the battlefield dominant; UI should float over it rather than look like web cards. */
+#game{padding-left:12px;padding-right:12px}
+.hud{
+  min-height:42px;
+  border-bottom:1px solid #d5bd8c2d;
+  background:linear-gradient(180deg,#08111cbc,transparent);
+}
+.round-label small{font-size:10px;letter-spacing:.16em}
+.round-label b{font-size:23px;color:#ead7aa}
+.scene-meta{height:23px}
+.terrain-toggle{opacity:.82}
+.history-trigger{opacity:.75}
+
+/* Turn order: tiny framed portraits, with enemy/ally tint only as an accent. */
+.order{padding:4px 2px 5px}
+.order-face{
+  height:27px;
+  border-width:1px;
+  background:#08111c99;
+  opacity:.82;
+  box-shadow:none;
+  transition:opacity .15s,filter .15s,transform .15s,border-color .15s;
+}
+.order-face img{filter:saturate(.88) contrast(1.02)}
+.order-face.foe{border-color:#a760665c;box-shadow:inset 0 -1px #a76066}
+.order-face.ally{border-color:#7f96ad55;box-shadow:inset 0 -1px #718da9}
+.order-face.is-active{
+  transform:translateY(-1px);
+  opacity:1;
+  border-color:var(--v35-gold);
+  box-shadow:0 0 8px #d8c08f35,inset 0 -2px var(--v35-gold);
+}
+.order-face .order-side{width:3px;height:3px;top:2px;right:2px}
+
+/* Enemy labels become fine floating captions rather than little panels. */
+.enemy-unit .enemy-name,.enemy-back-lane .enemy-name{
+  font-family:'Yu Mincho','Hiragino Mincho ProN',Georgia,serif;
+  font-size:9px;
+  letter-spacing:.05em;
+  color:#f0ebe1;
+}
+.enemy-unit .enemy-hp,.enemy-back-lane .enemy-hp{height:4px;top:18px}
+.enemy-unit .enemy-hp .bar{
+  height:2px;
+  background:#05090da8;
+  outline:0;
+  border-bottom:1px solid #c2a98155;
+  box-shadow:0 1px 4px #0008;
+}
+.enemy-unit .enemy-hp .bar i{
+  min-height:2px;
+  background:linear-gradient(90deg,#a2616d,#e4a9a0);
+  box-shadow:0 0 4px #c77f8055;
+}
+
+/* Allies: two unified information bands, not six boxed cards. */
+.allies{
+  gap:3px;
+  padding-top:5px;
+  margin-bottom:4px;
+  border-top:1px solid #d1b67d35;
+}
+.allies::before{color:#cdb47e;background:#0b1420;font-size:9px;top:-8px}
+.row.ally-row{
+  gap:0;
+  min-height:0;
+  background:linear-gradient(90deg,#101b29b8,#0a121ddb 50%,#101b29b8);
+  border-top:1px solid var(--v35-line);
+  border-bottom:1px solid #d6bd8a18;
+}
+.ally-unit{
+  height:43px;
+  padding:4px 7px 4px;
+  border:0;
+  border-right:1px solid #d9e1e91a;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  overflow:hidden;
+}
+.ally-unit:last-child{border-right:0}
+.ally-unit::before{
+  content:'';
+  position:absolute;
+  left:0;top:8px;bottom:8px;
+  width:1px;
+  background:var(--accent);
+  opacity:.65;
+}
+.ally-unit .card-name{
+  height:13px;
+  line-height:13px;
+  margin:0;
+  font-family:'Yu Mincho','Hiragino Mincho ProN',Georgia,serif;
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.07em;
+  color:#eee9df;
+}
+.ally-unit .resource-list{margin-top:2px;gap:1px 6px}
+.ally-unit .resource[data-resource="hp"] .bar{height:2px}
+.ally-unit .resource .sp,.ally-unit .resource .mp{height:1px;margin-top:1px}
+.ally-unit .resource-value b{font-size:9px;color:#dcdfe0}
+.ally-unit .resource-value span{font-size:7px;color:#8f9aa5}
+.ally-unit.active{
+  background:linear-gradient(100deg,#d9bd7e12,#d9bd7e05 46%,transparent);
+  border:0;
+  box-shadow:inset 0 1px var(--v35-gold),inset 0 -1px #d8c08f30;
+}
+.ally-unit.active::before{width:2px;opacity:1;background:var(--v35-gold)}
+.ally-unit.target-selected{
+  outline:0;
+  box-shadow:inset 0 1px #a8d4c3,inset 0 -1px #a8d4c350;
+}
+.queued-mark{color:#d9c18e!important}
+
+/* Command dock: portrait + five icon commands; only the round-start action keeps a frame. */
+.command-panel{
+  height:96px;
+  min-height:96px;
+  padding-top:4px;
+  border-top:1px solid #d4b97835;
+  background:
+    linear-gradient(90deg,transparent 0 24%,#09121ce8 42%,#09121cf2);
+}
+.command-panel::before{
+  content:'◇';
+  position:absolute;
+  top:-8px;left:calc(50% - 8px);
+  width:16px;
+  text-align:center;
+  color:#cdb57f;
+  background:#0b1420;
+  font:9px Georgia,serif;
+}
+.actor-art{
+  left:-8px;
+  top:-5px;
+  width:31%;
+  height:101px;
+  opacity:.9;
+  filter:drop-shadow(12px 0 14px #04080cb0);
+  mask-image:linear-gradient(to bottom,#000 70%,transparent 100%),linear-gradient(to right,#000 65%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 70%,transparent 100%),linear-gradient(to right,#000 65%,transparent 100%);
+}
+.command-content{width:78%;padding-left:8px}
+.actor-button{
+  min-height:27px;height:27px;
+  max-width:31%;
+  padding:0 0 2px;
+}
+.actor-button b{
+  font-family:'Yu Mincho','Hiragino Mincho ProN',Georgia,serif;
+  font-size:12px;
+  font-weight:500;
+  letter-spacing:.08em;
+}
+.target-line{
+  top:0;
+  left:33%;
+  right:104px;
+  height:27px;
+  justify-content:flex-end;
+}
+.target-hint{font-size:8px;color:#98a1aa}
+.command-buttons{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:0;
+  margin-top:3px;
+  padding-top:2px;
+  border-top:1px solid #b8c6d11b;
+}
+.command:not(.round-start){
+  height:59px;
+  min-height:59px;
+  border:0;
+  border-right:1px solid #d7dfe617;
+  border-radius:0;
+  background:linear-gradient(180deg,transparent,#111d292a);
+  flex-direction:column;
+  gap:3px;
+  padding:6px 1px 4px;
+  color:#bdc6ce;
+  transition:color .15s,background .15s,transform .1s;
+}
+.command:not(.round-start):nth-child(5){border-right:0}
+.command:not(.round-start) .icon{width:20px;height:20px;stroke-width:1.25}
+.command:not(.round-start) b{font-size:9px;font-weight:500;letter-spacing:.08em}
+.command:not(.round-start):active:not(:disabled){
+  transform:translateY(1px);
+  background:linear-gradient(180deg,#d9c18b0c,#d9c18b15);
+}
+.command.attack{color:#e1c68e}
+.command.magic{color:#c4b7df}
+.command.guard{color:#a8c6c9}
+#swap{color:#c1c8ce}
+#switch{color:#c8b899}
+.command.round-start{
+  position:absolute;
+  top:-29px;
+  right:0;
+  width:99px;
+  height:27px;
+  min-height:27px;
+  border:1px solid #d3b97f73;
+  border-radius:2px 6px 2px 6px;
+  background:linear-gradient(90deg,#bda46714,#d2b87c22);
+  color:#e3d3ae;
+  flex-direction:row;
+  justify-content:center;
+  gap:4px;
+  padding:0 8px;
+}
+.command.round-start .icon{width:12px;height:12px}
+.command.round-start b{font-size:8px;letter-spacing:.03em}
+.command.round-start small{font-size:7px;right:3px;top:1px;color:#cdb57f}
+.command.round-start:disabled{opacity:.28;filter:saturate(.3)}
+.command.round-start:not(:disabled){
+  box-shadow:0 0 9px #d9bb7740,inset 0 0 12px #d9bb7710;
+}
+
+/* Battle text keeps the same footprint as the command dock. */
+.command-panel .battle-message{
+  height:69px;
+  min-height:69px;
+  padding:2px 72px 0 0;
+}
+.command-panel .battle-message p{
+  font-family:'Yu Mincho','Hiragino Mincho ProN',Georgia,serif;
+  font-size:11px;
+  line-height:1.55;
+  letter-spacing:.035em;
+  max-height:66px;
+}
+.command-panel .playback-tools{right:0;bottom:4px}
+
+/* Keep the safe-area breathing room the user asked for. */
+#game{padding-bottom:calc(42px + env(safe-area-inset-bottom))}
+
+@media(max-width:375px){
+  .ally-unit{height:42px;padding-left:5px;padding-right:5px}
+  .ally-unit .card-name{font-size:10px}
+  .command-content{width:79%;padding-left:5px}
+  .command:not(.round-start){height:57px;min-height:57px}
+  .command:not(.round-start) .icon{width:18px;height:18px}
+  .command.round-start{width:91px}
+  .target-line{right:95px}
+}
+@media(max-height:665px) and (orientation:portrait){
+  .allies{gap:2px;margin-bottom:3px}
+  .ally-unit{height:39px;padding-top:3px;padding-bottom:3px}
+  .command-panel{height:88px;min-height:88px}
+  .actor-art{height:92px;width:27%}
+  .command-content{width:82%}
+  .actor-button{height:25px;min-height:25px}
+  .target-line{height:25px;left:30%}
+  .command-buttons{margin-top:1px}
+  .command:not(.round-start){height:55px;min-height:55px}
+  .command.round-start{top:-27px;height:25px;min-height:25px}
+  .command-panel .battle-message{height:61px;padding-right:72px}
+  #game{padding-bottom:calc(34px + env(safe-area-inset-bottom))}
+}
