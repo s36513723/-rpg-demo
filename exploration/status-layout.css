@@ -92,3 +92,9 @@
  #panel .combined-attributes .attribute-cell small{font-size:9px}
  .character-experience{margin-bottom:4px}
 }
+@media(max-width:350px) and (max-height:680px){
+ #panel .combined-attributes{grid-template-columns:repeat(4,minmax(0,1fr))}
+ #panel:has(.allocation-grid) .combined-attributes .attribute-cell{padding:2px;min-height:27px}
+ #panel .combined-attributes .attribute-cell small{font-size:9px;letter-spacing:-.03em}
+ #panel .combined-attributes .attribute-cell b,#panel .combined-attributes .attribute-cell b .attribute-change{font-size:10px;letter-spacing:-.03em}
+}
