@@ -43,7 +43,7 @@ function normal(u){return{name:'通常攻撃',kind:'attack',range:u.weapon?.rang
 function getDraft(u){if(!drafts.has(u.id))drafts.set(u.id,{key:'attack',targetId:null});return drafts.get(u.id)}
 function actionFor(u,key=getDraft(u).key){return key==='attack'?normal(u):u.skills[Number(key)]||normal(u)}
 function canReach(a,t,r){if(!t?.alive||t.hp<=0)return false;if(r==='far'||r==='all')return true;const side=t.enemy?enemies:party;const tr=live(side).some(x=>x.row==='front')?t.row:'front';return r==='mid'?tr==='front'||a.row==='front':a.row==='front'&&tr==='front'}
-function targets(u,a){return a.target==='ally'?live(party):live(enemies).filter(t=>canReach(u,t,a.range))}
+function targets(u,a){if(a.revive)return party.filter(x=>!x.alive);return a.target==='ally'?live(party):live(enemies).filter(t=>canReach(u,t,a.range))}
 function enough(u,a){return !a.costType||u[a.costType.toLowerCase()]>=a.cost}
 function unavailable(u,a){if(a.kind==='spell'&&u.status.headBind>0)return'頭封じ';if((a.kind==='attack'||a.kind==='skill')&&u.status.armBind>0)return'腕封じ';if(!enough(u,a))return a.costType+'不足';if(!targets(u,a).length)return'射程内に対象なし';return''}
 function ensureTarget(u,a){const d=getDraft(u),ts=targets(u,a);if(!ts.some(t=>t.id===d.targetId))d.targetId=ts[0]?.id||null;return ts}
