@@ -4814,77 +4814,80 @@
 }
 
 
-/* PLAN UI v11 — compact 3x3 cards, command bar above and aligned to card board. */
+/* PLAN UI v11 — integrated round meta; cards compact; commands above and exactly card width. */
 :root{
-  --plan-card-left:108px;
-  --plan-card-right:8px;
   --plan-card-h:96px!important;
-  --plan-command-h:30px!important;
+  --plan-command-h:28px!important;
+  --plan-board-left:108px;
+  --plan-board-right:48px;
 }
 
-/* Treat ROUND + time icon + terrain as one left-aligned unit. */
+/* R01 + moon/time + terrain are one inseparable left-side group. */
 .hud{
-  grid-template-columns:138px 1fr 38px!important;
+  position:absolute!important;
+  grid-template-columns:1fr 38px!important;
 }
-.round-label{
+.round-meta{
   position:absolute!important;
   left:0!important;
   top:0!important;
-  width:42px!important;
   height:40px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
   z-index:78!important;
+  white-space:nowrap!important;
 }
-.terrain-toggle{
-  position:absolute!important;
-  left:42px!important;
-  top:0!important;
-  width:88px!important;
+.round-meta .round-label{
+  position:static!important;
+  display:flex!important;
+  align-items:baseline!important;
+  width:auto!important;
   height:40px!important;
-  z-index:78!important;
+  gap:3px!important;
+}
+.round-meta .terrain-toggle{
+  position:static!important;
   display:flex!important;
   visibility:visible!important;
   opacity:1!important;
   align-items:center!important;
-  justify-content:flex-start!important;
-  gap:3px!important;
-  white-space:nowrap!important;
+  width:auto!important;
+  height:40px!important;
+  gap:4px!important;
+  padding:0!important;
 }
-.terrain-toggle .icon{
+.round-meta .terrain-toggle .icon{
   display:block!important;
   visibility:visible!important;
   opacity:1!important;
   width:14px!important;
   height:14px!important;
-  flex:0 0 14px!important;
 }
-#terrainEffect{
+.round-meta #terrainEffect{
   display:block!important;
   visibility:visible!important;
   opacity:1!important;
-  max-width:62px!important;
+  max-width:none!important;
   overflow:visible!important;
   font-size:9px!important;
-  line-height:1!important;
 }
-
-/* Leave the left metadata clear; turn order remains centered but slightly narrower. */
 .order-ribbon{
-  left:59%!important;
-  width:166px!important;
+  left:56%!important;
+  width:174px!important;
 }
 
-/* Cards use only the height their two information rows actually need.
-   96px / 3 = 32px per formation row. */
+/* 3x3 board: no surplus row height. 96px = 32px per tactical row. */
 .party-hud{
-  left:var(--plan-card-left)!important;
-  right:var(--plan-card-right)!important;
+  left:var(--plan-board-left)!important;
+  right:var(--plan-board-right)!important;
   bottom:0!important;
   height:var(--plan-card-h)!important;
 }
 .ally-unit{
   grid-template-rows:11px 14px!important;
-  padding:2px 4px!important;
   align-content:center!important;
+  padding:1px 4px!important;
 }
 .card-name{
   height:11px!important;
@@ -4902,17 +4905,14 @@
   grid-template-rows:7px 3px!important;
   gap:1px!important;
 }
-.resource-value,
-.resource[data-resource=hp] .resource-value{height:7px!important}
 .resource .bar,
 .resource[data-resource=hp] .bar{height:3px!important}
 
-/* Command strip returns above the cards and matches their exact horizontal width. */
+/* Command strip returns above cards and matches the board's exact horizontal bounds. */
 .command-panel{
-  left:var(--plan-card-left)!important;
-  right:var(--plan-card-right)!important;
+  left:var(--plan-board-left)!important;
+  right:var(--plan-board-right)!important;
   bottom:var(--plan-card-h)!important;
-  width:auto!important;
   height:var(--plan-command-h)!important;
 }
 .command-content,
@@ -4922,76 +4922,65 @@
   min-height:var(--plan-command-h)!important;
 }
 .command-content{
-  padding:0 3px!important;
-  border-radius:6px 6px 0 0!important;
+  padding:0 2px!important;
+  border-radius:5px 5px 0 0!important;
 }
 .command-buttons>.command b{
-  font-size:8px!important;
+  font-size:7.5px!important;
 }
 
-/* AUTO / speed stay outside the aligned command+card block.
-   AUTO uses the portrait column; speed is a small overlay at the command's far-right edge. */
-#auto{
-  left:5px!important;
-  right:auto!important;
+/* AUTO remains just left of the aligned board/command block; speed remains at far right. */
+#auto,#pace{
   bottom:var(--plan-card-h)!important;
-  width:42px!important;
+  width:40px!important;
   height:var(--plan-command-h)!important;
   min-height:var(--plan-command-h)!important;
+  border-radius:14px!important;
 }
-#pace{
-  right:10px!important;
-  left:auto!important;
-  bottom:calc(var(--plan-card-h) + var(--plan-command-h) + 4px)!important;
-  width:34px!important;
-  height:26px!important;
-  min-height:26px!important;
-  z-index:68!important;
-  opacity:.88!important;
-}
+#auto{left:60px!important}
+#pace{right:3px!important}
 
-/* Portrait occupies the left column beside the 3x3 board. */
+/* Portrait stays entirely to the left of the 3x3 board. */
 .actor-art,
 .actor-art[data-face-only=true]{
-  left:-58px!important;
+  left:-60px!important;
   top:var(--plan-command-h)!important;
-  bottom:auto!important;
   width:104px!important;
   height:var(--plan-card-h)!important;
 }
 .actor-button{
-  left:-58px!important;
+  left:-60px!important;
   top:calc(var(--plan-command-h) + var(--plan-card-h) - 16px)!important;
   width:104px!important;
   max-width:104px!important;
   height:16px!important;
 }
 
-/* Reclaim vertical space for the battlefield. */
+/* Main battlefield ends at top of the command strip. */
 .enemy-stage{
   bottom:calc(var(--plan-card-h) + var(--plan-command-h))!important;
 }
 
 @media(max-width:380px){
   :root{
-    --plan-card-left:100px;
-    --plan-card-right:5px;
-    --plan-card-h:90px!important;
-    --plan-command-h:28px!important;
+    --plan-card-h:93px!important;
+    --plan-command-h:27px!important;
+    --plan-board-left:100px;
+    --plan-board-right:45px;
   }
-  .hud{grid-template-columns:128px 1fr 35px!important}
-  .terrain-toggle{left:40px!important;width:82px!important}
-  .order-ribbon{left:60%!important;width:154px!important}
+  .round-meta{gap:5px!important}
+  .order-ribbon{left:57%!important;width:160px!important}
+  #auto{left:54px!important}
+  #pace{right:2px!important}
   .actor-art,
   .actor-art[data-face-only=true]{
-    left:-54px!important;
+    left:-56px!important;
     width:96px!important;
     height:var(--plan-card-h)!important;
   }
   .actor-button{
-    left:-54px!important;
+    left:-56px!important;
     width:96px!important;
     max-width:96px!important;
-    top:calc(var(--plan-command-h) + var(--plan-card-h) - 16px)!important;
   }
 }
