@@ -1,4 +1,4 @@
-"""Browser regression: native HTTP on CI, DOM + Storage adapter for offline workstations."""
+"""Native HTTP regression on CI; local DOM/Storage adapter when OFFLINE is explicit."""
 import asyncio,json,re,os,threading,http.server,pathlib
 from playwright.async_api import async_playwright
 ROOT=pathlib.Path(__file__).resolve().parents[1]
@@ -7,14 +7,35 @@ async def load(page,hub):
  await page.add_init_script('window.__RPG_TEST__=true')
  if not OFFLINE:
   await page.goto('http://127.0.0.1:8139/'+('exploration/' if hub else ''),wait_until='load');return
- html=(ROOT/('exploration/index.html' if hub else 'index.html')).read_text()
- scripts=re.findall(r'<script[^>]*>([\s\S]*?)</script>',html)
- html=re.sub(r'<script[^>]*>[\s\S]*?</script>','',html)
- html=re.sub(r'<link[^>]+href="ui-v29.css"[^>]*>','<style>'+(ROOT/'ui-v29.css').read_text()+'</style>',html)
+ source=ROOT/('exploration/index.html' if hub else 'index.html')
+ html=source.read_text()
+ scripts=re.findall(r'<script\b([^>]*)>([\s\S]*?)</script>',html)
+ html=re.sub(r'<script\b[^>]*>[\s\S]*?</script>','',html)
+ def style(match):
+  href=re.search(r'href="([^"]+)"',match[0]);p=(source.parent/href[1].split('?')[0]).resolve() if href else None
+  return '<style>'+p.read_text()+'</style>' if p and p.is_relative_to(ROOT) and p.is_file() else ''
+ html=re.sub(r'<link\b[^>]*rel="stylesheet"[^>]*>',style,html)
  await page.set_content(html)
  await page.evaluate("""() => {window.__RPG_TEST__=true;window.__storage={};Object.defineProperty(window,'localStorage',{configurable:true,value:{getItem:k=>__storage[k]??null,setItem:(k,v)=>__storage[k]=String(v),removeItem:k=>delete __storage[k],clear:()=>{__storage={}}}})}""")
- await page.add_script_tag(content=(ROOT/'rpg-rules.js').read_text())
- await page.add_script_tag(content=scripts[-1] if hub else (ROOT/'battle-v29.js').read_text())
+ for attributes,inline in scripts:
+  src=re.search(r'src="([^"]+)"',attributes)
+  if src:
+   path=(source.parent/src[1].split('?')[0]).resolve()
+   if not path.is_relative_to(ROOT):raise ValueError('Script outside the repository')
+   inline=path.read_text()
+  if inline.strip():await page.add_script_tag(content=inline)
+async def layouts(page):
+ results=[]
+ baseline=await page.evaluate('collectSave()')
+ for width,height in [(320,568),(375,667),(390,844),(430,932),(768,1024)]:
+  for alerts in [False,True]:
+   await page.set_viewport_size({'width':width,'height':height})
+   await page.evaluate("""({base,alerts})=>{installSave(base);H.run=null;for(const q of hc().quests)H.quests[q.id]={state:0,progress:0};loot.古器=alerts?2:0;H.story.pending=alerts?['古代迷宮']:[];const q=hc().quests[0];H.quests[q.id]={state:alerts?2:0,progress:alerts?q.target:0};H.tracked=alerts?q.id:null;town()}""",{'base':baseline,'alerts':alerts})
+   dims=await page.evaluate("""()=>{const s=document.querySelector('#screen'),a=document.querySelector('.primary-action'),f=document.querySelector('#app nav');return {overflow:s.scrollHeight-s.clientHeight,wide:document.documentElement.scrollWidth>innerWidth,actionVisible:a.getBoundingClientRect().bottom<=s.getBoundingClientRect().bottom,foot:innerHeight-f.getBoundingClientRect().bottom}}""")
+   results.append({'name':f'UI8 viewport {width}x{height} alerts={alerts}','ok':dims['overflow']<=1 and not dims['wide'] and dims['actionVisible'] and dims['foot']>=20,'measurements':dims})
+ await page.evaluate('base=>{installSave(base);closeM();town()}',baseline)
+ await page.set_viewport_size({'width':390,'height':844})
+ return results
 async def main():
  if not OFFLINE:
   class Handler(http.server.SimpleHTTPRequestHandler):
@@ -24,23 +45,23 @@ async def main():
   threading.Thread(target=server.serve_forever,daemon=True).start()
  out=[]
  async with async_playwright() as p:
-  exe=os.getenv('CHROMIUM_PATH')
-  browser=await p.chromium.launch(executable_path=exe,headless=True,args=['--no-sandbox'])
+  browser=await p.chromium.launch(executable_path=os.getenv('CHROMIUM_PATH'),headless=True,args=['--no-sandbox'])
   for hub in [True,False]:
    page=await browser.new_page(viewport={'width':390,'height':844})
    errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
    await load(page,hub)
    case='hub' if hub else 'battle'
-   values=await page.evaluate((ROOT/'tests'/f'{case}-regression.js').read_text())
-   out.extend(values)
+   out.extend(await page.evaluate((ROOT/'tests'/f'{case}-regression.js').read_text()))
+   if hub:
+    out.extend(await page.evaluate((ROOT/'tests/ui-regression.js').read_text()))
+    out.extend(await layouts(page))
    out.append({'name':case+' runtime console errors','ok':not errors,'errors':errors})
    await page.close()
   await browser.close()
  (ROOT/'test-results.json').write_text(json.dumps({'mode':'offline DOM/Storage adapter' if OFFLINE else 'native Chromium HTTP','tests':out},ensure_ascii=False,indent=2))
  for r in out:
   print(('PASS' if r['ok'] else 'FAIL')+' '+r['name'])
-  if not r['ok']:print(r.get('error',r.get('errors')))
- failed=[r for r in out if not r['ok']]
- print(f'{len(out)-len(failed)}/{len(out)} passed')
- if failed:raise SystemExit(1)
+  if not r['ok']:print(r.get('error',r.get('errors',r.get('measurements'))))
+ print(f'{sum(r["ok"] for r in out)}/{len(out)} passed')
+ if any(not r['ok'] for r in out):raise SystemExit(1)
 if __name__=='__main__':asyncio.run(main())
