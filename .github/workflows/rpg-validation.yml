@@ -9,6 +9,9 @@ on:
       - 'exploration/**'
       - 'rpg-*.js'
       - 'tests/**'
+      - 'play-plan-v2.html'
+      - 'battle-plan-v2.js'
+      - 'battle-plan-v1.css'
       - '.github/workflows/rpg-validation.yml'
   pull_request:
     paths:
@@ -40,11 +43,15 @@ jobs:
         run: |
           python -m pip install playwright==1.55.0
           python -m playwright install --with-deps chromium
+      - name: Plan battle browser diagnostic
+        run: python tests/plan-browser.py
       - name: Native browser regression
         run: python tests/browser.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: rpg-regression-results
-          path: test-results.json
+          path: |
+            test-results.json
+            plan-debug.json
           retention-days: 7
