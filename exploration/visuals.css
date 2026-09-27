@@ -37,3 +37,14 @@
 @media(max-width:350px){.scene-banner{grid-template-columns:72px 1fr 20px;gap:8px;padding:7px}.scene-banner .scene-art{width:72px;height:56px}.scene-copy b{font-size:13px}.scene-copy small{font-size:9px}.region-select{grid-template-columns:44px 1fr auto;padding-bottom:4px}.region-preview{width:44px;height:34px}.attention-strip .row{min-height:32px;padding-top:3px;padding-bottom:3px}.tracked-objective .row{min-height:30px}.departure-bottom{gap:2px}.town-scene{gap:2px;padding-top:6px;padding-bottom:6px}.place{min-height:56px}.home-objective .row{padding-bottom:9px}}
 @media(max-height:720px){.scene-banner{margin-bottom:10px}.scene-copy small{display:none}.attention-strip .row{min-height:36px;padding-top:4px;padding-bottom:4px}.tracked-objective .row{min-height:34px}.departure-bottom{gap:4px}}
 @media(min-width:600px){.scene-banner{grid-template-columns:108px 1fr 28px;padding:10px 11px}.scene-banner .scene-art{width:108px;height:80px}.scene-copy b{font-size:16px}.scene-copy small{font-size:11px}.region-select{grid-template-columns:68px 1fr auto}.region-preview{width:68px;height:50px}.region-emblem .ui-icon{width:24px;height:24px}}
+
+/* UI11: visual completion for exploration nodes, events and enemy records. */
+.scene-theme .scene-art,.scene-event .scene-art{filter:saturate(.92) contrast(1.03)}
+.scene-event{border-color:#88704f70}.scene-event .scene-mark{color:#efd18d}
+.scene-merchant .scene-art{object-position:50% 22%}
+.scene-enemy .scene-art{object-fit:contain;background:radial-gradient(circle at 50% 40%,#354339,#101713 72%);padding:4px}
+.enemy-thumb{object-fit:contain!important;background:radial-gradient(circle at 50% 38%,#354339,#101713 72%)!important;padding:3px}
+.map-node{overflow:hidden}.map-node>.node-thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.13;filter:saturate(.65);pointer-events:none}
+.map-node>i,.map-node>b,.map-node>small{position:relative;z-index:1;text-shadow:0 1px 5px #000}
+.map-node.available>.node-thumb{opacity:.18}.map-node.done>.node-thumb{opacity:.08;filter:grayscale(1)}
+@media(max-height:720px){.scene-event .scene-art,.scene-theme .scene-art{height:56px}.scene-merchant .scene-art,.scene-enemy .scene-art{height:58px}}
