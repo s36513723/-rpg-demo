@@ -1,0 +1,17 @@
+/* v41 — strong rear sprite headroom correction based on iPhone screenshot. */
+.enemy-back-lane .enemy-visual{
+  transform:translateY(-82px);
+  transform-origin:50% 0;
+}
+.enemy-back-lane .enemy-visual img{
+  object-position:center top;
+}
+/* Keep labels fixed; only the actual full-body art moves up. */
+.enemy-back-lane .enemy-name{top:0}
+.enemy-back-lane .enemy-hp{top:14px}
+.enemy-back-lane .target-pointer{top:20px}
+.enemy-back-lane .enemy-unit .card-status{top:22px}
+
+@media(max-height:720px) and (orientation:portrait){
+  .enemy-back-lane .enemy-visual{transform:translateY(-72px)}
+}
