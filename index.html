@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja" data-build="29">
+<html lang="ja" data-build="30">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -29,9 +29,10 @@
     <div class="command-body">
       <div id="commandInput" class="command-input">
         <p id="terrainEffect" class="terrain-text"></p>
+        <p id="enemyIntent" class="terrain-text" aria-live="polite"></p>
         <div class="action-row"><button id="switch" class="quiet" type="button">換装</button><button id="actionButton" class="action-picker" type="button" aria-haspopup="dialog"><span><b id="actionName">通常攻撃</b><small id="actionMeta"></small></span><span class="chevron">⌃</span></button></div>
         <div id="targetHint" class="target-hint" aria-live="polite"></div>
-        <div class="command-buttons"><button id="queue" class="confirm" type="button">決定</button><button id="swap" class="quiet" type="button">交代</button><button id="rowChange" class="quiet" type="button">列変更</button><button id="carry" class="quiet" type="button">携行具</button><button id="defend" class="quiet" type="button">防御</button><button id="escape" class="quiet" type="button">逃走</button></div>
+        <div class="command-buttons"><button id="queue" class="confirm" type="button">決定</button><button id="swap" class="quiet" type="button">交代</button><button id="rowChange" class="quiet" type="button">列変更</button><button id="carry" class="quiet" type="button">携行具</button><button id="defend" class="quiet" type="button">防御</button><button id="escape" class="quiet" type="button">逃走</button><button id="enemyInfo" class="quiet" type="button">敵情報</button></div>
       </div>
       <div id="battleMessage" class="battle-message" hidden>
         <div class="playback-tools"><span id="playbackTitle">行動中</span><div><button id="pace" type="button">ゆっくり</button><button id="pause" type="button" aria-pressed="false">一時停止</button></div></div>
