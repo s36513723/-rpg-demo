@@ -1,4 +1,4 @@
-/* UI9: a consistent visual vocabulary; each icon keeps its text label. */
+/* UI10: icons plus portraits and scenic hub/exploration art. */
 .ui-icon{display:inline-block;width:23px;height:23px;vertical-align:middle;flex-shrink:0;pointer-events:none;color:var(--gold)}
 #app>nav{grid-template-columns:repeat(3,minmax(0,1fr))}nav .ico{line-height:23px;margin-bottom:1px}nav .ico .ui-icon{width:21px;height:21px;color:inherit}
 .header-tools .ui-icon{width:22px;height:22px}.panel-head h2{display:flex;align-items:center;gap:7px}.panel-head .title-icon{width:20px;height:20px}.panel-head .panel-back .ui-icon{width:21px;height:21px}
@@ -26,3 +26,14 @@
 @media(max-height:640px){.town-scene{gap:3px;padding:7px 8px}.place i .ui-icon{width:21px;height:21px}}
 
 .panel-head .header-face{width:26px;height:32px;border-radius:5px;flex-shrink:0}
+
+.visual-portrait.npc-face{object-position:50% 24%;background:linear-gradient(180deg,#1a2622,#0d1310);box-shadow:inset 0 0 0 1px #c7ae6a22}
+.host-card .visual-portrait.npc-face,.dialogue-block>.visual-portrait.npc-face,.conversation-cast .visual-portrait.npc-face{border-color:#b99d67}
+.scene-banner{display:grid;grid-template-columns:88px 1fr 24px;gap:10px;align-items:center;margin:2px 0 14px;padding:8px;border:1px solid #77684a5c;border-radius:12px;background:linear-gradient(120deg,#43523e38,#121d18)}
+.scene-banner .scene-art{width:88px;height:68px;object-fit:cover;border-radius:8px;border:1px solid #877654;background:#17201c}.scene-copy{min-width:0;display:grid;gap:3px}.scene-copy b{font-size:14px;font-weight:600;color:#e9dcbb}.scene-copy small{font-size:10px;line-height:1.65;color:var(--muted)}.scene-kicker{font:10px/1.35 Georgia,serif;letter-spacing:.16em;color:var(--gold)}.scene-mark{display:flex;align-items:center;justify-content:center;color:var(--gold)}.scene-mark .ui-icon{width:20px;height:20px}
+.place{position:relative;overflow:hidden}.place-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.24;filter:saturate(.85)}.place>*:not(.place-art){position:relative;z-index:1}
+.region-select{grid-template-columns:56px 1fr auto;column-gap:10px;padding-left:0;padding-bottom:6px}.region-select .chapter-kicker{grid-column:2/4}.region-select b,.region-select small{grid-column:auto}.region-preview{width:56px;height:42px;object-fit:cover;border-radius:7px;border:1px solid #78684a;grid-row:1/span 3;align-self:center}.region-emblem{position:static;transform:none;grid-column:2;grid-row:2;justify-self:start}.region-emblem .ui-icon{width:22px;height:22px}
+.attention-strip .row{min-height:38px;padding-top:5px;padding-bottom:5px}.tracked-objective .row{min-height:36px}.departure-bottom{gap:7px}
+@media(max-width:350px){.scene-banner{grid-template-columns:72px 1fr 20px;gap:8px;padding:7px}.scene-banner .scene-art{width:72px;height:56px}.scene-copy b{font-size:13px}.scene-copy small{font-size:9px}.region-select{grid-template-columns:44px 1fr auto;padding-bottom:4px}.region-preview{width:44px;height:34px}.attention-strip .row{min-height:32px;padding-top:3px;padding-bottom:3px}.tracked-objective .row{min-height:30px}.departure-bottom{gap:2px}.town-scene{gap:2px;padding-top:6px;padding-bottom:6px}.place{min-height:56px}.home-objective .row{padding-bottom:9px}}
+@media(max-height:720px){.scene-banner{margin-bottom:10px}.scene-copy small{display:none}.attention-strip .row{min-height:36px;padding-top:4px;padding-bottom:4px}.tracked-objective .row{min-height:34px}.departure-bottom{gap:4px}}
+@media(min-width:600px){.scene-banner{grid-template-columns:108px 1fr 28px;padding:10px 11px}.scene-banner .scene-art{width:108px;height:80px}.scene-copy b{font-size:16px}.scene-copy small{font-size:11px}.region-select{grid-template-columns:68px 1fr auto}.region-preview{width:68px;height:50px}.region-emblem .ui-icon{width:24px;height:24px}}

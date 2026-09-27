@@ -1,4 +1,4 @@
-/* UI9 visual vocabulary. No progression, inventory or battle mutations. */
+/* UI10 visual vocabulary. No progression, inventory or battle mutations. */
 (()=>{
 'use strict';
 const paths={
@@ -84,11 +84,16 @@ const glyph=(key,extra='')=>'<svg class="ui-icon '+extra+'" data-icon="'+key+'" 
 const esc=s=>hesc(s);
 const cast=['gald','lize','ern','sena','mirea','yuna'];
 const npcGlyph={'受付':'quill','鍛冶師':'forge','学者':'book','宿主':'tavern','伝令':'wind','守人':'sun'};
+const npcImage={'受付':'../images/npc_eda.svg','鍛冶師':'../images/npc_balun.svg','学者':'../images/npc_iris.svg','宿主':'../images/npc_marta.svg','伝令':'../images/npc_noa.svg','守人':'../images/npc_sahir.svg'};
+const facilityArt={town:'../images/town_lexia.svg',inn:'../images/facility_inn.svg',guild:'../images/facility_guild.svg',market:'../images/facility_market.svg'};
+const facilityLabel={town:'王都レクシア',inn:'宿・酒場',guild:'ギルド',market:'市場'};
+const facilityCopy={town:'冒険者区の朝。食卓、依頼、仕入れ、出撃準備をここで整える。',inn:'食事と会話の場。帰還後の様子、噂、仲間たちの短い会話を読む。',guild:'依頼と査定の窓口。探索資料や地域調査の進捗もここで整理する。',market:'武具、道具、加工、売却、保管をまとめた装備管理の中心。'};
+const regionArt={'古代迷宮':'../images/region_maze.svg','辺境遺跡':'../images/region_frontier.svg','深淵の樹海':'../images/region_forest.svg','沈黙の砂都':'../images/region_sand.svg'};
 const person=(kind,id)=>{
- if(kind==='npc'){const n=hc().npcs.find(n=>n.id===id)||hc().npcs[id===0?3:4];return n?{name:n.name,role:n.role,key:n.id,icon:npcGlyph[n.id]||'speech'}:null}
+ if(kind==='npc'){const n=hc().npcs.find(n=>n.id===id)||hc().npcs[id===0?3:4];return n?{name:n.name,role:n.role,key:n.id,icon:npcGlyph[n.id]||'speech',image:npcImage[n.id]||''}:null}
  const i=typeof id==='number'?id:names.indexOf(id);return i>=0&&i<6?{name:names[i],role:battleStyle(i),image:'../images/'+cast[i]+'.svg',key:'ally-'+i}:null;
 };
-const portrait=(p,cls='')=>!p?'':p.image?'<img class="visual-portrait '+cls+'" data-person="'+esc(p.name)+'" src="'+p.image+'" alt="">':'<span class="role-emblem '+cls+'" data-person="'+esc(p.name)+'" data-role="'+esc(p.key)+'" aria-hidden="true">'+glyph(p.icon)+'</span>';
+const portrait=(p,cls='')=>!p?'':p.image?'<img class="visual-portrait '+cls+(p.key&&npcImage[p.key]?' npc-face':'')+'" data-person="'+esc(p.name)+'" src="'+p.image+'" alt="">':'<span class="role-emblem '+cls+'" data-person="'+esc(p.name)+'" data-role="'+esc(p.key)+'" aria-hidden="true">'+glyph(p.icon)+'</span>';
 const peopleHeader=(ps,label='')=>'<div class="conversation-cast">'+ps.filter(Boolean).map(p=>'<div>'+portrait(p)+'<span><b>'+esc(p.name)+'</b><small>'+esc(p.role)+'</small></span></div>').join('')+(label?'<span class="scene-label">'+esc(label)+'</span>':'')+'</div>';
 const dialogue=(p,text)=>'<figure class="dialogue-block">'+portrait(p)+'<figcaption><b class="speaker">'+esc(p.name)+'</b><small>'+esc(p.role)+'</small><blockquote>'+esc(text)+'</blockquote></figcaption></figure>';
 const itemIcon=n=>{
@@ -98,6 +103,10 @@ const itemIcon=n=>{
 };
 const masteryIcon=n=>({'源泉':'flame','術法':'wand','技能':'compass','武器':'sword','防具':'armor','森羅':'herb','灼陽':'sun','霊峰':'mountain','海神':'water','星辰':'stars','信仰':'sun','呪術':'moon','魔術':'wand','符術':'scroll','機巧':'settings','異能':'eye','探索':'compass','士気':'music'})[n]||itemIcon(n);
 const regionIcon=n=>({'古代迷宮':'terrain','辺境遺跡':'mountain','深淵の樹海':'herb','沈黙の砂都':'sun'})[n]||'map';
+const regionOf=route=>{const x=route.args?.[0];if(['deployment','dungeonIntel','regionRecord','readStory'].includes(route.name)&&typeof x==='string')return x;if(route.name==='questSelect'){const q=findQuest(x);return q?.d||''}if(route.name==='historyDetail'){const h=H.history.find(z=>z.id===x)||(lastExpedition.id===x?lastExpedition:null);return h?.dungeon||''}return H.run?.dungeon||H.selected||dungeonId||''};
+const sceneCard=({kind='region',image='',kicker='',title='',text='',icon='map'}={})=>'<section class="scene-banner scene-'+kind+'"><img class="scene-art" src="'+image+'" alt=""><div class="scene-copy"><span class="scene-kicker">'+esc(kicker)+'</span><b>'+esc(title)+'</b><small>'+esc(text)+'</small></div><span class="scene-mark" aria-hidden="true">'+glyph(icon)+'</span></section>';
+const regionBanner=region=>region&&regionArt[region]?sceneCard({kind:'region',image:regionArt[region],kicker:'REGION',title:region,text:hc().regions[region]?.intro||hc().regions[region]?.mechanism||'',icon:regionIcon(region)}):'';
+const facilityBanner=name=>facilityArt[name]?sceneCard({kind:'facility',image:facilityArt[name],kicker:'FACILITY',title:facilityLabel[name]||name,text:facilityCopy[name]||'',icon:actions[name]||'town'}):'';
 const nodeGlyph=n=>({battle:'sword',explore:'search',event:'event',camp:'camp',elite:'skull',merchant:'merchant',forge:'forge',stairs:'stairs',boss:'boss',secret:'stars'})[n]||'compass';
 const actions={town:'home',inn:'tavern',guild:'guild',market:'forge',dungeon:'map',deployment:'compass',startDungeon:'compass',partyMenu:'party',character:'party',charOverview:'party',charAbility:'plus',equip:'sword',skills:'stars',mastery:'mastery',charMastery:'mastery',readiness:'check',squadMenu:'formation',toggleRow:'swap',swapFormation:'swap',rowSwapMenu:'swap',presetMenu:'save',savePreset:'save',applyPreset:'check',askSavePreset:'save',swapMain:'swap',items:'bag',uiInventory:'bag',itemCategory:'bag',records:'book',recordList:'book',regionRecords:'map',enemyBook:'skull',enemyRecord:'eye',peopleBook:'party',historyMenu:'history',historyDetail:'history',storyMenu:'scroll',startStory:'quill',readStory:'book',reportChapter:'report',finishChapter:'quill',epilogue:'sun',finishEnding:'flag',questMenu:'quest',questSelect:'quest',reportAll:'report',claimQuest:'report',acceptQuest:'plus',trackQuest:'flag',uiClearTrack:'flag',askAbandonQuest:'close',abandonQuest:'close',conversation:'speech',memberTalk:'speech',npcMenu:'party',npcTalk:'speech',pairMenu:'pair',readPair:'pair',talkArchive:'book',finishCompanion:'speech',finishNPC:'quill',returnTalk:'tavern',rumors:'rumor',addRumor:'rumor',infoMenu:'book',dungeonIntel:'map',toolShop:'potion',weaponShop:'sword',armorShop:'armor',craftMenu:'forge',recipeMenu:'forge',upgradeMenu:'hammer',traitMenu:'wand',appraiseMenu:'search',appraise:'search',rareAppraise:'chest',keepRare:'bag',storeRare:'chest',restoreRare:'bag',sellRare:'coin',sellMenu:'coin',sellWeapon:'coin',sellTool:'coin',sellMaterial:'coin',askSellAll:'coin',storageMenu:'chest',depositMenu:'chest',deposit:'download',withdraw:'upload',materialTrade:'jewel',favoriteGear:'stars',settings:'settings',cycleText:'book',toggleConfirm:'check',manualSave:'save',exportSave:'upload',chooseImport:'download',askRestore:'history',resetSave:'trash',resetSaveConfirmed:'trash',cancelImport:'back',confirmImport:'download',closeM:'home',uiBack:'back',askReturn:'home',returnTown:'home',resumeExpedition:'map',expeditionMenu:'map',runJournal:'book',battlePrep:'shield',battleDemo:'sword',pendingBattleMenu:'sword',resumeNode:'compass',camp:'camp',campHeal:'rest',moraleMenu:'music',setMorale:'music',mechanismMenu:'settings',operateMechanism:'settings',eventChoice:'event',explorationNode:'search',takeExploration:'search',stairsMenu:'stairs',nextFloor:'stairs',secretNode:'stars',claimSecret:'chest',skipBattle:'eyeoff',leaveNode:'next',merchantNode:'merchant',dungeonForge:'forge',uiMapLegend:'map'};
 const actionIcon=(action,args=[],text='')=>{
@@ -118,6 +127,7 @@ const readArgs=e=>{try{return JSON.parse(e.dataset.args||'[]')}catch(_){return [
 const thumbFor=(action,args)=>{
  if(['memberTalk','character'].includes(action))return portrait(person('ally',args[0]));
  if(action==='npcTalk')return portrait(person('npc',args[0]));
+ if(action==='talkArchive')return portrait(person(args[0]==='npc'?'npc':'ally',args[1]));
  if(action==='readPair'){const p=hc().pairs[args[0]];return p?'<span class="duet-thumb">'+portrait(person('ally',p[0]))+portrait(person('ally',p[1]))+'</span>':''}
  return '';
 };
@@ -130,6 +140,25 @@ const markRow=e=>{
  else if(e.classList.contains('swap-set')||e.classList.contains('primary-action')||e.classList.contains('mini')){if(e.classList.contains('swap-set'))e.textContent=e.textContent.replace(/^⇄\s*/, '');e.insertAdjacentHTML('afterbegin',glyph(icon));e.classList.add('icon-action')}
  else return;
  e.dataset.visualized='true';
+};
+const decorateScene=(root,route)=>{
+ const body=root.querySelector?.('.panel-body');
+ if(body&&!body.dataset.sceneVisual){
+  let banner='';
+  if(['inn','guild','market'].includes(route.name))banner=facilityBanner(route.name);
+  else if(['deployment','dungeonIntel','regionRecord','questSelect','historyDetail','explorationNode','eventChoice','mechanismMenu','secretNode','merchantNode','camp','moraleMenu','runJournal','battlePrep','stairsMenu'].includes(route.name)){const region=regionOf(route);banner=regionBanner(region)}
+  else if(route.name==='enemyRecord')banner=sceneCard({kind:'enemy',image:facilityArt.guild,kicker:'ENCOUNTER',title:route.args?.[0]||'敵情報',text:'遭遇から判明した弱点・耐性・部位記録。',icon:'skull'});
+  if(banner){body.insertAdjacentHTML('afterbegin',banner);body.dataset.sceneVisual='1'}
+ }
+ if(route.name==='town'){
+  const scene=root.querySelector?.('.town-scene');
+  if(scene&&!scene.dataset.heroVisual){
+   scene.dataset.heroVisual='1';
+   scene.querySelectorAll('.place').forEach(e=>{if(e.querySelector('.place-art'))return;const name=e.dataset.hub;if(facilityArt[name])e.insertAdjacentHTML('afterbegin','<img class="place-art" src="'+facilityArt[name]+'" alt="">')});
+   const select=scene.querySelector('.region-select');
+   if(select&&!select.querySelector('.region-preview')){const region=H.selected||dungeonId;if(regionArt[region])select.insertAdjacentHTML('afterbegin','<img class="region-preview" src="'+regionArt[region]+'" alt="">')}
+  }
+ }
 };
 const dialoguePage=(panel,route)=>{
  const body=panel.querySelector('.panel-body');if(!body||body.dataset.dialogueVisual==='1')return;body.dataset.dialogueVisual='1';
@@ -158,9 +187,10 @@ const decorate=(root,route={name:'town',args:[]})=>{
   title.insertAdjacentHTML('afterbegin',member?portrait(member,'header-face'):glyph(actionIcon(route.name,route.args),'title-icon'));title.dataset.visualized='true';
  }
  dialoguePage(root,route);
+ decorateScene(root,route);
  root.querySelectorAll('.place').forEach(e=>{const i=e.querySelector('i');if(i)i.innerHTML=glyph(actions[e.dataset.hub]||'compass')});
  root.querySelectorAll('button[data-hub]').forEach(markRow);
- root.querySelectorAll('.region-select').forEach(e=>{if(!e.querySelector('.region-emblem'))e.insertAdjacentHTML('afterbegin','<span class="region-emblem" aria-hidden="true">'+glyph(regionIcon(H.selected||dungeonId))+'</span>')});
+ root.querySelectorAll('.region-select').forEach(e=>{const region=H.selected||dungeonId;if(!e.querySelector('.region-emblem'))e.insertAdjacentHTML('afterbegin','<span class="region-emblem" aria-hidden="true">'+glyph(regionIcon(region))+'</span>');if(regionArt[region]&&!e.querySelector('.region-preview'))e.insertAdjacentHTML('afterbegin','<img class="region-preview" src="'+regionArt[region]+'" alt="">')});
  root.querySelectorAll('.map-node').forEach(e=>{const node=H.run?.floors[H.run.floor-1]?.nodes.find(n=>n.id===readArgs(e)[0]);const i=e.querySelector('i');if(i&&node)i.innerHTML=glyph(nodeGlyph(node.type))});
  root.querySelectorAll('.party-member,.deploy-member').forEach(e=>{if(e.classList.contains('deploy-member')&&!e.querySelector('img')){const b=e.querySelector('button'),i=readArgs(b)[0];b.insertAdjacentHTML('afterbegin',portrait(person('ally',i),'deploy-face'))}});
  root.querySelectorAll('.stats-grid>div').forEach((e,i)=>{const label=e.querySelector('span');if(label&&!label.querySelector('.ui-icon'))label.insertAdjacentHTML('afterbegin',glyph(['heart','bow','wand','sun'][i]))});
@@ -170,13 +200,13 @@ const chrome=()=>{
  document.querySelectorAll('#app>nav button').forEach(e=>{const icon=e.querySelector('.ico');if(icon)icon.innerHTML=glyph(actions[e.dataset.hub]||'compass')});
  const gear=document.querySelector('.header-tools [data-hub="settings"]');if(gear)gear.innerHTML=glyph('settings');
 };
-window.HUB_VISUAL={version:9,glyph,decorate,chrome,person,portrait,itemIcon,masteryIcon,regionIcon,actionIcon};
+window.HUB_VISUAL={version:10,glyph,decorate,chrome,person,portrait,itemIcon,masteryIcon,regionIcon,actionIcon};
 // Adapt the existing presentation layer without duplicating its navigation or game actions.
 const showBase=window.show,townBase=window.town,mapBase=window.drawDungeon,closeBase=window.closeM;
 window.show=html=>{showBase(html);const panel=document.getElementById('panel'),route=HUB_UI.state.route||{name:'note',args:[]};decorate(panel,route);const exit=panel.querySelector('.modal-x');if(exit){exit.setAttribute('aria-label',activeRun()?'地図へ戻る':'拠点へ戻る');exit.innerHTML=glyph(activeRun()?'map':'home')+'<span>'+(activeRun()?'地図へ':'拠点へ')+'</span>'}const back=panel.querySelector('.panel-back');if(back)back.innerHTML=glyph('back');chrome()};
 window.town=(...args)=>{const value=townBase(...args);if(!activeRun())decorate(document.getElementById('screen'),{name:'town',args:[]});chrome();return value};
 window.drawDungeon=(...args)=>{const value=mapBase(...args);decorate(document.querySelector('.expedition'),{name:'drawDungeon',args:[]});chrome();return value};
 window.closeM=(...args)=>{const value=closeBase(...args);if(document.activeElement?.closest('#modal'))document.querySelector('#app nav button')?.focus({preventScroll:true});return value};
-HUB_UI.version=9;
+HUB_UI.version=10;
 
 })();
