@@ -1,0 +1,45 @@
+name: RPG validation
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'battle-v29.js'
+      - 'exploration/**'
+      - 'rpg-*.js'
+      - 'tests/**'
+      - '.github/workflows/rpg-validation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check battle and exploration syntax
+        run: |
+          node --check battle-v29.js
+          node <<'JS'
+          const fs = require('node:fs');
+          const vm = require('node:vm');
+          for (const path of ['exploration/index.html', 'index.html']) {
+            const html = fs.readFileSync(path, 'utf8');
+            for (const [i, match] of [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].entries()) {
+              new vm.Script(match[1], { filename: path + ':' + i });
+            }
+          }
+          console.log('All embedded JavaScript parsed successfully');
+          JS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rpg-validation-source
+          path: |
+            battle-v29.js
+            index.html
+            ui-v29.css
+            exploration/
+            images/
+          retention-days: 3
