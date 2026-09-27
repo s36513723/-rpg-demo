@@ -1,6 +1,7 @@
 'use strict';
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),cp=require('node:child_process');
-for(const file of ['battle-v29.js','rpg-rules.js','tests/battle-regression.js','tests/hub-regression.js'])cp.execFileSync(process.execPath,['--check',file]);
+const hubFiles=fs.readdirSync('exploration').filter(f=>f.endsWith('.js')).map(f=>'exploration/'+f);
+for(const file of ['battle-v29.js','rpg-rules.js','tests/battle-regression.js','tests/hub-regression.js',...hubFiles])cp.execFileSync(process.execPath,['--check',file]);
 for(const file of ['index.html','exploration/index.html']){
  const html=fs.readFileSync(file,'utf8');
  for(const [i,m]of [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].entries())new vm.Script(m[1],{filename:file+':script'+i});
@@ -18,4 +19,8 @@ for(const file of ['battle-v29.js','exploration/index.html']){
  const content=fs.readFileSync(file,'utf8'),names=[...content.matchAll(/(?:async\s+)?function\s+([a-zA-Z_$][\w$]*)\s*\(/g)].map(x=>x[1]);
  assert.equal(new Set(names).size,names.length,file+' duplicate function definitions');
 }
-console.log('Syntax, unique functions, 296 skill definitions and 31 masteries: PASS');
+const hubNames=hubFiles.flatMap(file=>[...fs.readFileSync(file,'utf8').matchAll(/(?:async\s+)?function\s+([a-zA-Z_$][\w$]*)\s*\(/g)].map(m=>m[1]));
+assert.equal(new Set(hubNames).size,hubNames.length,'hub duplicate function definitions');
+const path=require('node:path');
+for(const m of fs.readFileSync('exploration/index.html','utf8').matchAll(/(?:src|href)="([^"]+)"/g)){const target=m[1].split('?')[0];if(target.startsWith('#'))continue;assert(!/^https?:/.test(target),'hub dependency must be local');assert(fs.existsSync(path.resolve('exploration',target)),'missing hub resource '+target);}
+console.log('Syntax, local assets, unique functions, 296 skill definitions and 31 masteries: PASS');
