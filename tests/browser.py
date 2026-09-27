@@ -96,6 +96,21 @@ async def main():
     out.append({'name':'Battle sheet bottom navigation','ok':dims['fit'] and dims['bottom'] and dims['height']>=44,'measurements':dims})
    out.append({'name':case+' runtime console errors' ,'ok':not errors,'errors':errors})
    await page.close()
+  modern=await browser.new_page(viewport={'width':390,'height':844})
+  await modern.add_init_script('window.__RPG_TEST__=true')
+  await modern.goto('http://127.0.0.1:8139/play-v97.html',wait_until='load')
+  await modern.wait_for_function('!!window.__test')
+  for w,h in [(320,568),(390,844),(430,932)]:
+   await modern.set_viewport_size({'width':w,'height':h})
+   await modern.evaluate("window.__test.fresh();window.__test.selectActor('arc')")
+   dims=await modern.evaluate("""()=>{const panel=document.querySelector('#commandPanel'),close=document.querySelector('#closeCommand'),commands=[...panel.querySelectorAll('.command-buttons button')],r=panel.getBoundingClientRect(),c=close.getBoundingClientRect();return {fit:r.top>=0&&r.bottom<=innerHeight&&r.left>=0&&r.right<=innerWidth,bottom:c.top>=Math.max(...commands.map(b=>b.getBoundingClientRect().bottom))-1,touch:commands.every(b=>b.getBoundingClientRect().width>=44&&b.getBoundingClientRect().height>=44)}}""")
+   out.append({'name':f'Modern battle command touch layout {w}x{h}','ok':all(dims.values()),'measurements':dims})
+   for mode in ['skills','formation','members','more','terrain']:
+    await modern.evaluate('(mode)=>window.__test.openSheet(mode)',mode)
+    dims=await modern.evaluate("""()=>{const d=document.querySelector('#choiceSheet'),f=d.querySelector('.touch-dialog-footer'),b=d.querySelector('.touch-dialog-body'),r=d.getBoundingClientRect(),fr=f.getBoundingClientRect();return {fit:r.top>=0&&r.bottom<=innerHeight+1,bottom:fr.bottom<=innerHeight+1&&fr.top>=innerHeight-100,noOverflow:b.scrollWidth<=b.clientWidth+1}}""")
+    out.append({'name':f'Modern battle sheet {mode} {w}x{h}','ok':all(dims.values()),'measurements':dims})
+    await modern.click('#closeSheet')
+  await modern.close()
   await browser.close()
  (ROOT/'test-results.json').write_text(json.dumps({'mode':'offline DOM/Storage adapter' if OFFLINE else 'native Chromium HTTP','tests':out},ensure_ascii=False,indent=2))
  for r in out:

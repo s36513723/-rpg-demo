@@ -1,5 +1,5 @@
 /* Bottom sheets share dimensions and keep navigation outside the scroll area. */
-dialog.touch-dialog{padding:0!important;width:min(calc(100% - 16px),620px)!important;max-width:620px!important;height:min(78dvh,720px)!important;max-height:calc(100dvh - 16px)!important;box-sizing:border-box;overflow:hidden!important;border-radius:16px 16px 0 0!important;inset:auto 0 0!important;margin:0 auto!important}
+dialog.touch-dialog{animation:none!important;transform:none!important;padding:0!important;width:min(calc(100% - 16px),620px)!important;max-width:620px!important;height:min(78dvh,720px)!important;max-height:calc(100dvh - 16px)!important;box-sizing:border-box;overflow:hidden!important;border-radius:16px 16px 0 0!important;inset:auto 0 0!important;margin:0 auto!important}
 dialog.touch-dialog[open]{display:flex!important;flex-direction:column!important}
 .touch-dialog-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:16px;box-sizing:border-box}
 .touch-dialog-body .sheet-list{max-height:none!important;overflow:visible!important;padding-bottom:12px!important}
@@ -23,3 +23,13 @@ dialog.touch-dialog button:not(.formation-cell):not(.form-cell){min-height:44px}
 @media(max-width:350px){#game #commandPanel .command-content{padding-left:65px!important}#game #commandPanel .command-buttons{gap:1px!important}.touch-dialog-body{padding:12px}}
 
 .menu-description{display:block;font-size:12px;line-height:1.5;margin-top:4px;opacity:.8}
+
+/* SP is the single action resource; MP is a zero-valued legacy protocol field. */
+[data-resource="mp"],.scene-gauge-mp{display:none!important}
+.resource-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.scene-ally-sub{grid-template-columns:minmax(0,1fr)!important}
+
+.resource-list{grid-template-columns:1fr!important}
+
+#game .ally-unit .resource[data-resource="mp"],#game .scene-gauge-mp{display:none!important}
+#game .ally-unit .resource[data-resource="sp"]{left:10px!important;right:9px!important;width:auto!important;grid-column:1/-1!important}
