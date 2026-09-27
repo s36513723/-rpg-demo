@@ -162,7 +162,7 @@ const decorateScene=(root,route)=>{
  const body=root.querySelector?.('.panel-body');
  if(body&&!body.dataset.sceneVisual){
   let banner='',theme=H.run?.themes?.[Math.max(0,(H.run?.floor||1)-1)]||'';
-  if(['inn','guild','market'].includes(route.name))banner=facilityBanner(route.name);
+  if(['inn','guild','market'].includes(route.name))banner='';
   else if(route.name==='eventChoice')banner=eventBanner(eventForNode());
   else if(route.name==='explorationNode')banner=themeBanner(theme,'調査地点',(currentNode()?.terrain||'')+'を調べています。','search');
   else if(route.name==='camp'||route.name==='moraleMenu')banner=themeBanner(theme,'野営',theme+'で隊を休め、資源と状態を整えます。','camp');
