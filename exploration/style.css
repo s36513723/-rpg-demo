@@ -15,3 +15,24 @@
 .compact-ui .ui-tabs button{min-height:38px}
 .compact-ui .toolbar,.compact-ui .actions{margin:7px 0}
 .compact-ui .dialogue-block{margin-bottom:12px;padding-top:12px;padding-bottom:12px}
+
+/* UI15: formation lives directly inside 編成. */
+.formation-section{margin:2px 0 8px}
+.formation-section .section-meta{margin:4px 0 10px}
+.formation-section .section-meta span{font-size:10px;line-height:1.5;text-align:right}
+.formation-board{display:grid;gap:10px}
+.formation-row{display:grid;grid-template-columns:38px 1fr;gap:8px;align-items:stretch}
+.formation-row-label{display:flex;align-items:center;justify-content:center;border-right:1px solid var(--edge);font-size:10px;letter-spacing:.08em;color:var(--muted);writing-mode:vertical-rl}
+.formation-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.formation-member{position:relative;min-width:0;border:1px solid var(--edge);border-radius:9px;background:#14231c;overflow:hidden}
+.formation-member.selected{border-color:var(--gold);box-shadow:0 0 0 1px #d9c58255}
+.formation-member.has-issue:not(.selected){border-color:#7d6749}
+.formation-pick{display:grid;grid-template-rows:44px auto auto;width:100%;min-height:86px;border:0;background:transparent;padding:5px 4px 4px;text-align:center;position:relative}
+.formation-pick img{width:100%;height:44px;object-fit:cover;object-position:center 24%;border-radius:5px;opacity:.92}
+.formation-pick b{font-size:10px;line-height:1.5;font-weight:600;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.formation-pick small{font-size:8px;line-height:1.35;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.formation-config{width:100%;min-height:30px;border:0;border-top:1px solid var(--edge);background:#1c2b23;color:#c8d0c7;font-size:9px}
+.formation-issue{position:absolute;top:3px;right:3px;width:15px;height:15px;border-radius:50%;display:grid;place-items:center;background:#7a5937;color:#fff2d0;font-size:10px;font-weight:700}
+.formation-member.selected .formation-pick:after{content:'選択中';position:absolute;left:4px;top:4px;background:#d9c582;color:#142119;border-radius:4px;padding:2px 4px;font-size:7px;font-weight:700}
+@media(max-width:350px){.formation-row{grid-template-columns:30px 1fr;gap:5px}.formation-slots{gap:4px}.formation-pick{min-height:80px;grid-template-rows:39px auto auto}.formation-pick img{height:39px}.formation-pick b{font-size:9px}.formation-pick small{font-size:7px}}
+@media(min-width:600px){.formation-row{grid-template-columns:48px 1fr;gap:10px}.formation-slots{gap:10px}.formation-pick{min-height:102px;grid-template-rows:56px auto auto}.formation-pick img{height:56px}.formation-pick b{font-size:12px}.formation-pick small{font-size:9px}.formation-config{font-size:10px;min-height:34px}}
