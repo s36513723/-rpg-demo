@@ -12,7 +12,7 @@ async def main():
   errors=[];logs=[]
   page.on('pageerror',lambda e:errors.append(str(e)))
   page.on('console',lambda m: logs.append(m.text) if m.type=='error' else None)
-  await page.goto('http://127.0.0.1:8140/play-plan-v2.html',wait_until='load')
+  await page.goto('http://127.0.0.1:8140/play-plan-v3.html',wait_until='load')
   await page.wait_for_timeout(1500)
   data=await page.evaluate("""()=>({presentation:document.documentElement.dataset.presentation,enemy:document.querySelectorAll('.enemy-unit').length,cards:document.querySelectorAll('.ally-unit').length,order:document.querySelectorAll('.order-face').length,api:!!window.RPGDemo,boot:!!document.querySelector('#bootStatus')})""")
   pathlib.Path('plan-debug.json').write_text(json.dumps({'data':data,'errors':errors,'console':logs},ensure_ascii=False,indent=2))
