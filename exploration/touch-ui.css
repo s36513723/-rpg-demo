@@ -1,0 +1,32 @@
+/* One size system: 48px actions, 44px compact controls, 64px list rows. */
+:root{--touch-action:48px;--touch-row:64px;--touch-gap:8px}
+#panel{padding-bottom:0;box-sizing:border-box}
+#panel>.panel-head{min-height:52px;padding:8px 16px;box-sizing:border-box}
+#panel>.panel-head h2{margin:0;font-size:17px}
+#panel>.panel-body{flex:1;min-height:0;overscroll-behavior:contain;scroll-padding-bottom:16px}
+#panel>.panel-footer{flex:none;padding:8px 12px max(8px,env(safe-area-inset-bottom));border-top:1px solid var(--edge);background:var(--surface,#132019);z-index:10}
+.panel-navigation{display:flex;gap:var(--touch-gap)}
+#panel .panel-footer button{position:static;display:flex;flex:1;align-items:center;justify-content:center;gap:6px;width:auto;height:auto;min-height:var(--touch-action);margin:0;padding:10px 12px;border:1px solid var(--edge);border-radius:8px;background:#23362b;color:var(--text,#f0ecdf);font-family:inherit;font-weight:500;font-size:13px;line-height:1.4;box-sizing:border-box}
+#panel .panel-footer button[hidden]{display:none}
+#panel .panel-footer .actions{display:flex;gap:8px;margin:0 0 8px}
+#panel .panel-footer .actions button:last-child{background:#d0bb88;color:#19261d;border-color:#d0bb88}
+#panel .panel-footer button .small{display:none}
+#panel .panel-body button.row{min-height:var(--touch-row);box-sizing:border-box}
+#panel .panel-body button.row b{font-size:13px;line-height:1.4}
+#panel .panel-body button.row .small{font-size:11px;line-height:1.5;white-space:normal}
+#panel .ui-tabs button,#panel .icon-button,#panel .stat-plus{min-height:44px;min-width:44px}
+#panel .actions button,#panel .primary-action{min-height:48px}
+#panel .screen-hint,#panel .item-explain{font-size:12px;line-height:1.65}
+#panel .people-select-page{overflow-y:auto!important}
+#panel .people-select-page>.people-select-grid{flex:0 0 auto;grid-template-rows:repeat(6,clamp(48px,8dvh,68px));gap:6px}
+#panel .person-select-card{min-height:48px;height:100%;padding:5px 10px}
+#panel .person-select-card b{font-size:12px}
+#panel .person-select-card small{font-size:10px}
+#panel .facility-stage-page,#panel .npc-conversation-page{grid-template-rows:minmax(0,1fr) 150px}
+#panel .facility-action-deck,#panel .npc-action-deck{height:150px;grid-template-rows:repeat(2,minmax(0,1fr));gap:6px;padding:8px 10px;box-sizing:border-box}
+#panel .facility-action-deck>button.row,#panel .npc-action-deck>button.row{height:100%;min-height:0;padding:6px 9px;display:flex;flex-direction:column;justify-content:center}
+#panel .facility-action-deck>button.row b,#panel .npc-action-deck>button.row b{font-size:12px}
+#panel .facility-action-deck>button.row .small,#panel .npc-action-deck>button.row .small{font-size:10px;line-height:1.4}
+#panel .room-page{overflow-y:auto!important}
+#panel .sortie-page{overflow-y:auto!important}
+@media(max-height:640px){#panel>.actor-hero{height:112px;flex-basis:112px}#panel .panel-footer{padding-top:6px}#panel .facility-stage-page,#panel .npc-conversation-page{grid-template-rows:minmax(0,1fr) 138px}#panel .facility-action-deck,#panel .npc-action-deck{height:138px}}

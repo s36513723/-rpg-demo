@@ -273,7 +273,7 @@ const api={version:9,resourceVersion:1,legacyDerived,migrateVitals,skills,master
 if(typeof module!=='undefined')module.exports=api;root.RPG_RULES=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
 </script>
-<link rel="stylesheet" href="unified-sp.css?v=2"></head>
+<link rel="stylesheet" href="unified-sp.css?v=2"><link rel="stylesheet" href="touch-ui.css?v=1"></head>
 <body>
 <main id="game">
   <header class="masthead">
@@ -564,5 +564,5 @@ fast:()=>{waitRead=async()=>{};say=async(text)=>{log(text,'sys')};animateSwap=as
 state:()=>({round,phase,busy,over,summons,carryRemaining}),context:(ctx)=>{EXPCTX=ctx;fresh()},act:(u,q)=>execute(u,q,session),status:(u,t,a)=>applyStatuses(u,t,a,session),end:()=>endRound(session),finish:t=>finish(t,session),move:(u,r)=>moveTo(u,r,session),breakPart:(u,id,n)=>damagePart(u,id,n,session),combo:(u,t,a)=>comboBefore(u,t,a,session),setRound:r=>{round=r},setTerrain:n=>{terrain={...TERRAINS.find(t=>t.name===n)}}});}
 })();
 </script>
-</body>
+<script defer src="touch-ui.js?v=1"></script></body>
 </html>

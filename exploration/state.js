@@ -11,7 +11,24 @@ function region(){return hc().regions[H?.run?.dungeon||dungeonId]||hc().regions[
 function activeRun(){return !!H?.run}
 function requireTown(){if(!activeRun())return true;note('探索中は利用できません。帰還するか、野営・旅商人を利用してください。');return false}
 function hesc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function HB(title,sub,action,args=[],disabled=false){if(!action)return HT(title,sub);return '<button type="button" class="row"'+(action?' data-hub="'+action+'" data-args="'+hesc(JSON.stringify(args))+'"':'')+(disabled?' disabled':'')+'><b>'+hesc(title)+'</b>'+(sub?'<span class="small">'+hesc(sub)+'</span>':'')+'</button>'}
+var HUB_COMMAND_HELP={
+ items:'回復道具・武具・素材・重要品を確認',records:'探索結果・人物・会話の記録を読む',pairMenu:'仲間同士の会話と関係を読む',
+ conversation:'仲間の話を聞く。新しい会話は進行で解放',npcMenu:'客の話から噂や探索の手がかりを得る',
+ dungeon:'地域の特徴を比べて行き先を選ぶ',resistView:'属性攻撃・状態異常への強さを確認',
+ claimQuest:'達成した依頼を報告して報酬を受け取る',trackQuest:'この依頼の目標を拠点と地図に表示',uiClearTrack:'目標表示だけ解除。依頼は継続',
+ manualSave:'現在の進行をこの端末に保存',askRestore:'以前のバックアップを確認して復元',
+ askSavePreset:'装備・スキル・陣形の組み合わせを保存',applyPreset:'保存した装備・スキル・陣形を呼び出す',
+ recipeDetail:'必要な素材・費用と完成品を確認',craftMenu:'素材を使った製作・強化・特性付与',
+ storageMenu:'道具・素材・武具を預ける／取り出す',depositMenu:'持ち物を選んで保管庫へ預ける',
+ materialTrade:'余った素材を売って資金にする',appraiseMenu:'見つけた古器や未鑑定品の内容を調べる',
+ peopleBook:'出会った人物と読んだ会話を確認',regionRecord:'踏査した地点や発見の進捗を確認',
+ battleDemo:'現在の装備・スキルで戦闘を始める',startDungeon:'選んだ地域の探索を開始',
+ nextFloor:'HP・SPと状態異常を引き継いで次の層へ',askReturn:'探索を終えて街へ戻る前に確認',
+ masteryType:'系統の特徴と習得できるスキルを見る',mastery:'熟練度を上げて新しい技を習得',
+ setEquip:'比較内容を確定して装備を変更',swapMain:'主武器・副手と予備セットをまとめて交換',
+ innRest:'全回復し、未精算の成長ポイントを受け取る',confirmImport:'内容を確認したセーブで現在の進行を置き換える'
+};
+function HB(title,sub,action,args=[],disabled=false){if(!sub&&!/^(戻る|一覧|一覧へ|やめる|取り消す|取消|閉じる)$/.test(title))sub=HUB_COMMAND_HELP[action]||'';if(!action)return HT(title,sub);return '<button type="button" class="row"'+(action?' data-hub="'+action+'" data-args="'+hesc(JSON.stringify(args))+'"':'')+(disabled?' disabled':'')+'><b>'+hesc(title)+'</b>'+(sub?'<span class="small">'+hesc(sub)+'</span>':'')+'</button>'}
 function HT(title,sub=''){return '<div class="row static"><b>'+hesc(title)+'</b>'+(sub?'<span class="small">'+hesc(sub)+'</span>':'')+'</div>'}
 function ha(...buttons){return '<div class="actions">'+buttons.join('')+'</div>'}
 function back(){return ha(HB(activeRun()?'探索へ':'閉じる','','closeM'))}

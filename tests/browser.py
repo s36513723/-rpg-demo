@@ -80,13 +80,21 @@ async def main():
     out.extend(await page.evaluate((ROOT/'tests/ui-regression.js').read_text()))
     out.extend(await page.evaluate((ROOT/'tests/visual-regression.js').read_text()))
     out.extend(await layouts(page))
+    for w,h in [(320,568),(390,844),(430,932)]:
+     await page.set_viewport_size({'width':w,'height':h})
+     out.extend(await page.evaluate((ROOT/'tests/touch-audit.js').read_text()))
     if not OFFLINE:
      await page.evaluate('conversation()')
      loaded=await page.evaluate("""async()=>{const images=[...document.querySelectorAll('#party img,#panel img')];await Promise.all(images.map(i=>i.decode().catch(()=>{})));return images.length>=12&&images.every(i=>i.naturalWidth>0)}""")
      out.append({'name':'UI17 existing portrait assets load on HTTP origin','ok':loaded})
      stands=await page.evaluate("""async()=>{const src=[...Object.values(HUB_VISUAL.npcStand||{})];const images=src.map(s=>{const i=new Image();i.src=s;return i});await Promise.all(images.map(i=>i.decode().catch(()=>{})));return src.length===6&&images.every(i=>i.naturalWidth>0&&i.naturalHeight>0)}""")
      out.append({'name':'UI17 six NPC standing assets load on HTTP origin','ok':stands})
-   out.append({'name':case+' runtime console errors','ok':not errors,'errors':errors})
+   if not hub:
+    await page.evaluate('window.__test.context(null);window.__test.openSheet()')
+    await page.wait_for_selector('.touch-dialog-footer')
+    dims=await page.evaluate("""()=>{const d=document.querySelector('#choiceSheet'),b=d.querySelector('.touch-dialog-footer button'),r=d.getBoundingClientRect(),f=b.getBoundingClientRect();return {fit:r.bottom<=innerHeight+1&&r.top>=0,bottom:f.bottom<=innerHeight&&f.top>innerHeight-100,height:f.height}}""")
+    out.append({'name':'Battle sheet bottom navigation','ok':dims['fit'] and dims['bottom'] and dims['height']>=44,'measurements':dims})
+   out.append({'name':case+' runtime console errors' ,'ok':not errors,'errors':errors})
    await page.close()
   await browser.close()
  (ROOT/'test-results.json').write_text(json.dumps({'mode':'offline DOM/Storage adapter' if OFFLINE else 'native Chromium HTTP','tests':out},ensure_ascii=False,indent=2))

@@ -236,10 +236,10 @@ function openSheet(mode='skills'){
  if(editable())cancelTarget();
  const u=current();
  $('sheetKicker').textContent=['skills','formation'].includes(mode)?u.name:'';
- $('sheetTitle').textContent={skills:'技',formation:'FORMATION',members:'仲間',more:'',terrain:terrain.name,history:'履歴'}[mode]||'';
- $('sheetHint').textContent='';const list=$('sheetList');list.replaceChildren();
+ $('sheetTitle').textContent={skills:'技',formation:'陣形移動',members:'仲間',more:'戦闘メニュー',terrain:terrain.name,history:'履歴'}[mode]||'';
+ $('sheetHint').textContent={skills:'技をタップすると表示中の対象へ行動。別の相手を狙うときは「対象変更」。',members:'操作する仲間を選びます。',more:'戦闘の記録・やり直し・逃走。'}[mode]||'';const list=$('sheetList');list.replaceChildren();
  if(mode==='formation'){
-  $('sheetHint').textContent='SHIFT · 1 ACTION';
+  $('sheetHint').textContent='移動先を選ぶと1行動を使います。仲間がいるマスは位置を交換。';
   const editor=document.createElement('div');editor.className='formation-editor';
   for(const rank of RANKS){
    const line=document.createElement('div');line.className='formation-line';line.dataset.rank=rank;
@@ -266,7 +266,7 @@ function openSheet(mode='skills'){
   const p=document.createElement('p');p.className='terrain-detail';p.textContent=terrain.desc;list.append(p);
  }else if(mode==='more'){
   const entries=[['restart','新しい戦闘',()=>fresh(),false],['book','履歴',()=>{closeSheet();toggleHistory()},false],['exit','逃走',()=>{closeSheet();simpleCommand('escape')},!editable()||u?.status.legBind>0]];
-  for(const [ic,label,fn,disabled]of entries){const b=document.createElement('button');b.type='button';b.className='menu-action';b.innerHTML=icon(ic)+esc(label);b.disabled=disabled;b.addEventListener('click',fn);list.append(b)}
+  for(const [ic,label,fn,disabled]of entries){const b=document.createElement('button');b.type='button';b.className='menu-action';b.innerHTML=icon(ic)+'<span>'+esc(label)+'<small class="menu-description">'+esc({restart:'現在の戦闘を最初からやり直す',book:'これまでの行動とダメージを確認',exit:'1行動を使って逃走を試みる。失敗することもあります'}[ic])+'</small></span>';b.disabled=disabled;b.addEventListener('click',fn);list.append(b)}
  }else{
   for(const[key,a]of u.skills.map((s,i)=>[String(i),s])){
    const reason=unavailable(u,a),t=defaultTarget(u,a),item=document.createElement('div');item.className='skill-item';

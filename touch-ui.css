@@ -1,0 +1,25 @@
+/* Bottom sheets share dimensions and keep navigation outside the scroll area. */
+dialog.touch-dialog{padding:0!important;width:min(calc(100% - 16px),620px)!important;max-width:620px!important;height:min(78dvh,720px)!important;max-height:calc(100dvh - 16px)!important;box-sizing:border-box;overflow:hidden!important;border-radius:16px 16px 0 0!important;inset:auto 0 0!important;margin:0 auto!important}
+dialog.touch-dialog[open]{display:flex!important;flex-direction:column!important}
+.touch-dialog-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:16px;box-sizing:border-box}
+.touch-dialog-body .sheet-list{max-height:none!important;overflow:visible!important;padding-bottom:12px!important}
+.touch-dialog-body .sheet-head{position:static!important;padding:0 0 12px!important}
+.touch-dialog-footer{flex:none;display:flex;gap:8px;padding:8px 12px max(10px,env(safe-area-inset-bottom));border-top:1px solid #a898b355;background:#eee8f0;color:#4b425b}
+dialog.touch-dialog .touch-dialog-footer button{position:static!important;inset:auto!important;transform:none!important;display:block!important;flex:1;width:auto!important;height:auto!important;min-height:48px!important;margin:0!important;padding:10px!important;border:1px solid #ab99b7!important;border-radius:8px!important;background:#faf7fb!important;color:#4b425b!important;font:inherit!important;font-size:13px!important}
+dialog.touch-dialog button:not(.formation-cell):not(.form-cell){min-height:44px}
+.touch-dialog-body .skill-choice,.touch-dialog-body .skill-option,.touch-dialog-body .member-option,.touch-dialog-body .menu-action{min-height:64px!important;box-sizing:border-box}
+.touch-dialog-body .skill-choice small,.touch-dialog-body .skill-meta,.touch-dialog-body .skill-effect,.touch-dialog-body .sheet-hint{font-size:12px!important;line-height:1.6!important}
+#touchHelp h2{font-size:18px}#touchHelp dt{margin-top:18px;font-size:14px;font-weight:600}#touchHelp dd{margin:5px 0 0;font-size:13px;line-height:1.75}
+#game #commandPanel{height:116px!important}
+#game #commandPanel .command-content{height:116px!important;padding-bottom:52px!important;box-sizing:border-box!important}
+#game #commandInput,#game #commandPanel .command-buttons{height:60px!important}
+#game #commandPanel .command-buttons>.command{height:56px!important;min-width:44px!important}
+#game #commandPanel .command-buttons>.command b{font-size:10px!important;line-height:14px!important}
+#game .command-dismiss{position:absolute;bottom:4px;left:6px;right:6px;display:flex;justify-content:flex-end;gap:6px;height:44px}
+#game .command-dismiss button{position:static!important;inset:auto!important;transform:none!important;flex:1;width:auto!important;height:44px!important;min-height:44px!important;border:1px solid #ab99b766!important;border-radius:7px!important;background:#f7f2fae8!important;color:#54445e!important;font:inherit!important;font-size:12px!important;padding:6px!important}
+#game .command-dismiss button[hidden]{display:none!important}
+#game #commandPanel.resolving .command-dismiss{display:none}
+#game #closeHistory{position:sticky!important;bottom:0!important;right:auto!important;top:auto!important;display:block!important;width:100%!important;height:48px!important;background:#eee8f0!important;color:#4b425b!important;font-size:13px!important}
+@media(max-width:350px){#game #commandPanel .command-content{padding-left:65px!important}#game #commandPanel .command-buttons{gap:1px!important}.touch-dialog-body{padding:12px}}
+
+.menu-description{display:block;font-size:12px;line-height:1.5;margin-top:4px;opacity:.8}
