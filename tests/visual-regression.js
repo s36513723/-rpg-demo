@@ -34,6 +34,6 @@ async () => {
  await test('map nodes have themed mini artwork',()=>{reset();startDungeon();drawDungeon();const nodes=[...document.querySelectorAll('.map-node')];assert(nodes.length>=9);assert(nodes.every(e=>e.querySelector('.node-thumb')))});
  await test('enemy book and detail use enemy thumbnails',()=>{reset();journal.enemies=['古代弓兵','辺境の巨獣','術式魔導師','迷宮守護機'];journal.enemyData={};enemyBook();assert(panel().querySelectorAll('[data-hub="enemyRecord"] img.enemy-thumb').length===4);enemyRecord('迷宮守護機');assert(panel().querySelector('.scene-enemy img').getAttribute('src').includes('enemy_golem'))});
  await test('field merchant uses a dedicated portrait',()=>{reset();startDungeon();const f=H.run.floors[0],n=f.nodes.find(n=>n.type==='merchant');f.open=[n.id];routeNode(n.id);assert(panel().querySelector('.scene-merchant img').getAttribute('src').includes('npc_merchant'))});
- await test('back navigation still works with icon-enhanced buttons',()=>{reset();market();toolShop();toolQuantity('回復薬');uiBack();assert(panel().textContent.includes('道具屋'));uiBack();assert(panel().querySelector('.host-card'));assert(panel().querySelector('.modal-x').textContent==='拠点へ')});
+ await test('back navigation still works with NPC-centered facilities',()=>{reset();market();toolShop();toolQuantity('回復薬');uiBack();assert(panel().textContent.includes('道具屋'));uiBack();assert(panel().querySelector('.facility-host'));assert(panel().querySelector('.modal-x').textContent==='拠点へ')});
  reset();return out;
 }
