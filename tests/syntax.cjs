@@ -12,10 +12,10 @@ for(const [n,d]of Object.entries(R.skills)){
  assert.equal(n,d.name);assert(['Active','Passive'].includes(d.mode));assert(d.setCost>=1&&d.setCost<=10,n+' cost');
  assert(Array.isArray(d.unlocks)&&d.unlocks.length,n+' unlocks');
  for(const u of d.unlocks){assert(R.masteries[u.mastery],n+' mastery');assert(u.rank>=0&&u.rank<=50);assert(['PHY','SKL','ARC','MND'].includes(u.stat))}
- if(d.mode==='Active'){assert(Number.isFinite(d.mult));assert(Number.isFinite(d.cost));assert(['SP','MP'].includes(d.costType));assert(['near','mid','far','all'].includes(d.range));assert(['single','row','all','pierce','adjacent','random'].includes(d.scope));const t=d.targeting;assert(t,n+' targeting');assert(['enemy','ally','self'].includes(t.side),n+' targeting side');assert(['same','select','self'].includes(t.column),n+' targeting column');assert(['front','through','last','ally','self'].includes(t.order),n+' targeting order');assert(['single','cross','x','vertical','horizontal','3x3'].includes(t.area),n+' targeting area');assert(typeof t.ignoreTaunt==='boolean',n+' ignoreTaunt');}
+ if(d.mode==='Active'){assert(Number.isFinite(d.mult));assert(Number.isFinite(d.cost));assert.equal(d.costType,'SP');assert(['near','mid','far','all'].includes(d.range));assert(['single','row','all','pierce','adjacent','random'].includes(d.scope));const t=d.targeting;assert(t,n+' targeting');assert(['enemy','ally','self'].includes(t.side),n+' targeting side');assert(['same','select','self'].includes(t.column),n+' targeting column');assert(['front','through','last','ally','self'].includes(t.order),n+' targeting order');assert(['single','cross','x','vertical','horizontal','3x3'].includes(t.area),n+' targeting area');assert(typeof t.ignoreTaunt==='boolean',n+' ignoreTaunt');}
  else assert(Object.keys(d.passive).length,n+' passive');
 }
-assert.equal(R.version,8);assert.equal(R.targetRules.board.allyNear,'back');assert.equal(R.targetRules.board.enemyNear,'front');assert.equal(R.targetRules.board.forwardAxis,'vertical');
+assert.equal(R.version,9);assert.equal(R.targetRules.board.allyNear,'back');assert.equal(R.targetRules.board.enemyNear,'front');assert.equal(R.targetRules.board.forwardAxis,'vertical');
 assert.deepEqual(R.targetRules.normalAttack,{side:'enemy',column:'same',order:'front',area:'single'});
 assert.equal(R.targetRules.emptySameColumn,'choose-occupied-column');assert.equal(R.targetRules.throughFallback,'front');assert.equal(R.targetRules.counterChain,false);
 assert.equal(R.targetingText(R.skills['毒刃']),'正面・スルー・単体');
@@ -39,3 +39,15 @@ assert.equal(new Set(hubNames).size,hubNames.length,'hub duplicate function defi
 const path=require('node:path');
 for(const m of fs.readFileSync('exploration/index.html','utf8').matchAll(/(?:src|href)="([^"]+)"/g)){const target=m[1].split('?')[0];if(target.startsWith('#'))continue;assert(!/^https?:/.test(target),'hub dependency must be local');assert(fs.existsSync(path.resolve('exploration',target)),'missing hub resource '+target);}
 console.log('Syntax, local assets, unique functions, 296 skill definitions and 31 masteries: PASS');
+
+const caster=[10,10,60,20],old=R.legacyDerived(caster),max=R.derived(caster);
+assert.equal(max.sp,old.sp+old.mp);assert.equal(max.mp,0);
+const migrated=R.migrateVitals({hp:80,sp:10,mp:42,status:{poison:2}},caster);
+assert.equal(migrated.sp,52);assert.equal(migrated.mp,0);assert.equal(migrated.status.poison,2);
+assert.deepEqual(R.migrateVitals(migrated,caster,1),migrated);
+assert.equal(R.migrateVitals({hp:10,sp:30,mp:80},caster,0,4).sp,max.sp);
+assert.equal(R.migrateVitals({hp:0,sp:0,mp:0},caster).sp,0);
+assert.equal(R.skills['動力炉'].resourceRecovery.sp,18);
+assert(!R.skills['MP回復']);assert(R.skills['気力回復']);
+for(const d of Object.values(R.skills))assert(!R.skillExplain(d).includes('MP'),d.name);
+console.log('Unified SP costs, recovery and old-save migration: PASS');

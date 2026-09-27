@@ -1,0 +1,6 @@
+/* SP is the single action resource; MP is a zero-valued legacy protocol field. */
+[data-resource="mp"],.scene-gauge-mp{display:none!important}
+.resource-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.scene-ally-sub{grid-template-columns:minmax(0,1fr)!important}
+
+.resource-list{grid-template-columns:1fr!important}

@@ -9,17 +9,17 @@ const skill=(name,kind,costType,cost,mult,attr,range,stat,extra={})=>({name,kind
 const HT=[
 {id:'war',name:'ガルド',style:'ウォーリアー',row:'front',rank:'front',gridCol:1,slot:1,PHY:55,SKL:25,ARC:10,MND:10,armor:'heavy',weapons:['hammer','axe'],skills:[skill('破砕撃','skill','SP',10,1.45,'壊','near','PHY',{speed:-2}),skill('震撃','skill','SP',15,1.2,'壊','near','PHY',{speed:-5,stun:45})]},
 {id:'rog',name:'リゼ',style:'ローグ',row:'front',rank:'front',gridCol:2,slot:2,PHY:30,SKL:50,ARC:10,MND:10,armor:'light',weapons:['dagger','chakram'],skills:[skill('毒刃','skill','SP',8,1.15,'斬','near','SKL',{hit:8,speed:6,poison:60}),skill('急所突き','skill','SP',12,1.5,'斬','near','SKL',{hit:5,speed:3,critBonus:20})]},
-{id:'run',name:'エルン',style:'ルーンフェンサー',row:'front',rank:'front',gridCol:3,slot:3,PHY:40,SKL:20,ARC:30,MND:10,armor:'light',weapons:['sword','spear'],skills:[skill('火炎剣','skill','MP',12,1.35,'火','near','MIX'),skill('貫穿','skill','SP',9,1.35,'突','mid','PHY',{hit:4})]},
+{id:'run',name:'エルン',style:'ルーンフェンサー',row:'front',rank:'front',gridCol:3,slot:3,PHY:40,SKL:20,ARC:30,MND:10,armor:'light',weapons:['sword','spear'],skills:[skill('火炎剣','skill','SP',12,1.35,'火','near','MIX'),skill('貫穿','skill','SP',9,1.35,'突','mid','PHY',{hit:4})]},
 {id:'ran',name:'セナ',style:'レンジャー',row:'back',rank:'mid',gridCol:2,slot:4,PHY:20,SKL:60,ARC:10,MND:10,armor:'light',weapons:['bow','spear'],skills:[skill('脚封じ射ち','skill','SP',10,1.05,'突','far','SKL',{hit:10,speed:2,legBind:65}),skill('狙撃','skill','SP',14,1.55,'突','far','SKL',{hit:12,speed:-3,critBonus:10})]},
-{id:'arc',name:'ミレア',style:'アルカニスト',row:'back',rank:'rear',gridCol:1,slot:5,PHY:10,SKL:10,ARC:60,MND:20,armor:'magic',weapons:['staff','talisman'],skills:[skill('火球','spell','MP',14,1.45,'火','far','ARC',{hit:5,speed:0}),skill('大火炎','spell','MP',28,1.9,'火','far','ARC',{hit:0,speed:-10})]},
-{id:'mys',name:'ユナ',style:'ミスティック',row:'back',rank:'rear',gridCol:3,slot:6,PHY:10,SKL:30,ARC:10,MND:50,armor:'magic',weapons:['talisman','staff'],skills:[skill('頭封じの符','spell','MP',12,.75,'無','far','MND',{hit:10,speed:5,headBind:70}),skill('治癒祈祷','spell','MP',16,0,'無','all','MND',{target:'ally',hit:100,speed:5,heal:true})]}
+{id:'arc',name:'ミレア',style:'アルカニスト',row:'back',rank:'rear',gridCol:1,slot:5,PHY:10,SKL:10,ARC:60,MND:20,armor:'magic',weapons:['staff','talisman'],skills:[skill('火球','spell','SP',14,1.45,'火','far','ARC',{hit:5,speed:0}),skill('大火炎','spell','SP',28,1.9,'火','far','ARC',{hit:0,speed:-10})]},
+{id:'mys',name:'ユナ',style:'ミスティック',row:'back',rank:'rear',gridCol:3,slot:6,PHY:10,SKL:30,ARC:10,MND:50,armor:'magic',weapons:['talisman','staff'],skills:[skill('頭封じの符','spell','SP',12,.75,'無','far','MND',{hit:10,speed:5,headBind:70}),skill('治癒祈祷','spell','SP',16,0,'無','all','MND',{target:'ally',hit:100,speed:5,heal:true})]}
 ];
 const ET=[
 {id:'g1',name:'重装兵A',style:'重装兵',row:'front',slot:1,hp:155,PHY:42,SKL:20,ARC:10,MND:18,physDef:70,magDef:36,weak:{壊:2,火:1.2},resist:{斬:.5},weapon:{name:'大盾槍',attr:'突',range:'mid',power:20,hit:0,speed:-4,weight:'heavy'},ai:'guard'},
 {id:'g2',name:'重装兵B',style:'重装兵',row:'front',slot:2,hp:145,PHY:40,SKL:22,ARC:10,MND:18,physDef:66,magDef:36,weak:{壊:2},resist:{斬:.5},weapon:{name:'戦槌',attr:'壊',range:'near',power:21,hit:-3,speed:-5,weight:'heavy'},ai:'guard'},
 {id:'g3',name:'槍兵',style:'槍兵',row:'front',slot:3,hp:125,PHY:34,SKL:30,ARC:10,MND:16,physDef:52,magDef:32,weak:{斬:1.3,火:1.2},resist:{突:.5},weapon:{name:'長槍',attr:'突',range:'mid',power:18,hit:3,speed:0,weight:'normal'},ai:'guard'},
 {id:'arch',name:'弓兵A',style:'弓兵',row:'back',slot:4,hp:100,PHY:20,SKL:48,ARC:10,MND:15,physDef:35,magDef:35,weak:{斬:1.5},resist:{},weapon:{name:'弓',attr:'突',range:'far',power:15,hit:7,speed:2,weight:'normal'},ai:'archer'},
-{id:'mage',name:'魔術師',style:'魔術師',row:'back',slot:5,hp:90,PHY:10,SKL:24,ARC:48,MND:24,physDef:24,magDef:58,weak:{斬:1.4,突:1.2},resist:{火:.5},spell:skill('火炎術','spell','MP',12,1.25,'火','far','ARC',{power:16,hit:5,speed:-2}),ai:'mage'},
+{id:'mage',name:'魔術師',style:'魔術師',row:'back',slot:5,hp:90,PHY:10,SKL:24,ARC:48,MND:24,physDef:24,magDef:58,weak:{斬:1.4,突:1.2},resist:{火:.5},spell:skill('火炎術','spell','SP',12,1.25,'火','far','ARC',{power:16,hit:5,speed:-2}),ai:'mage'},
 {id:'arch2',name:'弓兵B',style:'弓兵',row:'back',slot:6,hp:95,PHY:18,SKL:44,ARC:10,MND:16,physDef:32,magDef:36,weak:{斬:1.5,壊:1.2},resist:{},weapon:{name:'弓',attr:'突',range:'far',power:14,hit:6,speed:3,weight:'normal'},ai:'archer'}
 ];
 const PORTRAITS={war:'gald',rog:'lize',run:'ern',ran:'sena',arc:'mirea',mys:'yuna',g1:'enemy_guard',g2:'enemy_guard',g3:'enemy_guard',arch:'enemy_archer',arch2:'enemy_archer',mage:'enemy_mage'};
@@ -61,7 +61,8 @@ try{paceIndex=clamp(Number(localStorage.getItem('rpg.pace.v31'))||0,0,2)}catch(_
 const nodes=new Map(),drafts=new Map(),replacementUsed={party:new Set(),enemies:new Set()},activeAnimations=new Set();
 const CANCEL=Symbol('cancelled battle');
 function check(token){if(token!==session)throw CANCEL}
-function derived(P,S,A,M){const T=P+S+A+M,p=Math.max(0,P-10),s=Math.max(0,S-10),x=Math.max(0,A+M-20);return{hp:Math.floor(100+.5*(T-100)+2*p+Math.max(0,p-20)),sp:Math.floor(20+.1*(T-100)+.4*p+s),mp:Math.floor(x<=50?2*x:100+.5*(x-50))}}
+function legacyDerived(P,S,A,M){const T=P+S+A+M,p=Math.max(0,P-10),s=Math.max(0,S-10),x=Math.max(0,A+M-20);return{hp:Math.floor(100+.5*(T-100)+2*p+Math.max(0,p-20)),sp:Math.floor(20+.1*(T-100)+.4*p+s),mp:Math.floor(x<=50?2*x:100+.5*(x-50))}}
+function derived(P,S,A,M){const d=legacyDerived(P,S,A,M);return {hp:d.hp,sp:d.sp+d.mp,mp:0}}
 function initUnit(source,enemy=false){const o=JSON.parse(JSON.stringify(source)),d=derived(o.PHY,o.SKL,o.ARC,o.MND),ar=ARM[o.armor];return{...o,enemy,maxHp:enemy?o.hp:d.hp,hp:enemy?o.hp:d.hp,maxSp:d.sp,sp:d.sp,maxMp:d.mp,mp:d.mp,physDef:enemy?o.physDef:o.PHY+ar.p,magDef:enemy?o.magDef:o.ARC+o.MND+ar.m,wi:0,weapon:enemy?o.weapon:W[o.weapons[0]],alive:true,defending:false,status:{},queued:null}}
 function current(){return party[idx]}
 function normal(u){return{name:'通常攻撃',kind:'attack',range:u.weapon?.range||'near',attr:u.weapon?.attr||'壊',target:'enemy',scope:'single',mult:1,hit:0,speed:0}}
