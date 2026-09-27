@@ -24,13 +24,44 @@ function characterValues(i){
  const attack=(w.power+(w.throwing?a[1]:w.skillNormal?a[0]*.4+a[1]*.7:a[0]))*[1,.95,.9,.8][s.weightLevel];
  return {...s,phy:a[0],skl:a[1],arc:a[2],mnd:a[3],total:a.reduce((x,y)=>x+y,0),physical:Math.round(attack*10)/10,magicArc:a[2]+14,magicMind:a[3]+14,accuracy:a[1]+(w.hit||0),evade:a[1]+effect('evade')-pen,speed:a[1]+(w.speed||0)-pen,castSpeed:a[1]+effect('castSpeed')-pen,crit:Math.min(50,Math.max(0,5+(w.crit||0)+effect('crit'))),power:w.power,upgrade:(upgrades[eq[i][0].split('：')[1]]||0)*4,capacity:skillCap(i),cost:skillCost(i),resistance:calcResist(i),enabled};
 }
+// Allocation is a transient preview. Saving and battle exports use only committed stats.
+let attributeDraft=null;
+function attributeDiscard(){attributeDraft=null}
+function attributeSession(i){
+ if(!Number.isInteger(i)||i<0||i>=names.length)return null;
+ if(!attributeDraft||attributeDraft.i!==i||JSON.stringify(attributeDraft.base)!==JSON.stringify(stats[i])||attributeDraft.points!==statPt[i])attributeDraft={i,base:stats[i].slice(),values:stats[i].slice(),points:statPt[i]};
+ return attributeDraft;
+}
+function attributeRemaining(d){return d.points-d.values.reduce((n,x,j)=>n+x-d.base[j],0)}
+function attributeWith(i,values,fn){const original=stats[i];stats[i]=values.slice();try{return fn()}finally{stats[i]=original}}
+function attributeAdjust(i,j,delta){
+ if(H.run?.battle||!Number.isInteger(j)||j<0||j>3||![1,-1].includes(delta))return;
+ const d=attributeSession(i);if(!d||delta===1&&attributeRemaining(d)<=0||delta===-1&&d.values[j]<=d.base[j])return;
+ d.values[j]+=delta;actorAttributes(i,'basic');
+}
+function attributeApply(i){
+ if(H.run?.battle||!attributeDraft||attributeDraft.i!==i)return;
+ const d=attributeDraft;
+ if(JSON.stringify(d.base)!==JSON.stringify(stats[i])||d.points!==statPt[i]){attributeDiscard();return actorAttributes(i)}
+ const remaining=attributeRemaining(d),spent=d.points-remaining;
+ if(spent<=0||remaining<0||!d.values.every((x,j)=>Number.isInteger(x)&&x>=d.base[j]))return;
+ const old=rules().derived(d.base),next=rules().derived(d.values);
+ stats[i]=d.values.slice();statPt[i]=remaining;
+ for(const key of ['hp','sp','mp'])if(key!=='hp'||vitals[i].hp>0)vitals[i][key]+=next[key]-old[key];
+ attributeDiscard();persist();actorAttributes(i);
+}
 function actorAttributes(i,tab='basic'){
- if(H.run?.battle)return pendingBattleMenu();if(!Number.isInteger(i)||i<0||i>=names.length)return;
- const s=characterValues(i),cell=(k,v)=>'<div class="attribute-cell"><small>'+hesc(k)+'</small><b>'+hesc(String(v))+'</b></div>';
- const pages={basic:[['PHY・肉体',s.phy],['SKL・技巧',s.skl],['ARC・異能',s.arc],['MND・精神',s.mnd],['HP',vitals[i].hp+' / '+s.hp],['SP',vitals[i].sp+' / '+s.sp],['総能力値',s.total],['セットCost',s.cost+' / '+s.capacity],['装備重量',s.weight+' / '+s.limit],['使用可能技',s.usable+' / '+s.setCount],['能力 Pt',statPt[i]],['Mastery Pt',mp[i]]],combat:[['通常攻撃力',s.physical],['魔攻・ARC基準',s.magicArc],['魔攻・MND基準',s.magicMind],['物理防御',s.pdef],['魔法防御',s.mdef],['命中値',s.accuracy],['回避値',s.evade],['通常行動速度',s.speed],['術の行動速度',s.castSpeed],['同SKL相手の会心',s.crit+'%'],['武器威力',s.power],['武器強化補正','+'+s.upgrade+'%']],resist:Object.entries(s.resistance).map(([k,v])=>[k,(v>0?'+':'')+v])};
- const notes={basic:'現在の装備・セットスキルでの能力。HP／SPは現在値／最大値。',combat:'戦闘前の基準値。魔攻は術威力14で算出。命中値は％ではなく、技・敵・地形・一時効果で結果が変化します。',resist:'全属性・状態異常・封じの耐性。＋は耐性、−は弱点、0は標準。',effects:'セットしたパッシブの効果。装備条件を満たしていないものは発動しません。'};
+ if(H.run?.battle)return pendingBattleMenu();const d=attributeSession(i);if(!d)return;
+ const before=characterValues(i),s=attributeWith(i,d.values,()=>characterValues(i)),remaining=attributeRemaining(d),dirty=remaining!==d.points;
+ const format=v=>hesc(String(v)),compare=(x,y)=>format(x)+(x!==y?'<span class="attribute-change"> → '+format(y)+'</span>':''),cell=(k,x,y=x)=>'<div class="attribute-cell"><small>'+hesc(k)+'</small><b>'+compare(x,y)+'</b></div>';
+ const current=(key,snapshot)=>vitals[i][key]+(key==='hp'&&vitals[i].hp<=0?0:snapshot[key]-before[key]);
+ const pages={basic:[['HP',vitals[i].hp+' / '+before.hp,current('hp',s)+' / '+s.hp],['SP',vitals[i].sp+' / '+before.sp,current('sp',s)+' / '+s.sp],['総能力値',before.total,s.total],['セットCost',before.cost+' / '+before.capacity,s.cost+' / '+s.capacity],['装備重量',before.weight+' / '+before.limit,s.weight+' / '+s.limit],['使用可能技',before.usable+' / '+before.setCount,s.usable+' / '+s.setCount],['物理防御',before.pdef,s.pdef],['魔法防御',before.mdef,s.mdef]],combat:[['通常攻撃力',before.physical,s.physical],['魔攻・ARC基準',before.magicArc,s.magicArc],['魔攻・MND基準',before.magicMind,s.magicMind],['物理防御',before.pdef,s.pdef],['魔法防御',before.mdef,s.mdef],['命中値',before.accuracy,s.accuracy],['回避値',before.evade,s.evade],['通常行動速度',before.speed,s.speed],['術の行動速度',before.castSpeed,s.castSpeed],['同SKL相手の会心',before.crit+'%',s.crit+'%'],['武器威力',before.power,s.power],['武器強化補正','+'+before.upgrade+'%','+'+s.upgrade+'%']],resist:Object.entries(s.resistance).map(([k,v])=>[k,(v>0?'+':'')+v])};
+ const notes={basic:'＋／−で仮割り振り。確定までは振り直せます。画面を離れると未確定分は戻ります。',combat:'魔攻は術威力14の基準値。命中値は％ではなく、技・敵・地形で結果が変わります。',resist:'全属性・状態異常・封じの耐性。＋は耐性、−は弱点、0は標準。',effects:'セットしたパッシブの効果。装備条件を満たしていないものは発動しません。'};
  if(!Object.hasOwn(notes,tab))tab='basic';
+ const button=(label,action,args,disabled=false,aria=label)=>'<button data-hub="'+action+'" data-args="'+hesc(JSON.stringify(args))+'" aria-label="'+hesc(aria)+'"'+(disabled?' disabled':'')+'>'+label+'</button>';
+ const pointbar='<div class="allocation-bar"><b>能力ポイント <span>'+remaining+' Pt</span></b>'+button(tab==='basic'?'割り振りを確定':'仮割り振りを見る',tab==='basic'?'attributeApply':'actorAttributes',tab==='basic'?[i]:[i,'basic'],tab==='basic'&&!dirty)+'</div>';
+ const editor=tab==='basic'?'<div class="allocation-grid">'+['PHY','SKL','ARC','MND'].map((k,j)=>'<div class="allocation-stat">'+button('−','attributeAdjust',[i,j,-1],d.values[j]===d.base[j],k+'の仮割り振りを1戻す')+'<span><small>'+k+'</small><b>'+compare(d.base[j],d.values[j])+'</b></span>'+button('＋','attributeAdjust',[i,j,1],remaining<=0,k+'に1ポイント仮割り振り')+'</div>').join('')+'</div>':'';
  const controls='<div class="ui-tabs attribute-heading">'+[['basic','基本'],['combat','戦闘'],['resist','耐性'],['effects','効果']].map(([k,v])=>'<button data-hub="actorAttributes" data-args="'+hesc(JSON.stringify([i,k]))+'" aria-pressed="'+(tab===k)+'">'+v+'</button>').join('')+'</div>';
- const content=tab==='effects'?skillSet[i].filter(n=>rules().meta(n)?.mode==='Passive').map(n=>HT(n+(s.enabled.includes(n)?'':'（装備条件不足）'),skillExplanation(rules().meta(n)))).join('')||HT('パッシブ未設定','スキルタブでセットできます。'):'<div class="attribute-grid '+(tab==='resist'?'resistance-grid':'')+'">'+pages[tab].map(([k,v])=>cell(k,v)).join('')+'</div>';
- show('<h2>'+hesc(names[i])+' / 能力値</h2>'+controls+'<p class="screen-hint">'+notes[tab]+'</p>'+content);
+ const content=tab==='effects'?skillSet[i].filter(n=>rules().meta(n)?.mode==='Passive').map(n=>HT(n+(s.enabled.includes(n)?'':'（装備条件不足）'),skillExplanation(rules().meta(n)))).join('')||HT('パッシブ未設定','スキルタブでセットできます。'):'<div class="attribute-grid '+(tab==='resist'?'resistance-grid':'')+'">'+pages[tab].map(([k,x,y])=>cell(k,x,y)).join('')+'</div>';
+ show('<h2>'+hesc(names[i])+' / 能力値</h2>'+controls+pointbar+editor+'<p class="screen-hint">'+notes[tab]+'</p>'+content);
 }
