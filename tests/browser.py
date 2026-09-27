@@ -44,6 +44,10 @@ async def layouts(page):
   await page.evaluate('npcMenu()')
   dims=await page.evaluate("""()=>{const body=document.querySelector('#panel .panel-body');return {scroll:body.scrollHeight-body.clientHeight,tiles:body.querySelectorAll('.person-tile').length,wide:body.scrollWidth>body.clientWidth+1}}""")
   results.append({'name':f'UI17 NPC list fits {width}x{height}','ok':dims['scroll']<=1 and not dims['wide'] and dims['tiles']==6,'measurements':dims})
+  for facility in ['inn()','guild()','market()']:
+   await page.evaluate(facility)
+   dims=await page.evaluate("""()=>{const body=document.querySelector('#panel .panel-body');return {scroll:body.scrollHeight-body.clientHeight,wide:body.scrollWidth>body.clientWidth+1,stand:!!body.querySelector('.facility-stand'),choices:body.querySelectorAll('.facility-action-deck button.row').length}}""")
+   results.append({'name':f'UI19 facility fits {width}x{height} {facility}','ok':dims['scroll']<=1 and not dims['wide'] and dims['stand'] and dims['choices']==4,'measurements':dims})
  await page.evaluate('base=>{installSave(base);closeM();town()}',baseline)
  await page.set_viewport_size({'width':390,'height':844})
  return results
