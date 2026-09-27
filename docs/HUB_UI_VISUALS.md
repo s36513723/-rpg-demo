@@ -1,11 +1,13 @@
-# Hub UI 10 — NPC portraits and scenic hub/exploration visuals
+# Hub UI 11 — visual completion for hub and exploration
 
-拠点・探索の表示層だけを更新。戦闘ルール、育成、セーブ形式、資源計算は変更しない。
+Battle logic remains untouched.
 
-- NPC6人（エダ、バルン、イリス、マルタ、ノア、サヒル）にローカル画像を追加。
-- NPC一覧、会話、施設ホスト、人物記録、章報告、会話記録で画像を使用。
-- 宿・ギルド・市場、4地域にローカルのシーン画像を追加。
-- 拠点施設カード、出撃先プレビュー、地域資料、探索イベント関連の画面で表示。
-- 下部の「拠点」常設ボタンは復活させず、編成 / 所持品 / 記録を維持。メニューは「拠点へ / 地図へ」で閉じる。
+- Eight exploration themes now have dedicated local scene artwork: 森林 / 洞窟 / 廃墟都市 / 山岳 / 沼地 / 砂漠遺跡 / 海上・船 / 地下神殿.
+- Regional event screens now use the matching exploration-theme artwork plus an event-specific icon instead of a generic regional card.
+- Every map node has a small environmental thumbnail behind its semantic node icon.
+- The traveling merchant has a dedicated portrait and field card.
+- Enemy records use category-specific thumbnails: guard / archer / mage / beast / golem / nature / flying.
+- Enemy-book rows show the same thumbnails.
+- Existing NPC portraits, facility art, region art, menu icons and fixed-height modal behavior are preserved.
 
-ローカル検証: 261 / 261 passed.
+No battle script or battle UI file is modified.
