@@ -15,6 +15,7 @@ function enhanceDialogs(){
  }
 }
 function init(){
+ try{if(localStorage.getItem("rpg.command-language")===null)localStorage.setItem("rpg.command-language","ja")}catch(_){}
  enhanceDialogs();
  const help=document.createElement('dialog');help.id='touchHelp';help.setAttribute('aria-label','戦闘操作の説明');
  const modern=!!document.querySelector('#commandPanel .command-content');
