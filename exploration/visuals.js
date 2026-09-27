@@ -85,6 +85,7 @@ const esc=s=>hesc(s);
 const cast=['gald','lize','ern','sena','mirea','yuna'];
 const npcGlyph={'受付':'quill','鍛冶師':'forge','学者':'book','宿主':'tavern','伝令':'wind','守人':'sun'};
 const npcImage={'受付':'../images/npc_eda.svg','鍛冶師':'../images/npc_balun.svg','学者':'../images/npc_iris.svg','宿主':'../images/npc_marta.svg','伝令':'../images/npc_noa.svg','守人':'../images/npc_sahir.svg'};
+const npcStand={'受付':'../images/npc_eda_stand.svg','鍛冶師':'../images/npc_balun_stand.svg','学者':'../images/npc_iris_stand.svg','宿主':'../images/npc_marta_stand.svg','伝令':'../images/npc_noa_stand.svg','守人':'../images/npc_sahir_stand.svg'};
 const facilityArt={town:'../images/town_lexia.svg',inn:'../images/facility_inn.svg',guild:'../images/facility_guild.svg',market:'../images/facility_market.svg'};
 const facilityLabel={town:'王都レクシア',inn:'宿・酒場',guild:'ギルド',market:'市場'};
 const facilityCopy={town:'冒険者区の朝。食卓、依頼、仕入れ、出撃準備をここで整える。',inn:'食事と会話の場。帰還後の様子、噂、仲間たちの短い会話を読む。',guild:'依頼と査定の窓口。探索資料や地域調査の進捗もここで整理する。',market:'武具、道具、加工、売却、保管をまとめた装備管理の中心。'};
@@ -98,12 +99,13 @@ const enemyKind=n=>/守護機|ゴーレム|機械|番人/.test(n)?'golem':/巨�
 const enemyAsset=n=>enemyImage[enemyKind(String(n||''))]||enemyImage.guard;
 const enemyThumb=n=>'<img class="visual-portrait enemy-thumb" data-person="'+esc(n)+'" src="'+enemyAsset(n)+'" alt="">';
 const person=(kind,id)=>{
- if(kind==='npc'){const n=hc().npcs.find(n=>n.id===id)||hc().npcs[id===0?3:4];return n?{name:n.name,role:n.role,key:n.id,icon:npcGlyph[n.id]||'speech',image:npcImage[n.id]||''}:null}
+ if(kind==='npc'){const n=hc().npcs.find(n=>n.id===id)||hc().npcs[id===0?3:4];return n?{name:n.name,role:n.role,key:n.id,icon:npcGlyph[n.id]||'speech',image:npcImage[n.id]||'',stand:npcStand[n.id]||npcImage[n.id]||''}:null}
  const i=typeof id==='number'?id:names.indexOf(id);return i>=0&&i<6?{name:names[i],role:battleStyle(i),image:'../images/'+cast[i]+'.svg',key:'ally-'+i}:null;
 };
 const portrait=(p,cls='')=>!p?'':p.image?'<img class="visual-portrait '+cls+(p.key&&npcImage[p.key]?' npc-face':'')+'" data-person="'+esc(p.name)+'" src="'+p.image+'" alt="">':'<span class="role-emblem '+cls+'" data-person="'+esc(p.name)+'" data-role="'+esc(p.key)+'" aria-hidden="true">'+glyph(p.icon)+'</span>';
 const peopleHeader=(ps,label='')=>'<div class="conversation-cast">'+ps.filter(Boolean).map(p=>'<div>'+portrait(p)+'<span><b>'+esc(p.name)+'</b><small>'+esc(p.role)+'</small></span></div>').join('')+(label?'<span class="scene-label">'+esc(label)+'</span>':'')+'</div>';
 const dialogue=(p,text)=>'<figure class="dialogue-block">'+portrait(p)+'<figcaption><b class="speaker">'+esc(p.name)+'</b><small>'+esc(p.role)+'</small><blockquote>'+esc(text)+'</blockquote></figcaption></figure>';
+const npcStage=(p,text)=>'<section class="npc-stage"><div class="npc-stage-art"><img class="npc-stand" src="'+esc(p.stand||p.image)+'" alt=""><div class="npc-identity"><b>'+esc(p.name)+'</b><small>'+esc(p.role)+'</small></div></div><div class="npc-speech"><p>'+esc(text)+'</p></div></section>';
 const itemIcon=n=>{
  const s=String(n||'');if(!s||s==='なし')return 'empty';
  const pairs=[[/解毒/,'antidote'],[/回復薬|薬瓶|魔法薬/,'potion'],[/煙玉/,'smoke'],[/爆弾|爆薬/,'bomb'],[/登攀|縄/,'rope'],[/解錠具|鍵/,'key'],[/浄化香|薬草|霊樹/,'herb'],[/清水/,'water'],[/投げ|鉄針|投石|回刃|投擲/,'throw'],[/短剣/,'dagger'],[/槌/,'hammer'],[/斧/,'axe'],[/槍/,'spear'],[/鞭/,'whip'],[/鎌/,'scythe'],[/刀/,'katana'],[/弓/,'bow'],[/銃/,'gun'],[/短杖|杖/,'staff'],[/盾/,'shield'],[/剣/,'sword'],[/拳|格闘|無手/,'fist'],[/呪符|符術/,'scroll'],[/魔装/,'robe'],[/軽装|重装|防具/,'armor'],[/護符|装飾/,'jewel'],[/風晶|結晶|金砂/,'jewel'],[/古器|遺物/,'chest'],[/皮/,'armor'],[/封文|銘板|原典|航路図|記憶/,'scroll']];
@@ -186,7 +188,13 @@ const dialoguePage=(panel,route)=>{
  if(name==='memberTalk')p=person('ally',args[0]);
  if(name==='npcTalk')p=person('npc',args[0]);
  if(name==='returnTalk'&&message){const match=message.textContent.match(/^([^「]+)「([\s\S]*)」$/);if(match){p=person('ally',match[1]);message.textContent=match[2]}}
- if(p&&message){message.outerHTML=dialogue(p,message.textContent);body.classList.add('conversation-page')}
+ if(name==='npcTalk'&&p&&message){
+  const stage=document.createElement('div');stage.innerHTML=npcStage(p,message.textContent);const scene=stage.firstElementChild;message.replaceWith(scene);
+  const deck=document.createElement('div');deck.className='npc-action-deck';
+  [...body.children].forEach(el=>{if(el===scene)return;if(el.classList.contains('actions')){[...el.children].forEach(b=>deck.append(b));el.remove()}else if(el.matches('.row'))deck.append(el)});
+  body.append(deck);body.classList.add('npc-conversation-page');
+ }else if(p&&message){message.outerHTML=dialogue(p,message.textContent);body.classList.add('conversation-page')}
+ if(name==='npcMenu'){body.classList.add('npc-list-page');body.querySelectorAll('[data-hub="npcTalk"]').forEach(e=>e.classList.add('person-tile'))}
  if(name==='readPair'){const pair=hc().pairs[args[0]];if(pair){body.insertAdjacentHTML('afterbegin',peopleHeader([person('ally',pair[0]),person('ally',pair[1])]));message?.classList.add('scene-narration');body.classList.add('conversation-page')}}
  if(name==='talkArchive'){p=person(args[0]==='npc'?'npc':'ally',args[1]);if(p){body.insertAdjacentHTML('afterbegin',peopleHeader([p],'会話記録'));body.querySelectorAll('.row.static').forEach(e=>e.classList.add('archive-line'))}}
  if(name==='reportChapter'){const row=[...body.querySelectorAll('.row.static')].find(e=>e.querySelector('b')?.textContent==='イリス');if(row)row.outerHTML=dialogue(person('npc','学者'),row.querySelector('.small')?.textContent||'')}
@@ -203,7 +211,7 @@ const decorate=(root,route={name:'town',args:[]})=>{
  const title=root.querySelector('#panelTitle');if(title&&!title.dataset.visualized){
   const member=['character','charOverview','charAbility','equip','skills','mastery','charMastery','resistView','equipChoice'].includes(route.name)?person('ally',route.args[0]):route.name==='personRecord'?person(route.args[0]==='npc'?'npc':'ally',route.args[1]):null;
   if(route.name==='memberTalk')title.textContent=hc().companion[route.args[0]]?.[1]||title.textContent;
-  if(route.name==='npcTalk')title.textContent='街の人との会話';
+  if(route.name==='npcTalk')title.textContent='会話';
   title.insertAdjacentHTML('afterbegin',member?portrait(member,'header-face'):glyph(actionIcon(route.name,route.args),'title-icon'));title.dataset.visualized='true';
  }
  dialoguePage(root,route);
@@ -220,13 +228,13 @@ const chrome=()=>{
  document.querySelectorAll('#app>nav button').forEach(e=>{const icon=e.querySelector('.ico');if(icon)icon.innerHTML=glyph(actions[e.dataset.hub]||'compass')});
  const gear=document.querySelector('.header-tools [data-hub="settings"]');if(gear)gear.innerHTML=glyph('settings');
 };
-window.HUB_VISUAL={version:14,glyph,decorate,chrome,person,portrait,itemIcon,masteryIcon,regionIcon,actionIcon};
+window.HUB_VISUAL={version:17,glyph,decorate,chrome,person,portrait,itemIcon,masteryIcon,regionIcon,actionIcon};
 // Adapt the existing presentation layer without duplicating its navigation or game actions.
 const showBase=window.show,townBase=window.town,mapBase=window.drawDungeon,closeBase=window.closeM;
 window.show=html=>{showBase(html);const panel=document.getElementById('panel'),route=HUB_UI.state.route||{name:'note',args:[]};decorate(panel,route);const exit=panel.querySelector('.modal-x');if(exit){exit.setAttribute('aria-label',activeRun()?'地図へ戻る':'拠点へ戻る');exit.innerHTML=glyph(activeRun()?'map':'home')+'<span>'+(activeRun()?'地図へ':'拠点へ')+'</span>'}const back=panel.querySelector('.panel-back');if(back)back.innerHTML=glyph('back');chrome()};
 window.town=(...args)=>{const value=townBase(...args);if(!activeRun())decorate(document.getElementById('screen'),{name:'town',args:[]});chrome();return value};
 window.drawDungeon=(...args)=>{const value=mapBase(...args);decorate(document.querySelector('.expedition'),{name:'drawDungeon',args:[]});chrome();return value};
 window.closeM=(...args)=>{const value=closeBase(...args);if(document.activeElement?.closest('#modal'))document.querySelector('#app nav button')?.focus({preventScroll:true});return value};
-HUB_UI.version=14;
+HUB_UI.version=17;
 
 })();
