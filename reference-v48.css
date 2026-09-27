@@ -1,0 +1,240 @@
+/* v48 — reference-inspired portrait layout. 3x3 exists tactically, not as permanent chrome. */
+
+/* Battlefield gets the space back. */
+.party-hud{
+  flex:0 0 76px;
+  height:76px;
+  display:block;
+  padding:0;
+  border-top:1px solid #d7c39b52;
+  background:linear-gradient(180deg,#0d1723e9,#08111bf8);
+  position:relative;
+  z-index:40;
+}
+.party-strip{
+  height:76px;
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:2px;
+  padding:4px 0 2px;
+}
+.party-strip .ally-unit{
+  height:68px;
+  min-width:0;
+  width:100%;
+  padding:2px 2px 2px;
+  border:0;
+  border-right:1px solid #b5c0c31d;
+  border-radius:0;
+  background:transparent;
+  text-align:center;
+  overflow:visible;
+  box-shadow:none;
+}
+.party-strip .ally-unit:last-child{border-right:0}
+.party-strip .ally-unit::before{display:none}
+
+.ally-face-wrap{
+  position:relative;
+  width:36px;
+  height:36px;
+  margin:0 auto 1px;
+  display:block;
+}
+.ally-face{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  object-fit:cover;
+  display:block;
+  border:1px solid #d8c69a4f;
+  filter:saturate(.82);
+  box-shadow:0 2px 8px #0007;
+}
+.rank-badge{
+  position:absolute;
+  right:-2px;
+  bottom:-1px;
+  width:13px;
+  height:13px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  border:1px solid #d5c08b88;
+  background:#152231f2;
+  color:#e2cfaa;
+  font:7px/1 Georgia,serif;
+}
+.party-strip .card-name{
+  display:block;
+  max-width:100%;
+  height:10px;
+  margin:0;
+  font:9px/10px var(--serif);
+  letter-spacing:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.party-strip .resource-list{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px 3px;
+  margin-top:1px;
+}
+.party-strip .resource[data-resource="hp"]{
+  grid-column:1/-1;
+  position:relative;
+}
+.party-strip .resource-value{display:none}
+.party-strip .resource .bar{
+  height:2px;
+  margin:0;
+  background:#53616c4a;
+}
+.party-strip .resource[data-resource="hp"] .bar{height:3px}
+.party-strip .resource .sp,.party-strip .resource .mp{height:2px}
+.party-strip .queued-mark{
+  top:2px;
+  right:2px;
+  bottom:auto;
+  width:12px;
+  height:12px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#d7bf87;
+  color:#12202b;
+  font:8px/1 sans-serif;
+}
+.party-strip .card-status{
+  top:1px;
+  left:1px;
+  right:auto;
+}
+.party-strip .status-chip{
+  font-size:6px;
+  line-height:9px;
+}
+.party-strip .ally-unit.active{
+  background:linear-gradient(180deg,#d9c08a15,transparent);
+  box-shadow:inset 0 2px #e0c78f;
+}
+.party-strip .ally-unit.active .ally-face{
+  border-color:#efd59b;
+  box-shadow:0 0 12px #d9b96a52,0 2px 8px #0008;
+}
+.party-strip .ally-unit.dead .ally-face{filter:grayscale(1);opacity:.35}
+
+/* Command row follows the reference: soft circular buttons floating above the party HUD. */
+.command-panel,.command-panel.resolving{
+  bottom:calc(var(--bottom-gap) + 76px);
+  height:92px;
+  min-height:92px;
+  left:10px;
+  right:10px;
+  background:linear-gradient(90deg,transparent 0 21%,#0d1926d9 34%,#0b1723ee 100%);
+  border:0;
+  box-shadow:none;
+}
+.command-panel::before{
+  inset:0 0 0 22%;
+  border-top:1px solid #d3c0923b;
+  border-bottom:0;
+  background:linear-gradient(180deg,#d9c4960d,transparent);
+}
+.command-content,.command-panel.resolving .command-content{margin-left:23%}
+.command-buttons{
+  border:0;
+  gap:4px;
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  padding-top:1px;
+}
+.command-buttons>.command{
+  height:58px;
+  min-height:58px;
+  border:0;
+  background:none;
+  gap:2px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  color:#c4c9cc;
+}
+.command-buttons>.command::before{
+  display:block;
+  content:'';
+  position:absolute;
+  top:1px;
+  left:50%;
+  translate:-50% 0;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  border:1px solid #d3d7d846;
+  background:
+    radial-gradient(circle at 35% 28%,#ffffff1f,transparent 35%),
+    linear-gradient(145deg,#cad3d219,#8c99a311);
+  box-shadow:inset 0 0 10px #ffffff08,0 3px 8px #0004;
+}
+.command-buttons>.command .icon{
+  width:38px;
+  height:38px;
+  padding:9px;
+  position:relative;
+  z-index:2;
+  stroke-width:1.35;
+}
+.command-buttons>.command b{
+  font:8px/10px Georgia,'Times New Roman',serif;
+  letter-spacing:.06em;
+}
+.command-buttons>.command.attack{color:#edd49f}
+.command-buttons>.command.magic{color:#cec0e3}
+.command-buttons>.command.guard{color:#b6d2d1}
+.command-buttons>#swap{color:#c1ccd7}
+.command-buttons>#switch{color:#d5c6a9}
+.command-buttons>.command.attack::before{
+  border-color:#e3c98a90;
+  background:
+    radial-gradient(circle at 35% 28%,#fff6d938,transparent 38%),
+    linear-gradient(145deg,#c9a9652c,#7e6b4319);
+  box-shadow:0 0 12px #d7b46926,inset 0 0 10px #fff1c218;
+}
+.command-buttons>.command:active:not(:disabled){filter:brightness(1.2);transform:translateY(1px)}
+
+/* Selected character art rises behind the controls, like the reference hero focus. */
+.actor-art{
+  bottom:calc(-76px - var(--bottom-gap));
+  height:250px;
+  width:38%;
+  opacity:.98;
+}
+.history[open]{inset:auto 10px calc(82px + var(--bottom-gap))}
+
+/* 3x3 is shown only in SHIFT's formation sheet. */
+.formation-editor{padding:5px 0 8px}
+.formation-line{grid-template-columns:50px minmax(0,1fr)}
+.formation-label{font-size:8px}
+.formation-cell{height:64px}
+.formation-cell img{width:38px;height:38px}
+
+/* Keep the field cinematic. */
+.enemy-stage{min-height:0}
+.rank-trace{opacity:.18}
+.rear-trace::before,.front-trace::before{opacity:.45}
+
+@media(max-width:350px){
+  .party-hud,.party-strip{height:72px}
+  .party-hud{flex-basis:72px}
+  .party-strip .ally-unit{height:64px}
+  .ally-face-wrap,.ally-face{width:33px;height:33px}
+  .command-panel,.command-panel.resolving{bottom:calc(var(--bottom-gap) + 72px)}
+  .actor-art{bottom:calc(-72px - var(--bottom-gap))}
+  .command-buttons{gap:1px}
+  .command-buttons>.command::before{width:35px;height:35px}
+  .command-buttons>.command .icon{width:35px;height:35px;padding:8px}
+  .command-buttons>.command b{font-size:7px;letter-spacing:.03em}
+}
