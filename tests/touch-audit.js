@@ -1,7 +1,7 @@
 /* Exercise common and secondary windows with real layout at each viewport. */
 (async()=>{
 const results=[],saved=collectSave();
-const routes=['inn()','roomMenu()','conversation()','npcMenu()','memberTalk(0)','npcTalk("受付")','guild()','questMenu("open")','market()','toolShop()','toolQuantity("回復薬")','weaponShop()','armorShop()','craftMenu()','storageMenu()','items()','records()','settings()','partyMenu()','character(0)','equip(0)','equipChoice(0,0)','skills(4)','charAbility(4)','mastery(4)','resistView(4)','dungeon()'];
+const routes=['inn()','roomMenu()','conversation()','npcMenu()','memberTalk(0)','npcTalk("受付")','guild()','guildMembers()','appraiseMenu()','guildSellMenu()','guildSellMenu("materials")','guildSellMenu("tools")','guildSellMenu("weapons")','questMenu("open")','market()','toolShop()','toolQuantity("回復薬")','weaponShop()','armorShop()','craftMenu()','storageMenu()','items()','records()','settings()','partyMenu()','character(0)','equip(0)','equipChoice(0,0)','skills(4)','charAbility(4)','mastery(4)','resistView(4)','dungeon()'];
 for(const route of routes){
  try{
   closeM();(0,eval)(route);
