@@ -9,7 +9,7 @@ async function loadAtlas(){
  return URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
 }
 let ATLAS;
-try{ATLAS=window.__INLINE_ATLAS__||await loadAtlas()}catch(error){const b=document.getElementById('bootStatus');if(b)b.querySelector('p').textContent='画像を読み込めません。再読み込みしてください。';window.__bootError=String(error);console.error(error);return}
+try{ATLAS=window.__INLINE_ATLAS__||await loadAtlas()}catch(error){window.__bootError=String(error);console.error(error);return}
 
 const $=id=>document.getElementById(id),scene=$('enemyStage'),bodies=new Map(),allyHuds=new Map(),enemyGrid=$('enemyGrid'),allyGrid=$('allyGrid');
 let state=null;
@@ -264,5 +264,5 @@ try{
  localize();$('more').addEventListener('click',()=>{const b=document.createElement('button');b.type='button';b.className='menu-action';b.textContent='コマンド：'+(language==='en'?'English':'日本語');b.addEventListener('click',()=>{language=language==='en'?'ja':'en';try{localStorage.setItem('rpg.command-language',language)}catch(_){}localize();b.textContent='コマンド：'+(language==='en'?'English':'日本語')});$('sheetList').append(b)});
  // An additional Escape dismisses the command overlay, without changing a reserved move.
  document.documentElement.dataset.presentation='concept1';
-}catch(error){console.error(error);const boot=$('bootStatus');if(boot){boot.style.display='block';boot.querySelector('p').textContent='読み込みに失敗しました。再読み込みしてください。';}window.__bootError=String(error)}
+}catch(error){console.error(error);window.__bootError=String(error)}
 })();
