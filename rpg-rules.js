@@ -17,17 +17,15 @@ const targetRules={
 const targetAreaFromScope={single:'single',row:'horizontal',pierce:'vertical',adjacent:'cross',all:'3x3',random:'single'};
 const targetThrough=new Set(['急所突き','抜打ち','毒刃','盲目刃','追鞭','追撃鞭','頭封じ','腕封じ','脚封じ','引寄せ','鉤引き','体勢崩し','吸魂刈','急所投げ','毒針','封じ針','足止め射撃','急所撃ち','頭封じの符','魂縛','精神感応']);
 const targetLast=new Set(['曲射','頭封じ射ち','脚封じ射ち','狙撃','悪夢','裁き']);
-const targetSelectColumn=new Set(['投斧','投槍','引寄せ','鉤引き','曲射','飛行射ち','頭封じ射ち','脚封じ射ち','狙撃','急所撃ち','足止め射撃','貫通弾','制圧射撃','連投','急所投げ','毒針','封じ針','往復刃','旋回刃','爆弾','煙玉']);
+const targetSelectColumn=new Set(['投斧','投槍','引寄せ','鉤引き','曲射','飛行射ち','頭封じ射ち','脚封じ射ち','狙撃','急所撃ち','足止め射撃','貫通弾','制圧射撃','連投','急所投げ','毒針','封じ針','往復刃','旋回刃','爆弾','煙玉','火球','水槍','岩弾','風刃','岩槍','水刃','星光','月光','神雷','聖光','裁き','闇刃','頭封じの符','精神感応','悪夢','発火','電撃','銃砲','爆薬']);
 const targetIgnoreTaunt=new Set(['曲射','頭封じ射ち','脚封じ射ち','狙撃','急所撃ち','頭封じの符','裁き']);
 const targetCross=new Set(['震撃','火球','爆弾','旋回刃']);
 const targetX=new Set(['神雷','雷雨','幻影']);
 const targetAll3=new Set(['砂嵐']);
-const spellSelectMasteries=new Set(['森羅','灼陽','霊峰','海神','星辰','信仰','呪術','魔術','符術','機巧','異能']);
 for(const d of Object.values(skills)){
  if(d.mode!=='Active')continue;
  const side=d.target==='enemy'?'enemy':d.target==='ally'?'ally':'self',mastery=d.unlocks?.[0]?.mastery;
  const t={side,column:side==='enemy'?'same':side==='ally'&&d.scope==='single'?'select':'self',order:side==='enemy'?'front':side==='ally'&&d.scope==='single'?'ally':'self',area:side==='self'?'single':(targetAreaFromScope[d.scope]||'single'),origin:side==='ally'&&d.scope!=='single'?'self':'target',ignoreTaunt:false};
- if(side==='enemy'&&d.range==='far'&&spellSelectMasteries.has(mastery))t.column='select';
  if(targetSelectColumn.has(d.name))t.column='select';
  if(targetThrough.has(d.name))t.order='through';
  if(targetLast.has(d.name))t.order='last';
