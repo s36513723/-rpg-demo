@@ -1,0 +1,89 @@
+/* v33: visible enemy HP, near-side ally front row, compact lower HUD. */
+/* Enemy art has a fixed box. Labels and gauges cannot be pushed out by images. */
+.enemy-stage{height:clamp(235px,44svh,355px)}
+.enemy-unit{display:block;min-height:0;min-width:0;line-height:normal;overflow:visible}
+.enemy-unit .enemy-visual{position:absolute;inset:33px 0 20px;width:100%;height:auto;margin:0;display:block;pointer-events:none}
+.enemy-unit .enemy-visual img{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:100%;object-fit:contain;object-position:center bottom}
+.enemy-unit .enemy-name,.enemy-back-lane .enemy-name{position:absolute;top:1px;left:0;right:0;height:15px;line-height:15px;font-size:10px;color:#ece8df;text-shadow:0 1px 3px #000,0 0 6px #000;z-index:6;pointer-events:none}
+.enemy-unit .enemy-hp,.enemy-back-lane .enemy-hp{position:absolute;top:19px;bottom:auto;left:16%;right:auto;width:68%;height:5px;margin:0;z-index:6;pointer-events:none}
+.enemy-unit .enemy-hp .bar{display:block;width:100%;height:4px;background:#11151ded;outline:1px solid #bd9d7759;box-shadow:0 1px 4px #000b;overflow:hidden}
+.enemy-unit .enemy-hp .bar i{display:block;height:100%;min-height:4px;background:linear-gradient(90deg,#ad7076,#ecc1b2)}
+.enemy-back-lane .enemy-unit{filter:none}
+.enemy-back-lane .enemy-visual{height:auto;margin:0;mask-image:none;-webkit-mask-image:none}
+.enemy-back-lane .enemy-visual img{object-position:center bottom;filter:brightness(.94) drop-shadow(0 4px 4px #0008)}
+.enemy-unit .target-pointer,.enemy-back-lane .target-pointer{top:28px;z-index:7}
+.enemy-unit .card-status,.enemy-back-lane .card-status{top:33px;right:8%;z-index:7}
+.enemy-unit::before{bottom:16px}
+.enemy-unit::after{bottom:14px}
+/* Formation has the same orientation as the battlefield: front is nearer enemies. */
+.allies{gap:4px;padding-top:5px;margin-bottom:4px}
+.allies #pf{order:0}
+.allies #pb{order:1}
+.row.ally-row{gap:5px;min-height:0}
+.ally-unit{height:46px;padding:4px 6px;border-radius:2px 6px 2px 6px;min-height:0}
+.ally-unit .card-name{height:14px;line-height:14px;font-size:12px;letter-spacing:.02em;margin:0;max-width:calc(100% - 36px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.ally-unit .slot-mark{display:none}
+.ally-unit .resource-list{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2px 7px;margin-top:2px}
+.ally-unit .resource[data-resource="hp"]{display:block;grid-column:1/-1}
+.ally-unit .resource[data-resource="hp"] .resource-value{display:flex;position:absolute;top:5px;right:6px;gap:3px;line-height:12px;align-items:baseline}
+.ally-unit .resource[data-resource="hp"] .resource-value span{font-size:7px;grid-column:auto;grid-row:auto}
+.ally-unit .resource[data-resource="hp"] .resource-value b{position:static;top:auto;grid-column:auto;grid-row:auto;justify-self:auto;font-size:11px;text-shadow:none}
+.ally-unit .resource[data-resource="hp"] .bar{height:3px;width:100%;margin:0;grid-column:auto;grid-row:auto}
+.ally-unit .resource-value{line-height:11px;gap:2px}
+.ally-unit .resource-value span{font-size:8px}
+.ally-unit .resource-value b{font-size:10px}
+.ally-unit .resource .sp,.ally-unit .resource .mp{height:2px;margin-top:1px}
+.ally-unit .card-status{top:-6px;right:4px;max-width:calc(100% - 8px);z-index:3}
+.ally-unit .status-chip{line-height:11px;font-size:8px}
+.ally-unit .queued-mark,.ally-unit .queued-mark.has-status{top:auto;bottom:0;right:2px;font-size:8px;line-height:8px;z-index:2}
+.ally-unit.dead .card-status{top:-6px;right:4px}
+/* Portrait uses the command area, not a separate vertical section. */
+.command-panel{height:114px;min-height:114px;padding-top:3px;margin:0}
+.actor-art{left:-8px;top:0;width:29%;height:113px}
+.actor-art img{object-position:50% 8%}
+.command-content{width:76%;padding-left:7px;position:relative}
+.actor-button{display:inline-flex;position:relative;z-index:2;min-height:18px;max-width:32%;height:18px;padding:0;gap:3px;vertical-align:top;white-space:nowrap}
+.actor-button b{font-size:12px;letter-spacing:.04em;overflow:hidden;text-overflow:ellipsis}
+.actor-button::after{font-size:9px}
+.target-line{position:absolute;top:0;left:36%;right:0;height:18px;min-width:0;margin:0;justify-content:flex-end;gap:3px}
+.target-hint{font-size:9px;line-height:16px}
+.text-button{min-height:18px;padding:0 3px;line-height:18px;font-size:9px}
+.command-buttons{grid-template-columns:repeat(3,minmax(0,1fr));gap:3px 4px;margin-top:1px}
+.command{height:44px;min-height:44px;padding:2px;gap:3px;flex-direction:row;border-radius:4px}
+.command .icon{width:15px;height:15px}
+.command b{font-size:11px;letter-spacing:.02em;white-space:nowrap}
+.command.round-start{flex-direction:column;gap:0}
+.command.round-start .icon{width:14px;height:14px}
+.command.round-start b{font-size:9px;letter-spacing:0}
+.command.round-start small{font-size:8px;top:2px;right:3px}
+.command-panel .battle-message{height:91px;min-height:0;padding:0 0 31px}
+.command-panel .battle-message p{font-size:12px;line-height:1.5;margin:0;max-height:66px;overflow-y:auto}
+.command-panel .playback-tools{bottom:0;right:0}
+#game{padding-bottom:calc(40px + env(safe-area-inset-bottom))}
+@media(max-width:375px){.ally-unit{padding:4px 5px;height:46px}.ally-unit .card-name{font-size:11px}.command-content{width:76%;padding-left:5px}.actor-button b{font-size:11px}.command b{font-size:10px}.command .icon{width:14px;height:14px}.command.round-start b{font-size:8px}}
+/* On short viewports the command bar changes layout instead of shrinking hit targets. */
+@media(max-height:665px) and (orientation:portrait){
+ .enemy-stage{height:clamp(165px,calc(100svh - 316px),275px)}
+ .allies{gap:4px;padding-top:4px;margin-bottom:4px}
+ .ally-unit{height:44px;padding-top:3px;padding-bottom:3px}
+ .ally-unit .card-name{font-size:11px;height:13px;line-height:13px}
+ .ally-unit .resource[data-resource="hp"] .resource-value{top:4px}
+ .ally-unit .resource-list{margin-top:1px;row-gap:1px}
+ .command-panel{height:86px;min-height:86px;padding-top:2px}
+ .command-content{width:100%;padding-left:0;padding-top:0;position:relative}
+ .actor-art{left:-6px;width:58px;top:0;height:39px;z-index:0;mask-image:linear-gradient(to right,#000 70%,transparent);-webkit-mask-image:linear-gradient(to right,#000 70%,transparent)}
+ .actor-art img{object-position:50% 22%}
+ .actor-button{height:33px;min-height:33px;max-width:29%;margin-left:54px}
+ .target-line{top:1px;height:31px;left:46%;right:80px;justify-content:flex-start}
+ .target-hint{font-size:8px}
+ .command-buttons{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin-top:1px;gap:3px}
+ .command{height:44px;min-height:44px;flex-direction:column;gap:1px}
+ .command .icon{width:15px;height:15px}
+ .command b{font-size:10px}
+ .command.round-start{position:absolute;right:0;top:0;width:77px;height:34px;min-height:34px;flex-direction:row;gap:3px}
+ .command.round-start b{font-size:8px}
+ .command.round-start small{top:1px;right:3px;font-size:7px}
+ .command-panel .battle-message{height:45px;padding:0 88px 0 0}
+ .command-panel .battle-message p{font-size:11px;line-height:1.4;max-height:45px}
+ #game{padding-bottom:calc(34px + env(safe-area-inset-bottom))}
+}
