@@ -1,0 +1,117 @@
+/* v43 — command UI overlays the battlefield and never participates in layout. */
+.command-panel{
+  position:absolute;
+  left:12px;
+  right:12px;
+  bottom:calc(var(--bottom-gap) + 100px);
+  width:auto;
+  height:82px;
+  min-height:82px;
+  flex:none;
+  z-index:32;
+  padding:2px 0 3px;
+  border-top:1px solid #d8c28d55;
+  border-bottom:1px solid #9ba8b526;
+  background:
+    linear-gradient(90deg,#09131ede 0%,#0b1826ed 28%,#0b1826f7 72%,#09131ee8 100%);
+  box-shadow:0 -10px 28px #02070d55,0 8px 26px #02070d66;
+  backdrop-filter:blur(9px);
+  -webkit-backdrop-filter:blur(9px);
+  overflow:visible;
+  isolation:isolate;
+  animation:commandOverlayIn .16s ease-out;
+}
+@keyframes commandOverlayIn{
+  from{opacity:0;transform:translateY(7px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* The battlefield and formation never react to command open/close. */
+.enemy-stage{flex:1 1 0}
+.allies{
+  flex:0 0 100px;
+  position:relative;
+  z-index:20;
+}
+#game[data-dock="open"] .enemy-stage,
+#game[data-dock="closed"] .enemy-stage,
+#game[data-dock="playback"] .enemy-stage{
+  min-height:0;
+}
+
+/* Portrait grows out of the overlay and may reach the physical bottom edge. */
+.actor-art{
+  left:-12px;
+  bottom:calc(-100px - var(--bottom-gap));
+  width:37%;
+  height:235px;
+  z-index:-1;
+}
+
+/* Keep the actual controls crisp above the artwork. */
+.command-content{position:relative;z-index:3}
+
+/* Fully queued: only a small start control floats above the formation. */
+.command-panel.ready-only{
+  left:auto;
+  right:12px;
+  bottom:calc(var(--bottom-gap) + 103px);
+  width:124px;
+  height:34px;
+  min-height:34px;
+  padding:0;
+  border:0;
+  background:transparent;
+  box-shadow:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  animation:none;
+}
+.command-panel.ready-only .actor-art,
+.command-panel.ready-only .actor-button,
+.command-panel.ready-only .target-line,
+.command-panel.ready-only .command:not(.round-start){
+  display:none;
+}
+.command-panel.ready-only .command-content{
+  margin:0;
+  padding:0;
+  width:100%;
+}
+.command-panel.ready-only .command-buttons{
+  display:block;
+  border:0;
+}
+.command-panel.ready-only .round-start{
+  display:flex;
+  position:static;
+  width:124px;
+  height:34px;
+  min-height:34px;
+  flex-direction:row;
+  gap:5px;
+  border:1px solid #d8c28d88;
+  border-radius:2px 7px 2px 7px;
+  background:linear-gradient(90deg,#332c20d9,#192433ee);
+  box-shadow:0 0 15px #d2b36d28;
+}
+
+/* Playback uses the same overlay layer, so executing actions also never resizes the field. */
+.command-panel.resolving{
+  position:absolute;
+  left:12px;
+  right:12px;
+  bottom:calc(var(--bottom-gap) + 100px);
+  width:auto;
+  height:64px;
+  min-height:64px;
+}
+.command-panel.resolving .command-content{margin-left:27%}
+.command-panel.resolving.enemy-action .command-content{margin-left:0}
+
+/* Narrow iPhones keep identical geometry with smaller side gutters. */
+@media(max-width:350px){
+  .command-panel,
+  .command-panel.resolving{left:9px;right:9px}
+  .command-panel.ready-only{left:auto;right:9px}
+}
