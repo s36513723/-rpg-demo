@@ -53,6 +53,116 @@ function targetingText(d){
  if(d.special?.temptation)parts.push('誘惑');
  return parts.filter(Boolean).join('・');
 }
+
+const masteryDescriptions={
+ '無手':'装備に依存しない身軽さ・即応・携行運用を伸ばす基礎Mastery。',
+ '格闘':'拳・蹴り・投げ・受身を軸に、近距離連撃と反撃を伸ばす。',
+ '短剣':'素早い連撃、スルー攻撃、毒・盲目、逆手反撃を扱う。',
+ '剣':'安定した斬撃、横薙ぎ、受流し、属性付与を両立する。',
+ '槌':'壊攻撃で前衛を崩し、気絶・動揺・守護反撃を狙う。',
+ '斧':'高威力の斬撃、投擲、重装特効、捨身火力を伸ばす。',
+ '槍':'中距離から正面列を突き、縦貫通・迎撃・押出しを行う。',
+ '鞭':'中距離からスルー、頭腕脚封じ、引寄せ・横薙ぎを行う。',
+ '鎌':'スルーや最後尾へ圧力をかけ、処刑・吸収・引寄せを扱う。',
+ '刀':'技巧的な単体斬撃、居合、先制、見切り反撃を伸ばす。',
+ '弓':'遠距離から最後尾や飛行敵を狙い、封じ射撃を行う。',
+ '銃':'横指定・最後尾・貫通・精密射撃に優れる遠距離Mastery。',
+ '杖':'術威力・射程・詠唱安定と最低限の杖術を支える。',
+ '盾':'挑発・庇護・防御・反撃で味方を守る防御Mastery。',
+ '投擲':'遠距離のスルー・範囲攻撃と携行具活用を伸ばす。',
+ '魔装':'魔防・属性障壁・MP循環・状態耐性を重視する術者向け防具。',
+ '軽装':'回避・先制・受流し・機動・急襲を重視する防具。',
+ '重装':'物理軽減・不動・ガード・庇護を重視する前衛向け防具。',
+ '森羅':'風・植物・生命・霊獣を扱い、攻撃と回復を両立する源泉。',
+ '灼陽':'火・光・砂塵・恵沢を扱う、攻撃と加護の源泉。',
+ '霊峰':'岩・氷・地火・鉱物を扱い、防御と地形制圧に強い源泉。',
+ '海神':'水・航海・荒天・深海を扱い、移動と範囲制圧に強い源泉。',
+ '星辰':'星・重力・時空・夢幻を扱い、制御と特殊効果に強い源泉。',
+ '信仰':'治癒・浄化・聖護・審判を扱う光中心の支援術法。',
+ '呪術':'弱体・血術・死霊・暗黒を扱う状態異常と吸収の術法。',
+ '魔術':'元素・術式・錬金・召喚を幅広く扱う汎用術法。',
+ '符術':'五行・護符・式神・巫祭を扱う準備型の術法。',
+ '機巧':'魔工・兵装・鍛冶・遺構を扱う装置と工学の術法。',
+ '異能':'念動・感応・転移・発現で位置操作や特殊作用を行う術法。',
+ '探索':'解錠・隠密・索敵・鑑識で探索情報と安全性を高める技能。',
+ '士気':'歌・舞・奏楽・号令で周囲の味方を支援する技能。'
+};
+const effectNames={attack:'攻撃',defense:'防御',speed:'速度',magic:'魔法',accuracy:'命中',evade:'回避'};
+const passiveText={
+ evade:'回避を高める',openingSpeed:'戦闘開始時の行動速度を高める',costDiscount:'セット中のスキルCostを軽減する',
+ capacity:'スキルのセット上限を増やす',itemSpeed:'道具使用を素早くする',swapReaction:'換装を素早く行える',
+ throwBoost:'投擲の威力を高める',reduction:'受けるダメージを軽減する',counter:'被撃時に反撃する',
+ intercept:'近接行動を迎撃する',armoredBonus:'重装の敵への威力を高める',executeBonus:'瀕死の敵への威力を高める',
+ weakBonus:'弱点攻撃の威力を高める',healBoost:'回復量を高める',castSpeed:'詠唱を速める',spellBoost:'術の威力を高める',
+ spellRange:'術の射程を伸ばす',castStability:'詠唱を妨害されにくくする',mpDiscount:'MP消費を軽減する',
+ guard:'防御時の軽減を高める',rowGuard:'同じ列の味方を守りやすくする',cover:'味方を庇う',
+ survive:'致命傷を一度耐える',magicDef:'魔法防御を高める',statusBonus:'状態異常・封じの成功を高める',
+ mpOnce:'戦闘中にMPを一度回復する',statusResist:'状態異常・封じへの耐性を高める',counterBonus:'反撃の威力を高める',
+ moveSpeed:'位置変更を素早くする',loadReduction:'装備重量の負担を軽減する',openingBonus:'戦闘開始時の攻撃性能を高める',
+ crit:'クリティカル率を高める',moveResist:'吹飛ばし・引寄せに耐えやすくする',stunResist:'気絶しにくくする',
+ physicalDef:'物理防御を高める',scout:'探索時に敵や地点の情報を増やす',appraise:'鑑識・査定を補助する',
+ unlock:'施錠や仕掛けの解除を補助する',stealth:'危険を避けて進みやすくする',weakRecovery:'弱点を突いた時にSPを回復する'
+};
+function masteryDescription(n){return masteryDescriptions[n]||'この系統に属するスキルと戦い方を伸ばすMastery。'}
+function branchDescription(g,b){const ns=masteries[g]?.branches?.[b]||[];return ns.length?ns.slice(0,3).join('・')+'を中心に伸ばす枝。':'この枝の能力を伸ばす。'}
+function targetSentence(d){
+ const t=d?.targeting;if(!t)return '';
+ if(t.side==='self')return '自分に使う';
+ if(t.side==='ally')return t.origin==='self'?'自分を中心に味方へ効果を広げる':'味方1人を選んで使う';
+ const col=t.column==='select'?'左右の列を選び':t.column==='same'?'正面列を見て':'';
+ const order=t.order==='through'?'最前を1体飛ばして次の敵を狙う':t.order==='last'?'最後尾を狙う':'最前の敵を狙う';
+ return (col?col+'、':'')+order;
+}
+function skillExplain(d){
+ if(!d)return '';
+ if(d.mode==='Passive'){
+  const out=Object.keys(d.passive||{}).map(k=>passiveText[k]).filter(Boolean);
+  if(d.reaction?.kind==='counter'&&!out.includes('被撃時に反撃する'))out.unshift('被撃時に反撃する');
+  return (out.slice(0,2).join('。')||(d.description&&!/能力・戦術効果を付与/.test(d.description)?d.description:'セット中に固有の戦術効果を得る')).replace(/。+$/,'')+'。';
+ }
+ const out=[],head=targetSentence(d);
+ if(d.mult>0)out.push((d.attr&&d.attr!=='無'?d.attr+'属性':'無属性')+'で攻撃する');
+ if(d.hits>1)out.push(d.hits+'回の連撃');
+ if(d.critBonus)out.push('クリティカルを狙いやすい');
+ if(d.defPierce)out.push('防御の一部を無視する');
+ if(d.executeBonus)out.push('瀕死の敵に強い');
+ if(d.flyingBonus)out.push('飛行敵に強い');
+ if(d.ignoreCover)out.push('庇護を無視する');
+ if(d.poison)out.push('猛毒を狙う');
+ if(d.blind)out.push('盲目を狙う');
+ if(d.sleep)out.push('睡眠を狙う');
+ if(d.agitate)out.push('動揺を狙う');
+ if(d.stun)out.push('気絶を狙う');
+ if(d.headBind)out.push('頭封じを狙う');
+ if(d.armBind)out.push('腕封じを狙う');
+ if(d.legBind)out.push('脚封じを狙う');
+ if(d.instantDeath)out.push('即死を狙う');
+ if(d.push)out.push('対象を後ろへ押す');
+ if(d.pull)out.push('対象を手前へ引き寄せる');
+ if(d.debuff)out.push((effectNames[d.debuff]||d.debuff)+'を低下させる');
+ if(d.buff)out.push((effectNames[d.buff]||d.buff)+'を強化する');
+ if(d.guardAction)out.push('防御態勢を取る');
+ if(d.heal)out.push('HPを回復する');
+ if(d.regen)out.push('継続回復を付与する');
+ if(d.barrier)out.push('障壁を付与する');
+ if(d.cleanse)out.push('状態異常・封じを解除する');
+ if(d.revive)out.push('戦闘不能を回復する');
+ if(d.summon)out.push('召喚体を呼び出す');
+ if(d.resourceRecovery?.sp)out.push('SPを回復する');
+ if(d.resourceRecovery?.mp)out.push('MPを回復する');
+ if(d.reposition)out.push('位置を変更する');
+ if(d.followOrder)out.push('味方の追撃を支援する');
+ if(d.drain)out.push('与えたダメージを吸収する');
+ if(d.bless)out.push('加護を付与する');
+ if(d.alchemy)out.push('錬金効果を発生させる');
+ if(d.special?.taunt)out.push('敵の攻撃を自分へ集める');
+ if(d.special?.lockOn)out.push('味方の攻撃をこの敵へ集中させる');
+ if(d.special?.temptation)out.push('次の攻撃を敵自身の味方へ向けさせる');
+ if(d.cast)out.push('次ラウンドに発動する');
+ if(d.once)out.push('1戦1回だけ使える');
+ const body=out.length?out.slice(0,3).join('。'):(d.description||'固有効果を発動する').replace(/。+$/,'');
+ return (head?head+'。':'')+body.replace(/。+$/,'')+'。';
+}
 const clone=x=>JSON.parse(JSON.stringify(x));
 const total=a=>a.reduce((s,x)=>s+x,0);
 function derived(a){const T=total(a),P=Math.max(0,a[0]-10),S=Math.max(0,a[1]-10),M=Math.max(0,a[2]+a[3]-20);return {hp:Math.floor(100+.5*(T-100)+2*P+Math.max(0,P-20)),sp:Math.floor(20+.1*(T-100)+.4*P+S),mp:Math.floor(M<=50?2*M:100+.5*(M-50))}}
@@ -64,6 +174,6 @@ function setCost(set){return set.reduce((v,n)=>v+cost(n,set),0)}
 function fits(a,set){return set.every(n=>skills[n])&&new Set(set).size===set.length&&setCost(set)<=capacity(a,set)}
 function canLearn(n,mastery,ranks,stats){const def=skills[n],idx={PHY:0,SKL:1,ARC:2,MND:3};return !!def?.unlocks?.some(u=>u.mastery===mastery&&(ranks[mastery]||0)>=u.rank&&stats[idx[u.stat]]>=u.value)}
 function meta(n){return skills[n]||null}
-const api={version:7,skills,masteries,targetRules,targetingText,clone,total,derived,has,effect,cost,capacity,setCost,fits,canLearn,meta};
+const api={version:8,skills,masteries,targetRules,targetingText,skillExplain,masteryDescription,branchDescription,clone,total,derived,has,effect,cost,capacity,setCost,fits,canLearn,meta};
 if(typeof module!=='undefined')module.exports=api;root.RPG_RULES=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
