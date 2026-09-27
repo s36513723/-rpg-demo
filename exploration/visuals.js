@@ -213,10 +213,10 @@ const dialoguePage=(panel,route)=>{
 const decorate=(root,route={name:'town',args:[]})=>{
  if(!root)return;
  const title=root.querySelector('#panelTitle');if(title&&!title.dataset.visualized){
-  const member=['character','charOverview','charAbility','equip','skills','mastery','charMastery','resistView','equipChoice'].includes(route.name)?person('ally',route.args[0]):route.name==='personRecord'?person(route.args[0]==='npc'?'npc':'ally',route.args[1]):null;
+  const actorRoute=['character','charOverview','charAbility','equip','skills','mastery','charMastery','resistView','equipChoice'].includes(route.name),member=route.name==='personRecord'?person(route.args[0]==='npc'?'npc':'ally',route.args[1]):null;
   if(route.name==='memberTalk')title.textContent=hc().companion[route.args[0]]?.[1]||title.textContent;
   if(route.name==='npcTalk')title.textContent='会話';
-  title.insertAdjacentHTML('afterbegin',member?portrait(member,'header-face'):glyph(actionIcon(route.name,route.args),'title-icon'));title.dataset.visualized='true';
+  if(!actorRoute)title.insertAdjacentHTML('afterbegin',member?portrait(member,'header-face'):glyph(actionIcon(route.name,route.args),'title-icon'));title.dataset.visualized='true';
  }
  dialoguePage(root,route);
  decorateScene(root,route);
