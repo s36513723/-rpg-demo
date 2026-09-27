@@ -1,7 +1,7 @@
 /* Equipment fitting is transient. Only fittingApply writes equipment and saves. */
 let fittingDraft=null;
 const fittingSlots={0:'主武器',1:'副手',2:'予備主武器',3:'予備副手',4:'防具一式',8:'装飾品',9:'携行具'};
-function fittingWith(i,items,fn){const saved=eq[i];eq[i]=items;try{return fn()}finally{eq[i]=saved}}
+function fittingWith(i,items,fn){const saved=eq[i];eq[i]=items.slice();try{return fn()}finally{eq[i]=saved}}
 function fittingSession(i){if(!Number.isInteger(i)||i<0||i>=names.length)return null;if(!fittingDraft||fittingDraft.i!==i||JSON.stringify(fittingDraft.base)!==JSON.stringify(eq[i]))fittingDraft={i,base:eq[i].slice(),items:eq[i].slice(),slot:0};return fittingDraft}
 function fittingDiscard(){fittingDraft=null}
 function fittingHero(i,a,b,overview=false){const portrait=['gald','lize','ern','sena','mirea','yuna'][i];const metric=(name,x,y,lower=false)=>{const delta=y-x;return '<span class="'+(!delta?'same':(lower?delta<0:delta>0)?'up':'down')+'"><small>'+name+'</small><b>'+x+(delta?' <i>→</i> '+y:'')+'</b>'+(delta?'<em>'+(delta>0?'+':'')+delta+'</em>':'')+'</span>'};return '<section class="actor-hero fitting-hero'+(overview?' status-hero':'')+'"><div class="actor-hero-art fitting-art"><img src="../images/'+portrait+'.svg" alt="'+hesc(names[i])+'"></div><div class="fitting-status"><small>'+hesc(battleStyle(i))+'</small><strong>'+hesc(names[i])+'</strong><div class="fitting-resources">HP '+a.hp+'　SP '+a.sp+'</div><div class="equip-compare" aria-live="polite"><small>'+(overview?'主要ステータス':'現在 → 試着後')+'</small><div class="equip-compare-grid">'+metric('物防',a.pdef,b.pdef)+metric('魔防',a.mdef,b.mdef)+metric('重量 / 上限 '+b.limit,a.weight,b.weight,true)+metric('使用可能技',a.usable,b.usable)+'</div></div></div></section>'}
