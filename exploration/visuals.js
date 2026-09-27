@@ -84,8 +84,8 @@ const glyph=(key,extra='')=>'<svg class="ui-icon '+extra+'" data-icon="'+key+'" 
 const esc=s=>hesc(s);
 const cast=['gald','lize','ern','sena','mirea','yuna'];
 const npcGlyph={'受付':'quill','鍛冶師':'forge','学者':'book','宿主':'tavern','伝令':'wind','守人':'sun'};
-const npcImage={'受付':'../images/npc_eda.svg','鍛冶師':'../images/npc_balun.svg','学者':'../images/npc_iris.svg','宿主':'../images/npc_marta.svg','伝令':'../images/npc_noa.svg','守人':'../images/npc_sahir.svg'};
 const npcStand={'受付':'../images/npc_eda_stand.svg','鍛冶師':'../images/npc_balun_stand.svg','学者':'../images/npc_iris_stand.svg','宿主':'../images/npc_marta_stand.svg','伝令':'../images/npc_noa_stand.svg','守人':'../images/npc_sahir_stand.svg'};
+const npcImage=npcStand;
 const facilityArt={town:'../images/town_lexia.svg',inn:'../images/facility_inn.svg',guild:'../images/facility_guild.svg',market:'../images/facility_market.svg'};
 const facilityLabel={town:'王都レクシア',inn:'宿屋',guild:'ギルド',market:'市場'};
 const facilityCopy={town:'冒険者区の朝。下のタブから宿屋・ギルド・市場を切り替える。',inn:'マルタの宿屋。部屋で休み、仲間や客と話し、出撃準備を整える。',guild:'依頼と査定の窓口。探索資料や地域調査の進捗もここで整理する。',market:'武具、道具、加工、売却をまとめた装備管理の中心。'};
@@ -194,6 +194,7 @@ const dialoguePage=(panel,route)=>{
   const stage=document.createElement('div');stage.innerHTML=npcStage(p,message.textContent);const scene=stage.firstElementChild;message.replaceWith(scene);
   const deck=document.createElement('div');deck.className='npc-action-deck';
   [...body.children].forEach(el=>{if(el===scene)return;if(el.classList.contains('actions')){[...el.children].forEach(b=>deck.append(b));el.remove()}else if(el.matches('.row'))deck.append(el)});
+  if(deck.children.length===1)deck.classList.add('single');
   body.append(deck);body.classList.add('npc-conversation-page');
  }else if(p&&message){message.outerHTML=dialogue(p,message.textContent);body.classList.add('conversation-page')}
  if(['conversation','npcMenu'].includes(name))body.classList.add('people-select-page');
@@ -231,13 +232,13 @@ const chrome=()=>{
  document.querySelectorAll('#app>nav button').forEach(e=>{const icon=e.querySelector('.ico');if(icon)icon.innerHTML=glyph(actions[e.dataset.hub]||'compass')});
  const gear=document.querySelector('.header-tools [data-hub="settings"]');if(gear)gear.innerHTML=glyph('settings');
 };
-window.HUB_VISUAL={version:23,glyph,decorate,chrome,person,portrait,itemIcon,masteryIcon,regionIcon,actionIcon,npcStand};
+window.HUB_VISUAL={version:25,glyph,decorate,chrome,person,portrait,itemIcon,masteryIcon,regionIcon,actionIcon,npcStand};
 // Adapt the existing presentation layer without duplicating its navigation or game actions.
 const showBase=window.show,townBase=window.town,mapBase=window.drawDungeon,closeBase=window.closeM;
 window.show=html=>{showBase(html);const panel=document.getElementById('panel'),route=HUB_UI.state.route||{name:'note',args:[]};decorate(panel,route);const exit=panel.querySelector('.modal-x');if(exit){exit.setAttribute('aria-label',activeRun()?'地図へ戻る':'拠点へ戻る');exit.innerHTML=glyph(activeRun()?'map':'home')+'<span>'+(activeRun()?'地図へ':'拠点へ')+'</span>'}const back=panel.querySelector('.panel-back');if(back)back.innerHTML=glyph('back');chrome()};
 window.town=(...args)=>{const value=townBase(...args);if(!activeRun())decorate(document.getElementById('screen'),{name:'town',args:[]});chrome();return value};
 window.drawDungeon=(...args)=>{const value=mapBase(...args);decorate(document.querySelector('.expedition'),{name:'drawDungeon',args:[]});chrome();return value};
 window.closeM=(...args)=>{const value=closeBase(...args);if(document.activeElement?.closest('#modal'))document.querySelector('#app nav button')?.focus({preventScroll:true});return value};
-HUB_UI.version=23;
+HUB_UI.version=25;
 
 })();
