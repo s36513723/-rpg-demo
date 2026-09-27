@@ -31,8 +31,8 @@ async def layouts(page):
   for alerts in [False,True]:
    await page.set_viewport_size({'width':width,'height':height})
    await page.evaluate("""({base,alerts})=>{installSave(base);H.run=null;for(const q of hc().quests)H.quests[q.id]={state:0,progress:0};loot.古器=alerts?2:0;H.story.pending=alerts?['古代迷宮']:[];const q=hc().quests[0];H.quests[q.id]={state:alerts?2:0,progress:alerts?q.target:0};H.tracked=alerts?q.id:null;town()}""",{'base':baseline,'alerts':alerts})
-   dims=await page.evaluate("""()=>{const s=document.querySelector('#screen'),f=document.querySelector('#app nav'),home=document.querySelector('.town-home');return {overflow:s.scrollHeight-s.clientHeight,wide:document.documentElement.scrollWidth>innerWidth,background:!!home&&getComputedStyle(home).backgroundImage.includes('town_lexia'),tabs:document.querySelectorAll('#app nav button').length,foot:innerHeight-f.getBoundingClientRect().bottom}}""")
-   results.append({'name':f'UI21 viewport {width}x{height} alerts={alerts}','ok':dims['overflow']<=1 and not dims['wide'] and dims['background'] and dims['tabs']==3 and dims['foot']>=20,'measurements':dims})
+   dims=await page.evaluate("""()=>{const s=document.querySelector('#screen'),f=document.querySelector('#app nav'),home=document.querySelector('.town-home'),cmd=document.querySelector('.town-dungeon-command');return {overflow:s.scrollHeight-s.clientHeight,wide:document.documentElement.scrollWidth>innerWidth,background:!!home&&getComputedStyle(home).backgroundImage.includes('town_lexia'),tabs:document.querySelectorAll('#app nav button').length,dungeon:!!cmd&&cmd.getBoundingClientRect().bottom<=s.getBoundingClientRect().bottom,foot:innerHeight-f.getBoundingClientRect().bottom}}""")
+   results.append({'name':f'UI22 viewport {width}x{height} alerts={alerts}','ok':dims['overflow']<=1 and not dims['wide'] and dims['background'] and dims['tabs']==3 and dims['dungeon'] and dims['foot']>=20,'measurements':dims})
  for width,height in [(320,568),(375,667),(390,844),(430,932),(768,1024)]:
   await page.set_viewport_size({'width':width,'height':height})
   await page.evaluate('base=>{installSave(base);H.run=null;closeM();town()}',baseline)
@@ -43,8 +43,8 @@ async def layouts(page):
    results.append({'name':f'UI17 dialogue/equipment layout {width}x{height} {action}','ok':not dims['wide'] and dims['exit'] and dims['fit'] and dims['portrait'] and (not npc or (dims['stand'] and dims['scroll']<=1)),'measurements':dims})
   for selector in ['conversation()','npcMenu()']:
    await page.evaluate(selector)
-   dims=await page.evaluate("""()=>{const body=document.querySelector('#panel .panel-body');return {scroll:body.scrollHeight-body.clientHeight,cards:body.querySelectorAll('.person-select-card').length,wide:body.scrollWidth>body.clientWidth+1,same:body.classList.contains('people-select-page')}}""")
-   results.append({'name':f'UI21 people selector fits {width}x{height} {selector}','ok':dims['scroll']<=1 and not dims['wide'] and dims['cards']>=6 and dims['same'],'measurements':dims})
+   dims=await page.evaluate("""()=>{const body=document.querySelector('#panel .panel-body'),cards=[...body.querySelectorAll('.person-select-card')],grid=body.querySelector('.people-select-grid');return {scroll:body.scrollHeight-body.clientHeight,cards:cards.length,wide:body.scrollWidth>body.clientWidth+1,same:body.classList.contains('people-select-page'),oneColumn:!!grid&&getComputedStyle(grid).gridTemplateColumns.split(' ').length===1,horizontal:cards.every(x=>x.getBoundingClientRect().width>x.getBoundingClientRect().height*3)}}""")
+   results.append({'name':f'UI22 people selector fits {width}x{height} {selector}','ok':dims['scroll']<=1 and not dims['wide'] and dims['cards']>=6 and dims['same'] and dims['oneColumn'] and dims['horizontal'],'measurements':dims})
   for tab in ['formation','members','destination']:
    await page.evaluate(f"partyMenu('{tab}')")
    dims=await page.evaluate("""()=>{const body=document.querySelector('#panel .panel-body');return {scroll:body.scrollHeight-body.clientHeight,wide:body.scrollWidth>body.clientWidth+1,fixed:body.classList.contains('sortie-page'),tabs:body.querySelectorAll('.ui-tabs button').length}}""")
