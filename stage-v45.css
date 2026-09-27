@@ -1,0 +1,203 @@
+/* v44: a staged battlefield, not a grid of figures; one overlay, no reflow. */
+:root{--gold:#d9c5a0;--ink:#f1ece2;--hp:#a5b9ac;--sp:#b9a47e;--mp:#93aabe;--figure-size:130px;--rank-height:100px}
+#game{background:#0a141e}
+#game::before{background:linear-gradient(#0a111949,#11232d16 28%,#0d1a2666 61%,#08121cbb 85%,#080f18),url('court-v32.svg') 50% 26%/cover no-repeat;filter:saturate(.7)}
+#game::after{background:radial-gradient(ellipse at 65% 26%,#e2d4ba12,transparent 60%),linear-gradient(90deg,#080f1966,transparent 25% 80%,#080f1944)}
+.hud{border-bottom:0;background:linear-gradient(#07101bdd,transparent)}
+.hud::after{content:'';position:absolute;bottom:0;left:3px;right:3px;height:1px;background:linear-gradient(90deg,transparent,#d8c29945,transparent);pointer-events:none}
+.order{gap:6px}.order-face{border:0;clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px);box-shadow:inset 0 -1px #8cb2c4;opacity:.78}
+.order-face img{filter:saturate(.74)}.order-face.foe{box-shadow:inset 0 -2px #ce9092}.order-face .order-side{width:4px;height:4px;border-radius:0;rotate:45deg;top:3px;right:3px}
+.order-face.is-active{outline:1px solid var(--gold);box-shadow:inset 0 -2px var(--gold);opacity:1}.order-face.is-active img{filter:none}
+#auto{font:11px Georgia,serif;letter-spacing:.08em}#resolve{border:0;border-bottom:1px solid #d8bd8588;background:linear-gradient(90deg,transparent,#cbb07626,transparent);border-radius:0}#resolve b{font:11px Georgia,serif;letter-spacing:.08em}
+/* Display:contents makes both ranks share one projected stage coordinate system.
+   Slot positions are pure CSS, so the existing FLIP swaps measure the new positions synchronously. */
+.enemy-stage{display:block;container-type:normal;flex:1 1 0;min-height:0;position:relative;margin:0 -5px;isolation:isolate;overflow:visible}
+.enemy-lane,.enemy-row{display:contents;position:static;pointer-events:none}
+.enemy-unit{--x:50%;--feet:70%;position:absolute;left:calc(var(--x) - var(--figure-size)*.54);top:calc(var(--feet) - var(--figure-size) - 28px);width:calc(var(--figure-size)*1.08);height:calc(var(--figure-size) + 28px);min-height:0;padding:0;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;pointer-events:auto;transform-origin:50% 100%;border:0;background:none}
+#eb>.enemy-unit[style*="grid-column: 1"]{--x:22%;--feet:54%;z-index:120}
+#eb>.enemy-unit[style*="grid-column: 2"]{--x:53%;--feet:49%;z-index:110}
+#eb>.enemy-unit[style*="grid-column: 3"]{--x:82%;--feet:44%;z-index:100}
+#ef>.enemy-unit[style*="grid-column: 1"]{--x:18%;--feet:89%;z-index:220}
+#ef>.enemy-unit[style*="grid-column: 2"]{--x:49%;--feet:84%;z-index:210}
+#ef>.enemy-unit[style*="grid-column: 3"]{--x:80%;--feet:79%;z-index:200}
+.enemy-unit.moving{z-index:500!important}
+.enemy-visual,.enemy-sprite{height:var(--figure-size);flex:none}.enemy-visual{position:relative;isolation:isolate;align-items:flex-start;justify-content:center}
+.enemy-sprite{width:calc(var(--figure-size)*var(--sprite-ratio));transform-origin:50% 100%;filter:drop-shadow(1px 4px 2px #000b) drop-shadow(-2px 0 1px #ced4ce16)}
+.enemy-back-lane .enemy-sprite{filter:brightness(.96) saturate(.82) drop-shadow(1px 5px 2px #0009)}
+.enemy-name{font:11px/16px var(--serif);letter-spacing:.035em;color:#e5e0d4;text-shadow:0 1px 4px #02060a,0 0 7px #02060a;max-width:100%;white-space:nowrap}
+.enemy-hp{height:2px;width:74%;margin:2px 0 7px;flex:0 0 2px}
+.enemy-hp .bar{height:2px;box-shadow:0 0 0 1px #c9af8030,0 1px 3px #0009;background:#0a121bd9}
+.enemy-hp i{background:linear-gradient(90deg,#a47873,#caaa95)}
+.enemy-visual::before{content:'';position:absolute;bottom:-4px;left:9%;right:9%;height:13px;transform:skewX(-26deg);border-radius:50%;background:radial-gradient(ellipse,#030609ce 10%,#02060980 38%,transparent 74%);filter:blur(2px);z-index:-2;pointer-events:none}
+.enemy-visual::after{left:14%;right:14%;height:10px;bottom:-1px;background:none;border:1px solid #c1c8bb10;box-shadow:none;transform:skewX(-22deg);pointer-events:none}
+.enemy-unit.target-selected .enemy-visual::after{border-color:#dfc397a6;box-shadow:0 0 11px #d3b07c20;background:radial-gradient(ellipse,#c7aa6815,transparent 68%)}
+.enemy-unit.target-selected .enemy-name{color:#f2dab0}
+.target-pointer{top:-12px;width:7px;height:7px;border-color:#e4c995}
+.enemy-unit .card-status{top:26px;right:7%;z-index:5}.enemy-unit.dead{opacity:.08}.enemy-unit.dead .enemy-visual::after{visibility:hidden}
+/* Low-contrast floor, with two parallel traces connecting the rank footprints. */
+.scene-floor{position:absolute;inset:0;pointer-events:none;z-index:-1;overflow:hidden;mask-image:linear-gradient(transparent 10%,#000 29%,#000 89%,transparent);-webkit-mask-image:linear-gradient(transparent 10%,#000 29%,#000 89%,transparent)}
+.stone-plane{position:absolute;left:-45%;top:16%;width:180%;height:114%;transform:perspective(410px) rotateX(58deg) rotateZ(-12deg);transform-origin:50% 0;background:repeating-linear-gradient(0deg,#c9d9dd06 0 1px,transparent 1px 47px,#01060a38 47px 49px),repeating-linear-gradient(90deg,transparent 0 84px,#0a121b59 84px 86px),radial-gradient(ellipse at 55% 15%,#5d727755,#14263033 50%,#08131b);box-shadow:inset 0 0 140px #09131b}
+.rank-trace{position:absolute;left:7%;right:4%;height:25px;border-bottom:1px solid #c5c9be24;transform:rotate(-12deg);border-radius:0 0 50% 35%;filter:drop-shadow(0 0 3px #afcec218)}
+.rear-trace{top:43%;opacity:.48}.front-trace{top:78%;opacity:.76}
+/* Data belongs in two lean bands. Text stays upright even when the battle plane tilts. */
+.allies{z-index:20;border-top:1px solid #d8c49a3b;isolation:isolate;flex-basis:100px}
+.ally-row{background:linear-gradient(90deg,#0c1a26ed,#0d1a28f7,#0c1a26ed);border-bottom:1px solid #c7b48529}
+.ally-unit{border-right:1px solid #b1bdc21a;background:none}.ally-unit::before{opacity:.55}.ally-unit .card-name{font-weight:400}.ally-unit.active{background:linear-gradient(110deg,#bb9c5733,transparent);box-shadow:inset 0 1px #d8c297,inset 0 -1px #d8c2973a}
+/* Five engraved medallions form a single command rail, not five rectangular boxes. */
+.command-panel,.command-panel.resolving{position:absolute;left:12px;right:12px;bottom:calc(var(--bottom-gap) + 100px);height:94px;min-height:94px;padding:3px 0 0;border:0;z-index:32;background:linear-gradient(90deg,transparent 0%,#0713218c 27%,#0a1522f2 52%,#0a1522ef);box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;isolation:isolate}
+.command-panel::before{content:'';position:absolute;inset:0 0 0 25%;background:linear-gradient(#bfa77910,transparent 50%);border-top:1px solid #d2b78245;border-bottom:1px solid #d2b78216;pointer-events:none}
+.command-content,.command-panel.resolving .command-content{margin-left:24%;padding-left:0;position:relative;z-index:3}
+.actor-button{height:29px;font:400 16px var(--serif);letter-spacing:.07em;max-width:37%;color:#e7d6b7}.actor-button::after{display:none}
+.close-command{height:29px;width:30px;top:0;right:0;font:20px Georgia;color:#a9afb3}
+.target-line{left:37%;right:30px;top:0;height:29px}.target-hint{font-size:9px;color:#b9bec1}
+.command-buttons{border-top:0;gap:3px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding-top:1px}
+.command-buttons>.command{--cmd:#cbd1d5;height:60px;min-height:60px;border:0;border-radius:0;background:none;padding:1px 0 0;gap:5px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;color:var(--cmd);transition:color .14s,filter .14s}
+.command-buttons>.command::before{content:'';position:absolute;top:0;left:50%;width:34px;height:34px;transform:translateX(-50%);border:1px solid #b0b9b32b;border-radius:50%;background:radial-gradient(ellipse at 40% 15%,#a1b4bd12,transparent 68%);pointer-events:none}
+.command-buttons>.command .icon{width:34px;height:34px;padding:7px;stroke-width:1.45}
+.command-buttons>.command b{font:10px/13px Georgia,'Times New Roman',serif;letter-spacing:.035em;font-weight:400;color:inherit;white-space:nowrap}
+.command-buttons>.command.attack{--cmd:#e2c592}.command-buttons>.command.magic{--cmd:#c4b9df}.command-buttons>.command.guard{--cmd:#adc8c9}.command-buttons>#swap{--cmd:#bdc7d3}.command-buttons>#switch{--cmd:#ccbda1}
+.command-buttons>.command.attack::before{border-color:#b6a07375;background:radial-gradient(ellipse at 50% 20%,#d0b88224,transparent 75%);box-shadow:0 0 8px #c2a57613}
+.command-buttons>.command:hover:not(:disabled)::before,.command-buttons>.command:active:not(:disabled)::before{border-color:currentColor;background:#cfb77e1c}
+.command-buttons>.command:active:not(:disabled){filter:brightness(1.35);transform:translateY(1px)}
+.actor-art{left:-12px;top:auto;bottom:calc(-100px - var(--bottom-gap));height:252px;width:37%;z-index:0;mask-image:linear-gradient(90deg,#000 61%,transparent 100%);-webkit-mask-image:linear-gradient(90deg,#000 61%,transparent 100%);pointer-events:none;opacity:.97}
+.actor-art svg{filter:saturate(.81) contrast(1.04)}
+.command-panel.ready-only{display:none!important}
+.command-panel.resolving{height:80px;min-height:80px}.command-panel.resolving.enemy-action .command-content{margin-left:0}.command-panel.resolving.enemy-action::before{left:0}
+.command-panel .battle-message{height:48px;padding-right:72px}.battle-message p{font-size:13px;line-height:1.55;max-height:47px}
+.command-panel.resolving .actor-button{pointer-events:none}.command-panel.resolving .actor-art{height:242px}
+.playback-tools button{border:0;border-radius:50%;width:34px;height:38px;background:#a3b4c011}
+/* Sheets contain details only on demand, preserving the quiet battlefield. */
+.choice-sheet{border-radius:2px;border:1px solid #c0a77c70;background:linear-gradient(150deg,#172634f7,#0a1522fa);box-shadow:0 12px 48px #010611c9}
+.skill-item{border:0;border-bottom:1px solid #cab98c33;border-radius:0;background:none}.skill-choice{padding:10px 7px}.skill-target{border-top:0;padding-left:42px}
+@media(max-height:600px){.allies{grid-template-rows:44px 44px;gap:4px;flex-basis:100px}.command-panel{height:84px;min-height:84px}.command-buttons>.command{height:53px;min-height:53px}.actor-button,.target-line{height:27px}.command-buttons>.command::before{width:30px;height:30px}.command-buttons>.command .icon{width:30px;height:30px;padding:6px}.command-buttons>.command b{font-size:9px}.actor-art{height:230px}.command-panel .battle-message{height:44px}}
+@media(max-width:350px){.command-panel,.command-panel.resolving{left:9px;right:9px}.command-content,.command-panel.resolving .command-content{margin-left:22%}.actor-button{font-size:14px}.command-buttons{gap:0}.command-buttons>.command b{font-size:9px;letter-spacing:0}.command-buttons>.command::before{width:30px;height:30px}.command-buttons>.command .icon{width:30px;height:30px;padding:6px}.enemy-name{font-size:10px}.target-hint{font-size:8px}}
+/* Ground uses the stone texture already present in the environment artwork. */
+.scene-floor{mask-image:linear-gradient(transparent 13%,#000 40%,#000 91%,transparent);-webkit-mask-image:linear-gradient(transparent 13%,#000 40%,#000 91%,transparent)}
+.stone-plane{top:14%;left:-4%;width:108%;height:90%;transform:none;background:linear-gradient(#152d3850,#0a172277);box-shadow:none;overflow:hidden}
+.stone-plane svg{width:100%;height:100%;display:block;filter:saturate(.45) brightness(.67);opacity:.72}
+.rank-trace{opacity:.3;border-color:#ddceaa30}.front-trace{opacity:.42}
+.allies{z-index:40}
+.stone-plane{top:27%;height:75%;opacity:.48}.stone-plane svg{filter:saturate(.5) brightness(.7)}
+@media(prefers-reduced-motion:reduce){.command-panel{animation:none}.enemy-unit{scroll-behavior:auto}}
+
+/* v45 — plausible two-rank formation: shallow front arc, rear rank tucked into gaps. */
+.enemy-stage{perspective:700px}
+
+/* Rear rank sits behind the front line instead of on a diagonal showcase line. */
+#eb>.enemy-unit[style*="grid-column: 1"]{--x:34%;--feet:59%;z-index:115}
+#eb>.enemy-unit[style*="grid-column: 2"]{--x:50%;--feet:57%;z-index:110}
+#eb>.enemy-unit[style*="grid-column: 3"]{--x:66%;--feet:59%;z-index:105}
+
+/* Front rank forms a very shallow defensive arc facing the party. */
+#ef>.enemy-unit[style*="grid-column: 1"]{--x:22%;--feet:82%;z-index:220}
+#ef>.enemy-unit[style*="grid-column: 2"]{--x:50%;--feet:85%;z-index:230}
+#ef>.enemy-unit[style*="grid-column: 3"]{--x:78%;--feet:82%;z-index:220}
+
+/* Rear silhouettes are not scaled down; depth is conveyed by overlap, tone and floor position. */
+.enemy-back-lane .enemy-sprite{
+  filter:brightness(.88) saturate(.78) drop-shadow(0 5px 3px #0009);
+}
+.enemy-front-lane .enemy-sprite{
+  filter:drop-shadow(1px 5px 3px #000b) drop-shadow(-1px 0 1px #d7d5cd14);
+}
+
+/* Rear information remains immediately readable for tactical decisions. */
+#eb .enemy-name{color:#d7e0e4}
+#eb .enemy-hp .bar{box-shadow:0 0 0 1px #89a8b44d,0 1px 3px #0009}
+#eb .enemy-hp i{background:linear-gradient(90deg,#7f9eaa,#b8cbd0)}
+#ef .enemy-hp i{background:linear-gradient(90deg,#9f716d,#d3ab91)}
+
+/* Formation guides: subtle enough to feel physical, explicit enough to read ranks instantly. */
+.rear-trace{
+  top:55%;
+  left:24%;
+  right:24%;
+  height:18px;
+  opacity:.58;
+  border-bottom-color:#91aeb65d;
+  transform:none;
+}
+.front-trace{
+  top:80%;
+  left:9%;
+  right:9%;
+  height:18px;
+  opacity:.45;
+  border-bottom-color:#d5b98c4f;
+  transform:none;
+}
+.rear-trace::before{
+  content:'REAR';
+  position:absolute;
+  left:-18px;
+  bottom:-5px;
+  font:8px/1 Georgia,'Times New Roman',serif;
+  letter-spacing:.14em;
+  color:#9fb5bd;
+  opacity:.72;
+}
+.front-trace::before{
+  content:'FRONT';
+  position:absolute;
+  left:-1px;
+  bottom:-5px;
+  font:8px/1 Georgia,'Times New Roman',serif;
+  letter-spacing:.13em;
+  color:#cbb58e;
+  opacity:.5;
+}
+
+/* Command rail: one continuous instrument panel, not five separate round buttons. */
+.command-panel::before{
+  inset:0 0 0 23%;
+  background:
+    linear-gradient(180deg,#d2bd9310,transparent 42%),
+    linear-gradient(90deg,#111b28d9,#0a1522f5);
+  border-top:1px solid #d7bf8d4d;
+  border-bottom:1px solid #7f8e9928;
+}
+.command-content,.command-panel.resolving .command-content{margin-left:23%}
+.command-buttons{
+  gap:0;
+  border-top:1px solid #91a1aa20;
+  padding-top:0;
+}
+.command-buttons>.command{
+  height:60px;
+  min-height:60px;
+  justify-content:center;
+  gap:3px;
+  border-right:1px solid #9aa7ae18;
+  color:#bfc7cc;
+}
+.command-buttons>.command:last-child{border-right:0}
+.command-buttons>.command::before{display:none}
+.command-buttons>.command .icon{
+  width:23px;
+  height:23px;
+  padding:0;
+  stroke-width:1.35;
+}
+.command-buttons>.command b{
+  font:9px/11px Georgia,'Times New Roman',serif;
+  letter-spacing:.09em;
+}
+.command-buttons>.command.attack{
+  color:#e3c897;
+  background:linear-gradient(180deg,#d4bd8810,transparent);
+  box-shadow:inset 0 -2px #d2b577;
+}
+.command-buttons>.command.magic{color:#c6b8df}
+.command-buttons>.command.guard{color:#a9c7c9}
+.command-buttons>#swap{color:#b9c4d0}
+.command-buttons>#switch{color:#cdbda2}
+.command-buttons>.command:active:not(:disabled){
+  transform:none;
+  filter:brightness(1.22);
+  background:#c7b58112;
+}
+@media(max-width:350px){
+  .rear-trace::before,.front-trace::before{font-size:7px}
+  .command-buttons>.command b{font-size:8px;letter-spacing:.05em}
+  .command-buttons>.command .icon{width:21px;height:21px}
+}
