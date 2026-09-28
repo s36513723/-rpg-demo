@@ -9,9 +9,9 @@ on:
       - 'exploration/**'
       - 'rpg-*.js'
       - 'tests/**'
-      - 'play-plan-v2.html'
-      - 'battle-plan-v2.js'
-      - 'battle-plan-v1.css'
+      - 'play-plan-v*.html'
+      - 'battle-plan-v*.js'
+      - 'battle-plan-v*.css'
       - '.github/workflows/rpg-validation.yml'
   pull_request:
     paths:
@@ -55,4 +55,5 @@ jobs:
           path: |
             test-results.json
             plan-debug.json
+            plan-current.png
           retention-days: 7
