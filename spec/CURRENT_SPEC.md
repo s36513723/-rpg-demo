@@ -50,6 +50,15 @@ Skill Masteries (0-2):
 
 Skills are learned from requirements such as stats, Mastery, Source and spell system, and have an equip cost.
 
+## Growth and experience
+- Characters gain EXP from meaningful play.
+- There is no conventional character level that automatically raises combat stats.
+- When accumulated EXP reaches the next growth threshold, the character receives growth points.
+- Growth rewards include Stat Pt and Mastery Pt; the player decides where to allocate them.
+- EXP sources include normal battles, strong enemies, bosses, quests, exploration discoveries and important events.
+- The design must not make repetitive weak-enemy grinding the only or dominant growth route.
+- Exact EXP thresholds and the amount of Stat Pt / Mastery Pt per growth threshold are balance values and remain adjustable until confirmed.
+
 ## Dungeon
 - A run is basically 3 layers.
 - Layer environments can change each attempt.
