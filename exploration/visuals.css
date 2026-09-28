@@ -545,3 +545,79 @@
  .guild-service-page{grid-template-rows:53% 47%!important}
  .facility-stage-guild .facility-talk{top:66px!important;left:10px!important;min-height:30px!important;padding:4px 9px!important}
 }
+
+
+/* UI39: truly fixed guild camera across every guild sub-screen. */
+.guild-facility-page,
+.guild-service-page{
+ grid-template-rows:clamp(250px,42dvh,340px) minmax(0,1fr)!important;
+}
+.guild-facility-page>.facility-stage,
+.guild-service-page>.facility-stage{
+ height:clamp(250px,42dvh,340px)!important;
+ min-height:clamp(250px,42dvh,340px)!important;
+ max-height:clamp(250px,42dvh,340px)!important;
+ align-self:start!important;
+}
+.facility-stage-guild{
+ background-position:center center!important;
+ background-size:cover!important;
+ background-repeat:no-repeat!important;
+}
+.facility-stage-guild .facility-stand{
+ width:clamp(178px,46vw,258px)!important;
+ height:auto!important;
+ max-width:none!important;
+ max-height:94%!important;
+ right:2%!important;
+ bottom:0!important;
+ left:auto!important;
+ top:auto!important;
+ object-fit:contain!important;
+ object-position:right bottom!important;
+ transform:none!important;
+}
+.facility-stage-guild .facility-identity{
+ left:18px!important;
+ top:18px!important;
+ right:auto!important;
+ bottom:auto!important;
+}
+.facility-stage-guild .facility-talk{
+ left:18px!important;
+ top:76px!important;
+ right:auto!important;
+ bottom:auto!important;
+}
+.facility-stage-guild .facility-dialogue{
+ left:12px!important;
+ right:12px!important;
+ bottom:12px!important;
+ top:auto!important;
+}
+@media(max-height:700px){
+ .guild-facility-page,
+ .guild-service-page{
+  grid-template-rows:clamp(205px,36dvh,255px) minmax(0,1fr)!important;
+ }
+ .guild-facility-page>.facility-stage,
+ .guild-service-page>.facility-stage{
+  height:clamp(205px,36dvh,255px)!important;
+  min-height:clamp(205px,36dvh,255px)!important;
+  max-height:clamp(205px,36dvh,255px)!important;
+ }
+ .facility-stage-guild .facility-stand{
+  width:clamp(158px,43vw,218px)!important;
+  height:auto!important;
+ }
+ .facility-stage-guild .facility-identity{left:14px!important;top:14px!important}
+ .facility-stage-guild .facility-talk{left:14px!important;top:66px!important}
+}
+@media(max-width:350px){
+ .facility-stage-guild .facility-stand{
+  width:clamp(148px,45vw,190px)!important;
+  height:auto!important;
+ }
+ .facility-stage-guild .facility-identity{left:10px!important}
+ .facility-stage-guild .facility-talk{left:10px!important}
+}
