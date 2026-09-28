@@ -148,9 +148,13 @@
         "alchemist": "amber",
         "mystic": "cyan"
       },
-      "roster_resources": "slim always-visible HP/SP line gauges",
+      "roster_resources": "HP/SP always-visible slim hairline gauges",
       "character_overview_header": "transparent overlay over character art",
-      "portrait_tint": "none; identity color is card background only"
+      "portrait_tint": "none; identity color is card background only",
+      "member_card_art": "full-bleed untinted character image; identity color belongs to card background only",
+      "character_overview_art": "high-resolution standing-art derivative",
+      "facility_npc_alignment": "center",
+      "facility_art": "approved Inn/Guild/Market background + NPC assets"
     },
     "hub_facility_art": {
       "status": "確定",
@@ -173,7 +177,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "hub_approved_facility_art_and_untinted_cards_synced_2026-09-28",
+  "last_sync_status": "hub_art_quality_and_facility_alignment_synced_2026-09-28",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
