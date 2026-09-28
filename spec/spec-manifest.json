@@ -148,15 +148,32 @@
         "alchemist": "amber",
         "mystic": "cyan"
       },
-      "roster_resources": "HP/SP bars always visible",
-      "character_overview_header": "transparent overlay over character art"
+      "roster_resources": "slim always-visible HP/SP line gauges",
+      "character_overview_header": "transparent overlay over character art",
+      "portrait_tint": "none; identity color is card background only"
+    },
+    "hub_facility_art": {
+      "status": "確定",
+      "inn": {
+        "background": "images/hub-inn-bg.webp",
+        "npc": "images/hub-inn-npc.webp"
+      },
+      "guild": {
+        "background": "images/hub-guild-bg.webp",
+        "npc": "images/hub-guild-npc.webp"
+      },
+      "market": {
+        "background": "images/hub-market-bg.webp",
+        "npc": "images/hub-market-npc.webp"
+      },
+      "legacy_placeholders": "not used for the three main facility screens"
     }
   },
   "workstreams": {
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "canonical_315_runtime_active_2026-09-28",
+  "last_sync_status": "hub_approved_facility_art_and_untinted_cards_synced_2026-09-28",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
