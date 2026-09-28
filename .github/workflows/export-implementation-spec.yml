@@ -1,0 +1,22 @@
+name: Export implementation spec
+
+on:
+  push:
+    paths:
+      - "rpg-rules.js"
+      - "spec/generated/**"
+      - ".github/workflows/export-implementation-spec.yml"
+  workflow_dispatch:
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: implementation-spec-export
+          path: |
+            spec/generated/implemented-skills.csv
+            spec/generated/implemented-masteries.csv
+          retention-days: 7
