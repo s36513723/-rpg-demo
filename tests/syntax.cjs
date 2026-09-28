@@ -45,7 +45,16 @@ const hubNames=hubFiles.flatMap(file=>[...fs.readFileSync(file,'utf8').matchAll(
 assert.equal(new Set(hubNames).size,hubNames.length,'hub duplicate function definitions');
 const path=require('node:path');
 for(const m of fs.readFileSync('exploration/index.html','utf8').matchAll(/(?:src|href)="([^"]+)"/g)){const target=m[1].split('?')[0];if(target.startsWith('#'))continue;assert(!/^https?:/.test(target),'hub dependency must be local');assert(fs.existsSync(path.resolve('exploration',target)),'missing hub resource '+target);}
+const battleSource=fs.readFileSync('index.html','utf8');
+assert(battleSource.includes("dagger:{name:'短剣',normalStat:'SKL'"),'dagger normal attack must scale with SKL');
+assert(battleSource.includes("bow:{name:'長弓',normalStat:'SKL'"),'bow normal attack must scale with SKL');
+assert(battleSource.includes("staff:{name:'杖',normalStat:'ARC'"),'staff normal attack must scale with ARC');
+assert(battleSource.includes("stat:u.weapon?.normalStat||'PHY'"),'normal attack must use weapon-configured stat');
+assert(battleSource.includes("if(req.includes('投擲')&&throwAction(u))return ''"),'throwing mastery must use carry-item throw action');
+assert(battleSource.includes("if(!n||n==='なし')return'なし'"),'unarmed must be represented by no equipped hand weapon');
 const growthSource=fs.readFileSync('exploration/character-stats.js','utf8');
+assert(growthSource.includes("normalStat:'SKL'"),'character preview must preserve SKL weapon scaling');
+assert(growthSource.includes("normalStat:'ARC'"),'character preview must preserve ARC weapon scaling');
 assert(growthSource.includes('function awardExperience('),'shared EXP award function');
 assert(growthSource.includes('H.pendingGrowth.stat+=growth;H.pendingGrowth.mastery+=growth'),'EXP threshold grants both growth point types');
 const exploreSource=fs.readFileSync('exploration/explore.js','utf8'),hubSource=fs.readFileSync('exploration/hub.js','utf8');
