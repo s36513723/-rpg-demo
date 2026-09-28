@@ -65,13 +65,33 @@
       "動揺",
       "誘惑",
       "即死"
-    ]
+    ],
+    "progression": {
+      "conventional_level": false,
+      "experience": true,
+      "experience_threshold_grants": [
+        "Stat Pt",
+        "Mastery Pt"
+      ],
+      "allocation": "player_choice",
+      "experience_sources": [
+        "normal_battle",
+        "strong_enemy",
+        "boss",
+        "quest",
+        "exploration_discovery",
+        "important_event"
+      ],
+      "anti_grind_principle": true,
+      "threshold_curve_status": "balance_pending",
+      "reward_amount_status": "balance_pending"
+    }
   },
   "workstreams": {
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "contract_initialized",
+  "last_sync_status": "growth_exp_points_spec_confirmed",
   "blocked_steps": [
     "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
   ]
