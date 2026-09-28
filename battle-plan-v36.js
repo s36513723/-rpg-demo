@@ -222,7 +222,7 @@ const ACTOR_CROPS={
  ran:M.crops['back-ran'],arc:M.crops['portrait-arc'],mys:M.crops['back-mys']
 };
 const ACTOR_PORTRAITS={
- war:'images/battle-warrior.svg',run:'images/battle-paladin.svg',rog:'images/battle-rogue.svg',
+ war:'images/battle-warrior.svg',rog:'images/battle-paladin.svg',run:'images/battle-rogue.svg',
  ran:'images/battle-archer.svg',arc:'images/battle-alchemist.svg',mys:'images/battle-mystic.svg'
 };
 function enemyCrop(u){return u.id==='g3'?[542, 159, 210, 135]:CROPS[u.id==='mage'?'mage':['arch','arch2'].includes(u.id)?'archer':'guard']}
