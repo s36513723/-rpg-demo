@@ -138,12 +138,37 @@
       "conditions",
       "description",
       "status_class"
-    ]
+    ],
+    "schema_status": "implementation_fields_added_to_workbook",
+    "workbook_schema_columns": [
+      "skill_id",
+      "mode",
+      "power",
+      "scaling",
+      "physical_attribute",
+      "magic_attribute",
+      "range_min",
+      "range_max",
+      "target_rule",
+      "defense_ref",
+      "position_effect",
+      "conditions",
+      "description",
+      "status_class",
+      "migration_status",
+      "legacy_name"
+    ],
+    "runtime_switch_ready": false
   },
   "migration_policy": {
     "do_not_invent_missing_names": true,
     "do_not_delete_current_skills_from_target_count_alone": true,
     "do_not_convert_rank_0_50_to_1_10_without_exact_mapping": false,
-    "promotion_rule": "Use canonical workbook 08_SkillDB as the exact name/Mastery/Rank source. Normalize the remaining runtime fields into one Skill DB, then migrate by stable ID/name mapping with save-compatibility and regression tests."
+    "promotion_rule": "Use canonical workbook 08_SkillDB as the exact name/Mastery/Rank source. Normalize the remaining runtime fields into one Skill DB, then migrate by stable ID/name mapping with save-compatibility and regression tests.",
+    "audit": "spec/skill-migration-296-to-315.json",
+    "exact_unique_name_matches": 40,
+    "ambiguous_names": [
+      "速射"
+    ]
   }
 }
