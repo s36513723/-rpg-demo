@@ -7,7 +7,7 @@ This file is the persistent operating contract for every AI/Work session that mo
 The human-facing specification workbook is the canonical game specification.
 Its current logical name is:
 
-- `RPG制作_統合詳細仕様書.xlsx`
+- `RPG制作_仕様正本_同期版.xlsx`
 
 The repository mirror under `spec/` exists so coding agents can reliably consume the current confirmed rules.
 
@@ -23,7 +23,7 @@ Never restore an old implementation merely because it already exists in code.
 
 ## Specification status discipline
 
-Every rule or numeric value must be distinguishable as one of: **確定 / 初期実装値 / 要レビュー / 廃止旧仕様**. The machine-readable registry is `spec/spec-status.json`.
+Every rule or numeric value must be distinguishable as one of: **確定 / 構造確定 / 初期実装値 / 要レビュー / 廃止旧仕様**. The machine-readable registry is `spec/spec-status.json`.
 
 - A value found in code, tests, generated CSV, or reverse-synced Excel is **not** confirmed merely because it exists or passes tests.
 - Reverse-synced skill rows default to **要レビュー** until the user explicitly approves them.
@@ -63,6 +63,9 @@ Do not stop after only updating documentation when implementation is requested o
 - Battle resources: HP + unified SP. MP is obsolete.
 - No fixed classes.
 - Core stats: PHY / SKL / ARC / MND.
+- Mastery Rank is 1-10; 1 Mastery Pt raises Rank by 1; Skill Set Capacity is fixed at 12.
+- Unarmed means no hand weapon; gauntlets/knuckles are 格闘. 投擲 uses throwable carry items. Shields are offhand.
+- Normal weapon attacks use weapon-configured Scaling, not universal PHY scaling. Enemies use the same four-stat + skill-scaling model.
 - Physical damage types: slash / pierce / crush (斬 / 突 / 壊).
 - Magic attributes: fire / water / earth / wind / light / dark / neutral.
 - Status ailments include: blind, severe poison, sleep, stun, agitation, temptation, instant death.
