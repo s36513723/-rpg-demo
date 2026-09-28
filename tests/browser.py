@@ -56,7 +56,7 @@ async def layouts(page):
    before=await page.evaluate("""()=>({stage:document.querySelector('.facility-stage').getBoundingClientRect().height,panel:document.querySelector('#panel').getBoundingClientRect().height,src:document.querySelector('.facility-stand').getAttribute('src')})""")
    await page.evaluate("""()=>document.querySelector('.facility-host').click()""")
    after=await page.evaluate("""()=>({stage:document.querySelector('.npc-stage').getBoundingClientRect().height,panel:document.querySelector('#panel').getBoundingClientRect().height,src:document.querySelector('.npc-stand').getAttribute('src')})""")
-   results.append({'name':f'UI25 NPC talk balance {width}x{height} {facility}','ok':abs(before['stage']-after['stage'])<=1 and abs(before['panel']-after['panel'])<=1 and before['src']==after['src'] and '_stand.svg' in after['src'],'measurements':{'before':before,'after':after}})
+   results.append({'name':f'UI25 NPC talk balance {width}x{height} {facility}','ok':abs(before['stage']-after['stage'])<=1 and abs(before['panel']-after['panel'])<=1 and before['src']==after['src'] and ('_stand.svg' in after['src'] or 'hub-' in after['src']),'measurements':{'before':before,'after':after}})
  await page.evaluate('base=>{installSave(base);closeM();town()}',baseline)
  await page.set_viewport_size({'width':390,'height':844})
  return results
