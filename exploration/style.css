@@ -63,7 +63,7 @@
 @media(min-width:600px){.formation-empty{min-height:136px}}
 
 /* UI23: party cards first, then background with four equal town commands. */
-.town-home{position:relative;display:flex;flex-direction:column;gap:8px;background:linear-gradient(180deg,#07100c66,#07100caa),url("../images/hub-capital-bg.webp") center/cover no-repeat}
+.town-home{position:relative;display:flex;flex-direction:column;gap:8px;background:linear-gradient(180deg,#07100c66,#07100caa),url("../images/hub-capital-bg.webp?v=20260929-capital2") center/cover no-repeat}
 .town-home .home-objective,.town-home .tracked-objective,.town-home .attention-strip,.town-command-grid,.town-location-meta{position:relative;z-index:1}
 .town-command-grid{margin:6px 0 8px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .town-command-grid .place{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:68px;padding:7px 5px;border:1px solid #526356!important;border-radius:10px;background:#14241ddd;text-align:center;overflow:hidden;backdrop-filter:blur(3px)}
