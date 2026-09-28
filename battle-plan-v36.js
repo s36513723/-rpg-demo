@@ -228,14 +228,8 @@ const ACTOR_PORTRAITS={
 function enemyCrop(u){return u.id==='g3'?[542, 159, 210, 135]:CROPS[u.id==='mage'?'mage':['arch','arch2'].includes(u.id)?'archer':'guard']}
 const ENEMY_CINEMATIC={};
 const ORDER_PORTRAITS={
- war:'images/turn-warrior.svg',
- rog:'images/turn-paladin.svg',
- run:'images/turn-rogue.svg',
- ran:'images/turn-archer.svg',
- arc:'images/turn-alchemist.svg',
- mys:'images/turn-mystic.svg',
- g1:'images/enemy_guard.svg',g2:'images/enemy_guard.svg',g3:'images/beast-cinematic.svg',
- arch:'images/enemy_flying.svg',arch2:'images/enemy_flying.svg',mage:'images/enemy_mage.svg'
+ war:'images/turn-warrior.svg',rog:'images/turn-paladin.svg',run:'images/turn-rogue.svg',
+ ran:'images/turn-archer.svg',arc:'images/turn-alchemist.svg',mys:'images/turn-mystic.svg'
 };
 function enemyArtMarkup(u){
  const src=ENEMY_CINEMATIC[u.id];
