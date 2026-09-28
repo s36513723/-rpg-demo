@@ -1,8 +1,8 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "canonical_spec": {
     "type": "xlsx",
-    "logical_name": "RPG制作_統合詳細仕様書.xlsx",
+    "logical_name": "RPG制作_仕様正本_同期版.xlsx",
     "owner": "user",
     "editing_policy": "User gives natural-language decisions; assistant updates workbook and propagates to repo implementation."
   },
@@ -116,15 +116,34 @@
         "master": "2026-09-28 user-approved elegant adult female receptionist with long ash-blonde hair, navy/ivory/gold guild uniform, ledger and quill",
         "derivation_policy": "hub dialogue/profile/card derivatives use the same master art"
       }
-    }
+    },
+    "mastery_rank": {
+      "min": 1,
+      "max": 10,
+      "rank_per_point": 1
+    },
+    "skill_set_capacity": 12,
+    "skill_set_cost": {
+      "min": 1,
+      "max": 4
+    },
+    "equipment_semantics": {
+      "unarmed": "no hand weapon",
+      "fist_weapons": "格闘",
+      "throwing": "carry-item based",
+      "shield_slot": "offhand",
+      "normal_weapon_attribute": "single physical type",
+      "range_storage": "1-5"
+    },
+    "enemy_combat_model": "PHY/SKL/ARC/MND + skill scaling"
   },
   "workstreams": {
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "guild_receptionist_art_registered",
+  "last_sync_status": "compact_canonical_spec_synced_2026-09-28",
   "blocked_steps": [
-    "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
+    "Binary XLSX snapshot is maintained as the conversation artifact; repository mirror/data/code are synchronized separately."
   ],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
@@ -139,12 +158,12 @@
     "skills": 296,
     "masteries": 31,
     "mastery_rank": {
-      "min": 0,
-      "max": 50,
-      "rank_per_mastery_point": 5,
-      "skill_learn_cost_points": 1
+      "min": 1,
+      "max": 10,
+      "rank_per_mastery_point": 1,
+      "skill_learn_cost_points": "1 standard / 2 ultimate-keystone"
     },
-    "skill_set_capacity": "10 + floor((PHY + SKL + ARC + MND) / 10)",
+    "skill_set_capacity": 12,
     "battle_schema": 6,
     "hub_schema": 7,
     "hub_content": {
@@ -160,8 +179,8 @@
       "spec/generated/implemented-skills.csv",
       "spec/generated/implemented-masteries.csv"
     ],
-    "mastery_rank_status": "初期実装値",
-    "skill_set_capacity_status": "初期実装値",
+    "mastery_rank_status": "確定",
+    "skill_set_capacity_status": "確定",
     "skill_records_status": "要レビュー",
     "generated_export_policy": {
       "source": [
@@ -183,8 +202,8 @@
       "base_slots": 310,
       "extra_slots": 5,
       "rank_model": "1-10",
-      "status": "要レビュー",
-      "exact_catalog": "未取得",
+      "status": "構造確定",
+      "exact_catalog": "canonical workbook 08_SkillDB",
       "runtime_replacement": false
     },
     "enemy_archetypes": {
