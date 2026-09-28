@@ -12,7 +12,7 @@ async def main():
   browser=await p.chromium.launch(headless=True,args=['--no-sandbox'])
   page=await browser.new_page(viewport={'width':390,'height':844})
   errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
-  await page.goto('http://127.0.0.1:8140/play-plan-v19.html',wait_until='load');await page.wait_for_timeout(1200)
+  await page.goto('http://127.0.0.1:8140/play-plan-v22.html',wait_until='load');await page.wait_for_timeout(1200)
   data=await page.evaluate("""()=>{const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)],rect=e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}};const board=rect(q('#allies')),cmd=rect(q('#commandPanel')),auto=rect(q('#auto')),pace=rect(q('#pace')),portrait=rect(q('#actorArt')),enemyEls=qa('.enemy-unit'),enemy=enemyEls.map(rect),img=q('.actor-portrait-image');return {cards:qa('.ally-unit').length,enemies:enemy.length,enemyRanks:enemyEls.map(x=>x.dataset.rank),enemyCols:enemyEls.map(x=>Number(x.dataset.col)),order:qa('.order-face').length,active:q('.ally-unit.active')?.dataset.unitId||null,board,cmd,auto,pace,portrait,enemy,portraitSrc:img?.getAttribute('src')||'',portraitLoaded:!!img&&img.complete&&img.naturalWidth>0,meta:q('.round-meta')?.innerText.replace(/\s+/g,' ').trim(),labels:['attack','skills','swap','defend'].map(id=>q('#'+id+' b')?.textContent.trim())}}""")
   enemy_overlap=max([overlap(a,b) for i,a in enumerate(data['enemy']) for b in data['enemy'][i+1:]] or [0])
   aligned=abs(data['auto']['left']-data['board']['left'])<2 and abs(data['pace']['right']-data['board']['right'])<2 and abs(data['cmd']['left']-data['auto']['right'])<3 and abs(data['cmd']['right']-data['pace']['left'])<3
