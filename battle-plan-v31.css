@@ -1,0 +1,253 @@
+/* PLAN UI v28 — clean-room rebuild from locked reference. */
+:root{color-scheme:light;--ink:#51455e;--rose:#df7698;--aqua:#78d1c6;--gold:#e2bd62;--party-left:31%;--party-h:22.2%;--cmd-h:5.1%;--serif:"Yu Mincho","Hiragino Mincho ProN",Georgia,serif;font-family:-apple-system,BlinkMacSystemFont,"Yu Gothic",sans-serif}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#ddd9e4;color:var(--ink);overscroll-behavior:none}button{font:inherit;color:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer}button:focus-visible{outline:1px solid #b987c5;outline-offset:2px}[hidden]{display:none!important}.icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round}.svg-library{position:absolute;width:0;height:0;overflow:hidden}
+#game{position:relative;isolation:isolate;overflow:hidden;margin:auto;width:min(100%,540px);height:100dvh;min-height:620px;background:#ebe9f1}
+#environment{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse at 48% 27%,rgba(255,255,255,.94),rgba(244,239,249,.60) 31%,transparent 56%),linear-gradient(180deg,#e7e6f1 0%,#e9e7f0 27%,#f0e8e8 55%,#c8c4d5 78%,#454657 100%)}
+.sky-art{position:absolute;inset:0 0 39% 0;opacity:.88;background:linear-gradient(90deg,transparent 4%,rgba(137,139,166,.17) 5% 8%,transparent 9% 23%,rgba(137,139,166,.13) 24% 29%,transparent 30% 71%,rgba(125,129,158,.16) 72% 77%,transparent 78% 91%,rgba(125,129,158,.18) 92% 95%,transparent 96%),repeating-linear-gradient(90deg,transparent 0 70px,rgba(130,129,155,.07) 71px 74px,transparent 75px 112px);mask-image:linear-gradient(#000 0 76%,transparent);-webkit-mask-image:linear-gradient(#000 0 76%,transparent)}
+.marble-ground{position:absolute;left:-55%;width:210%;top:31%;height:125%;transform:perspective(590px) rotateX(55deg);transform-origin:center top;background-image:repeating-linear-gradient(0deg,transparent 0 74px,rgba(170,151,170,.25) 75px 76px),repeating-linear-gradient(90deg,transparent 0 94px,rgba(160,145,169,.20) 95px 96px);opacity:.48;mask-image:linear-gradient(transparent,#000 7%,#000 68%,transparent);-webkit-mask-image:linear-gradient(transparent,#000 7%,#000 68%,transparent)}
+.atmosphere{position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,247,245,.22),transparent 14% 86%,rgba(255,247,245,.18)),radial-gradient(ellipse at 50% 42%,rgba(255,255,255,.16),transparent 57%)}.petal{position:absolute;width:10px;height:5px;border-radius:80% 5% 80% 5%;background:rgba(233,150,181,.43)}.p1{top:11%;left:18%;transform:rotate(-24deg)}.p2{top:47%;left:91%;transform:rotate(18deg)}.p3{top:65%;left:37%;transform:rotate(-38deg)}
+.hud{position:absolute;z-index:80;left:14px;right:14px;top:max(5px,env(safe-area-inset-top));height:52px;border-bottom:1px solid rgba(123,105,139,.12);pointer-events:none}.round-meta{position:absolute;left:0;top:0;height:46px;display:flex;align-items:center;gap:8px;pointer-events:auto}.round-label{display:flex;align-items:baseline;gap:3px;font-family:Georgia,serif;color:#544664}.round-label small{font-size:9px}.round-label b{font-size:31px;line-height:40px;font-weight:400}.terrain-toggle{position:relative;height:42px;padding:0 0 7px;display:flex;align-items:center;gap:4px;border:0;background:none;color:#665a70;font:10px var(--serif)}.terrain-toggle .icon{width:14px;height:14px}.terrain-toggle:after{content:"Narrow Ground";position:absolute;left:18px;top:29px;white-space:nowrap;color:rgba(91,78,104,.52);font:italic 6px Georgia,serif;letter-spacing:.08em}
+#more{position:absolute;right:0;top:0;width:40px;height:40px;border:1px solid rgba(113,96,129,.17);border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;pointer-events:auto}#more .icon{width:21px;height:21px}.scene-meta,.formation-trigger,#resolve{display:none!important}
+.order-ribbon{position:absolute!important;z-index:82!important;left:50%!important;transform:translateX(-50%)!important;top:max(4px,env(safe-area-inset-top))!important;width:184px!important;height:42px!important;background:none!important;border:0!important;overflow:visible!important}.order{height:42px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:3px!important;padding:0!important}.order-face{position:relative!important;width:34px!important;height:34px!important;flex:0 0 34px!important;border-radius:50%!important;overflow:visible!important;background:rgba(255,255,255,.44)!important}.order-face img,.order-face svg{width:100%!important;height:100%!important;object-fit:cover!important;border-radius:50%!important}.order-face.ally{box-shadow:0 0 0 2px #20c9c6}.order-face.enemy{box-shadow:0 0 0 2px #ec5f8d}.order-face.is-next{transform:scale(1.08);box-shadow:0 0 0 2px #fff8df,0 0 0 4px #dcb24e,0 3px 11px rgba(117,82,34,.18)!important}.order-face.is-next:after{content:"NEXT";position:absolute;left:50%;top:-10px;transform:translateX(-50%);padding:1px 8px;border-radius:8px;background:#fff5d5;color:#765e54;font:6px Georgia,serif}
+.enemy-stage{position:absolute;z-index:10;left:0;right:0;top:70px;bottom:calc(var(--party-h) + var(--cmd-h) + 5px);overflow:visible}.enemy-grid,.ally-grid,.engage-line,#partyScene{position:absolute;inset:0;pointer-events:none}.enemy-grid,.ally-grid,.engage-line{background:none!important;border:0!important;opacity:0!important}.enemy-lane{position:absolute!important;inset:0!important;pointer-events:none!important}.enemy-row{position:absolute!important;inset:0!important}
+.enemy-unit{position:absolute!important;display:flex!important;flex-direction:column!important;align-items:center!important;border:0!important;background:none!important;padding:0!important;overflow:visible!important;pointer-events:auto!important}.enemy-name{position:relative!important;z-index:3!important;order:1!important;width:100%!important;height:16px!important;text-align:center!important;color:#57495f!important;font:11px/14px var(--serif)!important;text-shadow:0 1px 5px #fff!important;white-space:nowrap!important}.enemy-hp{position:relative!important;z-index:3!important;order:2!important;width:70%!important;height:3px!important;margin:1px auto 3px!important;background:rgba(255,255,255,.45)!important;border:0!important;border-radius:2px!important;overflow:hidden!important}.enemy-hp .bar{display:block!important;width:100%!important;height:100%!important}.enemy-hp .bar i{display:block!important;height:100%!important;background:linear-gradient(90deg,#d66f91,#e991ab)!important}.enemy-hp b{display:none!important}.enemy-visual{position:relative!important;order:3!important;width:100%!important;flex:1!important;min-height:0!important;display:grid!important;place-items:end center!important;overflow:visible!important}.enemy-visual>svg,.enemy-cinematic-art{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:50% 100%!important;overflow:visible!important}.target-pointer{position:absolute!important;left:50%!important;bottom:2px!important;transform:translateX(-50%)!important;width:68%!important;height:12px!important;border:1px solid rgba(223,118,152,.44)!important;border-radius:50%!important}.card-status{position:absolute!important}.scene-ally,.scene-ally-hud{display:none!important}
+
+#game:after{content:"";position:absolute;z-index:48;left:0;right:0;bottom:0;height:39%;pointer-events:none;background:linear-gradient(180deg,transparent 0%,rgba(31,31,44,.08) 19%,rgba(28,29,42,.38) 42%,rgba(22,24,36,.72) 68%,rgba(17,20,30,.91) 100%);mask-image:linear-gradient(transparent,#000 21%);-webkit-mask-image:linear-gradient(transparent,#000 21%)}
+.party-hud{position:absolute!important;z-index:58!important;left:var(--party-left)!important;right:0!important;bottom:0!important;height:var(--party-h)!important;background:linear-gradient(180deg,rgba(29,31,44,.06),rgba(22,24,36,.44) 22%,rgba(17,20,30,.76))!important;border:0!important;box-shadow:none!important;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.party-strip{position:absolute!important;inset:0!important;display:grid!important;grid-template-columns:repeat(3,1fr)!important;grid-template-rows:repeat(3,1fr)!important;background:none!important}.ally-unit{position:relative!important;min-width:0!important;border:0!important;background:transparent!important;box-shadow:none!important;padding:8px 11px!important;text-align:left!important;align-content:start!important;overflow:visible!important}.ally-unit.active{background:linear-gradient(90deg,rgba(188,91,205,.08),transparent 68%)!important}.ally-unit.active:before{content:"";position:absolute;left:1px;top:5px;bottom:5px;width:2px;background:linear-gradient(transparent,#ba5aca 12%,#dc8de3 88%,transparent);box-shadow:0 0 11px rgba(195,88,211,.40)}.ally-face-wrap,.queued-mark,.slot-mark{display:none!important}
+.card-name{display:block!important;height:19px!important;color:#f5edf4!important;font:10px/19px var(--serif)!important;letter-spacing:.045em!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}.resource-list{display:grid!important;grid-template-columns:1fr 1fr!important;gap:11px!important;height:26px!important;margin-top:3px!important}.resource{display:grid!important;grid-template-rows:10px 5px!important;gap:3px!important;min-width:0!important}.resource[data-resource=mp]{display:none!important}.resource-value{height:10px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:3px!important}.resource-value span{font:5px/10px sans-serif!important;color:rgba(238,228,239,.58)!important}.resource-value b{font:8px/10px Georgia,serif!important;color:#fff8f4!important;font-weight:400!important}.resource .bar{display:block!important;width:100%!important;height:5px!important;border-radius:5px!important;background:rgba(235,229,237,.13)!important;overflow:hidden!important}.resource .bar i{display:block!important;height:100%!important;border-radius:inherit!important}.resource[data-resource=hp] .bar i{background:linear-gradient(90deg,#69c8bd,#a5ddd4)!important}.resource[data-resource=sp] .bar i{background:linear-gradient(90deg,#cfa64e,#edcf78)!important}
+.command-panel{position:absolute!important;z-index:63!important;left:calc(var(--party-left) + 42px)!important;right:42px!important;bottom:var(--party-h)!important;height:var(--cmd-h)!important;background:none!important;border:0!important;overflow:visible!important}.command-content{position:absolute!important;inset:0!important;background:rgba(27,28,40,.20)!important;border:0!important;box-shadow:inset 0 -1px 0 rgba(239,220,238,.22)!important}.close-command,.target-line{display:none!important}#commandInput{position:absolute!important;inset:0!important}.command-buttons{position:absolute!important;inset:0!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:5px!important}.command-buttons>.command{position:relative!important;display:grid!important;place-items:center!important;min-width:0!important;height:100%!important;padding:0!important;border:0!important;background:transparent!important;color:#f2e9f0!important}.command-buttons>.command .icon,.plan-hidden-equip{display:none!important}.command-buttons>.command b{font:9px/1 Georgia,serif!important;letter-spacing:.055em!important;white-space:nowrap!important;font-weight:400!important}.command-buttons>.command:after{content:"";position:absolute;left:25%;right:25%;bottom:1px;height:1px;background:linear-gradient(90deg,transparent,#d8b251 25%,#f0d988 50%,#d8b251 75%,transparent);opacity:0}.command-buttons>.command:active:after,.command-buttons>.command.is-active:after{opacity:1}
+#auto,#pace{position:absolute!important;z-index:64!important;bottom:calc(var(--party-h) + 7px)!important;width:39px!important;height:27px!important;min-height:27px!important;padding:0!important;border:1px solid rgba(244,234,245,.42)!important;border-radius:999px!important;background:rgba(44,42,56,.27)!important;color:#f1e9f1!important;font:7px/1 Georgia,serif!important;backdrop-filter:blur(8px)}#auto{left:calc(var(--party-left) + 1px)!important}#pace{right:1px!important;left:auto!important}
+.actor-art{position:absolute!important;z-index:61!important;left:calc(-1 * (var(--party-left) + 42px))!important;top:-76px!important;width:30vw!important;max-width:126px!important;height:calc(var(--party-h) + var(--cmd-h) + 76px)!important;overflow:hidden!important;border-radius:62px 62px 0 0!important;background:transparent!important;pointer-events:none!important;mask-image:linear-gradient(#000 0 91%,rgba(0,0,0,.85) 96%,transparent);-webkit-mask-image:linear-gradient(#000 0 91%,rgba(0,0,0,.85) 96%,transparent)}.actor-art.dim{opacity:0!important}.actor-portrait-image{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 39%;filter:saturate(.95) contrast(1.035)}.actor-button{position:absolute!important;z-index:64!important;left:calc(-1 * (var(--party-left) + 42px))!important;top:calc(var(--party-h) + var(--cmd-h) - 27px)!important;width:30vw!important;max-width:126px!important;height:27px!important;padding:0 11px!important;border:0!important;background:linear-gradient(90deg,rgba(32,28,40,.67),rgba(32,28,40,.20),transparent)!important;text-align:left!important;color:#fff5f3!important;font:10px/27px var(--serif)!important}
+
+/* Interaction surfaces not visible in beauty state. */
+.choice-sheet,.formation-panel,.menu-panel,.history-panel,.log-panel,.skill-sheet,.item-sheet{z-index:120!important}.notice,.toast{z-index:140!important}
+.plan-move-layer{position:absolute!important;inset:0!important;z-index:70!important;display:grid!important;grid-template-columns:repeat(3,1fr)!important;grid-template-rows:repeat(3,1fr)!important;pointer-events:none!important}.plan-move-cell{border:0!important;background:transparent!important}.move-mode .plan-move-layer{pointer-events:auto!important}.move-mode .plan-move-cell{box-shadow:inset 0 0 0 1px rgba(218,199,226,.18)!important;background:rgba(239,230,242,.025)!important}.move-mode .plan-move-cell:after{content:"";position:absolute;width:5px;height:5px;border-radius:50%;background:rgba(222,198,229,.46)!important}
+.battle-message{position:absolute!important;z-index:90!important;left:8%!important;right:8%!important;bottom:calc(var(--party-h) + var(--cmd-h) + 10px)!important;padding:7px 10px!important;border:1px solid rgba(255,255,255,.2)!important;background:rgba(31,29,42,.65)!important;color:#fff!important;backdrop-filter:blur(8px)!important}
+@media(max-width:380px){:root{--party-left:30%;--party-h:21.8%;--cmd-h:5%}.order-ribbon{width:166px!important}.order-face{width:31px!important;height:31px!important;flex-basis:31px!important}.round-label b{font-size:28px}.command-panel{left:calc(var(--party-left) + 39px)!important;right:39px!important}.command-buttons{gap:3px!important}.command-buttons>.command b{font-size:8px!important;letter-spacing:.025em!important}#auto,#pace{width:36px!important;height:25px!important;min-height:25px!important}.actor-art,.actor-button{left:calc(-1 * (var(--party-left) + 39px))!important}.ally-unit{padding:7px 8px!important}.resource-list{gap:8px!important}}
+
+
+/* v29 — corrective pass from the actual iPhone screenshot. */
+
+/* The old standalone NEXT label was the giant word above the portraits. */
+.order-sign{display:none!important}
+
+/* renderOrder uses .foe, not .enemy. */
+.order-face.foe{box-shadow:0 0 0 2px #ec5f8d!important}
+.order-ribbon{overflow:hidden!important}
+.order{overflow:hidden!important}
+.order-portrait,.order-portrait-art{
+  display:block!important;width:100%!important;height:100%!important;
+  object-fit:cover!important;border-radius:50%!important
+}
+.order-side{position:absolute!important;right:-2px!important;bottom:-2px!important;width:7px!important;height:7px!important;border-radius:50%!important;background:#18c7c3!important;border:1px solid rgba(255,255,255,.92)!important}
+.order-face.foe .order-side{border-radius:1px!important;transform:rotate(45deg)!important;background:#ec5f8d!important}
+
+/* Correct 3×3 status placement; no implicit fourth/fifth/sixth columns. */
+.party-strip{grid-auto-columns:0!important;grid-auto-rows:0!important}
+.ally-unit{width:auto!important;height:auto!important}
+
+/* Place portrait against the left edge of the game. calc(-1 * ...) was invalid on
+   the real Safari build and left the portrait floating in the middle. */
+.actor-art{
+  left:-145px!important;
+}
+.actor-button{
+  left:-145px!important;
+}
+.actor-portrait-svg{
+  display:block!important;width:100%!important;height:100%!important;
+  overflow:visible!important
+}
+
+/* Atlas enemies are transparent scene art, so remove all square-image blending hacks. */
+.enemy-cinematic-art{mix-blend-mode:normal!important;mask-image:none!important;-webkit-mask-image:none!important}
+.enemy-visual>svg{filter:saturate(.96) contrast(1.025)!important}
+
+/* Keep enemy labels above figures instead of allowing the figure to cover another row. */
+.enemy-name,.enemy-hp{flex:none!important}
+.enemy-unit[data-rank="back"]{z-index:8!important}
+.enemy-unit[data-rank="mid"]{z-index:11!important}
+.enemy-unit[data-rank="front"]{z-index:14!important}
+
+/* Reference-like party typography: each cell owns its text and bars. */
+.party-hud{overflow:visible!important}
+.card-name{position:relative!important;left:auto!important;top:auto!important}
+.resource-list{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important}
+
+/* Remove inherited decoration that survived the clean-room stylesheet. */
+.allies:before,.allies:after,.party-strip:before,.party-strip:after{display:none!important}
+
+
+/* v30 — direct correction from IMG_3543 vs locked target. */
+
+/* Turn rail: five actual portraits, target-sized and clear of R01 / book. */
+.order-ribbon{
+  left:54%!important;
+  width:170px!important;
+  overflow:visible!important;
+}
+.order{overflow:visible!important;gap:4px!important}
+.order-face{
+  width:31px!important;height:31px!important;flex:0 0 31px!important;
+  background:rgba(250,247,249,.60)!important;
+}
+.order-face img.order-portrait-art{
+  opacity:1!important;
+  width:100%!important;height:100%!important;
+  object-fit:cover!important;object-position:50% 25%!important;
+}
+.order-face.is-next{transform:scale(1.11)!important}
+
+/* Party layout is absolute rather than CSS grid. This prevents Safari from
+   collapsing/reflowing the rear row. */
+.party-strip{display:block!important;position:absolute!important;inset:0!important}
+.ally-unit{
+  position:absolute!important;
+  width:33.333%!important;
+  height:33.333%!important;
+  margin:0!important;
+}
+.ally-unit[data-col="1"]{left:0!important}
+.ally-unit[data-col="2"]{left:33.333%!important}
+.ally-unit[data-col="3"]{left:66.666%!important}
+.ally-unit[data-rank="front"]{top:0!important}
+.ally-unit[data-rank="mid"]{top:33.333%!important}
+.ally-unit[data-rank="rear"]{top:66.666%!important}
+
+/* Explicitly kill the hidden fifth command that leaked as EQUIP on Safari. */
+#switch,.plan-hidden-equip{display:none!important}
+
+/* Non-Gald fallback body crops need to read as portraits, not tiny full-body
+   characters. Zoom the crop inside the fixed portrait window. */
+.actor-portrait-svg{
+  width:100%!important;height:100%!important;
+  transform:scale(1.58)!important;
+  transform-origin:50% 12%!important;
+}
+.actor-art{
+  left:-145px!important;
+  width:126px!important;
+  max-width:126px!important;
+  top:-84px!important;
+  height:calc(var(--party-h) + var(--cmd-h) + 84px)!important;
+}
+.actor-button{
+  left:-145px!important;
+  width:126px!important;
+  max-width:126px!important;
+}
+
+/* Match target's party field: all three rows visible before Safari chrome. */
+.party-hud{
+  height:24.2%!important;
+}
+.command-panel{
+  bottom:24.2%!important;
+}
+#auto,#pace{
+  bottom:calc(24.2% + 7px)!important;
+}
+.actor-art{
+  height:calc(24.2vh + var(--cmd-h) + 84px)!important;
+}
+
+/* Current screenshot was too table-like at the bottom. Keep only information. */
+.party-hud,.party-strip,.ally-unit{
+  border:0!important;box-shadow:none!important
+}
+.ally-unit:not(.active){background:transparent!important}
+
+/* Target's command line is visually wider than v29. */
+.command-panel{
+  left:calc(var(--party-left) + 40px)!important;
+  right:40px!important;
+}
+.command-buttons{gap:7px!important}
+.command-buttons>.command b{font-size:9px!important;letter-spacing:.04em!important}
+
+/* Keep the lower fade dark enough before the portrait starts. */
+#game:after{
+  height:41%!important;
+  background:linear-gradient(180deg,transparent 0%,rgba(31,31,44,.10) 17%,rgba(28,29,42,.43) 40%,rgba(22,24,36,.76) 67%,rgba(17,20,30,.92) 100%)!important;
+}
+
+/* On the 390 CSS-px iPhone viewport, preserve the same measured proportions. */
+@media(max-width:380px){
+ .order-ribbon{width:158px!important;left:54%!important}
+ .order-face{width:29px!important;height:29px!important;flex-basis:29px!important}
+ .actor-art,.actor-button{left:-136px!important;width:117px!important;max-width:117px!important}
+ .command-buttons{gap:4px!important}
+}
+
+
+/* v31 — measured from automated 390×844 screenshot against locked reference. */
+
+/* The target keeps the architecture visible through almost the whole battlefield.
+   v30 masked it out around y=250, creating the large blank white field. */
+.sky-art{
+  inset:0 0 8% 0!important;
+  opacity:.93!important;
+  mask-image:linear-gradient(#000 0 82%,rgba(0,0,0,.82) 91%,transparent 100%)!important;
+  -webkit-mask-image:linear-gradient(#000 0 82%,rgba(0,0,0,.82) 91%,transparent 100%)!important;
+}
+.marble-ground{
+  top:34%!important;
+  opacity:.38!important;
+}
+
+/* Target enemies begin substantially lower than v30. */
+.enemy-stage{
+  top:105px!important;
+  bottom:calc(24.2% + var(--cmd-h) + 2px)!important;
+}
+.enemy-grid{
+  top:0!important;
+  height:88%!important;
+}
+
+/* More separation between middle and front silhouettes. */
+.enemy-unit[data-rank="back"] .enemy-visual{transform:scale(1.08)!important}
+.enemy-unit[data-rank="mid"] .enemy-visual{transform:scale(.98)!important}
+.enemy-unit[data-rank="front"] .enemy-visual{transform:scale(.96)!important}
+
+/* The lower cinematic transition starts earlier in the target. */
+#game:after{
+  height:45%!important;
+  background:linear-gradient(180deg,
+    transparent 0%,
+    rgba(31,31,44,.07) 14%,
+    rgba(28,29,42,.34) 34%,
+    rgba(22,24,36,.72) 59%,
+    rgba(17,20,30,.93) 100%)!important;
+}
+
+/* Portrait begins above the command line by about 100 px on a 390×844 viewport. */
+.actor-art{
+  top:-103px!important;
+  height:calc(24.2vh + var(--cmd-h) + 103px)!important;
+}
+.actor-button{
+  top:calc(24.2vh + var(--cmd-h) - 28px)!important;
+}
+
+/* Party information sits slightly higher and with more vertical rhythm. */
+.party-hud{height:24.2%!important}
+.ally-unit{padding-top:6px!important}
+.card-name{height:18px!important;line-height:18px!important}
+.resource-list{margin-top:2px!important}
+
+/* Safari-safe order portraits: direct WebP data URLs, no SVG-with-WebP nesting. */
+.order-face img.order-portrait-art{
+  display:block!important;
+  opacity:1!important;
+  visibility:visible!important;
+  width:100%!important;height:100%!important;
+  object-fit:cover!important;
+  object-position:50% 34%!important;
+  border-radius:50%!important;
+}
+
+/* Keep the target's airy top row. */
+.order-ribbon{top:max(7px,env(safe-area-inset-top))!important}
+.round-meta{top:2px!important}
