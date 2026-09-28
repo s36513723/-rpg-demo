@@ -15,6 +15,7 @@ async def main():
   data=await page.evaluate("""()=>{const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)],r=e=>{const x=e.getBoundingClientRect();return {left:x.left,right:x.right,top:x.top,bottom:x.bottom,width:x.width,height:x.height}};return {cards:qa('.ally-unit').length,enemies:qa('.enemy-unit').length,order:qa('.order-face').length,orderImages:qa('.order-face img').filter(x=>x.complete&&x.naturalWidth>0).length,active:q('.ally-unit.active')?.dataset.unitId||null,cmd:r(q('#commandPanel')),party:r(q('#allies')),portrait:r(q('#actorArt')),labels:['attack','skills','swap','defend'].map(id=>q('#'+id+' b')?.textContent.trim())}}""")
   await page.set_viewport_size({'width':390,'height':640});await page.wait_for_timeout(250)
   await page.screenshot(path='plan-compact.png',full_page=False)
+  await page.goto('http://127.0.0.1:8140/debug-portraits.html',wait_until='load');await page.set_viewport_size({'width':390,'height':520});await page.wait_for_timeout(400);await page.screenshot(path='portrait-debug.png',full_page=True)
   ok=(not errors and data['cards']==6 and data['enemies']==6 and data['order']==5 and data['orderImages']==5 and data['active'] and data['labels']==['ATTACK','SKILL','ITEM','DEFEND'])
   pathlib.Path('plan-debug.json').write_text(json.dumps({'ok':ok,'data':data,'errors':errors},ensure_ascii=False,indent=2))
   print(json.dumps({'ok':ok,'data':data,'errors':errors},ensure_ascii=False))
