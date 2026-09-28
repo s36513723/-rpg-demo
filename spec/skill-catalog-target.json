@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "status": "要レビュー",
+  "source": "別チャット最新設計候補",
+  "implementation_is_confirmation": false,
+  "current_runtime": {
+    "skills": 296,
+    "mastery_count": 31,
+    "rank_model": "0-50 initial implementation",
+    "status": "現行実装・個別値は要レビュー"
+  },
+  "target_candidate": {
+    "total_skills": 315,
+    "base_slots": 310,
+    "extra_slots": 5,
+    "structure": {
+      "weapon_masteries": {
+        "count": 15,
+        "skills_per_mastery": 10,
+        "total": 150
+      },
+      "armor_masteries": {
+        "count": 3,
+        "skills_per_mastery": 10,
+        "total": 30
+      },
+      "source_masteries": {
+        "count": 5,
+        "skills_per_mastery": 10,
+        "total": 50
+      },
+      "spell_masteries": {
+        "count": 6,
+        "skills_per_mastery": 10,
+        "total": 60
+      },
+      "skill_masteries": {
+        "count": 2,
+        "skills_per_mastery": 10,
+        "total": 20
+      }
+    },
+    "rank_model": {
+      "min": 1,
+      "max": 10,
+      "stages": {
+        "5": "中核",
+        "9": "大技・フィニッシャー",
+        "10": "Mastery完成・原則パッシブ候補",
+        "1-2": "基礎",
+        "3-4": "個性",
+        "6-8": "発展"
+      }
+    },
+    "initial_balance_bands": {
+      "status": "初期実装値",
+      "set_cost_sp": [
+        {
+          "ranks": "1-2",
+          "set_cost": 1,
+          "sp": "4-8"
+        },
+        {
+          "ranks": "3-5",
+          "set_cost": 2,
+          "sp": "8-14"
+        },
+        {
+          "ranks": "6-8",
+          "set_cost": 3,
+          "sp": "12-20"
+        },
+        {
+          "ranks": "9",
+          "set_cost": 4,
+          "sp": "20-30"
+        },
+        {
+          "ranks": "10",
+          "set_cost": 4,
+          "sp": "原則パッシブ候補"
+        }
+      ],
+      "damage_multiplier": [
+        {
+          "kind": "通常攻撃",
+          "value": "1.00"
+        },
+        {
+          "ranks": "1-2",
+          "value": "0.90-1.15"
+        },
+        {
+          "ranks": "3-5",
+          "value": "1.10-1.45"
+        },
+        {
+          "ranks": "6-8",
+          "value": "1.25-1.70"
+        },
+        {
+          "ranks": "9",
+          "value": "1.70-2.20"
+        }
+      ],
+      "ailment_base_rate_percent": {
+        "猛毒": 55,
+        "睡眠": 40,
+        "誘惑": 35,
+        "気絶": 45,
+        "封じ": 55
+      }
+    }
+  },
+  "exact_catalog": {
+    "status": "未取得",
+    "known_complete_list": false,
+    "note": "315件の完全な名称・Mastery・Rank対応表は別チャット履歴から回収できていない。296→315を単純な19件追加とはみなさず、改名・統合・削除を含む正確な差分表が得られるまで現行カタログを置換しない。",
+    "required_fields": [
+      "skill_id",
+      "name",
+      "mastery",
+      "rank",
+      "mode",
+      "set_cost",
+      "sp",
+      "attribute",
+      "range",
+      "target",
+      "scope",
+      "scaling",
+      "effect",
+      "status"
+    ]
+  },
+  "migration_policy": {
+    "do_not_invent_missing_names": true,
+    "do_not_delete_current_skills_from_target_count_alone": true,
+    "do_not_convert_rank_0_50_to_1_10_without_exact_mapping": true,
+    "promotion_rule": "別チャットで個別表が確定したら、差分を機械比較し、ユーザーが確定した内容だけruntime/specへ反映する。"
+  }
+}
