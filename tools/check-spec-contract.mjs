@@ -57,8 +57,8 @@ if (skillMigration.canonical_count !== 315 || skillMigration.legacy_runtime_coun
 if (skillMigration.exact_unique_name_matches !== 40) errors.push("skill migration audit exact-match baseline changed; regenerate from canonical workbook before migration");
 if (!skillMigration.ambiguous_canonical_rows?.includes("速射")) errors.push("skill migration audit must preserve the bow/gun 速射 ambiguity");
 if (skillNormalization.canonical_count !== 315) errors.push("normalized SkillDB must contain 315 canonical rows");
-if (skillNormalization.schema_normalized !== 291 || skillNormalization.needs_special_review !== 24) errors.push("SkillDB normalization coverage must remain 291 normalized / 24 special review until the canonical workbook changes");
-if (skillNormalization.special_review?.length !== 24) errors.push("SkillDB special-review list must contain 24 rows");
+if (skillNormalization.schema_normalized !== 315 || skillNormalization.needs_special_review !== 0) errors.push("SkillDB normalization coverage must remain 315 normalized / 0 special review until the canonical workbook changes");
+if (skillNormalization.special_review?.length !== 0) errors.push("SkillDB special-review list must be empty after full normalization");
 
 for (const token of ["Mandatory workflow","Definition of done","canonical specification workbook"]) {
   if (!contract.includes(token)) errors.push(`AGENTS contract missing: ${token}`);
