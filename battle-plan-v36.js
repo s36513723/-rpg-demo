@@ -260,6 +260,11 @@ const ORDER_PORTRAITS={
  arch2:ENEMY_ARCHETYPE_ART.flying,
  mage:ENEMY_ARCHETYPE_ART.mage
 };
+const ORDER_FRAMES={
+ ally:'images/order-frame-ally.svg',
+ enemy:'images/order-frame-enemy.svg',
+ next:'images/order-frame-next.svg'
+};
 function enemyArchetypeArt(u){
  const s=String(u?.style||u?.name||'');
  if(/ゴーレム|機械|石像/.test(s))return ENEMY_ARCHETYPE_ART.golem;
@@ -612,8 +617,8 @@ $('closeHistory').addEventListener('click',()=>{if($('history').open)toggleHisto
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!sheet.open&&editable())closeCommands()});
 if(typeof ResizeObserver==='function')new ResizeObserver(fitScene).observe($('enemyStage'));
 window.addEventListener('resize',fitScene);
-fresh(false);document.documentElement.dataset.ready='true';$('bootStatus')?.remove();$('engineStatus').classList.add('ready');$('engineStatus').title='JavaScript動作中 · UI v42';
-window.RPGDemo={version:'49',selectActorUI:(id)=>selectActor(id),moveActorUI:(rank,c)=>queueMove(rank,c),snapshot:()=>({round,phase,busy,over,commandOpen,targetMode:targetMode?.key||null,active:current()?.id,party:party.map(u=>({id:u.id,hp:u.hp,sp:u.sp,mp:u.mp,row:u.row,rank:u.rank,col:col(u),slot:u.slot,queued:u.queued?.type||null,target:u.queued?.targetId,weapon:u.weapon.name})),enemies:enemies.map(u=>({id:u.id,hp:u.hp,row:u.row,slot:u.slot}))})};
+fresh(false);document.documentElement.dataset.ready='true';$('bootStatus')?.remove();$('engineStatus').classList.add('ready');$('engineStatus').title='JavaScript動作中 · UI v44';
+window.RPGDemo={version:'50',selectActorUI:(id)=>selectActor(id),moveActorUI:(rank,c)=>queueMove(rank,c),snapshot:()=>({round,phase,busy,over,commandOpen,targetMode:targetMode?.key||null,active:current()?.id,party:party.map(u=>({id:u.id,hp:u.hp,sp:u.sp,mp:u.mp,row:u.row,rank:u.rank,col:col(u),slot:u.slot,queued:u.queued?.type||null,target:u.queued?.targetId,weapon:u.weapon.name})),enemies:enemies.map(u=>({id:u.id,hp:u.hp,row:u.row,slot:u.slot}))})};
 if(window.__RPG_TEST__)window.__test={get units(){return{party,enemies}},fresh,render,defeated,animateSwap,resolve,autoRound,selectActor,toggleActor,closeCommands,openSheet,simpleCommand,getDraft,chooseSkill,attack,canReach,cancelTarget,setPace:i=>{paceIndex=i},runDeath:async u=>{displayActorId=null;busy=true;setBattle(true);await defeated(u,session);busy=false;setBattle(false);render()}};
 })();
 
