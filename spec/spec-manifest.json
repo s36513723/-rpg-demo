@@ -102,13 +102,21 @@
     "base_recovery": {
       "auto_heal_on_return": false,
       "rest_at_inn": "full HP/SP/status recovery and pending growth-point settlement"
+    },
+    "character_art": {
+      "paladin": {
+        "status": "確定",
+        "master": "2026-09-28 user-approved white/blue/gold blonde female knight with sword and large shield",
+        "derivation_policy": "turn-order, party/formation and battle portraits derive from the same master art",
+        "frame_policy": "UI frames are separate reusable assets"
+      }
     }
   },
   "workstreams": {
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "cross_chat_integration_630_of_630_pass",
+  "last_sync_status": "paladin_art_registered_runtime_updated_pending_regression",
   "blocked_steps": [
     "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
   ],
@@ -186,6 +194,13 @@
       ],
       "behavior_status": "初期実装値",
       "encounter_mix_status": "初期実装値"
+    },
+    "character_art": {
+      "paladin": {
+        "turn_order_asset": "images/paladin-turn.webp",
+        "battle_portrait_asset": "images/paladin-battle.webp",
+        "runtime_status": "implemented"
+      }
     }
   },
   "legacy_compatibility": {
