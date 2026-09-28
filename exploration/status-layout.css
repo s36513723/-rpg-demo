@@ -160,3 +160,18 @@
  #panel .equipment-left .equip-compare-grid>span{min-height:15px;line-height:1.25}
  #panel .equipment-left .fitting-hint{font-size:11px}
 }
+
+@media(max-height:680px) and (max-width:350px){
+ #panel .attributes-overview .combined-attributes{grid-template-columns:repeat(4,minmax(0,1fr))}
+ #panel .equipment-left .equip-compare-grid>span{min-height:14px}
+ #panel .equipment-left .fitting-summary{padding:0}
+}
+@media(min-height:681px){
+ #panel .equipment-left .equip-compare-grid>span{min-height:22px}
+ #panel .equipment-left .equip-compare-grid small{font-size:11px}
+ #panel .equipment-left .equip-compare-grid b{font-size:12px}
+ #panel .equipment-left .equip-compare-grid i{font-size:10px}
+ #panel .equipment-left .fitting-controls button small{font-size:10px}
+ #panel .equipment-left .fitting-controls button b{font-size:12px}
+ #panel .equipment-left .equipment-reference{font-size:10px!important}
+}
