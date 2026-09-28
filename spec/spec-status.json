@@ -84,9 +84,9 @@
   ],
   "reverse_synced_skills": {
     "count": 296,
-    "source": "GitHub実装から逆同期",
+    "source": "legacy 296 runtime audit snapshot",
     "default_status": "要レビュー",
-    "note": "296件が実装・動作していることは承認を意味しない。個別レビューで確定へ昇格する。",
+    "note": "旧296ランタイムの監査スナップショット。現行ランタイム件数ではない。",
     "items": {
       "軽身": "要レビュー",
       "回避歩法": "要レビュー",
@@ -408,9 +408,9 @@
     "skill_catalog_315": {
       "path": "spec/skill-catalog-target.json",
       "status": "構造確定",
-      "current_runtime_count": 296,
+      "current_runtime_count": 315,
       "exact_catalog_available": true,
-      "note": "Canonical workbook 08_SkillDB contains the complete 315-candidate table; runtime migration is separate."
+      "note": "Canonical workbook 08_SkillDB / skill-catalog-315.js is the active runtime catalog."
     }
   },
   "confirmed_values": {
@@ -450,5 +450,11 @@
       "value": "PHY/SKL/ARC/MND + skill scaling + enemy weapon base",
       "status": "確定"
     }
+  },
+  "current_runtime": {
+    "skill_count": 315,
+    "skill_catalog": "skill-catalog-315.js",
+    "skill_catalog_status": "構造確定",
+    "legacy_save_policy": "unmatched old learned skills -> legacySkills + Mastery Pt refund"
   }
 }
