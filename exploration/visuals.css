@@ -153,3 +153,117 @@
 .facility-action-deck>.row b{flex:0 0 auto}
 .facility-action-deck>.row .small{line-height:1.35}
 @media(max-height:640px){#panel>.actor-hero{flex-basis:142px;height:142px}.facility-action-deck>.row{min-height:0}}
+
+
+/* UI26: atmospheric facility stages; legacy stand art recedes. */
+.facility-stage{
+ position:relative;
+ background:#101914!important;
+ isolation:isolate;
+}
+.facility-stage::before{
+ content:'';
+ position:absolute;
+ inset:0;
+ z-index:0;
+ background:
+   radial-gradient(circle at 25% 28%,rgba(255,226,163,.16),transparent 24%),
+   linear-gradient(135deg,rgba(255,255,255,.035),transparent 34%),
+   linear-gradient(180deg,#15241c,#0b130f);
+}
+.facility-stage-inn::before{
+ background:
+   radial-gradient(circle at 24% 24%,rgba(245,183,100,.26),transparent 23%),
+   linear-gradient(125deg,rgba(126,65,35,.68),rgba(29,47,38,.58) 54%,rgba(9,20,16,.96)),
+   linear-gradient(180deg,#53301f,#111b16);
+}
+.facility-stage-guild::before{
+ background:
+   radial-gradient(circle at 24% 22%,rgba(120,174,231,.2),transparent 24%),
+   linear-gradient(125deg,rgba(29,58,94,.78),rgba(28,51,55,.66) 55%,rgba(8,18,17,.96)),
+   linear-gradient(180deg,#223f63,#101916);
+}
+.facility-stage-market::before{
+ background:
+   radial-gradient(circle at 24% 22%,rgba(240,181,85,.22),transparent 24%),
+   linear-gradient(125deg,rgba(117,67,35,.75),rgba(62,70,42,.63) 55%,rgba(11,20,15,.96)),
+   linear-gradient(180deg,#684126,#111a14);
+}
+.facility-stage::after{
+ content:'';
+ position:absolute;
+ inset:0;
+ z-index:1;
+ pointer-events:none;
+ background:
+   linear-gradient(90deg,rgba(6,13,10,.16),transparent 48%,rgba(5,11,9,.48)),
+   linear-gradient(180deg,transparent 48%,rgba(5,10,8,.44));
+}
+.facility-host{z-index:2}
+.facility-word{
+ position:absolute;
+ left:22px;
+ bottom:44px;
+ z-index:1;
+ font:700 clamp(52px,15vw,96px)/.85 Georgia,serif;
+ letter-spacing:.03em;
+ color:#f1dfb2;
+ opacity:.09;
+ pointer-events:none;
+}
+.facility-stand{
+ position:absolute!important;
+ right:-2%!important;
+ bottom:0!important;
+ left:auto!important;
+ width:auto!important;
+ height:88%!important;
+ max-width:46%!important;
+ margin:0!important;
+ object-fit:contain!important;
+ object-position:right bottom!important;
+ opacity:.16!important;
+ filter:grayscale(.45) sepia(.18) saturate(.65) contrast(1.08) drop-shadow(0 14px 20px #0008)!important;
+}
+.facility-identity{
+ left:18px!important;
+ top:18px!important;
+ padding:9px 12px!important;
+ border-left:3px solid var(--gold)!important;
+ background:#07100cb8!important;
+ box-shadow:0 7px 22px #0004;
+}
+.facility-identity b{font-size:20px!important}
+.facility-identity small{font-size:10px!important}
+.facility-talk{
+ right:18px!important;
+ bottom:16px!important;
+ min-height:44px;
+ padding:9px 12px!important;
+ border-color:#c1a76f80!important;
+ background:#08110dcc!important;
+ font-size:12px!important;
+}
+.facility-action-deck{
+ border-top:1px solid #596352!important;
+ background:#0f1914!important;
+ gap:8px!important;
+ padding:10px 12px 12px!important;
+}
+.facility-action-deck>.row{
+ border-color:#405849!important;
+ background:linear-gradient(180deg,#193325,#14291f)!important;
+ border-radius:10px!important;
+}
+.facility-action-deck>.row b{font-size:13px!important}
+.facility-action-deck>.row .small{font-size:10px!important;color:#aebbb0!important}
+@media(max-height:640px){
+ .facility-word{font-size:48px;bottom:32px}
+ .facility-identity{left:10px!important;top:10px!important;padding:6px 9px!important}
+ .facility-identity b{font-size:16px!important}
+ .facility-stand{height:82%!important;max-width:40%!important}
+ .facility-talk{right:10px!important;bottom:9px!important;min-height:38px;padding:6px 9px!important}
+ .facility-action-deck{gap:5px!important;padding:7px 8px 9px!important}
+ .facility-action-deck>.row b{font-size:11px!important}
+ .facility-action-deck>.row .small{font-size:8px!important}
+}
