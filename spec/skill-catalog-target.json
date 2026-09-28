@@ -6,8 +6,8 @@
   "current_runtime": {
     "skills": 296,
     "mastery_count": 31,
-    "rank_model": "0-50 initial implementation",
-    "status": "現行実装・個別値は要レビュー"
+    "rank_model": "1-10 compatibility runtime",
+    "status": "現行296互換ランタイム。Rank/Capacityは現行正本へ移行済み、個別スキル内容は要レビュー"
   },
   "target_candidate": {
     "total_skills": 315,
@@ -116,7 +116,7 @@
   "exact_catalog": {
     "status": "取得済み",
     "known_complete_list": true,
-    "note": "Canonical workbook 08_SkillDB contains the complete 315-candidate table. Runtime remains 296 until machine-readable export and migration tests are complete.",
+    "note": "Canonical workbook 08_SkillDB contains the complete 315-candidate name/Mastery/Rank/design table. Runtime remains 296 until the remaining implementation fields (Power/Scaling/attribute/range/target rules) are normalized into the machine-readable Skill DB and migration tests pass.",
     "required_fields": [
       "skill_id",
       "name",
@@ -125,19 +125,25 @@
       "mode",
       "set_cost",
       "sp",
-      "attribute",
-      "range",
-      "target",
-      "scope",
+      "power",
       "scaling",
-      "effect",
-      "status"
+      "physical_attribute",
+      "magic_attribute",
+      "range_min",
+      "range_max",
+      "target_rule",
+      "defense_ref",
+      "status",
+      "position_effect",
+      "conditions",
+      "description",
+      "status_class"
     ]
   },
   "migration_policy": {
     "do_not_invent_missing_names": true,
     "do_not_delete_current_skills_from_target_count_alone": true,
     "do_not_convert_rank_0_50_to_1_10_without_exact_mapping": false,
-    "promotion_rule": "Use canonical workbook 08_SkillDB as the mapping source; migrate by stable mapping and tests."
+    "promotion_rule": "Use canonical workbook 08_SkillDB as the exact name/Mastery/Rank source. Normalize the remaining runtime fields into one Skill DB, then migrate by stable ID/name mapping with save-compatibility and regression tests."
   }
 }
