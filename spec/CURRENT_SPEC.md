@@ -1,111 +1,93 @@
-# Current Confirmed RPG Specification
+# Current RPG Specification Mirror
 
-This is the repository-readable mirror of the canonical Excel specification. It is intentionally concise. Detailed tables live in the workbook; code/data should use stable IDs where available.
+Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural rules here override old implementation values.
 
-## Core battle
-- 6 allies in a 3x3 formation; 3 cells remain empty.
-- Enemy side is basically 3x3.
-- Round-based command battle.
-- Default target is the nearest enemy in the actor's forward lane; skills may override with provoke, bypass, snipe, penetration, cover, etc.
-- Formation/row change costs 1 turn.
-- Manual main/sub weapon-set swap costs 0 turns; no automatic swapping.
-- Strategy axes: formation, turn order, target, area, range, matchup, binds, ailments.
-- Repeating one strongest move should not be the universal optimum.
+## Core
+- Mobile portrait UI; 6 allies on a 3x3 ally grid, enemy side basically 3x3.
+- No fixed classes. Core stats: PHY / SKL / ARC / MND.
+- Battle resources: HP + unified SP. MP is obsolete except old-save compatibility.
+- Physical: 斬 / 突 / 壊. Magic: 火 / 水 / 土 / 風 / 光 / 闇 / 無.
+- Binds: 頭 / 腕 / 脚. Ailments: 盲目 / 猛毒 / 睡眠 / 気絶 / 動揺 / 誘惑 / 即死.
 
-## Stats and resources
-- Core: PHY / SKL / ARC / MND.
-- HP is PHY-based.
-- Physical defense is PHY-based.
-- Magic defense is ARC + MND based.
-- Normal attack is PHY-based.
-- Weight limit is PHY-based; exceeding it is allowed with speed/evasion/weapon-performance penalties.
-- HP + unified SP. MP must not be reintroduced.
-- Exact SP formula remains balance-controlled unless explicitly confirmed.
+## Formation / range
+- Positional distance: ally front -> enemy front = 1; maximum back -> back = 5.
+- Range: near 1, mid 1-2, far 1-3, long 1-4, global 1-5.
+- Normal attack: nearest enemy in the same forward lane that is in range. No automatic adjacent-lane snap.
+- Normal movement: one orthogonal empty cell, costs one turn; no diagonal normal move.
+- Manual weapon-set swap costs 0 turns; no automatic swapping.
 
-## Damage and conditions
-- Physical: 斬 / 突 / 壊.
-- Magic: 火 / 水 / 土 / 風 / 光 / 闇 / 無.
-- Enemy archetypes: 獣 / 軽装 / 重装 / 魔術師 / 弓 / 飛行 / ゴーレム.
-- Binds: 頭封じ / 腕封じ / 脚封じ.
-- Ailments: 盲目 / 猛毒 / 睡眠 / 気絶 / 動揺 / 誘惑 / 即死.
+## SP
+- SP is the common resource for weapon skills, techniques and spells; it is not magic power.
+- Maximum SP is not directly derived from PHY/SKL/ARC/MND.
+- No automatic round regeneration. SP persists between battles.
+- Normal attack / Guard SP recovery values are balance-controlled.
+- Inn rest fully restores HP/SP/status; returning alone does not auto-heal.
 
-## Equipment
-- 主武器 / 副手 / 予備主武器 / 予備副手 / 防具一式 / 装飾品 / 携行具.
-- Armor categories/Mastery: 魔装 / 軽装 / 重装.
-- Weapon and armor equipment is gated by the corresponding Mastery. The talisman weapon uses 符術. Starter main-hand equipment remains usable after save migration. Market direct equip and presets follow the same requirements. The current Rank 5 threshold is an **initial implementation value**, not yet confirmed.
-- Dual wield requires two one-handed weapons and SKL 30. Two-hand grip applies to a one-handed main weapon with an empty offhand.
-- Initial balance proposal: two-hand grip reduces effective main-weapon weight by 20%, boosts physical attack by 10% and normal-attack hit by 6. A normal hit lowers target physical defense by 10% for two rounds. Dual wield adds 35% of offhand weapon power to physical attacks and reserves 4 skill-set Cost if either weapon set qualifies. These values are adjustable.
-- Unarmed, throwing and shields retain their existing handling.
+## Mastery / skills
+- Mastery Rank is 1-10. 1 Mastery Pt raises Rank by 1.
+- Mastery Pt is also used to learn skills: standard 1 Pt; ultimate/keystone candidates 2 Pt.
+- Rank unlocks candidates; it does not auto-learn every skill.
+- Skill Set Capacity = 12 fixed. Active and Passive share it. Set Cost = 1-4.
+- Weapon Masteries: 無手 / 格闘 / 短剣 / 剣 / 槌 / 斧 / 槍 / 鞭 / 鎌 / 刀 / 弓 / 銃 / 杖 / 盾 / 投擲.
+- Armor: 魔装 / 軽装 / 重装.
+- Sources: 灼陽 / 霊峰 / 海神 / 森羅 / 星辰 (0-1).
+- Spell Masteries: 信仰 / 呪術 / 魔術 / 符術 / 機巧 / 異能 (0-2).
+- Skill Masteries: 探索 / 士気 (0-2).
+- Canonical workbook 08_SkillDB contains the complete 315-candidate design table. Runtime migration from the legacy 296 catalog is a separate implementation task.
 
-## Mastery
-Weapon Masteries:
-無手 / 格闘 / 短剣 / 剣 / 槌 / 斧 / 槍 / 鞭 / 鎌 / 刀 / 弓 / 銃 / 杖 / 盾 / 投擲.
+## Equipment semantics
+- Slots: 主武器 / 副手 / 予備主 / 予備副 / 防具一式 / 装飾品 / 携行具.
+- 無手 = no equipped hand weapon. Gauntlets/knuckles are 格闘 weapons.
+- 投擲 Mastery uses throwable carry items; it is not a normal equipped weapon category.
+- Shields are offhand.
+- Each equipped weapon has exactly one normal physical attack type: 斬, 突 or 壊. Skills may override it.
+- Runtime equipment data stores numeric range_min/range_max 1-5; near/mid/far/long/global are display labels.
+- Dual-wield/two-hand numeric bonuses remain balance values.
 
-Sources (0-1):
-灼陽 / 霊峰 / 海神 / 森羅 / 星辰.
+## Combat model
+- PHY: HP, physical defense, weight limit, PHY-scaling actions.
+- SKL: speed, accuracy, evasion, critical, SKL-scaling actions and weapon-status accuracy.
+- ARC: offensive spell power and ARC-scaling actions.
+- MND: magic defense, healing/support and status/bind resistance.
+- Normal attacks use weapon-configured Scaling; they are not universally PHY-based.
+- Enemies use the same PHY/SKL/ARC/MND + skill Scaling model. Enemy claws/fangs/bodies/magical organs provide enemy weapon-base data.
+- A single generic enemy Attack value is not authoritative.
+- Enemy resistance data represents head/arm/leg binds and all seven ailments separately.
 
-Spell Masteries (0-2):
-信仰 / 呪術 / 魔術 / 符術 / 機巧 / 異能.
+## Battle flow
+- Turn order is fixed at round start using speed plus selected-action modifiers; ordinary speed changes apply next round.
+- Reaction actions interrupt only on explicit triggers; Reaction -> Reaction chains are prohibited by default.
+- Casting pays SP at start and normally resolves at the actor's next-round turn. Head bind, stun and sleep interrupt it.
+- HP/SP persist after victory. Battle-only binds/ailments/buffs/debuffs and summons end after battle; KO persists.
 
-Skill Masteries (0-2):
-- 探索: 盗技 / 隠密 / 索敵 / 鑑識
-- 士気: 歌唱 / 舞踏 / 奏楽 / 号令
-
-Skills are learned from requirements such as stats, Mastery, Source and spell system, and have an equip cost. Exact Rank thresholds, Mastery Rank cap, Rank gained per Mastery Pt, skill-learning Pt costs, individual Set Costs and the Set Cost capacity formula are **initial implementation / review values unless explicitly promoted to Confirmed**.
-
-## Growth and experience
-- Characters gain EXP from meaningful play.
-- There is no conventional character level that automatically raises combat stats.
-- When accumulated EXP reaches the next growth threshold, the character receives growth points.
-- Growth rewards include Stat Pt and Mastery Pt; the player decides where to allocate them.
-- EXP sources include normal battles, strong enemies, bosses, quests, exploration discoveries and important events.
-- The design must not make repetitive weak-enemy grinding the only or dominant growth route.
-- Exact EXP thresholds and the amount of Stat Pt / Mastery Pt per growth threshold are balance values and remain adjustable until confirmed.
-
-## Dungeon
-- A run is basically 3 layers.
-- Layer environments can change each attempt.
-- Environment candidates: 森林 / 洞窟 / 廃墟都市 / 山岳 / 沼地 / 砂漠遺跡 / 海上・船 / 地下神殿.
-- Nodes: 通常 / 強敵 / イベント / 野営 / 商人 / 探索 / 鍛冶 / ボス.
-- Rewards include Stat Pt / Mastery Pt / materials / equipment / items.
-- No weapon/armor durability-repair system.
+## Growth / dungeon
+- No conventional displayed level with automatic stat growth.
+- EXP creates pending growth; inn rest settles pending Stat Pt / Mastery Pt.
+- Exact EXP curve and reward quantities are balance-controlled.
+- A run is basically 3 layers. Environments: 森林 / 洞窟 / 廃墟都市 / 山岳 / 沼地 / 砂漠遺跡 / 海上・船 / 地下神殿.
+- Nodes include normal battle / strong enemy / event / camp / merchant / exploration / smith-workshop / boss.
+- No equipment durability/repair.
+- Camp once per layer: HP35% + SP35% + battle-status recovery; no KO revival.
 
 ## Base
-- 宿・酒場: conversation and rest. Returning alone does not auto-heal; choosing rest fully restores HP/SP/status and settles pending growth points.
-- ギルド: requests, information, appraisal, purchase of exploration finds.
-- 市場: equipment, items, processing.
-- ダンジョン: destination, party, sortie.
-- Old storage concept is replaced by member-management functionality.
+- Home: next objective / notifications / next sortie + Inn / Guild / Market.
+- Inn: rest / ally conversation / guest conversation / sortie preparation.
+- Sortie preparation: formation / members / destination.
+- Guild: member management / quests & reports / exploration records / relic appraisal / storage.
+- Three formation presets save formation/equipment/skills with validity checks.
+- Market: equipment / items / processing / selling. Processing: regional crafting / +3 enhancement / trait processing.
+- Records: up to 40 expedition-history entries plus statistics / people / regions / enemy observations.
+- Rumors come through NPC conversation, not a separate daily menu.
 
 ## Battle UI
-Top to bottom:
 1. ROUND / AUTO / speed / settings
 2. turn order
 3. main enemy + current acting ally presentation
 4. commands
-5. ally 3x3 card formation
+5. ally 3x3 cards
+Commands sit immediately above ally cards. Character appeal has priority over tiny board-token presentation.
 
-The first visual impression should be a stylish character-focused RPG, not a grid board game.
-
-## Character art
-- The Paladin's confirmed master standing art is the user-approved 2026-09-28 full-body blonde female knight in white / blue / gold armor with sword and large shield.
-- Turn-order, party/formation icon, and acting-character battle portrait for a character are derived from the same approved master art; UI frames remain separate reusable assets.
-- Character-art handling must scale to a growing roster: add a master standing art once, then derive standardized UI crops instead of redesigning the character separately for each UI.
-
-- The Guild receptionist NPC (Eda) has a confirmed master standing art: an elegant adult female receptionist with long ash-blonde hair, navy/ivory/gold guild uniform, ledger and quill. Hub dialogue/profile derivatives should use this master art.
-
-## Specification status
-- Machine-readable classification: `spec/spec-status.json`.
-- Implementation existence or a passing test does not imply approval.
-- The 296 reverse-synced skill records default to **要レビュー**.
-- Balance placeholders such as Mastery Rank cap 50, +5 Rank per Mastery Pt, the Set Cost capacity formula and combo bonus percentages remain **初期実装値** until explicitly confirmed.
-
-## Enemy archetype implementation
-- The confirmed enemy archetype set is 獣 / 軽装 / 重装 / 魔術師 / 弓 / 飛行 / ゴーレム.
-- Runtime now distinguishes those seven archetypes in generated dungeon encounters. Their current stat lines, AI frequencies, ailment resistances and per-environment encounter mixes are **initial implementation values**, not confirmed balance.
-- 誘惑 is now connected to battle targeting: when active, its next hostile action is redirected toward its own side before 挑発 / lock-on / ordinary skill targeting is considered.
-
-## Skill catalog migration target
-- A separate-chat design currently targets **315 skills** with a **Rank 1-10** Mastery structure, recorded in `spec/skill-catalog-target.json`.
-- The current runtime remains 296 skills. The exact 315-name / Mastery / Rank table has not yet been recovered, so the runtime catalog must not be padded with invented skills or replaced from the count alone.
-- Candidate Rank bands and Set Cost / SP / power ranges in that target file are review values until explicitly confirmed.
+## Status discipline
+- Implementation or passing tests do not imply approval.
+- Rank 0-50, +5 Rank per Mastery Pt and ability-dependent Set Capacity are obsolete implementation rules.
+- Structural rules and balance values must remain distinguishable.
