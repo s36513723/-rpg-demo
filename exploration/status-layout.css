@@ -248,5 +248,5 @@
 #panel .fitting-filters button{flex:none;min-height:44px;padding:4px 7px;border:1px solid #718361;background:#1e3328;color:#ded8c4;border-radius:6px;font-size:11px}
 #panel .fitting-filters button[aria-pressed=true]{background:#d5bd83;color:#17271b;border-color:#efdda9;font-weight:700}
 @media(max-height:680px){
- #panel .equipment-left .fitting-controls button{height:clamp(24px,calc((100cqh - 202px)/8),44px)}
+ #panel .equipment-left .fitting-controls button{height:clamp(20px,calc((100cqh - 244px)/8),44px)}
 }
