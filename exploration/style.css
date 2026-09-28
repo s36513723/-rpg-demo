@@ -358,3 +358,134 @@
  #party .m{background:var(--card-bg)!important}
  #party .m::before{background:rgba(0,0,0,.08)}
 }
+
+
+/* UI35: untinted portraits + slim resource lines. */
+#party .m{
+ display:grid!important;
+ grid-template-rows:45px 11px 8px 10px!important;
+ align-content:center;
+ gap:1px!important;
+ min-height:82px!important;
+ padding:4px 3px!important;
+ border-width:1px!important;
+ border-radius:8px!important;
+ overflow:hidden;
+}
+#party .m:nth-child(1){background:linear-gradient(180deg,#8f3042 0%,#511d29 58%,#231116 100%)!important;border-color:#d65b70!important}
+#party .m:nth-child(2){background:linear-gradient(180deg,#3769bd 0%,#25477f 58%,#13213b 100%)!important;border-color:#76a1ef!important}
+#party .m:nth-child(3){background:linear-gradient(180deg,#7547a8 0%,#4b2d70 58%,#251736 100%)!important;border-color:#ae79dd!important}
+#party .m:nth-child(4){background:linear-gradient(180deg,#3d8a5d 0%,#285d40 58%,#142b1e 100%)!important;border-color:#75c591!important}
+#party .m:nth-child(5){background:linear-gradient(180deg,#c57832 0%,#865023 58%,#352113 100%)!important;border-color:#e7a35a!important}
+#party .m:nth-child(6){background:linear-gradient(180deg,#2298a6 0%,#176772 58%,#102d32 100%)!important;border-color:#64cbd4!important}
+#party .m::before{display:none!important}
+#party .m::after{
+ display:block!important;
+ z-index:1!important;
+ background:linear-gradient(180deg,transparent 0%,transparent 46%,rgba(4,8,7,.10) 58%,rgba(4,8,7,.55) 100%)!important;
+}
+#party .m>img{
+ position:relative!important;
+ inset:auto!important;
+ grid-row:1!important;
+ align-self:stretch!important;
+ justify-self:stretch!important;
+ z-index:2!important;
+ width:100%!important;
+ height:45px!important;
+ margin:0!important;
+ border:0!important;
+ border-radius:5px!important;
+ object-fit:cover!important;
+ object-position:50% 20%!important;
+ opacity:1!important;
+ mix-blend-mode:normal!important;
+ filter:none!important;
+ background:transparent!important;
+ image-rendering:auto!important;
+ transform:none!important;
+}
+#party .m>b{
+ grid-row:2!important;
+ z-index:3!important;
+ margin:0!important;
+ align-self:end;
+ font-size:9px!important;
+ line-height:11px!important;
+ font-weight:700!important;
+ color:#fff9ed!important;
+ text-shadow:0 1px 3px #000!important;
+}
+#party .m>.roster-meta{
+ grid-row:3!important;
+ z-index:3!important;
+ margin:0!important;
+ align-self:center;
+ font-size:6px!important;
+ line-height:8px!important;
+ color:#dfe5df!important;
+ text-shadow:0 1px 2px #000!important;
+}
+#party .m>.roster-bars{
+ grid-row:4!important;
+ z-index:3!important;
+ display:grid!important;
+ grid-template-rows:repeat(2,3px)!important;
+ gap:2px!important;
+ width:100%!important;
+ margin:0!important;
+ align-self:center;
+}
+#party .m .roster-line{
+ display:grid!important;
+ grid-template-columns:6px minmax(0,1fr)!important;
+ align-items:center!important;
+ gap:2px!important;
+ width:100%!important;
+ height:3px!important;
+ min-height:3px!important;
+ margin:0!important;
+}
+#party .m .roster-line em{
+ width:auto!important;
+ font:600 5px/1 Georgia,serif!important;
+ color:#d5ddd8!important;
+ opacity:.72;
+ text-align:center;
+ text-shadow:none!important;
+}
+#party .m .roster-line .resource-track{
+ display:block!important;
+ height:2px!important;
+ min-height:2px!important;
+ border:0!important;
+ border-radius:999px!important;
+ overflow:visible!important;
+ background:rgba(255,255,255,.17)!important;
+ box-shadow:none!important;
+}
+#party .m .roster-line .resource-track>i{
+ display:block!important;
+ height:2px!important;
+ min-width:1px;
+ border-radius:999px!important;
+ opacity:1!important;
+}
+#party .m .roster-line .resource-track.hp>i{
+ background:#ff8490!important;
+ box-shadow:0 0 4px rgba(255,132,144,.68)!important;
+}
+#party .m .roster-line .resource-track.sp>i{
+ background:#69ddd2!important;
+ box-shadow:0 0 4px rgba(105,221,210,.62)!important;
+}
+@media(max-height:720px){
+ #party .m{grid-template-rows:39px 10px 7px 9px!important;min-height:72px!important}
+ #party .m>img{height:39px!important}
+}
+@media(max-height:640px){
+ #party .m{grid-template-rows:34px 9px 7px 8px!important;min-height:64px!important;padding:3px 2px!important}
+ #party .m>img{height:34px!important}
+ #party .m>b{font-size:8px!important;line-height:9px!important}
+ #party .m>.roster-meta{font-size:5.5px!important}
+}
