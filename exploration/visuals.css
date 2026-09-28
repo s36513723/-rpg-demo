@@ -764,3 +764,125 @@
  .guild-shell>.facility-stage-guild .facility-identity{left:10px!important}
  .guild-shell>.facility-stage-guild .facility-talk{left:10px!important}
 }
+
+
+/* UI41: match guild stage proportions to the original town hub card. */
+.guild-facility-page,
+.guild-service-page{
+ padding:10px 12px 12px!important;
+ background:var(--surface)!important;
+}
+.guild-shell{
+ position:absolute!important;
+ inset:10px 12px 12px!important;
+ border:1px solid var(--edge);
+ border-radius:13px;
+ overflow:hidden!important;
+ background:#101914;
+ box-shadow:none;
+}
+.guild-shell>.facility-stage-guild{
+ border-radius:12px!important;
+ overflow:hidden!important;
+}
+.guild-shell>.facility-stage-guild .facility-stand{
+ width:clamp(165px,38vw,230px)!important;
+ height:auto!important;
+ max-width:none!important;
+ max-height:54%!important;
+ right:3%!important;
+ bottom:40%!important;
+ top:auto!important;
+ left:auto!important;
+ object-fit:contain!important;
+ object-position:center bottom!important;
+ transform:none!important;
+}
+.guild-shell>.facility-stage-guild .facility-identity{
+ left:16px!important;
+ top:16px!important;
+}
+.guild-shell>.facility-stage-guild .facility-talk{
+ left:16px!important;
+ top:72px!important;
+}
+.guild-overlay-home{
+ height:30%!important;
+ left:12px!important;
+ right:12px!important;
+ bottom:12px!important;
+ border:1px solid rgba(82,99,86,.95)!important;
+ border-radius:10px!important;
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:6px!important;
+ padding:7px!important;
+ background:rgba(14,27,22,.82)!important;
+ box-shadow:none!important;
+ backdrop-filter:blur(5px);
+}
+.guild-overlay-home>.row{
+ min-height:0!important;
+ border:1px solid #526356!important;
+ border-radius:9px!important;
+ background:rgba(20,36,29,.74)!important;
+ padding:7px 9px!important;
+}
+.guild-overlay-home>.row b{
+ font-size:11px!important;
+}
+.guild-overlay-home>.row .small{
+ font-size:8px!important;
+ line-height:1.35!important;
+}
+.guild-service-content.guild-overlay-sheet{
+ height:38%!important;
+ left:12px!important;
+ right:12px!important;
+ bottom:12px!important;
+ border:1px solid rgba(82,99,86,.95)!important;
+ border-radius:10px!important;
+ padding:9px 10px 12px!important;
+ background:rgba(14,27,22,.9)!important;
+ box-shadow:none!important;
+ backdrop-filter:blur(6px);
+}
+.guild-facility-page .facility-dialogue,
+.guild-service-page .facility-dialogue{
+ left:12px!important;
+ right:12px!important;
+ bottom:calc(40% + 10px)!important;
+ top:auto!important;
+ border-radius:9px!important;
+}
+@media(max-height:700px){
+ .guild-shell{inset:8px 10px 10px!important}
+ .guild-shell>.facility-stage-guild .facility-stand{
+  width:clamp(150px,36vw,205px)!important;
+  max-height:51%!important;
+  bottom:41%!important;
+ }
+ .guild-overlay-home{
+  height:31%!important;
+  left:10px!important;right:10px!important;bottom:10px!important;
+ }
+ .guild-service-content.guild-overlay-sheet{
+  height:39%!important;
+  left:10px!important;right:10px!important;bottom:10px!important;
+ }
+ .guild-facility-page .facility-dialogue,
+ .guild-service-page .facility-dialogue{
+  left:10px!important;right:10px!important;
+  bottom:calc(41% + 8px)!important;
+ }
+}
+@media(max-width:350px){
+ .guild-shell>.facility-stage-guild .facility-stand{
+  width:37vw!important;
+  max-height:50%!important;
+  right:2%!important;
+ }
+ .guild-overlay-home{height:32%!important}
+ .guild-service-content.guild-overlay-sheet{height:40%!important}
+ .guild-facility-page .facility-dialogue,
+ .guild-service-page .facility-dialogue{bottom:calc(42% + 7px)!important}
+}
