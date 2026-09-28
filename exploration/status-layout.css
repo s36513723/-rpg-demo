@@ -336,3 +336,14 @@
 #panel .selection-overlay p{font-size:11px;line-height:1.45;margin:3px 0;white-space:normal}
 #panel .selection-overlay button{min-height:36px;padding:3px 10px;margin:0;width:auto}
 #panel .selection-overlay>button{float:right;background:#d5bd83;color:#17271b;min-height:40px}
+
+/* Shared equipment filters and bottom-aligned comparison. */
+#panel.status-equipment>.fitting-filters{margin:0;padding:2px 5px 5px;background:#10221999;box-sizing:border-box}
+#panel .equipment-left{justify-content:flex-end;align-items:flex-end;overflow:hidden}
+#panel .equipment-left .fitting-summary{width:100%;margin:0;padding:0 0 4px}
+#panel .equipment-left .equip-compare-grid{margin:0}
+#panel .equipment-left .equip-compare-grid b{text-align:right;margin-left:auto}
+#panel .selection-overlay:has(>[data-hub="uiDetailSkillSet"]){display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:10px;align-items:center}
+#panel .selection-overlay:has(>[data-hub="uiDetailSkillSet"])>div{grid-column:1;grid-row:1}
+#panel .selection-overlay:has(>[data-hub="uiDetailSkillSet"])>p{grid-column:1;grid-row:2}
+#panel .selection-overlay>[data-hub="uiDetailSkillSet"]{grid-column:2;grid-row:1/3;float:none;justify-self:end;white-space:nowrap}
