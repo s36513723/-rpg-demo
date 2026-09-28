@@ -102,6 +102,7 @@ const showUI=html=>{
   if(U.stack.length>24)U.stack.shift();U.route={name:r.name,args:r.args.slice()};
   renderGuildWorld(html,r);return;
  }
+ if(worldOpen)document.getElementById('app').classList.remove('facility-world','guild-world');
  const guildShell=false;modal.classList.remove('guild-screen-modal');panel.classList.remove('guild-screen-panel');
  if(!['equip','equipChoice'].includes(r.name))fittingDiscard();
  if(r.name!=='actorAttributes')attributeDiscard();
