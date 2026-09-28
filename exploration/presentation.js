@@ -6,7 +6,7 @@ const old={};
 const originals=['town','drawDungeon','closeM','skills','equip','character','partyMenu','settings','charAbility','charMastery','mastery','masteryType','growMastery','masterySkills','toggleLearnedSkill'];
 for(const n of originals)old[n]=window[n];
 const portraits=['gald','lize','ern','sena','mirea','yuna'];
-const standArts=['battle-warrior.svg','battle-paladin.svg','battle-rogue.svg','battle-archer.svg','battle-alchemist.svg','battle-mystic.svg'];
+const standArts=['hub-standing-warrior.webp','hub-standing-paladin.webp','hub-standing-rogue.webp','hub-standing-archer.webp','hub-standing-alchemist.webp','hub-standing-mystic.webp'];
 // Battle-card artwork is intentionally separate from full-body status artwork.
 // Paladin has its finalized turn icon in-repo; the other five use official full-body art cropped
 // by the card CSS until their finalized battle icons are registered as individual assets.
