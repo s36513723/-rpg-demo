@@ -911,3 +911,10 @@ html,body{height:100%;overflow:hidden}
 #game>.actor-art .actor-portrait-image{width:100%!important;height:100%!important;object-fit:cover!important;object-position:50% 18%!important;transform:scale(1.08)!important;transform-origin:50% 25%!important}
 #game>.actor-art .actor-art-name{left:9%!important;bottom:7%!important;font-size:clamp(16px,4.4vw,21px)!important;padding:5px 20px 6px 0!important;min-width:92px!important;background:none!important}
 @media(max-width:380px){.order-ribbon{left:57%!important;width:46%!important}.order-ribbon .order{gap:0!important}.order-ribbon .order-face,.order-ribbon .order-face.ally,.order-ribbon .order-face.foe{width:29px!important;height:29px!important;flex-basis:29px!important}.order-ribbon .order-face.is-next{width:33px!important;height:33px!important;flex-basis:33px!important}.command-panel{left:calc(var(--party-left) + 26px)!important;right:33px!important}.command-buttons{gap:2px!important}.command-buttons>.command b{font-size:10px!important}}
+
+/* Final portrait-stage balance: preserve the fixed geometry during commands. */
+.order-ribbon{top:max(10px,env(safe-area-inset-top))!important}
+#more{background:rgba(57,54,72,.28)!important;border-color:rgba(255,249,250,.68)!important;box-shadow:0 0 0 1px rgba(57,48,70,.12)!important}
+#game:after{background:linear-gradient(to bottom,transparent 0%,rgba(31,30,43,.13) 12%,rgba(28,28,42,.32) 32%,rgba(24,25,38,.60) 62%,rgba(18,20,32,.82) 100%)!important}
+#game>.actor-art{width:36%!important}
+#game>.actor-art .actor-portrait-image{transform:scale(1.19)!important}
