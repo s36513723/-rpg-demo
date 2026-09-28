@@ -855,7 +855,7 @@ html.battle-bg-ready #environment::after{
 }
 
 /* v44 mobile stage: fixed layers over the official full-height background. */
-:root{--party-left:30%;--party-h:25%;--cmd-h:5.6%}
+:root{--party-left:33%;--party-h:25%;--cmd-h:5.6%}
 html,body{height:100%;overflow:hidden}
 #game{height:100dvh;min-height:0;overflow:hidden}
 #environment{inset:0!important;background:var(--battle-background-image) center top/cover no-repeat #dfe4ef!important}
@@ -873,16 +873,16 @@ html,body{height:100%;overflow:hidden}
 .order-ribbon .order-face .order-portrait-clip{inset:3px!important;overflow:hidden!important;border-radius:50%!important}
 .order-ribbon .order-face .order-frame{inset:-5px!important;width:calc(100% + 10px)!important;height:calc(100% + 10px)!important}
 #more{top:2px;width:clamp(36px,9vw,44px);height:clamp(36px,9vw,44px)}
-.enemy-stage{top:8%!important;bottom:40%!important;overflow:visible!important}
+.enemy-stage{top:8%!important;bottom:41%!important;overflow:visible!important}
 .enemy-unit{overflow:visible!important;grid-template-rows:19px 5px minmax(0,1fr)!important;isolation:isolate}
 .enemy-name{height:19px!important;font-size:clamp(10px,2.8vw,13px)!important;line-height:19px!important;color:#57495f!important}
 .enemy-hp{height:4px!important;width:55%!important;max-width:76px!important;margin:0 auto!important}
 .enemy-visual,.enemy-unit[data-rank="back"] .enemy-visual,.enemy-unit[data-rank="mid"] .enemy-visual,.enemy-unit[data-rank="front"] .enemy-visual,.enemy-unit[data-unit-id="mage"] .enemy-visual,.enemy-unit[data-unit-id="g1"] .enemy-visual,.enemy-unit[data-unit-id="g2"] .enemy-visual{width:100%!important;height:100%!important;overflow:visible!important;transform:none!important}
-.enemy-unit{--sprite-scale:1.42;--sprite-x:0px;--sprite-y:0px}
-.enemy-unit[data-unit-id="arch"],.enemy-unit[data-unit-id="arch2"]{--sprite-scale:1.50;--sprite-y:8px}
-.enemy-unit[data-unit-id="g3"]{--sprite-scale:1.52;--sprite-y:5px}
-.enemy-unit[data-unit-id="g1"],.enemy-unit[data-unit-id="g2"]{--sprite-scale:1.30;--sprite-y:7px}
-.enemy-unit[data-unit-id="mage"]{--sprite-scale:1.12;--sprite-y:5px}
+.enemy-unit{--sprite-scale:.88;--sprite-x:0px;--sprite-y:0px}
+.enemy-unit[data-unit-id="arch"],.enemy-unit[data-unit-id="arch2"]{--sprite-scale:.96;--sprite-y:8px}
+.enemy-unit[data-unit-id="g3"]{--sprite-scale:1.04;--sprite-y:5px}
+.enemy-unit[data-unit-id="g1"],.enemy-unit[data-unit-id="g2"]{--sprite-scale:.70;--sprite-y:7px}
+.enemy-unit[data-unit-id="mage"]{--sprite-scale:.62;--sprite-y:5px}
 .enemy-cinematic-art,.enemy-visual>svg,.enemy-unit[data-rank="back"] .enemy-cinematic-art,.enemy-unit[data-rank="mid"] .enemy-cinematic-art,.enemy-unit[data-rank="front"] .enemy-cinematic-art{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:contain!important;object-position:center bottom!important;transform:translate(var(--sprite-x),var(--sprite-y)) scale(var(--sprite-scale))!important;transform-origin:50% 100%!important;margin:0!important}
 .target-pointer{display:block!important;z-index:0!important;bottom:-4px!important;width:66%!important;height:11px!important;border:1px solid rgba(231,172,154,.35)!important;background:rgba(237,186,178,.06)!important;box-shadow:0 0 8px rgba(236,180,169,.14)!important}
 .enemy-unit.target-selected .target-pointer{border-color:rgba(238,184,108,.82)!important;background:rgba(247,195,113,.13)!important}
@@ -905,7 +905,7 @@ html,body{height:100%;overflow:hidden}
 .command-buttons>.command b{position:relative;z-index:1}
 #auto,#pace{bottom:calc(var(--party-h) + 1.1%)!important;width:clamp(32px,8vw,42px)!important;height:clamp(32px,8vw,42px)!important;min-height:0!important;border:1px solid rgba(241,233,243,.7)!important;border-radius:50%!important;background-color:rgba(42,43,57,.25)!important;background-size:85% 85%!important;backdrop-filter:blur(3px)!important;-webkit-backdrop-filter:blur(3px)!important}
 #auto{left:calc(var(--party-left) + 1px)!important}#pace{right:2px!important}
-#game>.actor-art{left:0!important;right:auto!important;top:auto!important;bottom:0!important;width:37%!important;max-width:none!important;height:41%!important;overflow:hidden!important;border-radius:0!important;background:none!important;mask-image:linear-gradient(to right,#000 0 90%,rgba(0,0,0,.8) 96%,transparent 100%)!important;-webkit-mask-image:linear-gradient(to right,#000 0 90%,rgba(0,0,0,.8) 96%,transparent 100%)!important}
+#game>.actor-art{left:0!important;right:auto!important;top:auto!important;bottom:0!important;width:33%!important;max-width:none!important;height:41%!important;overflow:hidden!important;border-radius:0!important;background:none!important;mask-image:linear-gradient(to right,#000 0 90%,rgba(0,0,0,.8) 96%,transparent 100%)!important;-webkit-mask-image:linear-gradient(to right,#000 0 90%,rgba(0,0,0,.8) 96%,transparent 100%)!important}
 #game>.actor-art .actor-portrait-image{width:100%!important;height:100%!important;object-fit:cover!important;object-position:50% 18%!important;transform:scale(1.06)!important;transform-origin:50% 25%!important}
 #game>.actor-art .actor-art-name{left:9%!important;bottom:7%!important;font-size:clamp(16px,4.4vw,21px)!important;padding:5px 20px 6px 0!important;min-width:92px!important;background:none!important}
 @media(max-width:380px){.order-ribbon{left:57%!important;width:46%!important}.order-ribbon .order{gap:0!important}.order-ribbon .order-face,.order-ribbon .order-face.ally,.order-ribbon .order-face.foe{width:29px!important;height:29px!important;flex-basis:29px!important}.order-ribbon .order-face.is-next{width:33px!important;height:33px!important;flex-basis:33px!important}.command-panel{left:calc(var(--party-left) + 26px)!important;right:33px!important}.command-buttons{gap:2px!important}.command-buttons>.command b{font-size:10px!important}}
