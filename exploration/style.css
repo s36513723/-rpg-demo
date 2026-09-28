@@ -784,3 +784,13 @@
  #party .m>.roster-meta{font-size:5.5px!important;bottom:9px!important}
  #party .m>.roster-bars{bottom:3px!important}
 }
+
+
+/* Official regional exploration backgrounds */
+.expedition{position:relative;isolation:isolate;overflow:hidden;background:#0b1511}
+.expedition::before{content:"";position:absolute;inset:0;z-index:0;background:var(--explore-bg) center/cover no-repeat;filter:saturate(.92) brightness(.72);transform:scale(1.012);pointer-events:none}
+.expedition::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(5,12,8,.76) 0%,rgba(5,12,8,.32) 22%,rgba(5,12,8,.38) 68%,rgba(5,12,8,.84) 100%),linear-gradient(90deg,rgba(3,10,7,.58),transparent 24%,transparent 76%,rgba(3,10,7,.52));pointer-events:none}
+.expedition>.field-head,.expedition>.map,.expedition>.field-actions{position:relative;z-index:2}
+.expedition>.map{border:1px solid rgba(184,166,112,.38);border-radius:12px;background:rgba(5,15,10,.16);box-shadow:inset 0 0 32px rgba(0,0,0,.24)}
+.expedition .map-node{box-shadow:0 3px 12px rgba(0,0,0,.55)}
+.expedition .route-svg path{stroke:#efe0a8;opacity:.7;filter:drop-shadow(0 1px 1px rgba(0,0,0,.75))}

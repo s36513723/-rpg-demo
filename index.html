@@ -19,6 +19,9 @@ main{width:100%;max-width:720px;margin:0 auto;padding:10px 12px max(14px,env(saf
 @media(min-width:600px){main{padding-top:20px}.masthead{margin-bottom:15px}.unit{height:136px}.enemy-card{height:108px}.card-name{font-size:16px}.resource-value b{font-size:13px}.resource-value span{font-size:10px}.command-panel{padding:14px}.actor-button small{width:auto}.actor-button .chevron{right:auto;position:static}.command-body{min-height:139px}.command-input{gap:6px}.terrain-text{font-size:12px}.action-picker b{font-size:15px}.action-picker small{font-size:11px}.target-hint{font-size:11px}}
 @media(max-width:380px){main{padding-left:9px;padding-right:9px}.brand{gap:4px}.brand h1{font-size:16px}.engine-status{font-size:7px}.masthead{gap:4px}#new{padding:4px 6px;font-size:10px}.unit{height:98px}.enemy-card{height:80px}.card-name{font-size:12px;top:7px;left:7px}.resource-list{left:7px;right:6px;gap:4px}.resource-value b{font-size:10px}.resource-value span{font-size:7px}.round-actions{gap:3px}.round-actions button{padding:4px 6px;font-size:9px}.actor-button #actorName{font-size:16px}.actor-button small{font-size:8px}.round{margin-right:1px}.command-panel{padding:8px}.action-picker{padding:4px 7px}.action-picker b{font-size:12px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}.floating{animation:none;opacity:1;transform:translateX(-50%)}}
+
+/* Exploration theme battle backdrop */
+.exploration-theme-battle .battlefield{position:relative;overflow:hidden;border-radius:12px;background:linear-gradient(180deg,rgba(5,10,16,.72) 0%,rgba(5,10,16,.30) 42%,rgba(5,10,16,.78) 100%),linear-gradient(90deg,rgba(4,9,14,.54),transparent 28%,transparent 72%,rgba(4,9,14,.50)),var(--battle-theme-image) center/cover no-repeat;box-shadow:inset 0 0 34px rgba(0,0,0,.55)}
 </style>
 <script>
 var RPG_STORE=(function(){
@@ -156,7 +159,24 @@ const HT=[
 {id:'arc',name:'ミレア',style:'アルカニスト',row:'back',slot:5,PHY:10,SKL:10,ARC:60,MND:20,armor:'magic',weapons:['staff','talisman'],skills:[skill('火球','spell','SP',14,1.45,'火','far','ARC',{hit:5,speed:0}),skill('術式障壁','spell','SP',11,0,'無','far','ARC',{barrier:.2})]},
 {id:'mys',name:'ユナ',style:'ミスティック',row:'back',slot:6,PHY:10,SKL:30,ARC:10,MND:50,armor:'magic',weapons:['talisman','staff'],skills:[skill('頭封じの符','spell','SP',12,.75,'無','far','MND',{hit:10,speed:5,headBind:70}),skill('癒しの祈り','spell','SP',6,0,'無','far','MND',{target:'ally',hit:100,heal:true})]}
 ];
-let discoveredWeakness=new Set();let switchCounts={};let carryRemaining={};let summons=[];let uMorale='なし';let moraleRecoveryRounds=0;let EXPCTX=null;try{EXPCTX=JSON.parse(RPG_STORE.getItem('rpg.exploreBattle')||'null')}catch(_){EXPCTX=null}const ET=[
+let discoveredWeakness=new Set();let switchCounts={};let carryRemaining={};let summons=[];let uMorale='なし';let moraleRecoveryRounds=0;let EXPCTX=null;try{EXPCTX=JSON.parse(RPG_STORE.getItem('rpg.exploreBattle')||'null')}catch(_){EXPCTX=null}const EXPLORATION_THEME_BACKGROUNDS=Object.freeze({
+  '森林':'theme-forest-official.webp',
+  '洞窟':'theme-cave-official.webp',
+  '廃墟都市':'theme-ruins-official.webp',
+  '山岳':'theme-mountain-official.webp',
+  '沼地':'theme-swamp-official.webp',
+  '砂漠遺跡':'theme-desert-official.webp',
+  '海上・船':'theme-sea-official.webp',
+  '地下神殿':'theme-temple-official.webp'
+});
+function applyExplorationBattleBackground(){
+  const asset=EXPCTX&&(EXPCTX.backgroundAsset||EXPLORATION_THEME_BACKGROUNDS[EXPCTX.theme]);
+  if(!asset)return;
+  document.documentElement.style.setProperty('--battle-theme-image','url("images/'+asset+'")');
+  document.documentElement.classList.add('exploration-theme-battle');
+}
+applyExplorationBattleBackground();
+const ET=[
 {id:'g1',name:'重装兵A',style:'重装兵',row:'front',slot:1,hp:155,PHY:42,SKL:20,ARC:10,MND:18,physDef:70,magDef:36,weak:{壊:2,火:1.2},resist:{斬:.5},weapon:{name:'大盾槍',attr:'突',range:'mid',power:20,hit:0,speed:-4,weight:'heavy'},ai:'guard'},
 {id:'g2',name:'重装兵B',style:'重装兵',row:'front',slot:2,hp:145,PHY:40,SKL:22,ARC:10,MND:18,physDef:66,magDef:36,weak:{壊:2},resist:{斬:.5},weapon:{name:'戦槌',attr:'壊',range:'near',power:21,hit:-3,speed:-5,weight:'heavy'},ai:'guard'},
 {id:'g3',name:'槍兵',style:'槍兵',row:'front',slot:3,hp:125,PHY:34,SKL:30,ARC:10,MND:16,physDef:52,magDef:32,weak:{斬:1.3,火:1.2},resist:{突:.5},weapon:{name:'長槍',attr:'突',range:'mid',power:18,hit:3,speed:0,weight:'normal'},ai:'guard'},

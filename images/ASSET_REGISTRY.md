@@ -1,6 +1,6 @@
 # RPG Asset Registry
 
-最終更新: 2026-09-28
+最終更新: 2026-09-29
 
 画像生成チャットで確定した正式アートの台帳。
 「作成済み」「GitHub画像本体保存済み」「現行UI接続済み」を分けて管理する。
@@ -74,6 +74,19 @@
 | 行動順・敵枠 | ✓ | images/order-frame-enemy.svg | 保存済み・Plan戦闘UI接続済み |
 | 行動順・NEXT枠 | ✓ | images/order-frame-next.svg | 保存済み・Plan戦闘UI接続済み |
 
+## 探索・地域背景
+
+| テーマ | 正式 | GitHub画像本体 | 状況 |
+|---|---:|---|---|
+| 森林 | ✓ | `images/theme-forest-official.webp` | 探索UI・探索起点戦闘UIに接続済み |
+| 洞窟 | ✓ | `images/theme-cave-official.webp` | 探索UI・探索起点戦闘UIに接続済み |
+| 廃墟都市 | ✓ | `images/theme-ruins-official.webp` | 探索UI・探索起点戦闘UIに接続済み |
+| 山岳 | ✓ | `images/theme-mountain-official.webp` | 探索UI・探索起点戦闘UIに接続済み |
+| 沼地 | ✓ | `images/theme-swamp-official.webp` | 探索UI・探索起点戦闘UIに接続済み |
+| 砂漠遺跡 | ✓ | `images/theme-desert-official.webp` | 探索UI・探索起点戦闘UIに接続済み |
+| 海上・船 | ✓ | `images/theme-sea-official.webp` | 探索UI・探索起点戦闘UIに接続済み |
+| 地下神殿 | ✓ | `images/theme-temple-official.webp` | 探索UI・探索起点戦闘UIに接続済み |
+
 ## 戦闘背景
 
 | 種類 | 正式 | GitHub画像本体 | 状況 |
@@ -105,6 +118,7 @@
 - 行動用アイコン: 6 / 6
 - 戦闘用アイコン枠: 3
 - 戦闘画面UI素材: 9 / 9
+- 探索・地域背景: 8 / 8
 - 戦闘背景: 1
 - 拠点NPC: 3
 - 拠点背景: 3
