@@ -120,7 +120,7 @@
 #panel .attributes-overview .resistance-grid .attribute-cell{flex-direction:row;min-height:25px;padding:3px;gap:2px;border-radius:4px}
 #panel .attributes-overview .resistance-grid small{font-size:9px;white-space:nowrap}
 #panel .attributes-overview .resistance-grid b{font-size:10px}
-#panel .equipment-workspace{display:grid;grid-template-columns:48% minmax(0,1fr);gap:5px;flex:1;min-height:0;padding:0 5px;background:#10221999;overflow:hidden}
+#panel .equipment-workspace{display:grid;grid-template-columns:minmax(0,37.6fr) minmax(0,62.4fr);gap:5px;flex:1;min-height:0;padding:0 5px;background:#10221999;overflow:hidden}
 #panel .equipment-left{display:flex;flex-direction:column;min-width:0;min-height:0;gap:5px}
 #panel .equipment-left .fitting-controls{display:grid;grid-template-columns:1fr;gap:3px;padding:0;background:transparent;flex:none}
 #panel .equipment-left .fitting-slot-group>div{grid-template-columns:repeat(2,minmax(0,1fr));gap:3px}
@@ -276,3 +276,17 @@
 #panel .mastery-training{display:grid;grid-template-columns:1fr 1fr;gap:3px}
 #panel .mastery-training .row b{font-size:11px}
 #panel .mastery-training .row small{font-size:9px}
+
+@media(max-width:450px){
+ #panel .equipment-left .equip-compare-grid small{font-size:9px}
+ #panel .equipment-left .equip-compare-grid b{font-size:10px}
+ #panel .equipment-left .equip-compare-grid i{font-size:8px}
+ #panel .equipment-left .fitting-controls button small{font-size:9px}
+ #panel .equipment-left .fitting-controls button b{font-size:10px}
+}
+@media(max-width:350px){
+ #panel .equipment-left .equip-compare-grid small{font-size:8px}
+ #panel .equipment-left .equip-compare-grid b{font-size:9px}
+ #panel .equipment-left .equip-compare-grid i{font-size:7px}
+ #panel .equipment-left .reserve-slots>button b{font-size:9px}
+}
