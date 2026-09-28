@@ -12,6 +12,8 @@ let ATLAS;
 try{ATLAS=window.__INLINE_ATLAS__||await loadAtlas();window.__BATTLE_ATLAS__=ATLAS}catch(error){const b=document.getElementById('bootStatus');if(b)b.querySelector('p').textContent='画像を読み込めません。再読み込みしてください。';window.__bootError=String(error);console.error(error);return}
 
 const $=id=>document.getElementById(id),scene=$('enemyStage'),bodies=new Map(),allyHuds=new Map(),enemyGrid=$('enemyGrid'),allyGrid=$('allyGrid');
+const actorArtNode=$('actorArt');
+if(actorArtNode&&actorArtNode.parentElement?.id==='commandPanel')$('game').append(actorArtNode);
 let state=null;
 let viewSequence=0;
 function cut(c,cls=''){
@@ -244,6 +246,11 @@ function faceMarkup(u,cls='face-graphic'){
  const src=ORDER_PORTRAITS[u.id];
  return src?'<img class="'+cls+' order-portrait-art" src="'+src+'" alt="" draggable="false">':clipped(FACE_CROPS[u.id]||CROPS.guard,cls)
 }
+function orderPortraitMarkup(u){
+ const src=ORDER_PORTRAITS[u.id];
+ if(src)return '<span class="order-portrait-fill" style="background-image:url(\''+src+'\')" aria-hidden="true"></span>';
+ return faceMarkup(u,'order-portrait');
+}
 
 function fitScene(){
  const stage=$('enemyStage');if(!stage)return;
@@ -338,7 +345,7 @@ function renderOrder(){
   b.title=(u.enemy?'敵：':'味方：')+u.name;b.dataset.actorId=u.id;
   {
    const frameSrc=isNext?ORDER_FRAMES.next:(u.enemy?ORDER_FRAMES.enemy:ORDER_FRAMES.ally);
-   b.innerHTML='<span class="order-portrait-clip">'+faceMarkup(u,'order-portrait')+'</span><img class="order-frame" src="'+frameSrc+'" alt="" aria-hidden="true" draggable="false">';
+   b.innerHTML='<span class="order-portrait-clip">'+orderPortraitMarkup(u)+'</span><img class="order-frame" src="'+frameSrc+'" alt="" aria-hidden="true" draggable="false">';
   }
   b.addEventListener('click',()=>u.enemy?cardTap(u.id):toggleActor(u.id));target.append(b);
  }
