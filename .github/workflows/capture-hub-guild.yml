@@ -1,0 +1,71 @@
+name: Capture hub guild
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/capture-hub-guild.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install playwright
+      - run: python -m playwright install --with-deps chromium
+      - name: Capture
+        run: |
+          python -m http.server 8139 >/tmp/hub-http.log 2>&1 &
+          python - <<'PY'
+          import asyncio, json
+          from playwright.async_api import async_playwright
+
+          async def shot(page,name):
+              await page.screenshot(path=f"/tmp/{name}.png", full_page=True)
+              data=await page.evaluate("""()=>({
+                app:document.querySelector('#app')?.getBoundingClientRect().toJSON(),
+                screen:document.querySelector('#screen')?.getBoundingClientRect().toJSON(),
+                party:document.querySelector('#party')?.getBoundingClientRect().toJSON(),
+                nav:document.querySelector('.hub-global-nav')?.getBoundingClientRect().toJSON(),
+                npc:document.querySelector('.facility-world-npc')?.getBoundingClientRect().toJSON(),
+                overlay:document.querySelector('.facility-world-overlay')?.getBoundingClientRect().toJSON(),
+                dialog:document.querySelector('.facility-world-dialogue')?.getBoundingClientRect().toJSON(),
+                world:document.querySelector('#app')?.className
+              })""")
+              print(name,json.dumps(data,ensure_ascii=False))
+
+          async def main():
+              async with async_playwright() as p:
+                  b=await p.chromium.launch(headless=True)
+                  page=await b.new_page(viewport={"width":390,"height":844},device_scale_factor=1)
+                  await page.goto("http://127.0.0.1:8139/exploration/",wait_until="networkidle")
+                  await page.wait_for_timeout(300)
+                  await shot(page,"home")
+                  await page.click('.town-command-grid [data-hub="guild"]')
+                  await page.wait_for_timeout(250)
+                  await shot(page,"guild")
+                  await page.click('[data-hub="guildDesk"]')
+                  await page.wait_for_timeout(250)
+                  await shot(page,"guild-desk")
+                  q=page.locator('[data-hub="questMenu"]').first
+                  if await q.count():
+                      await q.click()
+                      await page.wait_for_timeout(250)
+                      await shot(page,"guild-quests")
+                  await b.close()
+          asyncio.run(main())
+          PY
+          cp /tmp/home.png /tmp/guild.png /tmp/guild-desk.png /tmp/guild-quests.png . || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hub-guild-capture
+          path: |
+            home.png
+            guild.png
+            guild-desk.png
+            guild-quests.png
+          if-no-files-found: error
