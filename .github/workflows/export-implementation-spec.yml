@@ -29,7 +29,7 @@ jobs:
           node tools/review-skills.mjs
       - name: Commit generated mirrors when changed
         run: |
-          if git diff --quiet -- spec/generated/implemented-skills.csv spec/generated/implemented-masteries.csv spec/generated/skill-review.json; then
+          if [ -z "$(git status --porcelain -- spec/generated/implemented-skills.csv spec/generated/implemented-masteries.csv spec/generated/skill-review.json)" ]; then
             echo "Generated mirrors already current."
             exit 0
           fi
