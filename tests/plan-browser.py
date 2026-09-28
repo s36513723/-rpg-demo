@@ -16,6 +16,7 @@ async def main():
   await page.set_viewport_size({'width':390,'height':640});await page.wait_for_timeout(250)
   await page.screenshot(path='plan-compact.png',full_page=False)
   await page.goto('http://127.0.0.1:8140/debug-portraits.html',wait_until='load');await page.set_viewport_size({'width':390,'height':520});await page.wait_for_timeout(400);await page.screenshot(path='portrait-debug.png',full_page=True)
+  await page.goto('http://127.0.0.1:8140/debug-background.html',wait_until='load');await page.set_viewport_size({'width':390,'height':640});await page.wait_for_timeout(300);await page.screenshot(path='background-debug.png',full_page=False)
   ok=(not errors and data['cards']==6 and data['enemies']==6 and data['order']==5 and data['orderImages']==5 and data['active'] and data['labels']==['ATTACK','SKILL','ITEM','DEFEND'])
   pathlib.Path('plan-debug.json').write_text(json.dumps({'ok':ok,'data':data,'errors':errors},ensure_ascii=False,indent=2))
   print(json.dumps({'ok':ok,'data':data,'errors':errors},ensure_ascii=False))
