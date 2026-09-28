@@ -108,7 +108,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "cross_chat_enemy_archetypes_temptation_and_315_target_scaffold",
+  "last_sync_status": "cross_chat_integration_630_of_630_pass",
   "blocked_steps": [
     "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
   ],
@@ -200,5 +200,14 @@
       "要レビュー",
       "廃止旧仕様"
     ]
+  },
+  "validation": {
+    "latest_rpg_regression": {
+      "passed": 630,
+      "total": 630,
+      "status": "success",
+      "head_sha": "9cea0fc52475920fbcf988df4b6f7a0f55500814"
+    },
+    "spec_contract": "success"
   }
 }
