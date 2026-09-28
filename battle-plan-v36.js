@@ -222,8 +222,8 @@ const ACTOR_CROPS={
  ran:M.crops['back-ran'],arc:M.crops['portrait-arc'],mys:M.crops['back-mys']
 };
 const ACTOR_PORTRAITS={
- war:'images/gald-cinematic.svg',rog:'images/lize.svg',run:'images/ern.svg',
- ran:'images/sena.svg',arc:'images/mirea.svg',mys:'images/yuna.svg'
+ war:'images/battle-warrior.svg',run:'images/battle-paladin.svg',rog:'images/battle-rogue.svg',
+ ran:'images/battle-archer.svg',arc:'images/battle-alchemist.svg',mys:'images/battle-mystic.svg'
 };
 function enemyCrop(u){return u.id==='g3'?[542, 159, 210, 135]:CROPS[u.id==='mage'?'mage':['arch','arch2'].includes(u.id)?'archer':'guard']}
 const ENEMY_CINEMATIC={};
@@ -355,11 +355,12 @@ function updatePortrait(){
  $('commandPanel').classList.toggle('enemy-action',busy&&!show);
  if(show&&box.dataset.actorId!==who.id){
   box.dataset.actorId=who.id;
-  if(who.id==='war'){
-   const art=document.createElement('img');art.className='actor-portrait-image';art.alt='';art.decoding='async';art.src=ORDER_PORTRAITS.war;box.replaceChildren(art);
-  }else{
-   box.innerHTML=cut(ACTOR_CROPS[who.id]||M.crops['back-'+who.id],'actor-portrait-svg');
-  }
+  const art=document.createElement('img');
+  art.className='actor-portrait-image';
+  art.alt='';
+  art.decoding='async';
+  art.src=ACTOR_PORTRAITS[who.id]||ORDER_PORTRAITS[who.id]||'';
+  box.replaceChildren(art);
   box.classList.remove('is-entering');void box.offsetWidth;box.classList.add('is-entering');
  }
  $('actorName').textContent=over?'':who?.name||'';
