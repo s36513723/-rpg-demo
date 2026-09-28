@@ -834,3 +834,22 @@
   .order-ribbon .order-face.foe{width:35px!important;height:35px!important;flex-basis:35px!important}
   .order-ribbon .order-face.is-next{width:39px!important;height:39px!important;flex-basis:39px!important}
 }
+
+
+/* v45 — user-provided battle background */
+#environment{
+  background-image:var(--battle-background-image)!important;
+  background-size:cover!important;
+  background-position:50% 0!important;
+  background-repeat:no-repeat!important;
+  background-color:#dfe4ef!important;
+}
+html.battle-bg-ready #environment .sky-art,
+html.battle-bg-ready #environment .marble-ground,
+html.battle-bg-ready #environment .atmosphere{
+  display:none!important;
+}
+html.battle-bg-ready #environment::before,
+html.battle-bg-ready #environment::after{
+  display:none!important;
+}
