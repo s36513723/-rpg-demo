@@ -627,3 +627,39 @@
  #auto,#pace{bottom:calc(26% + 5px)!important}
  #game>.actor-art .actor-art-name{left:11px!important;bottom:10px!important;font-size:16px!important;min-width:86px!important}
 }
+
+
+/* v37 — generated official battle UI assets. */
+/* Each of the nine ally cells uses the prepared transparent status-panel artwork. */
+.party-strip .ally-unit{
+  background:transparent url("images/battle-grid-9.webp") center/122% 122% no-repeat!important;
+}
+.party-strip .ally-unit.active{
+  background:transparent url("images/battle-card-selected.webp") center/122% 122% no-repeat!important;
+}
+.party-strip .ally-unit.active:before{opacity:.42}
+
+/* Prepared command panel + selected-command accent. */
+.command-content{
+  background:transparent url("images/battle-command.webp") center/112% 150% no-repeat!important;
+  box-shadow:none!important;
+}
+.command-buttons>.command:after{
+  left:8%!important;right:8%!important;bottom:-1px!important;height:12px!important;
+  background:transparent url("images/battle-command-selected.webp") center/100% 100% no-repeat!important;
+}
+.command-buttons>.command.is-active:after,
+.command-buttons>.command:active:not(:disabled):after{opacity:1!important}
+
+/* Prepared AUTO / speed controls. Text stays accessible through aria-label/title. */
+#auto{
+  background:transparent url("images/battle-auto.webp") center/100% 100% no-repeat!important;
+  color:transparent!important;border:0!important;
+}
+#pace{
+  background:transparent url("images/battle-speed2.webp") center/100% 100% no-repeat!important;
+  color:transparent!important;border:0!important;
+}
+
+/* The generated turn frames remain separate overlays around transparent portraits. */
+.order-frame{pointer-events:none}
