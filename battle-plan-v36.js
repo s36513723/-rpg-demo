@@ -370,8 +370,14 @@ function updatePortrait(){
   art.alt='';
   art.decoding='async';
   art.src=ACTOR_PORTRAITS[who.id]||ORDER_PORTRAITS[who.id]||'';
-  box.replaceChildren(art);
+  const label=document.createElement('span');
+  label.className='actor-art-name';
+  label.textContent=who.name||'';
+  box.replaceChildren(art,label);
   box.classList.remove('is-entering');void box.offsetWidth;box.classList.add('is-entering');
+ }else if(show){
+  const label=box.querySelector('.actor-art-name');
+  if(label)label.textContent=who.name||'';
  }
  $('actorName').textContent=over?'':who?.name||'';
 }
