@@ -429,7 +429,7 @@ function targets(u,a){
  if(a.revive)return side.filter(x=>!x.alive);
  const list=live(side).filter(t=>a.target==='ally'||canReach(u,t,a.range));
  if(a.target==='ally'||!list.length)return list;
- const rule=a.targeting||targetRules.normalAttack,area=rule.area||'single';
+ const rule=a.targeting||rulebook().targetRules.normalAttack,area=rule.area||'single';
  if(area==='single'&&!rule.ignoreTaunt){
   const taunts=list.filter(t=>Object.values(t.timed||{}).some(b=>b.key==='taunt')&&t.status.stun<=0&&t.status.sleep<=0);
   if(taunts.length)return taunts;
