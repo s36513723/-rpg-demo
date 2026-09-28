@@ -9,11 +9,11 @@ function fittingHero(i,a,b,k=0){
  const value=(x,y,suffix='',lower=false)=>{const delta=round(y-x);return '<b>'+round(y)+suffix+(delta?' <i class="'+((lower?delta<0:delta>0)?'up':'down')+'">('+(delta>0?'+':'')+delta+')</i>':'')+'</b>'};
  const metric=(name,x,y,suffix='',lower=false)=>'<span><small>'+name+'</small>'+value(x,y,suffix,lower)+'</span>';
  const ar=characterDisplayRates(i,a),br=characterDisplayRates(i,b);
- return '<section class="fitting-summary"><div class="equip-compare" aria-live="polite"><small>'+(k===2||k===3?'予備セット使用時（換装後）':'現在のセット')+' · 括弧内は変更前の装備との差</small><div class="equip-compare-grid">'+
+ return '<section class="fitting-summary"><div class="equip-compare" aria-live="polite"><small>'+(k===2||k===3?'予備セット使用時（換装後）':'現在のセット')+' · 差分は括弧内</small><div class="equip-compare-grid">'+
  metric('最大HP',a.hp,b.hp)+metric('最大SP',a.sp,b.sp)+metric('装備重量',a.weight,b.weight,' / '+b.limit,true)+metric('物理攻撃力',a.physical,b.physical)+
- '<span class="equipment-magic"><small>魔法攻撃力</small><div><em>ARC</em>'+value(a.magicArc,b.magicArc)+'</div><div><em>MND</em>'+value(a.magicMind,b.magicMind)+'</div></span>'+
+ metric('魔法攻撃力',a.magicArc,b.magicArc)+metric('信仰攻撃力',a.magicMind,b.magicMind)+
  metric('物理防御力',a.pdef,b.pdef)+metric('魔法防御力',a.mdef,b.mdef)+metric('命中率',ar.hit,br.hit,'%')+metric('会心率',ar.crit,br.crit,'%')+metric('回避率',ar.evade,br.evade,'%')+metric('行動速度',a.speed,b.speed)+
- '</div><small class="equipment-reference">魔攻：威力14のARC／MND術。各率：SKL30・補正なしの敵が基準。</small></div></section>';
+ '</div><small class="equipment-reference">魔法＝ARC／信仰＝MND。術威力14・各率はSKL30基準。</small></div></section>';
 }
 
 function fittingValues(i,items,k){return fittingWith(i,items,()=>{if(k===2||k===3){eq[i][0]=items[2];eq[i][1]=items[3]}return characterValues(i)})}
@@ -22,7 +22,7 @@ function fittingScreen(i,k=0,preview){if(H.run?.battle)return pendingBattleMenu(
  const a=previous,b=fittingValues(i,s.items,k),dirty=JSON.stringify(s.base)!==JSON.stringify(s.items),current=s.items[k].split('：')[1],list=k<4?['なし',...inventory.weapons]:k===4?inventory.armor:k===9?['なし',...Object.keys(hc().tools).filter(n=>hc().tools[n].battle)]:['なし','護符'];
  const slotButtons=keys=>keys.map(n=>'<button data-hub="equipChoice" data-args="'+hesc(JSON.stringify([i,n]))+'" aria-pressed="'+(n===k)+'"><small>'+fittingSlots[n]+'</small><b>'+hesc(s.items[n].split('：')[1])+'</b></button>').join('');
  const rows=fittingWith(i,s.items,()=>list.map(n=>{const ok=canEquip(i,k,n),m=WM[n];let desc=k<4?n==='なし'?'武器を外します。':weaponDescription(n):k===4?armorDescription(n):k===9?n==='なし'?'携行具を外します。':toolDescription(n):n==='なし'?'装飾品を外します。':'補助効果を持つ装飾品。';if(!ok){const j={PHY:0,SKL:1,ARC:2,MND:3}[m?.[3]];desc=m&&j!=null&&stats[i][j]<m[4]?m[3]+' '+stats[i][j]+' / 必要 '+m[4]:(k===1||k===3)?'副手条件不足：両手武器との併用不可・二刀流はSKL 30必要':'装備条件不足'}return '<div class="candidate '+(n===current?'selected':'')+'">'+HB(n+(n===current?('　装備中'):n===s.base[k].split('：')[1]?'　現在装備':''),desc,'uiEquipPreview',[i,k,n],!ok)+'</div>'}).join(''));
- show('<h2>'+hesc(names[i])+' / 装備</h2>'+fittingHero(i,a,b,k)+'<div class="fitting-controls"><div class="fitting-slot-group"><small>現在のセット</small><div>'+slotButtons([0,1])+'</div></div><div class="fitting-slot-group"><small>予備セット</small><div>'+slotButtons([2,3])+'</div></div><div class="fitting-other-slots">'+slotButtons([4,8,9])+'</div><p class="fitting-hint screen-hint">'+hesc(b.weightLevel?b.weightText:k===2||k===3?'予備を選択中：上は換装後の値。現在の戦闘値は変わりません。':k===1?'副手は技・重量に反映。盾は防御中の軽減率を上げます。':'候補をタップして装備変更。使えるスキル・重量も更新されます。')+'</p></div><div class="fitting-list"><div class="fitting-list-title">'+fittingSlots[k]+'の候補 <small>属性・射程 '+hesc(b.attack)+' / '+hesc(b.stance)+'</small></div>'+rows+HB('主副セットを換装','現在と予備を入れ替えます','fittingSwap',[i])+'</div>');
+ show('<h2>'+hesc(names[i])+' / 装備</h2>'+fittingHero(i,a,b,k)+'<div class="fitting-controls"><div class="fitting-slot-group"><small>現在のセット</small><div>'+slotButtons([0,1])+'</div></div><div class="fitting-slot-group"><small>予備セット</small><div>'+slotButtons([2,3])+'</div></div><div class="fitting-other-slots">'+slotButtons([4,8,9])+'</div><p class="fitting-hint screen-hint">'+hesc(b.weightLevel?b.weightText:k===2||k===3?'予備：換装後の値を表示。':k===1?'副手：技・重量・防御に反映。':'右の候補をタップして変更。')+'</p></div><div class="fitting-list"><div class="fitting-list-title">'+fittingSlots[k]+'の候補 <small>属性・射程 '+hesc(b.attack)+' / '+hesc(b.stance)+'</small></div>'+rows+HB('主副セットを換装','現在と予備を入れ替えます','fittingSwap',[i])+'</div>');
  if(changedSlot){const body=document.querySelector('#panel .panel-body');if(body)body.scrollTop=0}
 }
 function fittingCancel(i){if(H.run?.battle)return;const k=fittingDraft?.slot||0;fittingDiscard();equipChoice(i,k)}
