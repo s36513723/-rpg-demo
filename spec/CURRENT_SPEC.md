@@ -33,7 +33,7 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - Sources: 灼陽 / 霊峰 / 海神 / 森羅 / 星辰 (0-1).
 - Spell Masteries: 信仰 / 呪術 / 魔術 / 符術 / 機巧 / 異能 (0-2).
 - Skill Masteries: 探索 / 士気 (0-2).
-- Canonical workbook 08_SkillDB contains the complete 315-candidate design table. Runtime migration from the legacy 296 catalog is a separate implementation task.
+- Canonical workbook 08_SkillDB contains the active 315-skill runtime catalog. Runtime data is loaded through `skill-catalog-315.js`.
 
 ## Equipment semantics
 - Slots: 主武器 / 副手 / 予備主 / 予備副 / 防具一式 / 装飾品 / 携行具.
@@ -102,6 +102,7 @@ Commands sit immediately above ally cards. Character appeal has priority over ti
 ## 315 Skill DB normalization
 - Canonical workbook 08_SkillDB contains all 315 candidate rows with stable SK0001-SK0315 IDs.
 - 315/315 rows now have normalized implementation schema fields, including explicit mechanics for the former 24 special-review rows.
-- The remaining blocker is save/learned-skill migration from the structurally different 296 runtime catalog; it is not a missing-schema problem.
-- Runtime remains the 296 compatibility catalog until those 24 rows and explicit save-migration mappings are resolved.
+- Runtime is now the canonical 315 catalog.
+- Old 296 saves are not fuzzily renamed: skills that still exist by current key survive; unmatched old learned skills are archived in `legacySkills` and refunded as Mastery Pt.
+- The two canonical `速射` rows use distinct runtime keys `速射（弓）` / `速射（銃）` while retaining display name `速射`.
 - Machine-readable normalization status: spec/skill-normalization-status.json.
