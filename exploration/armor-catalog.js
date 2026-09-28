@@ -12,4 +12,13 @@ const ARMOR_VARIANTS={
 };
 for(const [n,d]of Object.entries(ARMOR_VARIANTS)){ARM[n]=d.data;ARMOR_HELP[n]=d.text}
 function armorFamily(n){return ARMOR_VARIANTS[n]?.family||n}
-function initializeArmorVariety(){if(!H.flags['armor-variety-46']){inventory.armor=[...new Set([...inventory.armor,...Object.keys(ARMOR_VARIANTS)])];H.flags['armor-variety-46']=true}}
+function initializeArmorVariety(){
+ if(!H.flags['armor-variety-46'])H.flags['armor-variety-46']=true;
+ // Earlier builds handed out every variant. Keep anything currently equipped;
+ // the remaining variants become purchasable when upgrading an older save.
+ if(!H.flags['armor-shop-63']){
+  const equipped=new Set(eq.flatMap(a=>a.slice(4,8).map(x=>x.split('：')[1])));
+  inventory.armor=inventory.armor.filter(n=>!Object.hasOwn(ARMOR_VARIANTS,n)||equipped.has(n));
+  H.flags['armor-shop-63']=true;
+ }
+}
