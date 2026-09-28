@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "canonical_spec": {
+    "type": "xlsx",
+    "logical_name": "RPG制作_統合詳細仕様書.xlsx",
+    "owner": "user",
+    "editing_policy": "User gives natural-language decisions; assistant updates workbook and propagates to repo implementation."
+  },
+  "repository_mirror": {
+    "current_spec": "spec/CURRENT_SPEC.md",
+    "contract": "AGENTS.md"
+  },
+  "sync_policy": {
+    "trigger": "confirmed specification decision",
+    "required_steps": [
+      "update_workbook",
+      "update_repo_mirror",
+      "update_data",
+      "update_code",
+      "update_tests",
+      "run_tests",
+      "record_status"
+    ],
+    "discussion_does_not_trigger": true,
+    "confirmed_decision_examples": [
+      "それで",
+      "採用",
+      "〜にしよう",
+      "〜を追加して"
+    ]
+  },
+  "current_confirmed": {
+    "battle_party_size": 6,
+    "ally_grid": "3x3",
+    "enemy_grid": "3x3",
+    "resource": [
+      "HP",
+      "SP"
+    ],
+    "obsolete_resource": [
+      "MP"
+    ],
+    "stats": [
+      "PHY",
+      "SKL",
+      "ARC",
+      "MND"
+    ],
+    "armor_slots": [
+      "防具一式"
+    ],
+    "spell_masteries": [
+      "信仰",
+      "呪術",
+      "魔術",
+      "符術",
+      "機巧",
+      "異能"
+    ],
+    "ailments": [
+      "盲目",
+      "猛毒",
+      "睡眠",
+      "気絶",
+      "動揺",
+      "誘惑",
+      "即死"
+    ]
+  },
+  "workstreams": {
+    "battle_demo": "戦闘デモワーク",
+    "base": "拠点ワーク"
+  },
+  "last_sync_status": "contract_initialized",
+  "blocked_steps": [
+    "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
+  ]
+}
