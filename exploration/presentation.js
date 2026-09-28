@@ -10,7 +10,7 @@ const standArts=['battle-warrior.svg','battle-paladin.svg','battle-rogue.svg','b
 // Battle-card artwork is intentionally separate from full-body status artwork.
 // Paladin has its finalized turn icon in-repo; the other five use official full-body art cropped
 // by the card CSS until their finalized battle icons are registered as individual assets.
-const battleCardArts=['turn-warrior.svg','turn-paladin.svg','turn-rogue.svg','turn-archer.svg','turn-alchemist.svg','turn-mystic.svg'];
+const battleCardArts=['hub-card-warrior.webp','hub-card-paladin.webp','hub-card-rogue.webp','hub-card-archer.webp','hub-card-alchemist.webp','hub-card-mystic.webp'];
 const standArt=i=>'../images/'+standArts[i];
 const battleCardArt=i=>'../images/'+battleCardArts[i];
 const attrs=['PHY','SKL','ARC','MND'];
