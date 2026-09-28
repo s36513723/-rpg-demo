@@ -318,3 +318,8 @@
  #panel.status-overview .overview-masteries>span{font-size:12px;line-height:18px;padding:3px 7px}
  #panel.status-overview .overview-masteries b{font-size:13px}
 }
+@media(max-height:680px){
+ #panel.status-overview .resource-grid>div{display:grid;grid-template-columns:auto 1fr;column-gap:5px;align-items:center}
+ #panel.status-overview .resource-grid>div>b{text-align:right}
+ #panel.status-overview .resource-grid>div>.resource-track{grid-column:1/-1}
+}
