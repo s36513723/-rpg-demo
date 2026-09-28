@@ -23,7 +23,7 @@ function cut(c,cls=''){
 $('environment').querySelector('.sky-art').innerHTML=cut(M.crops.sky,'scenery');
 
 const BATTLE_GRID={
- enemy:{left:.04,top:.055,width:.92,height:.72,rows:['REAR','MID','FRONT']},
+ enemy:{left:.025,top:.09,width:.95,height:.78,rows:['REAR','MID','FRONT']},
  ally:{left:.14,top:.52,width:.81,height:.42,rows:['FRONT','MID','REAR']}
 };
 function buildBattleGrid(container,side){
@@ -242,7 +242,7 @@ const ENEMY_CINEMATIC={
  g1:ENEMY_ARCHETYPE_ART.heavy,
  g2:ENEMY_ARCHETYPE_ART.heavy,
  g3:ENEMY_ARCHETYPE_ART.beast,
- arch:ENEMY_ARCHETYPE_ART.archer,
+ arch:ENEMY_ARCHETYPE_ART.flying,
  arch2:ENEMY_ARCHETYPE_ART.flying,
  mage:ENEMY_ARCHETYPE_ART.mage
 };
@@ -256,7 +256,7 @@ const ORDER_PORTRAITS={
  g1:ENEMY_ARCHETYPE_ART.heavy,
  g2:ENEMY_ARCHETYPE_ART.heavy,
  g3:ENEMY_ARCHETYPE_ART.beast,
- arch:ENEMY_ARCHETYPE_ART.archer,
+ arch:ENEMY_ARCHETYPE_ART.flying,
  arch2:ENEMY_ARCHETYPE_ART.flying,
  mage:ENEMY_ARCHETYPE_ART.mage
 };
@@ -266,7 +266,12 @@ const ORDER_FRAMES={
  next:'images/order-frame-next.svg'
 };
 function enemyArchetypeArt(u){
- const s=String(u?.style||u?.name||'');
+ const name=String(u?.name||'');
+ if(/翼竜/.test(name))return ENEMY_ARCHETYPE_ART.flying;
+ if(/月影の獣/.test(name))return ENEMY_ARCHETYPE_ART.beast;
+ if(/星詠み/.test(name))return ENEMY_ARCHETYPE_ART.mage;
+ if(/白銀騎士|聖域の番兵/.test(name))return ENEMY_ARCHETYPE_ART.heavy;
+ const s=name+' '+String(u?.style||'');
  if(/ゴーレム|機械|石像/.test(s))return ENEMY_ARCHETYPE_ART.golem;
  if(/飛行|翼|鳥/.test(s))return ENEMY_ARCHETYPE_ART.flying;
  if(/弓|狙撃/.test(s))return ENEMY_ARCHETYPE_ART.archer;
