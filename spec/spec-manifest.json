@@ -100,7 +100,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "equipment_regressions_green_and_spec_status_registry_added",
+  "last_sync_status": "sp_native_runtime_627_pass_and_auto_generated_spec_mirrors",
   "blocked_steps": [
     "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
   ],
@@ -140,7 +140,16 @@
     ],
     "mastery_rank_status": "初期実装値",
     "skill_set_capacity_status": "初期実装値",
-    "skill_records_status": "要レビュー"
+    "skill_records_status": "要レビュー",
+    "generated_export_policy": {
+      "source": [
+        "rpg-rules.js",
+        "spec/spec-status.json"
+      ],
+      "generator": "tools/export-implementation-spec.mjs",
+      "workflow": ".github/workflows/export-implementation-spec.yml",
+      "auto_commit": true
+    }
   },
   "legacy_compatibility": {
     "mp": "廃止旧仕様。旧セーブ読込・互換変換以外ではMP名称・MP資源を使用しない。"
