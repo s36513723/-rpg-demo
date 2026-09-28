@@ -9,7 +9,8 @@
   "repository_mirror": {
     "current_spec": "spec/CURRENT_SPEC.md",
     "contract": "AGENTS.md",
-    "status_registry": "spec/spec-status.json"
+    "status_registry": "spec/spec-status.json",
+    "balance_review": "spec/balance-review.json"
   },
   "sync_policy": {
     "trigger": "confirmed specification decision",
@@ -100,7 +101,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "sp_native_runtime_627_pass_and_auto_generated_spec_mirrors",
+  "last_sync_status": "balance_diagnostic_and_review_registry_added",
   "blocked_steps": [
     "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
   ],
