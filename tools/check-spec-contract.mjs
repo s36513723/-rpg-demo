@@ -5,6 +5,7 @@ const spec = fs.readFileSync("spec/CURRENT_SPEC.md", "utf8");
 const contract = fs.readFileSync("AGENTS.md", "utf8");
 const status = JSON.parse(fs.readFileSync("spec/spec-status.json", "utf8"));
 const balance = JSON.parse(fs.readFileSync("spec/balance-review.json", "utf8"));
+const skillTarget = JSON.parse(fs.readFileSync("spec/skill-catalog-target.json", "utf8"));
 
 const errors = [];
 const mustEqual = [
@@ -44,6 +45,11 @@ for (const key of ["mastery_rank_max","rank_per_mastery_point","skill_set_capaci
 if (status.obsolete_legacy?.MP?.status !== "廃止旧仕様") errors.push("MP must be classified as obsolete legacy");
 if (balance.overall_status !== "要レビュー") errors.push("battle balance registry must remain review-controlled until explicit confirmation");
 for (const key of ["hp_sp","damage","hit_evade","critical","weight","status_and_binds","weakness","repeat_action","action_speed"]) if (balance.systems?.[key]?.status !== "要レビュー") errors.push(`balance system ${key} must remain 要レビュー until explicitly confirmed`);
+if (skillTarget.status !== "要レビュー") errors.push("315-skill target must remain review-controlled until exact catalog is approved");
+if (skillTarget.current_runtime?.skills !== 296) errors.push("skill target registry must describe the current 296-skill runtime");
+if (skillTarget.target_candidate?.total_skills !== 315 || skillTarget.target_candidate?.base_slots !== 310 || skillTarget.target_candidate?.extra_slots !== 5) errors.push("315-skill target arithmetic mismatch");
+if (skillTarget.exact_catalog?.known_complete_list !== false) errors.push("do not mark the 315 catalog complete until exact names/ranks are supplied");
+if (!skillTarget.migration_policy?.do_not_invent_missing_names) errors.push("missing 315-skill names must never be invented");
 
 for (const token of ["Mandatory workflow","Definition of done","canonical specification workbook"]) {
   if (!contract.includes(token)) errors.push(`AGENTS contract missing: ${token}`);
