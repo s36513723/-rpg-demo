@@ -10,7 +10,7 @@ async def main():
   browser=await p.chromium.launch(headless=True,args=['--no-sandbox'])
   page=await browser.new_page(viewport={'width':390,'height':844})
   errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
-  await page.goto('http://127.0.0.1:8140/play-plan-v24.html',wait_until='load');await page.wait_for_timeout(1200)
+  await page.goto('http://127.0.0.1:8140/play-plan-v30.html',wait_until='load');await page.wait_for_timeout(1200)
   data=await page.evaluate("""()=>{const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];const img=q('.enemy-unit[data-unit-id="g3"] .enemy-cinematic-art');return {cards:qa('.ally-unit').length,enemies:qa('.enemy-unit').length,active:q('.ally-unit.active')?.dataset.unitId||null,beast:!!img&&img.complete&&img.naturalWidth>0,beastSrc:img?.getAttribute('src')||'',portrait:q('.actor-portrait-image')?.getAttribute('src')||'',labels:['attack','skills','swap','defend'].map(id=>q('#'+id+' b')?.textContent.trim()),terrain:q('.round-meta')?.innerText.replace(/\s+/g,' ').trim()}}""")
   ok=(not errors and data['cards']==6 and data['enemies']==6 and data['active'] and data['beast'] and data['beastSrc'].endswith('beast-cinematic.svg') and data['portrait'].endswith('gald-cinematic.svg') and data['labels']==['ATTACK','SKILL','ITEM','DEFEND'])
   await page.screenshot(path='plan-current.png', full_page=False)
