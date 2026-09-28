@@ -9,7 +9,7 @@ function fittingHero(i,a,b,k=0){
  const value=(x,y,suffix='',lower=false)=>{const delta=round(y-x);return '<b>'+round(y)+suffix+(delta?' <i class="'+((lower?delta<0:delta>0)?'up':'down')+'">('+(delta>0?'+':'')+delta+')</i>':'')+'</b>'};
  const metric=(name,x,y,suffix='',lower=false)=>'<span><small>'+name+'</small>'+value(x,y,suffix,lower)+'</span>';
  const ar=characterDisplayRates(i,a),br=characterDisplayRates(i,b);
- return '<section class="fitting-summary"><div class="equip-compare" aria-live="polite"><small>'+(k===2||k===3?'予備セット使用時（換装後）':'現在のセット')+' · 差分は括弧内</small><div class="equip-compare-grid">'+
+ return '<section class="fitting-summary"><div class="equip-compare" aria-live="polite"><small>'+(k===2||k===3?'予備セット使用時（換装後）':'現在のセット')+'</small><div class="equip-compare-grid">'+
  metric('最大HP',a.hp,b.hp)+metric('最大SP',a.sp,b.sp)+metric('装備重量',a.weight,b.weight,' / '+b.limit,true)+metric('物理攻撃力',a.physical,b.physical)+
  metric('魔法攻撃力',a.magicArc,b.magicArc)+metric('信仰攻撃力',a.magicMind,b.magicMind)+
  metric('物理防御力',a.pdef,b.pdef)+metric('魔法防御力',a.mdef,b.mdef)+metric('命中率',ar.hit,br.hit,'%')+metric('会心率',ar.crit,br.crit,'%')+metric('回避率',ar.evade,br.evade,'%')+metric('行動速度',a.speed,b.speed)+
