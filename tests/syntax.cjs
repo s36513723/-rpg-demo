@@ -15,7 +15,7 @@ for(const [n,d]of Object.entries(R.skills)){
  if(d.mode==='Active'){assert(Number.isFinite(d.mult));assert(Number.isFinite(d.cost));assert.equal(d.costType,'SP');assert(['near','mid','far','all'].includes(d.range));assert(['single','row','all','pierce','adjacent','random'].includes(d.scope));const t=d.targeting;assert(t,n+' targeting');assert(['enemy','ally','self'].includes(t.side),n+' targeting side');assert(['same','select','self'].includes(t.column),n+' targeting column');assert(['front','through','last','ally','self'].includes(t.order),n+' targeting order');assert(['single','cross','x','vertical','horizontal','3x3'].includes(t.area),n+' targeting area');assert(typeof t.ignoreTaunt==='boolean',n+' ignoreTaunt');}
  else assert(Object.keys(d.passive).length,n+' passive');
 }
-assert.equal(R.version,9);assert.equal(R.targetRules.board.allyNear,'back');assert.equal(R.targetRules.board.enemyNear,'front');assert.equal(R.targetRules.board.forwardAxis,'vertical');
+assert.equal(R.version,10);assert.equal(R.targetRules.board.allyNear,'back');assert.equal(R.targetRules.board.enemyNear,'front');assert.equal(R.targetRules.board.forwardAxis,'vertical');
 assert.deepEqual(R.targetRules.normalAttack,{side:'enemy',column:'same',order:'front',area:'single'});
 assert.equal(R.targetRules.emptySameColumn,'choose-occupied-column');assert.equal(R.targetRules.throughFallback,'front');assert.equal(R.targetRules.counterChain,false);
 assert.equal(R.targetingText(R.skills['毒刃']),'正面・スルー・単体');
