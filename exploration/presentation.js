@@ -39,6 +39,7 @@ const showUI=html=>{
  const priorFocus=document.activeElement,focusAction=priorFocus?.dataset?.hub,focusArgs=priorFocus?.dataset?.args;const panel=document.getElementById('panel'),open=isOpen(),scroll=panel.querySelector('.panel-body')?.scrollTop||0,r=U.render||{name:'note',args:['メニューを閉じて操作を続けてください。']};
  if(!['equip','equipChoice'].includes(r.name))fittingDiscard();
  if(r.name!=='actorAttributes')attributeDiscard();
+ if(!['mastery','masteryType','growMastery','masterySkills','charMastery','charAbility'].includes(r.name))masteryDiscard();
  const same=key(U.route)===key(r);if(!open){U.stack=[];U.opener=U.launcher||document.activeElement;U.launcher=null}else if(U.route&&!same&&!U.back)U.stack.push(recordRoute(U.route,scroll));if(U.stack.length>24)U.stack.shift();U.route={name:r.name,args:r.args.slice()};
  const temp=document.createElement('div');temp.innerHTML=html;const title=temp.querySelector('h2'),heading=title?.textContent||'メニュー';if(title)title.remove();
  // Navigation remains at the bottom; commit actions belong to the content they change.
@@ -69,10 +70,13 @@ const showUI=html=>{
  if(cancelRoute){const back=panel.querySelector('.panel-back');back.hidden=false;back.dataset.hub=cancelRoute.action;back.dataset.args=cancelRoute.args}
  panel.setAttribute('aria-labelledby','panelTitle');document.getElementById('modal').classList.add('on');document.getElementById('app').inert=true;panel.scrollTop=0;const body=panel.querySelector('.panel-body');if(same)body.scrollTop=scroll;navState(r.name);const nextFocus=same&&focusAction?[...panel.querySelectorAll('[data-hub]')].find(e=>e.dataset.hub===focusAction&&e.dataset.args===focusArgs&&!e.disabled):null;(nextFocus||panel.querySelector('#panelTitle')).focus({preventScroll:true});
 };
-const closeUI=()=>{fittingDiscard();attributeDiscard();document.getElementById('modal').classList.remove('on');document.getElementById('app').inert=false;U.route=null;U.stack=[];U.formationSelected=null;if(hubBooted){renderRoster();if(!activeRun())window.town();else navState('town')}const target=U.opener;U.opener=null;const fallback=target?.dataset?.hub?[...document.querySelectorAll('#app [data-hub]')].find(e=>e.dataset.hub===target.dataset.hub&&e.dataset.args===target.dataset.args):null;(target?.isConnected?target:fallback||document.querySelector('#app nav .current'))?.focus({preventScroll:true})};
+const closeUI=()=>{masteryDiscard();fittingDiscard();attributeDiscard();document.getElementById('modal').classList.remove('on');document.getElementById('app').inert=false;U.route=null;U.stack=[];U.formationSelected=null;if(hubBooted){renderRoster();if(!activeRun())window.town();else navState('town')}const target=U.opener;U.opener=null;const fallback=target?.dataset?.hub?[...document.querySelectorAll('#app [data-hub]')].find(e=>e.dataset.hub===target.dataset.hub&&e.dataset.args===target.dataset.args):null;(target?.isConnected?target:fallback||document.querySelector('#app nav .current'))?.focus({preventScroll:true})};
 const toast=text=>{const e=document.getElementById('uiToast');if(!e)return;e.textContent=text;e.hidden=false;clearTimeout(U.toast);U.toast=setTimeout(()=>e.hidden=true,2400)};
 const uiActions={
  uiSkillMastery(i,g){U.skillMasteries[i]=g;skills(i)},
+ uiMasteryRank(i,g,d){masteryRankAdjust(i,g,d)},
+ uiMasterySkill(i,g,b,n){masterySkillToggle(i,g,b,n)},
+ uiMasteryApply(i){masteryApply(i)},
  uiMasteryBranch(i,g,b){const s=masterySelection;if(s?.i!==i||s.g!==g)return masterySkills(i,g,b);const opened=new Set(s.openBranches||[]);if(opened.has(b))opened.delete(b);else opened.add(b);s.openBranches=[...opened];return masterySkills(i,g,opened.has(b)?b:'')},
  uiBack(){const frame=U.stack.pop();if(!frame)return closeUI();U.back=true;try{const fn=window[frame.route.name];if(typeof fn==='function')fn(...frame.route.args);else closeUI();const b=document.querySelector('#panel .panel-body');if(b)b.scrollTop=frame.scroll}finally{U.back=false}},
  uiActor(i,tab='overview'){if(!Number.isInteger(i)||i<0||i>=6)return;({overview:character,attributes:actorAttributes,equip,skills,growth:charAbility}[tab]||character)(i)},

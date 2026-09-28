@@ -266,3 +266,13 @@
 #panel .mastery-branch .branch-label{min-width:0;text-align:left}
 #panel .mastery-branch .branch-label small{display:block;white-space:normal;font-size:10px;line-height:1.4;margin-top:3px;color:#d0ccb9}
 #panel .mastery-branch>.branch-toggle>span:last-child{flex:none}
+
+#panel .mastery-points{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:3px;padding:4px 6px}
+#panel .mastery-points>div{min-width:0}
+#panel .mastery-points b{font-size:12px}
+#panel .mastery-points small{display:block;font-size:10px;line-height:1.35}
+#panel .mastery-points>button{min-height:44px;width:auto;margin:0;padding:4px 8px;background:#d5bd83;color:#17271b}
+#panel .mastery-points .mastery-point-help{flex-basis:100%;color:#d0ccb9}
+#panel .mastery-training{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+#panel .mastery-training .row b{font-size:11px}
+#panel .mastery-training .row small{font-size:9px}
