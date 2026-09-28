@@ -15,6 +15,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Decode capital background
         run: |
+          sha256sum tools/assets/capital-bg.part*
           cat tools/assets/capital-bg.part* | tr -d '\n\r' | base64 -d > images/hub-capital-bg.webp
           test "$(stat -c %s images/hub-capital-bg.webp)" -eq 30724
           echo "18762edb3a35da16eb97f3ee31e4d253916b3e32d50899b840078a85ce4de9fa  images/hub-capital-bg.webp" | sha256sum -c -
