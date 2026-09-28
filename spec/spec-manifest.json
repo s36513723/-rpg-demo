@@ -16,7 +16,8 @@
       "balance_registry": "spec/balance-review.json",
       "skill_mechanical_review": "spec/generated/skill-review.json",
       "enemy_matchup_audit": "docs/ENEMY_AUDIT.md"
-    }
+    },
+    "skill_catalog_target": "spec/skill-catalog-target.json"
   },
   "sync_policy": {
     "trigger": "confirmed specification decision",
@@ -107,7 +108,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "sp_native_627_pass_auto_sync_balance_skill_enemy_review_ready",
+  "last_sync_status": "cross_chat_enemy_archetypes_temptation_and_315_target_scaffold",
   "blocked_steps": [
     "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
   ],
@@ -162,6 +163,29 @@
       "current_runtime_skills": 296,
       "generated_report": "spec/generated/skill-review.json",
       "policy": "mechanical triage only; user approval required for design changes"
+    },
+    "skill_catalog_target": {
+      "candidate_total": 315,
+      "base_slots": 310,
+      "extra_slots": 5,
+      "rank_model": "1-10",
+      "status": "要レビュー",
+      "exact_catalog": "未取得",
+      "runtime_replacement": false
+    },
+    "enemy_archetypes": {
+      "count": 7,
+      "types": [
+        "獣",
+        "軽装",
+        "重装",
+        "魔術師",
+        "弓",
+        "飛行",
+        "ゴーレム"
+      ],
+      "behavior_status": "初期実装値",
+      "encounter_mix_status": "初期実装値"
     }
   },
   "legacy_compatibility": {
