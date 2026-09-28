@@ -41,7 +41,7 @@ const selectionOverlay=()=>{
  let description='',action='';
  if(d.kind==='skill'){const m=rules().meta(d.n);if(!m)return;description=skillExplanation(m)+' '+skillDescription(m)+(m.costType?' / '+m.costType+' '+m.cost:'');const on=skillSet[d.i].includes(d.n),next=on?skillSet[d.i].filter(n=>n!==d.n):skillSet[d.i].concat(d.n),fits=rules().fits(stats[d.i],next);action='<button'+data('uiDetailSkillSet',[d.i,d.n])+(!fits?' disabled':'')+'>'+(on?'セット解除':fits?'セットする':'コスト不足')+'</button>'}
  else{const row=[...panel.querySelectorAll('.candidate button')].find(e=>JSON.parse(e.dataset.args)[2]===d.n);description=row?.querySelector('.small')?.textContent||'';}
- footer.insertAdjacentHTML('beforeend','<section class="selection-overlay" aria-label="選択した項目の説明" aria-live="polite"><div><b>'+hesc(d.n)+'</b><button data-hub="uiDetailClose" aria-label="説明を閉じる">×</button></div><p>'+hesc(description)+'</p>'+action+'</section>');
+ footer.insertAdjacentHTML('beforeend','<section class="selection-overlay" aria-label="選択した項目の説明" aria-live="polite"><div><b>'+hesc(d.n)+'</b></div><p>'+hesc(description)+'</p>'+action+'</section>');
 };
 const showUI=html=>{
  const priorFocus=document.activeElement,focusAction=priorFocus?.dataset?.hub,focusArgs=priorFocus?.dataset?.args;const panel=document.getElementById('panel'),open=isOpen(),scroll=panel.querySelector('.panel-body')?.scrollTop||0,r=U.render||{name:'note',args:['メニューを閉じて操作を続けてください。']};
@@ -148,6 +148,6 @@ const routes=['actorAttributes','guildMembers','guildSellMenu','guildSaleQuantit
 for(const name of routes){const render=window[name];if(typeof render!=='function')continue;window[name]=(...args)=>{const previous=U.render;U.render={name,args};try{return render(...args)}finally{U.render=previous}}}
 // Modal focus, keyboard escape and touch navigation work independently of game state.
 document.addEventListener('keydown',e=>{if(e.key!=='Tab'||!isOpen())return;const list=focusables(),first=list[0],last=list[list.length-1];if(!first)return;e.stopPropagation();if(e.shiftKey&&(document.activeElement===first||!list.includes(document.activeElement))){last.focus();e.preventDefault()}else if(!e.shiftKey&&(document.activeElement===last||!list.includes(document.activeElement))){first.focus();e.preventDefault()}});
-document.addEventListener('click',e=>{if(e.target.closest('#app nav')){U.stack=[];U.route=null}const el=e.target.closest('[data-hub],button[onclick]');if(!el)return;if(el.closest('#app'))U.launcher=el;if(el.closest('#panel')&&!el.disabled){U.opener=U.opener?.isConnected?U.opener:document.querySelector('#app nav .current')}},true);
+document.addEventListener('click',e=>{if(U.detail&&!e.target.closest('.selection-overlay')){U.detail=null;selectionOverlay();document.querySelectorAll('.skill-toggle.inspected').forEach(el=>el.classList.remove('inspected'))}if(e.target.closest('#app nav')){U.stack=[];U.route=null}const el=e.target.closest('[data-hub],button[onclick]');if(!el)return;if(el.closest('#app'))U.launcher=el;if(el.closest('#panel')&&!el.disabled){U.opener=U.opener?.isConnected?U.opener:document.querySelector('#app nav .current')}},true);
 window.HUB_UI={version:21,state:U,warnings,resources};
 })();

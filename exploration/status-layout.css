@@ -261,7 +261,7 @@
 #panel .skill-selection .search-input{width:100%;flex:none;margin:0 0 5px;box-sizing:border-box}
 .skill-candidates{overflow-y:auto;min-height:0;overscroll-behavior:contain}
 #panel .skill-candidates .skill-toggle{width:100%;margin:0 0 5px;padding:7px 6px}
-#panel .skill-candidates .row-visual{display:none}
+#panel .skill-candidates .row-visual{display:none!important}
 #panel .skill-candidates .cost-label{display:inline-block;font-size:10px}
 #panel .mastery-branch .branch-label{min-width:0;text-align:left}
 #panel .mastery-branch .branch-label small{display:block;white-space:normal;font-size:10px;line-height:1.4;margin-top:3px;color:#d0ccb9}
@@ -326,7 +326,7 @@
 
 /* Compact selectable rows, with details over the bottom navigation. */
 #panel .candidate button.row,#panel .skill-candidates .skill-toggle{display:flex;align-items:center;min-height:40px;height:40px;padding:5px 7px;gap:4px;margin-bottom:3px}
-#panel .candidate button.row>.small,#panel .candidate .row-visual,#panel .skill-candidates .item-explain,#panel .skill-candidates .small,#panel .skill-candidates .inline-warning,#panel .skill-candidates .row-visual{display:none}
+#panel .candidate button.row>.small,#panel .candidate .row-visual,#panel .skill-candidates .item-explain,#panel .skill-candidates .small,#panel .skill-candidates .inline-warning,#panel .skill-candidates .row-visual{display:none!important}
 #panel .candidate button.row>b,#panel .skill-candidates .skill-toggle>b{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
 #panel .skill-candidates .skill-toggle.inspected{outline:1px solid #e4c987}
 #panel .panel-footer:has(.selection-overlay){position:relative;overflow:visible}
