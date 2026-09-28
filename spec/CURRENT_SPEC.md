@@ -71,11 +71,13 @@ Skills are learned from requirements such as stats, Mastery, Source and spell sy
 - No weapon/armor durability-repair system.
 
 ## Base
-- 宿・酒場: conversation and rest. Returning alone does not auto-heal; choosing rest fully restores HP/SP/status and settles pending growth points.
-- ギルド: requests, information, appraisal, purchase of exploration finds.
-- 市場: equipment, items, processing.
-- ダンジョン: destination, party, sortie.
-- Old storage concept is replaced by member-management functionality.
+- Home shows the next objective, actionable notices, the next sortie destination, and three town facilities: 宿屋 / ギルド / 市場.
+- 宿屋: rest / companion conversation / patron conversation / sortie preparation. Returning alone does not auto-heal; choosing rest fully restores HP/SP/status and settles pending growth points.
+- ギルド: requests/reports / exploration records / appraisal-buyback / storage.
+- 市場: equipment / items / processing / selling.
+- Sortie preparation is integrated rather than a fourth facility and uses three tabs: 陣形 / 仲間 / 行き先.
+- Character management is available from the roster/member screens and uses 概要 / 能力値 / 装備 / スキル / 習練. Equipment, skills and Mastery are not owned by a town facility.
+- Rumors/clues are obtained through conversation and revisited in records rather than being a separate facility action.
 
 ## Battle UI
 Top to bottom:
