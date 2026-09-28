@@ -17,7 +17,8 @@
       "skill_mechanical_review": "spec/generated/skill-review.json",
       "enemy_matchup_audit": "docs/ENEMY_AUDIT.md"
     },
-    "skill_catalog_target": "spec/skill-catalog-target.json"
+    "skill_catalog_target": "spec/skill-catalog-target.json",
+    "skill_migration_audit": "spec/skill-migration-296-to-315.json"
   },
   "sync_policy": {
     "trigger": "confirmed specification decision",
@@ -141,10 +142,11 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "canonical_compact_spec_resolved_and_repo_mirror_synced_2026-09-28",
+  "last_sync_status": "canonical_315_schema_and_migration_audit_synced_2026-09-28",
   "blocked_steps": [
     "Binary XLSX snapshot is maintained as the conversation artifact; repository mirror/data/code are synchronized separately.",
-    "Runtime skill catalog remains 296 until 315 Skill DB fields are normalized and save/regression migration tests pass."
+    "315 runtime switch is blocked: only 40 canonical rows have unique exact-name matches to the 296 runtime; 速射 is ambiguous and the remaining rows require explicit migration mapping.",
+    "08_SkillDB implementation schema fields such as scaling/attributes/numeric range/target_rule/defense_ref remain intentionally blank where not yet specified."
   ],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
@@ -205,7 +207,15 @@
       "rank_model": "1-10",
       "status": "構造確定",
       "exact_catalog": "canonical workbook 08_SkillDB complete design table",
-      "runtime_replacement": false
+      "runtime_replacement": false,
+      "migration_audit": {
+        "path": "spec/skill-migration-296-to-315.json",
+        "exact_unique_name_matches": 40,
+        "ambiguous_names": [
+          "速射"
+        ],
+        "policy": "No runtime 315 switch until explicit stable mapping exists for renamed/replaced skills and required implementation schema fields are complete."
+      }
     },
     "enemy_archetypes": {
       "count": 7,
