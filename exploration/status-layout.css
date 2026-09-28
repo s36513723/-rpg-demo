@@ -367,3 +367,16 @@
 #panel .candidate.unavailable.selected button{outline:2px solid #d5a17f;outline-offset:-2px;color:#e4c7b3}
 #panel .selection-overlay{z-index:40;min-height:100%}
 @media(max-height:680px){#panel .equipment-left .equip-compare-grid>span{min-height:15px;line-height:15px}}
+
+/* Every tab is visible; the selected state is consistent across screens. */
+#panel .bottom-tabs>.ui-tabs,#panel .bottom-tabs>.fitting-filters{display:flex;flex-wrap:wrap;overflow:visible;gap:3px}
+#panel .bottom-tabs button{flex:1 1 auto;min-width:0;white-space:nowrap}
+#panel .bottom-tabs>.fitting-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(44px,1fr))}
+#panel .bottom-tabs>.fitting-filters button{min-height:32px;padding:3px 2px;font-size:10px}
+#panel .equipment-bottom-slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));overflow:visible;gap:3px}
+#panel .equipment-bottom-slots button{min-width:0;width:100%;min-height:32px;padding:3px 1px;font-size:10px}
+#panel .bottom-tabs button[aria-pressed="true"],#panel .equipment-bottom-slots button[aria-pressed="true"],#panel .actor-tabs button[aria-pressed="true"]{background:#e2c98d!important;color:#16241b!important;border:1px solid #fff0bd!important;box-shadow:inset 0 -3px 0 #9e773b;font-weight:700}
+#panel .bottom-tabs button[aria-pressed="false"],#panel .equipment-bottom-slots button[aria-pressed="false"]{background:#20372c;color:#bdc8bc;border:1px solid #526654}
+#panel .equipment-bottom-operation{position:relative;z-index:41;flex-shrink:0}
+#panel .selection-overlay{box-sizing:border-box}
+@media(max-height:680px){#panel.status-equipment>.panel-footer{padding-top:3px}#panel .equipment-left .equip-compare-grid>span{min-height:14px;line-height:14px}}

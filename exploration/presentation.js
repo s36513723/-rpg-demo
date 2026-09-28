@@ -37,11 +37,12 @@ const routeGroup=n=>/guild|guildDesk|quest|reportChapter|appraise|storage|deposi
 const navState=n=>{const group=routeGroup(n);document.querySelectorAll('#app nav button').forEach(b=>{const on=!!group&&b.dataset.hub===group;b.classList.toggle('current',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')})};
 const selectionOverlay=()=>{
  const panel=document.getElementById('panel'),footer=panel.querySelector('.panel-footer');if(!footer)return;
- footer.querySelector('.selection-overlay')?.remove();const d=U.detail;for(const child of footer.children)child.inert=!!d;if(!d)return;
+ footer.querySelector('.selection-overlay')?.remove();const d=U.detail;for(const child of footer.children)child.inert=!!d&&!child.classList.contains('equipment-bottom-operation');if(!d)return;
  let description='',action='';
  if(d.kind==='skill'){const m=rules().meta(d.n);if(!m)return;description=skillExplanation(m)+' '+skillDescription(m)+(m.costType?' / '+m.costType+' '+m.cost:'');const on=skillSet[d.i].includes(d.n),next=on?skillSet[d.i].filter(n=>n!==d.n):skillSet[d.i].concat(d.n),fits=rules().fits(stats[d.i],next);action='<button'+data('uiDetailSkillSet',[d.i,d.n])+(!fits?' disabled':'')+'>'+(on?'セット解除':fits?'セットする':'コスト不足')+'</button>'}
  else{const row=[...panel.querySelectorAll('.candidate button')].find(e=>JSON.parse(e.dataset.args)[2]===d.n);description=row?.querySelector('.small')?.textContent||'';}
  footer.insertAdjacentHTML('beforeend','<section class="selection-overlay" aria-label="選択した項目の説明" aria-live="polite"><div><b>'+hesc(d.n)+'</b></div><p>'+hesc(description)+'</p>'+action+'</section>');
+ const operation=footer.querySelector('.equipment-bottom-operation');if(operation){const overlay=footer.querySelector('.selection-overlay');overlay.style.top=(operation.getBoundingClientRect().bottom-footer.getBoundingClientRect().top+4)+'px';overlay.style.minHeight='0'}
 };
 const showUI=html=>{
  const priorFocus=document.activeElement,focusAction=priorFocus?.dataset?.hub,focusArgs=priorFocus?.dataset?.args;const panel=document.getElementById('panel'),open=isOpen(),scroll=panel.querySelector('.panel-body')?.scrollTop||0,r=U.render||{name:'note',args:['メニューを閉じて操作を続けてください。']};
@@ -80,7 +81,7 @@ const showUI=html=>{
  const secondary=document.createElement('div');secondary.className='bottom-tabs';
  panel.querySelectorAll('.ui-tabs:not(.actor-tabs .ui-tabs),.fitting-filters').forEach(el=>secondary.append(el));
  if(secondary.children.length)footer.prepend(secondary);
- if(controlsMarkup){const operation=document.createElement('div');operation.className='equipment-bottom-operation';const slots=document.createElement('div');slots.className='equipment-bottom-slots';slots.setAttribute('aria-label','装備枠');panel.querySelectorAll('.fitting-controls [data-hub="equipChoice"]').forEach(el=>{const b=el.cloneNode(true),k=Number(JSON.parse(b.dataset.args)[1]);b.textContent=({0:'主手',1:'副手',2:'予備主',3:'予備副',4:'防具',8:'装飾',9:'携行'})[k];slots.append(b)});operation.append(slots,panel.querySelector('.fitting-confirm'));secondary.after(operation)}
+ if(controlsMarkup){const operation=document.createElement('div');operation.className='equipment-bottom-operation';const slots=document.createElement('div');slots.className='equipment-bottom-slots';slots.setAttribute('aria-label','装備枠');panel.querySelectorAll('.fitting-controls [data-hub="equipChoice"]').forEach(el=>{const b=el.cloneNode(true),k=Number(JSON.parse(b.dataset.args)[1]);b.textContent=({0:'主手',1:'副手',2:'予備主',3:'予備副',4:'防具',8:'装飾',9:'携行'})[k];slots.append(b)});operation.append(slots,panel.querySelector('.fitting-confirm'));secondary.before(operation)}
  if(actorRoute){const nav=panel.querySelector('.panel-navigation'),exit=nav.querySelector('.modal-x');exit.classList.add('actor-exit');panel.querySelector('.actor-tabs .ui-tabs').append(exit);nav.remove()}
  if(cancelRoute&&panel.querySelector('.panel-back')){const back=panel.querySelector('.panel-back');back.hidden=false;back.dataset.hub=cancelRoute.action;back.dataset.args=cancelRoute.args}
  selectionOverlay();panel.setAttribute('aria-labelledby','panelTitle');document.getElementById('modal').classList.add('on');document.getElementById('app').inert=true;panel.scrollTop=0;const body=panel.querySelector('.panel-body');if(same)body.scrollTop=scroll;navState(r.name);const nextFocus=same&&focusAction?[...panel.querySelectorAll('[data-hub]')].find(e=>e.dataset.hub===focusAction&&e.dataset.args===focusArgs&&!e.disabled):null;(nextFocus||panel.querySelector('#panelTitle')).focus({preventScroll:true});
