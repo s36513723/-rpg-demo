@@ -47,7 +47,7 @@ async def layouts(page):
    results.append({'name':f'UI22 people selector fits {width}x{height} {selector}','ok':dims['scroll']<=1 and not dims['wide'] and dims['cards']>=6 and dims['same'] and dims['oneColumn'] and dims['horizontal'],'measurements':dims})
   for tab in ['formation','members','destination']:
    await page.evaluate(f"partyMenu('{tab}')")
-   dims=await page.evaluate("""()=>{const body=document.querySelector('#panel .panel-body');return {scroll:body.scrollHeight-body.clientHeight,wide:body.scrollWidth>body.clientWidth+1,fixed:body.classList.contains('sortie-page'),tabs:body.querySelectorAll('.ui-tabs button').length}}""")
+   dims=await page.evaluate("""()=>{const body=document.querySelector('#panel .panel-body');return {scroll:body.scrollHeight-body.clientHeight,wide:body.scrollWidth>body.clientWidth+1,fixed:body.classList.contains('sortie-page'),tabs:document.querySelectorAll('#panel .bottom-tabs .ui-tabs button').length}}""")
    results.append({'name':f'UI21 sortie tab fits {width}x{height} {tab}','ok':dims['scroll']<=1 and not dims['wide'] and dims['fixed'] and dims['tabs']==3,'measurements':dims})
   for facility in ['inn()','guild()','market()']:
    await page.evaluate(facility)
