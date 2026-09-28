@@ -117,13 +117,13 @@
 
 | 敵タイプ | 正式 | GitHub画像本体 | 状況 |
 |---|---|---|---|
-| 獣 | ✓ | 未登録 | 正式画像作成済み・本体登録待ち |
-| 軽装 | ✓ | 未登録 | 正式画像作成済み・本体登録待ち |
-| 重装 | ✓ | 未登録 | 正式画像作成済み・本体登録待ち |
-| 魔術師 | ✓ | 未登録 | 正式画像作成済み・本体登録待ち |
-| 弓 | ✓ | 未登録 | 正式画像作成済み・本体登録待ち |
-| 飛行 | ✓ | 未登録 | 正式画像作成済み・本体登録待ち |
-| ゴーレム | ✓ | 未登録 | 正式画像作成済み・本体登録待ち |
+| 獣 | ✓ | images/enemy-beast-official.webp | 保存済み・Plan戦闘UI接続済み |
+| 軽装 | ✓ | images/enemy-light-official.webp | 保存済み・Plan戦闘UI接続済み |
+| 重装 | ✓ | images/enemy-heavy-official.webp | 保存済み・Plan戦闘UI接続済み |
+| 魔術師 | ✓ | images/enemy-mage-official.webp | 保存済み・Plan戦闘UI接続済み |
+| 弓 | ✓ | images/enemy-archer-official.webp | 保存済み・Plan戦闘UI接続済み |
+| 飛行 | ✓ | images/enemy-flying-official.webp | 保存済み・Plan戦闘UI接続済み |
+| ゴーレム | ✓ | images/enemy-golem-official.webp | 保存済み・Plan戦闘UI接続済み |
 
 既存の `images/enemy_beast.svg` / `enemy_nature.svg` / `enemy_guard.svg` / `enemy_mage.svg` / `enemy_archer.svg` / `enemy_flying.svg` / `enemy_golem.svg` は現時点では旧簡易素材。正式画像本体を登録・接続するまで正式素材とみなさない。
 
@@ -142,3 +142,27 @@
 | 種類 | 正式 | GitHub画像本体 | 状況 |
 |---|---|---|---|
 | 王都レクシア・城下町背景 | ✓ | images/hub-capital-bg.webp | 正式画像本体登録済み |
+
+## 戦闘UI正式素材
+
+| 用途 | GitHub画像本体 | 状況 |
+|---|---|---|
+| 味方9マス背景 | images/battle-grid-9.webp | 保存済み・Plan戦闘UI接続済み |
+| 味方カード選択状態 | images/battle-card-selected.webp | 保存済み・Plan戦闘UI接続済み |
+| コマンド背景 | images/battle-command.webp | 保存済み・Plan戦闘UI接続済み |
+| コマンド選択状態 | images/battle-command-selected.webp | 保存済み・Plan戦闘UI接続済み |
+| AUTO | images/battle-auto.webp | 保存済み・Plan戦闘UI接続済み |
+| 倍速 | images/battle-speed2.webp | 保存済み・Plan戦闘UI接続済み |
+| 行動順・味方枠 | images/order-frame-ally.svg | 保存済み・Plan戦闘UI接続済み |
+| 行動順・敵枠 | images/order-frame-enemy.svg | 保存済み・Plan戦闘UI接続済み |
+| 行動順・NEXT枠 | images/order-frame-next.svg | 保存済み・Plan戦闘UI接続済み |
+
+## 37点デモ反映セット
+
+- 通常立ち絵: 6 / 6（拠点）
+- 戦闘用立ち絵: 6 / 6（戦闘）
+- 行動順アイコン: 6 / 6（戦闘）
+- 拠点NPC: 3 / 3（拠点）
+- 敵正式立ち絵: 7 / 7（戦闘）
+- 戦闘UI: 9 / 9（戦闘）
+- 合計: **37 / 37**
