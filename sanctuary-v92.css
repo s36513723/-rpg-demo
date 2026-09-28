@@ -420,7 +420,7 @@
 }
 .order-face[data-actor-id="war"]::before{background-image:url("images/gald.svg")}
 .order-face[data-actor-id="rog"]::before{background-image:url("images/lize.svg")}
-.order-face[data-actor-id="run"]::before{background-image:url("images/ern.svg")}
+.order-face[data-actor-id="run"]::before{background-image:url("images/paladin-turn.webp")}
 .order-face[data-actor-id="ran"]::before{background-image:url("images/sena.svg")}
 .order-face[data-actor-id="arc"]::before{background-image:url("images/mirea.svg")}
 .order-face[data-actor-id="mys"]::before{background-image:url("images/yuna.svg")}
