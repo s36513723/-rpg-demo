@@ -79,6 +79,13 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - Records: up to 40 expedition-history entries plus statistics / people / regions / enemy observations.
 - Rumors come through NPC conversation, not a separate daily menu.
 
+## Hub visual identity
+- The six party-member cards must use clearly separated character identity colors; near-duplicate hues across members are avoided.
+- Current hub identity palette: Warrior crimson / Paladin sapphire / Rogue violet / Archer emerald / Alchemist amber / Mystic cyan.
+- HP and SP bars on hub member cards remain permanently visible over character art.
+- Character overview artwork should not be hidden by an opaque top header; navigation may overlay the artwork.
+- Temporary facility NPC placeholder art must not dominate the facility screen. Facility atmosphere and commands remain primary until final NPC/background masters are connected.
+
 ## Battle UI
 1. ROUND / AUTO / speed / settings
 2. turn order
