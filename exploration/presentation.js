@@ -73,7 +73,7 @@ const closeUI=()=>{fittingDiscard();attributeDiscard();document.getElementById('
 const toast=text=>{const e=document.getElementById('uiToast');if(!e)return;e.textContent=text;e.hidden=false;clearTimeout(U.toast);U.toast=setTimeout(()=>e.hidden=true,2400)};
 const uiActions={
  uiSkillMastery(i,g){U.skillMasteries[i]=g;skills(i)},
- uiMasteryBranch(i,g,b){return masterySkills(i,g,masterySelection?.i===i&&masterySelection.g===g&&masterySelection.b===b?'':b)},
+ uiMasteryBranch(i,g,b){const s=masterySelection;if(s?.i!==i||s.g!==g)return masterySkills(i,g,b);const opened=new Set(s.openBranches||[]);if(opened.has(b))opened.delete(b);else opened.add(b);s.openBranches=[...opened];return masterySkills(i,g,opened.has(b)?b:'')},
  uiBack(){const frame=U.stack.pop();if(!frame)return closeUI();U.back=true;try{const fn=window[frame.route.name];if(typeof fn==='function')fn(...frame.route.args);else closeUI();const b=document.querySelector('#panel .panel-body');if(b)b.scrollTop=frame.scroll}finally{U.back=false}},
  uiActor(i,tab='overview'){if(!Number.isInteger(i)||i<0||i>=6)return;({overview:character,attributes:actorAttributes,equip,skills,growth:charAbility}[tab]||character)(i)},
  uiFormationCell(pos){if(H.run?.battle)return pendingBattleMenu();if(!Number.isInteger(pos)||pos<0||pos>8)return;ensureFormation();const selected=U.formationSelected;if(selected==null){if(H.formation[pos]==null)return;U.formationSelected=pos;return partyMenu()}if(selected===pos){U.formationSelected=null;return partyMenu()}const value=H.formation[selected];H.formation[selected]=H.formation[pos];H.formation[pos]=value;U.formationSelected=null;syncFormationRows();persist();partyMenu()},

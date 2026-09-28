@@ -20,9 +20,9 @@ function fittingValues(i,items,k){return fittingWith(i,items,()=>{if(k===2||k===
 function fittingScreen(i,k=0,preview){if(H.run?.battle)return pendingBattleMenu();if(!Object.hasOwn(fittingSlots,k))return;const s=fittingSession(i);if(!s)return;const changedSlot=s.slot!==k;s.slot=k;const previous=fittingValues(i,s.base,k);
  if(preview!==undefined&&fittingWith(i,s.items,()=>canEquip(i,k,preview))){s.items[k]=s.items[k].split('：')[0]+'：'+preview;if(k===4)for(let z=5;z<=7;z++)s.items[z]=s.items[z].split('：')[0]+'：'+preview;if((k===0||k===2)&&isTwoHanded(preview))s.items[k+1]=s.items[k+1].split('：')[0]+'：なし'}
  const a=previous,b=fittingValues(i,s.items,k),dirty=JSON.stringify(s.base)!==JSON.stringify(s.items),current=s.items[k].split('：')[1],list=k<4?['なし',...inventory.weapons]:k===4?inventory.armor.filter(n=>Object.hasOwn(ARMOR_VARIANTS,n)).sort((a,b)=>['魔装','軽装','重装'].indexOf(armorFamily(a))-['魔装','軽装','重装'].indexOf(armorFamily(b))):k===9?['なし',...Object.keys(hc().tools).filter(n=>hc().tools[n].battle)]:['なし','護符'];
- const group=k<4?'weapon':k===4?'armor':null,types=group?['すべて',...new Set(list.filter(n=>n!=='なし').map(n=>k===4?armorFamily(n):weaponKind(n)))]:[];
+ const group=fittingGroup(k),types=group?['すべて',...new Set(list.filter(n=>n!=='なし').map(n=>fittingKind(k,n)))]:[];
  const filter=types.includes(s.filters[group])?s.filters[group]:'すべて';
- const visible=list.filter(n=>filter==='すべて'||(k===4?armorFamily(n):weaponKind(n))===filter);
+ const visible=list.filter(n=>filter==='すべて'||fittingKind(k,n)===filter);
  const filters=group?'<div class="fitting-filters" role="group" aria-label="装備の種類">'+types.map(t=>'<button data-hub="uiEquipFilter" data-args="'+hesc(JSON.stringify([i,k,t]))+'" aria-pressed="'+(t===filter)+'">'+hesc(t)+'</button>').join('')+'</div>':'';
  const slotButtons=keys=>keys.map(n=>'<button data-hub="equipChoice" data-args="'+hesc(JSON.stringify([i,n]))+'" aria-pressed="'+(n===k)+'"><small>'+fittingSlots[n]+'</small><b>'+hesc(s.items[n].split('：')[1])+(s.items[n]!==s.base[n]?' *':'')+'</b></button>').join('');
  let previousArmorFamily='';const rows=fittingWith(i,s.items,()=>visible.map(n=>{const ok=canEquip(i,k,n),m=WM[n];let desc=k<4?n==='なし'?'武器を外します。':weaponDescription(n):k===4?armorDescription(n):k===9?n==='なし'?'携行具を外します。':toolDescription(n):n==='なし'?'装飾品を外します。':'補助効果を持つ装飾品。';if(!ok){const j={PHY:0,SKL:1,ARC:2,MND:3}[m?.[3]];desc=m&&j!=null&&stats[i][j]<m[4]?m[3]+' '+stats[i][j]+' / 必要 '+m[4]:(k===1||k===3)?'副手条件不足：両手武器との併用不可・二刀流はSKL 30必要':'装備条件不足'}const family=k===4?armorFamily(n):'',heading=family&&family!==previousArmorFamily?'<h3 class="armor-family-heading">'+hesc(family)+'</h3>':'';previousArmorFamily=family;return heading+'<div class="candidate '+(n===current?'selected':'')+'">'+HB(n+(n===s.base[k].split('：')[1]?'　装備中':n===current?'　選択中':''),desc,'uiEquipPreview',[i,k,n],!ok)+'</div>'}).join(''));
@@ -35,4 +35,7 @@ function fittingApply(i){if(H.run?.battle||!fittingDraft||fittingDraft.i!==i)ret
 
 function fittingSwap(i){if(H.run?.battle)return;const s=fittingSession(i);if(!s)return;const v=s.items.slice(0,4).map(x=>x.split('：')[1]);for(let k=0;k<4;k++)s.items[k]=s.items[k].split('：')[0]+'：'+v[(k+2)%4];equipChoice(i,s.slot)}
 
-function fittingFilter(i,k,type){const s=fittingSession(i);if(!s||!Object.hasOwn(fittingSlots,k))return;const group=k<4?'weapon':k===4?'armor':null;if(!group)return;s.filters[group]=type;equipChoice(i,k);const body=document.querySelector('#panel .equipment-right>.panel-body');if(body)body.scrollTop=0}
+function fittingFilter(i,k,type){const s=fittingSession(i);if(!s||!Object.hasOwn(fittingSlots,k))return;const group=fittingGroup(k);if(!group)return;s.filters[group]=type;equipChoice(i,k);const body=document.querySelector('#panel .equipment-right>.panel-body');if(body)body.scrollTop=0}
+
+function fittingGroup(k){return k<4?'weapon':k===4?'armor':k===8?'accessory':k===9?'tool':null}
+function fittingKind(k,n){if(n==='なし')return 'なし';if(k<4)return weaponKind(n);if(k===4)return armorFamily(n);if(k===8)return '護符';return hc().tools[n]?.field?'回復・治療':['投げナイフ','鉄針','投石','爆弾'].includes(n)?'攻撃・投擲':'補助'}
