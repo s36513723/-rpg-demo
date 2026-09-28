@@ -71,7 +71,7 @@ Skills are learned from requirements such as stats, Mastery, Source and spell sy
 - No weapon/armor durability-repair system.
 
 ## Base
-- 宿・酒場: conversation, rumors, full recovery on return.
+- 宿・酒場: conversation and rest. Returning alone does not auto-heal; choosing rest fully restores HP/SP/status and settles pending growth points.
 - ギルド: requests, information, appraisal, purchase of exploration finds.
 - 市場: equipment, items, processing.
 - ダンジョン: destination, party, sortie.
