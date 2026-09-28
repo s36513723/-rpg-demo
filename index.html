@@ -421,13 +421,13 @@ function enemyPreferredTarget(u,ts,mode){
  return preferredTarget(u,ts)
 }
 function planEnemy(u){
+ if(u.status?.temptation>0){
+  const a=normal(u),own=live(actorSide(u)).filter(t=>t.id!==u.id),t=own[0];
+  if(t)return {type:'attack',action:a,targetId:t.id};
+ }
  if(u.style==='BOSS'){const a=makeBossTelegraph(u),ts=targets(u,a),t=ts.find(x=>a.targetRow?x.row===a.targetRow:true)||preferredTarget(u,ts);return {type:'skill',action:a,targetId:t?.id}}
  if(u.casting)return {type:'cast',action:u.casting.action,targetId:u.casting.targetId};
  const kind=u.archetype||enemyArchetype(u.style)||'獣';
- if(u.status?.temptation>0){
-  const a=normal(u),ts=targets(u,a),t=ts[0];
-  return {type:'attack',action:a,targetId:t?.id};
- }
  if(['弓','飛行','魔術師'].includes(kind)&&u.row==='front'&&freeColumn('back',enemies)&&u.status.legBind<=0)return {type:'row'};
  if(kind==='重装'&&round%3===1)return {type:'defend'};
  let a,targetMode='normal';
