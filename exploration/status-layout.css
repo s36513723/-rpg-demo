@@ -309,3 +309,12 @@
  #panel .equipment-top-weapons,#panel .equipment-top-other{grid-template-rows:repeat(4,34px);gap:2px}
  #panel.status-equipment>.fitting-controls button{height:34px;min-height:34px}
 }
+
+#panel.status-overview .overview-masteries{min-height:34px;gap:6px}
+#panel.status-overview .overview-masteries>span{font-size:14px;line-height:20px;padding:5px 9px;border-radius:6px}
+#panel.status-overview .overview-masteries b{font-size:15px;margin-left:5px}
+@media(max-height:680px){
+ #panel.status-overview .overview-masteries{min-height:26px}
+ #panel.status-overview .overview-masteries>span{font-size:12px;line-height:18px;padding:3px 7px}
+ #panel.status-overview .overview-masteries b{font-size:13px}
+}
