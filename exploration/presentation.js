@@ -36,11 +36,11 @@ const activeQuest=()=>{const q=findQuest(H.tracked);return q&&[1,2].includes(qst
 const objective=()=>{const q=activeQuest();if(q){const s=qstate(q);return HB(q.n,s.state===2?'達成・ギルドへ報告':q.d+' · '+s.progress+'/'+q.target,'questSelect',[q.id])}return ''};
 const warnings=()=>{const a=[];for(let i=0;i<6;i++){const w=weightInfo(i),carry=eq[i][9].split('：')[1];if(vitals[i].hp<=0)a.push({i,text:'戦闘不能',action:'character'});if(statusText(i))a.push({i,text:statusText(i),action:'character'});if(!skillFits(i))a.push({i,text:'セットCost超過',action:'skills'});else if(!skillSet[i].length)a.push({i,text:'スキル未設定',action:'skills'});if(w.level)a.push({i,text:'重量 '+w.weight+'/'+w.limit,action:'equip'});if(carry!=='なし'&&!(inventory.tools[carry]>0))a.push({i,text:carry+' 残り0',action:'equip'})}return a};
 const noticeList=()=>warnings().map(w=>HB(names[w.i]+' · '+w.text,'',''+w.action,[w.i])).join('');
-const npcPortraits={受付:'../images/npc_eda_stand.svg',鍛冶師:'../images/npc_balun_stand.svg',学者:'../images/npc_iris_stand.svg',宿主:'../images/npc_marta_stand.svg',伝令:'../images/npc_noa_stand.svg',守人:'../images/npc_sahir_stand.svg'};
+const npcPortraits={受付:'../images/hub-guild-npc.webp',鍛冶師:'../images/hub-market-npc.webp',学者:'../images/npc_iris_stand.svg',宿主:'../images/hub-inn-npc.webp',伝令:'../images/npc_noa_stand.svg',守人:'../images/npc_sahir_stand.svg'};
 const facilityVisuals={
- inn:{background:'../images/facility_inn.svg',npc:'../images/npc_marta_stand.svg',name:'マルタ'},
- guild:{background:'../images/facility_guild.svg',npc:'../images/npc_eda_stand.svg',name:'エダ'},
- market:{background:'../images/facility_market.svg',npc:'../images/npc_balun_stand.svg',name:'バルン'}
+ inn:{background:'../images/hub-inn-bg.webp',npc:'../images/hub-inn-npc.webp',name:'マルタ'},
+ guild:{background:'../images/hub-guild-bg.webp',npc:'../images/hub-guild-npc.webp',name:'エダ'},
+ market:{background:'../images/hub-market-bg.webp',npc:'../images/hub-market-npc.webp',name:'バルン'}
 };
 const facilityScene=(kind,title,body)=>{const v=facilityVisuals[kind];return '<section class="facility-scene facility-'+kind+'" style="--facility-bg:url(&quot;'+v.background+'&quot;)"><div class="facility-scene-art" aria-hidden="true"><img src="'+v.npc+'" alt=""></div><div class="facility-scene-copy"><span class="chapter-kicker">'+hesc(v.name)+'</span><h3>'+hesc(title)+'</h3></div></section><div class="facility-action-deck">'+body+'</div>'};
 const personCard=(img,name,meta,action,args=[])=>'<button class="person-select-card"'+data(action,args)+'><img src="'+img+'" alt=""><span><b>'+hesc(name)+'</b><small>'+hesc(meta)+'</small></span><span class="member-arrow">›</span></button>';
