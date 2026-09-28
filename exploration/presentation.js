@@ -47,11 +47,41 @@ const personCard=(img,name,meta,action,args=[])=>'<button class="person-select-c
 const peopleGrid=items=>'<div class="people-select-grid">'+items.join('')+'</div>';
 const memberGrid=()=>peopleGrid(names.map((n,i)=>personCard(battleCardArt(i),n,rows[i]+' · '+battleStyle(i),'character',[i])));
 const routeGroup=n=>/guild|guildDesk|quest|reportChapter|appraise|storage|deposit|withdraw|infoMenu|dungeonIntel|regionRecord|enemyBook/.test(n)?'guild':/market|gearShopMenu|toolShop|toolQuantity|weaponShop|armorShop|gearDetail|craft|recipe|upgrade|trait|sell|materialTrade|materialQuantity/.test(n)?'market':/inn|roomMenu|innRest|items|itemCategory|records|history|peopleBook|personRecord|talkArchive|conversation|memberTalk|npcMenu|npcTalk|pairMenu|readPair|partyMenu|readiness|preset|character|char|mastery|equip|skills|dungeon|deployment/.test(n)?'inn':'';
+const guildLine=(name,args=[])=>{
+ if(name==='guild')return 'おかえりなさい。今日はどのご用件ですか？';
+ if(name==='guildDesk')return '依頼と報告ですね。進んでいるものから確認しましょう。';
+ if(name==='questMenu')return args[0]==='ready'?'達成済みの依頼があります。報告を受け付けますね。':'掲示板の依頼です。気になるものを選んでください。';
+ if(name==='questSelect'){const q=findQuest(args[0]);return q?'「'+q.n+'」ですね。内容と報酬を確認してください。':'依頼の内容を確認しますね。'}
+ if(name==='reportChapter')return '探索の報告ですね。記録をこちらへお願いします。';
+ if(name==='infoMenu')return '探索資料をお出しします。調べたい項目を選んでください。';
+ if(name==='dungeonIntel'||name==='regionRecords'||name==='regionRecord')return '現地から集まった記録をまとめています。必要なところを確認してください。';
+ if(name==='enemyBook'||name==='enemyRecord')return '敵の記録ですね。過去の報告と照合してあります。';
+ if(name==='clueRecord'||name==='recordList')return '調査記録はこちらです。新しい情報も追記してあります。';
+ if(name==='appraiseMenu'||name==='rareAppraise')return '査定ですね。持ち帰った品を順番に見ていきましょう。';
+ if(name==='storageMenu'||name==='depositMenu'||name==='withdraw')return '保管品を確認します。必要なものだけ手元に戻せますよ。';
+ if(name==='guildMembers')return '登録メンバーの情報ですね。確認したい方を選んでください。';
+ if(/^guildSale/.test(name))return '装備の整理ですね。売却内容を一緒に確認します。';
+ return 'ご用件を確認しますね。';
+};
+const renderGuildWorld=(html,r)=>{
+ const app=document.getElementById('app'),screen=document.getElementById('screen'),modal=document.getElementById('modal'),panel=document.getElementById('panel');
+ app.classList.add('town-world','facility-world','guild-world');app.classList.remove('in-expedition');
+ modal.classList.remove('on','guild-screen-modal');panel.classList.remove('guild-screen-panel');app.inert=false;
+ document.querySelector('h1').textContent='王都レクシア';document.querySelector('header .small').textContent='冒険者ギルド';document.getElementById('money').textContent=moneyText(gold);
+ const temp=document.createElement('div');temp.innerHTML=html;
+ const title=temp.querySelector('h2')?.textContent||'冒険者ギルド';temp.querySelector('h2')?.remove();
+ temp.querySelectorAll('button').forEach(b=>{const t=b.textContent.trim();if(b.dataset.hub==='closeM'||/^(戻る|一覧へ|一覧|ギルドへ|拠点へ)$/.test(t))b.remove()});
+ temp.querySelectorAll('.actions').forEach(a=>{if(!a.children.length)a.remove()});
+ const home=r.name==='guild';
+ screen.innerHTML='<section class="town-scene facility-world-scene guild-world-scene"><div class="facility-world-title"><span class="chapter-kicker">GUILD</span><b>'+hesc(title)+'</b></div><img class="facility-world-npc" src="../images/hub-guild-npc.webp" alt="ギルド受付 エダ"><div class="facility-world-identity"><b>エダ</b><small>ギルド受付</small><button type="button" data-hub="uiGuildTalk">TALK</button></div><div class="facility-world-dialogue"><b>エダ</b><span>'+hesc(guildLine(r.name,r.args||[]))+'</span></div><section class="facility-world-overlay '+(home?'facility-world-home':'facility-world-service')+'">'+temp.innerHTML+'</section></section>';
+ renderRoster();renderSaveStatus();navState(r.name);
+};
+
 const navState=n=>{
  const nav=document.querySelector('#app .hub-global-nav');if(!nav)return;
  const back=nav.querySelector('[data-nav="back"]'),home=nav.querySelector('[data-nav="home"]'),map=nav.querySelector('[data-nav="map"]');
  const atHome=!n||n==='town',atMap=['partyMenu','dungeon','deployment'].includes(n);
- if(back)back.disabled=!isOpen();
+ if(back)back.disabled=!(isOpen()||document.getElementById('app').classList.contains('facility-world'));
  for(const [el,on] of [[home,atHome],[map,atMap]])if(el){el.classList.toggle('current',!!on);if(on)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current')}
 };
 const selectionOverlay=()=>{
@@ -65,7 +95,14 @@ const selectionOverlay=()=>{
 };
 const showUI=html=>{
  const priorFocus=document.activeElement,focusAction=priorFocus?.dataset?.hub,focusArgs=priorFocus?.dataset?.args;const panel=document.getElementById('panel'),modal=document.getElementById('modal'),open=isOpen(),scroll=panel.querySelector('.panel-body')?.scrollTop||0,r=U.render||{name:'note',args:['メニューを閉じて操作を続けてください。']};
- const guildShell=routeGroup(r.name)==='guild';modal.classList.toggle('guild-screen-modal',guildShell);panel.classList.toggle('guild-screen-panel',guildShell);
+ const guildWorld=routeGroup(r.name)==='guild'&&!activeRun(),worldOpen=document.getElementById('app').classList.contains('facility-world'),sameWorld=key(U.route)===key(r);
+ if(guildWorld){
+  if(!worldOpen){U.stack=[];U.opener=U.launcher||document.activeElement;U.launcher=null}
+  else if(U.route&&!sameWorld&&!U.back)U.stack.push(recordRoute(U.route,0));
+  if(U.stack.length>24)U.stack.shift();U.route={name:r.name,args:r.args.slice()};
+  renderGuildWorld(html,r);return;
+ }
+ const guildShell=false;modal.classList.remove('guild-screen-modal');panel.classList.remove('guild-screen-panel');
  if(!['equip','equipChoice'].includes(r.name))fittingDiscard();
  if(r.name!=='actorAttributes')attributeDiscard();
  if(U.detail&&(Number(r.args[0])!==U.detail.i||(U.detail.kind==='skill'?r.name!=='skills':!['equip','equipChoice'].includes(r.name)||Number(r.args[1]||0)!==U.detail.k)))U.detail=null;
@@ -114,7 +151,8 @@ const showUI=html=>{
 const closeUI=()=>{U.detail=null;masteryDiscard();fittingDiscard();attributeDiscard();const modal=document.getElementById('modal');modal.classList.remove('on','guild-screen-modal');document.getElementById('panel').classList.remove('guild-screen-panel');document.getElementById('app').inert=false;U.route=null;U.stack=[];U.formationSelected=null;if(hubBooted){renderRoster();if(!activeRun())window.town();else navState('town')}const target=U.opener;U.opener=null;const fallback=target?.dataset?.hub?[...document.querySelectorAll('#app [data-hub]')].find(e=>e.dataset.hub===target.dataset.hub&&e.dataset.args===target.dataset.args):null;(target?.isConnected?target:fallback||document.querySelector('#app nav .current'))?.focus({preventScroll:true})};
 const toast=text=>{const e=document.getElementById('uiToast');if(!e)return;e.textContent=text;e.hidden=false;clearTimeout(U.toast);U.toast=setTimeout(()=>e.hidden=true,2400)};
 const uiActions={
- uiHubBack(){if(isOpen())return uiActions.uiBack();},
+ uiHubBack(){if(isOpen())return uiActions.uiBack();if(document.getElementById('app').classList.contains('facility-world')){const frame=U.stack.pop();if(!frame)return town();U.back=true;try{const fn=window[frame.route.name];if(typeof fn==='function')fn(...frame.route.args);else town()}finally{U.back=false}}},
+ uiGuildTalk(){const line=document.querySelector('.facility-world-dialogue span');if(!line)return;const npc=hc().npcs.find(n=>n.id==='受付');const list=npc?.text||[];const current=line.textContent;const next=list.find(x=>x!==current)||list[0];if(next)line.textContent=next},
  uiDetailClose(){U.detail=null;selectionOverlay()},
  uiSkillInspect(i,n){if(!learned[i]?.includes(n))return;U.detail=U.detail?.kind==='skill'&&U.detail.i===i&&U.detail.n===n?null:{kind:'skill',i,n};selectionOverlay();document.querySelectorAll('.skill-toggle').forEach(e=>e.classList.toggle('inspected',!!U.detail&&JSON.parse(e.dataset.args)[1]===n))},
  uiDetailSkillSet(i,n){toggleLearnedSkill(i,n)},
@@ -143,7 +181,7 @@ Object.assign(window,uiActions);
 const views={
  back(){return ''},show:showUI,closeM:closeUI,
  town(){if(activeRun()){closeM();return drawDungeon()}
- const app=document.getElementById('app');app.classList.add('town-world');app.classList.remove('in-expedition');
+ const app=document.getElementById('app');app.classList.add('town-world');app.classList.remove('in-expedition','facility-world','guild-world');
  document.getElementById('modal').classList.remove('on');app.inert=false;U.route=null;U.stack=[];
  document.querySelector('h1').textContent='王都レクシア';document.querySelector('header .small').textContent=H.story.ending?'調査のつづき':'冒険者区';
  const b=badgeCounts(),next=H.story.intro?storyObjective():'地下から響く鐘';
@@ -178,7 +216,7 @@ const views={
  deployment(id){if(activeRun())return expeditionMenu();if(!hc().regions[id]||!unlocked.includes(id))return note('この地域は未開放です');dungeonId=id;H.selected=id;persist();partyMenu('destination')},
  settings(){show('<h2>設定</h2>'+section('表示・操作',HB('文字サイズ',H.settings.text,'cycleText')+HB('表示密度',H.settings.density||'標準','toggleCompact')+HB('重要操作の確認',H.settings.confirm?'ON':'OFF','toggleConfirm'))+section('セーブ',HT(hubSaveError?'保存に失敗しています':'自動保存',hubSaveError||'操作ごとに保存')+HB('今すぐ保存','','manualSave')+HB('書き出す','JSONファイル','exportSave')+HB('読み込む','確認後に置き換え','chooseImport'))+'<details class="ui-help danger-zone"><summary>データ管理</summary>'+HB('バックアップ復元','','askRestore',[],!RPG_STORE.getItem(HUB_BACKUP))+HB('最初から始める','進行を初期化','resetSave')+'</details>')},
  manualSave(){toast(saveGame()?'保存しました':'保存できません。書き出しを利用してください。');renderSaveStatus()},
- drawDungeon(){const app=document.getElementById('app');app.classList.remove('town-world');app.classList.add('in-expedition');old.drawDungeon();navState('map');const root=document.querySelector('.expedition');if(!root)return;const q=activeQuest();if(q){const e=document.createElement('button');e.className='field-quest';e.setAttribute('data-hub','questSelect');e.dataset.args=JSON.stringify([q.id]);e.textContent='★ '+q.n+' '+qstate(q).progress+'/'+q.target;root.querySelector('.field-head').after(e)}const head=root.querySelector('.field-head');if(head){const help=document.createElement('button');help.className='icon-button';help.setAttribute('data-hub','uiMapLegend');help.setAttribute('aria-label','地図の見方');help.textContent='?';head.append(help)}const generic=root.querySelector('.field-actions .row.static .small');if(generic)generic.remove()}
+ drawDungeon(){const app=document.getElementById('app');app.classList.remove('town-world','facility-world','guild-world');app.classList.add('in-expedition');old.drawDungeon();navState('map');const root=document.querySelector('.expedition');if(!root)return;const q=activeQuest();if(q){const e=document.createElement('button');e.className='field-quest';e.setAttribute('data-hub','questSelect');e.dataset.args=JSON.stringify([q.id]);e.textContent='★ '+q.n+' '+qstate(q).progress+'/'+q.target;root.querySelector('.field-head').after(e)}const head=root.querySelector('.field-head');if(head){const help=document.createElement('button');help.className='icon-button';help.setAttribute('data-hub','uiMapLegend');help.setAttribute('aria-label','地図の見方');help.textContent='?';head.append(help)}const generic=root.querySelector('.field-actions .row.static .small');if(generic)generic.remove()}
 };
 Object.assign(window,views);
 window.HUB_UI_ACTIONS=Object.keys(uiActions);
