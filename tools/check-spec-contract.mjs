@@ -7,6 +7,7 @@ const status = JSON.parse(fs.readFileSync("spec/spec-status.json", "utf8"));
 const balance = JSON.parse(fs.readFileSync("spec/balance-review.json", "utf8"));
 const skillTarget = JSON.parse(fs.readFileSync("spec/skill-catalog-target.json", "utf8"));
 const skillMigration = JSON.parse(fs.readFileSync("spec/skill-migration-296-to-315.json", "utf8"));
+const skillNormalization = JSON.parse(fs.readFileSync("spec/skill-normalization-status.json", "utf8"));
 
 const errors = [];
 const mustEqual = [
@@ -55,6 +56,9 @@ if (!skillTarget.migration_policy?.do_not_invent_missing_names) errors.push("ski
 if (skillMigration.canonical_count !== 315 || skillMigration.legacy_runtime_count !== 296) errors.push("skill migration audit counts must remain 315 vs 296");
 if (skillMigration.exact_unique_name_matches !== 40) errors.push("skill migration audit exact-match baseline changed; regenerate from canonical workbook before migration");
 if (!skillMigration.ambiguous_canonical_rows?.includes("速射")) errors.push("skill migration audit must preserve the bow/gun 速射 ambiguity");
+if (skillNormalization.canonical_count !== 315) errors.push("normalized SkillDB must contain 315 canonical rows");
+if (skillNormalization.schema_normalized !== 291 || skillNormalization.needs_special_review !== 24) errors.push("SkillDB normalization coverage must remain 291 normalized / 24 special review until the canonical workbook changes");
+if (skillNormalization.special_review?.length !== 24) errors.push("SkillDB special-review list must contain 24 rows");
 
 for (const token of ["Mandatory workflow","Definition of done","canonical specification workbook"]) {
   if (!contract.includes(token)) errors.push(`AGENTS contract missing: ${token}`);
