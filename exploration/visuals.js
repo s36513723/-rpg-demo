@@ -106,7 +106,24 @@ const portrait=(p,cls='')=>!p?'':p.image?'<img class="visual-portrait '+cls+(p.k
 const peopleHeader=(ps,label='')=>'<div class="conversation-cast">'+ps.filter(Boolean).map(p=>'<div>'+portrait(p)+'<span><b>'+esc(p.name)+'</b><small>'+esc(p.role)+'</small></span></div>').join('')+(label?'<span class="scene-label">'+esc(label)+'</span>':'')+'</div>';
 const dialogue=(p,text)=>'<figure class="dialogue-block">'+portrait(p)+'<figcaption><b class="speaker">'+esc(p.name)+'</b><small>'+esc(p.role)+'</small><blockquote>'+esc(text)+'</blockquote></figcaption></figure>';
 const npcStage=(p,text)=>'<section class="npc-stage"><div class="npc-stage-art"><img class="npc-stand" src="'+esc(p.stand||p.image)+'" alt=""><div class="npc-identity"><b>'+esc(p.name)+'</b><small>'+esc(p.role)+'</small></div></div><div class="npc-speech"><p>'+esc(text)+'</p></div></section>';
-const facilityStage=(p,id,kind='inn')=>'<section class="facility-stage facility-stage-'+esc(kind)+'"><button class="facility-host" type="button" data-hub="npcTalk" data-args="'+esc(JSON.stringify([id]))+'"><span class="facility-word" aria-hidden="true">'+esc(({inn:'INN',guild:'GUILD',market:'MARKET'})[kind]||'FACILITY')+'</span><img class="facility-stand" src="'+esc(p.stand||p.image)+'" alt=""><span class="facility-identity"><b>'+esc(p.name)+'</b><small>'+esc(p.role)+'</small></span><span class="facility-talk">'+glyph('speech')+' 話す</span></button></section>';
+const facilityStage=(p,id,kind='inn',speech='')=>'<section class="facility-stage facility-stage-'+esc(kind)+'"><button class="facility-host" type="button" data-hub="npcTalk" data-args="'+esc(JSON.stringify([id]))+'"><span class="facility-word" aria-hidden="true">'+esc(({inn:'INN',guild:'GUILD',market:'MARKET'})[kind]||'FACILITY')+'</span><img class="facility-stand" src="'+esc(p.stand||p.image)+'" alt=""><span class="facility-identity"><b>'+esc(p.name)+'</b><small>'+esc(p.role)+'</small></span><span class="facility-talk">'+glyph('speech')+' 話す</span>'+(speech?'<span class="facility-dialogue"><b>'+esc(p.name)+'</b><span>'+esc(speech)+'</span></span>':'')+'</button></section>';
+const guildContextRoutes=new Set(['guildDesk','questMenu','questSelect','reportChapter','infoMenu','dungeonIntel','regionRecords','regionRecord','enemyBook','enemyRecord','clueRecord','recordList','appraiseMenu','rareAppraise','storageMenu','depositMenu','guildMembers','guildSellMenu','guildSaleQuantity','guildSaleConfirm']);
+const guildSpeech=(name,args=[])=>{
+ if(name==='guild')return 'おかえりなさい。今日はどのご用件ですか？';
+ if(name==='guildDesk')return '依頼と報告ですね。進んでいるものから確認しましょう。';
+ if(name==='questMenu')return args[0]==='ready'?'達成済みの依頼があります。報告を受け付けますね。':'掲示板の依頼です。気になるものを選んでください。';
+ if(name==='questSelect'){const q=findQuest(args[0]);return q?'「'+q.n+'」ですね。内容と報酬を確認してください。':'依頼の内容を確認しますね。'}
+ if(name==='reportChapter')return '探索の報告ですね。記録をこちらへお願いします。';
+ if(name==='infoMenu')return '探索資料をお出しします。調べたい項目を選んでください。';
+ if(name==='dungeonIntel'||name==='regionRecords'||name==='regionRecord')return '現地から集まった記録をまとめています。必要なところを確認してください。';
+ if(name==='enemyBook'||name==='enemyRecord')return '敵の記録ですね。過去の報告と照合してあります。';
+ if(name==='clueRecord'||name==='recordList')return '調査記録はこちらです。新しい情報も追記してあります。';
+ if(name==='appraiseMenu'||name==='rareAppraise')return '査定ですね。持ち帰った品を順番に見ていきましょう。';
+ if(name==='storageMenu'||name==='depositMenu')return '保管品を確認します。必要なものだけ手元に戻せますよ。';
+ if(name==='guildMembers')return '登録メンバーの情報ですね。確認したい方を選んでください。';
+ if(/^guildSale/.test(name))return '装備の整理ですね。売却内容を一緒に確認します。';
+ return 'ご用件を確認しますね。';
+};
 const itemIcon=n=>{
  const s=String(n||'');if(!s||s==='なし')return 'empty';
  const pairs=[[/解毒/,'antidote'],[/回復薬|薬瓶|魔法薬/,'potion'],[/煙玉/,'smoke'],[/爆弾|爆薬/,'bomb'],[/登攀|縄/,'rope'],[/解錠具|鍵/,'key'],[/浄化香|薬草|霊樹/,'herb'],[/清水/,'water'],[/投げ|鉄針|投石|回刃|投擲/,'throw'],[/短剣/,'dagger'],[/槌/,'hammer'],[/斧/,'axe'],[/槍/,'spear'],[/鞭/,'whip'],[/鎌/,'scythe'],[/刀/,'katana'],[/弓/,'bow'],[/銃/,'gun'],[/短杖|杖/,'staff'],[/盾/,'shield'],[/剣/,'sword'],[/拳|格闘|無手/,'fist'],[/呪符|符術/,'scroll'],[/魔装/,'robe'],[/軽装|重装|防具/,'armor'],[/護符|装飾/,'jewel'],[/風晶|結晶|金砂/,'jewel'],[/古器|遺物/,'chest'],[/皮/,'armor'],[/封文|銘板|原典|航路図|記憶/,'scroll']];
@@ -207,7 +224,12 @@ const dialoguePage=(panel,route)=>{
  if(['inn','guild','market'].includes(name)){
   const id={inn:'宿主',guild:'受付',market:'鍛冶師'}[name],host=person('npc',id),deck=document.createElement('div');deck.className='facility-action-deck';
   [...body.children].forEach(el=>{if(el.matches('button.row')){if(el.dataset.hub==='closeM')el.remove();else deck.append(el)}else if(el.classList.contains('actions')){[...el.querySelectorAll('button.row')].forEach(b=>{if(b.dataset.hub!=='closeM')deck.append(b)});el.remove()}});
-  body.insertAdjacentHTML('afterbegin',facilityStage(host,id,name));body.append(deck);body.classList.add('facility-stage-page');
+  body.insertAdjacentHTML('afterbegin',facilityStage(host,id,name,name==='guild'?guildSpeech(name,args):''));body.append(deck);body.classList.add('facility-stage-page');
+ }else if(guildContextRoutes.has(name)){
+  const host=person('npc','受付'),content=document.createElement('div');content.className='guild-service-content';
+  [...body.children].forEach(el=>content.append(el));
+  body.insertAdjacentHTML('afterbegin',facilityStage(host,'受付','guild',guildSpeech(name,args)));
+  body.append(content);body.classList.add('guild-service-page');
  }
 };
 const decorate=(root,route={name:'town',args:[]})=>{
