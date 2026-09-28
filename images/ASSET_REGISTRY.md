@@ -43,9 +43,9 @@
 
 | 種類 | 正式 | GitHub画像本体 | 状況 |
 |---|---|---|---|
-| 赤系フレーム | ✓ | 未整理 | 作成済み |
-| 青系フレーム | ✓ | 未整理 | 作成済み |
-| 金色 NEXT フレーム | ✓ | 未整理 | 作成済み |
+| 赤系フレーム | ✓ | images/order-frame-enemy.svg | 保存済み・Plan戦闘UI接続済み |
+| 青系フレーム | ✓ | images/order-frame-ally.svg | 保存済み・Plan戦闘UI接続済み |
+| 金色 NEXT フレーム | ✓ | images/order-frame-next.svg | 保存済み・Plan戦闘UI接続済み |
 
 用途の詳細（味方／敵／NEXT等）は実装時に既存UI仕様と照合し、勝手に変更しない。
 
