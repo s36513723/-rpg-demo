@@ -859,11 +859,11 @@
 .facility-world-npc{
  position:absolute;
  z-index:2;
- right:1.5%;
- bottom:19%;
+ right:0;
+ bottom:0;
  width:auto;
- height:76%;
- max-width:59%;
+ height:84%;
+ max-width:64%;
  object-fit:contain;
  object-position:right bottom;
  filter:drop-shadow(0 10px 20px rgba(0,0,0,.44));
@@ -897,12 +897,19 @@
  font-size:7px;
  letter-spacing:.12em;
 }
-.facility-world-dialogue{
+.facility-world-controls{
  position:absolute;
- z-index:5;
- left:8px;
- right:8px;
- bottom:calc(18% + 7px);
+ z-index:6;
+ left:6px;
+ right:6px;
+ bottom:2px;
+ display:flex;
+ flex-direction:column;
+ gap:5px;
+ pointer-events:none;
+}
+.facility-world-dialogue{
+ position:relative;
  min-height:34px;
  display:grid;
  grid-template-columns:auto 1fr;
@@ -914,23 +921,19 @@
  background:rgba(7,16,12,.72);
  backdrop-filter:blur(4px);
  text-shadow:0 1px 3px rgba(0,0,0,.65);
+ pointer-events:auto;
 }
 .facility-world-dialogue>b{font:600 10px/1.2 'Yu Mincho',Georgia,serif;color:#e8d39e}
 .facility-world-dialogue>span{font-size:9px;line-height:1.4;color:#f2eee2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.facility-world-mode-service .facility-world-dialogue{bottom:calc(34% + 7px)}
 .facility-world-overlay{
- position:absolute;
- z-index:6;
- left:6px;
- right:6px;
- bottom:2px;
+ position:relative;
  border:1px solid rgba(104,124,108,.50);
  border-radius:9px;
  background:rgba(10,22,16,.66);
  backdrop-filter:blur(5px);
+ pointer-events:auto;
 }
 .facility-world-home{
- height:18%;
  min-height:92px;
  display:grid;
  grid-template-columns:repeat(2,minmax(0,1fr));
@@ -956,8 +959,7 @@
 .facility-world-home>.actions>.row .small{font-size:6px;line-height:1.25}
 .facility-world-home>.actions{display:contents}
 .facility-world-service{
- height:34%;
- min-height:150px;
+ max-height:clamp(128px,32dvh,260px);
  overflow-y:auto;
  overscroll-behavior:contain;
  padding:7px 8px 10px;
@@ -990,20 +992,20 @@
 @media(max-width:350px){
  #app.facility-world>header{margin-left:-8px;margin-right:-8px;padding-left:9px;padding-right:9px}
  #app.facility-world>.hub-global-nav{margin-left:-8px;margin-right:-8px;padding-left:8px;padding-right:8px}
- .facility-world-npc{height:72%;max-width:61%;right:-1%}
- .facility-world-dialogue{left:6px;right:6px;bottom:calc(19% + 6px);padding:5px 7px}
- .facility-world-mode-service .facility-world-dialogue{bottom:calc(36% + 6px)}
+ .facility-world-npc{height:80%;max-width:66%;right:-2%}
+ .facility-world-controls{left:5px;right:5px;bottom:1px;gap:4px}
+ .facility-world-dialogue{padding:5px 7px}
  .facility-world-dialogue>span{font-size:8px}
- .facility-world-home{height:19%;min-height:86px}
- .facility-world-service{height:36%;min-height:140px}
+ .facility-world-home{min-height:84px}
+ .facility-world-service{max-height:35dvh}
 }
 @media(max-height:640px){
- .facility-world-npc{height:69%;bottom:21%}
+ .facility-world-npc{height:77%;bottom:0}
  .facility-world-identity{top:45px;padding:5px 7px}
- .facility-world-dialogue{bottom:calc(20% + 5px);min-height:30px;padding:4px 7px}
- .facility-world-mode-service .facility-world-dialogue{bottom:calc(39% + 5px)}
- .facility-world-home{height:20%;min-height:76px;padding:4px}
- .facility-world-service{height:39%;min-height:128px;padding:5px 6px 8px}
+ .facility-world-controls{left:5px;right:5px;bottom:1px;gap:4px}
+ .facility-world-dialogue{min-height:30px;padding:4px 7px}
+ .facility-world-home{min-height:74px;padding:4px}
+ .facility-world-service{max-height:38dvh;padding:5px 6px 8px}
  .facility-world-home>.row,
  .facility-world-home>.actions>.row{padding:4px 6px}
 }
