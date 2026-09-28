@@ -130,21 +130,21 @@ var RPG_NAV=(function(){
 const $=id=>document.getElementById(id);
 const sheet=$('choiceSheet');
 const W={
-hammer:{name:'戦槌',attr:'壊',range:'near',power:22,hit:-5,speed:-5,weight:'heavy',load:7},
-axe:{name:'戦斧',attr:'斬',range:'near',power:24,hit:-5,speed:-5,weight:'heavy',load:7},
-dagger:{name:'短剣',attr:'斬',range:'near',power:11,hit:8,speed:8,weight:'light',load:2,skillNormal:true,crit:7},
+hammer:{name:'戦槌',normalStat:'PHY',attr:'壊',range:'near',power:22,hit:-5,speed:-5,weight:'heavy',load:7},
+axe:{name:'戦斧',normalStat:'PHY',attr:'斬',range:'near',power:24,hit:-5,speed:-5,weight:'heavy',load:7},
+dagger:{name:'短剣',normalStat:'SKL',attr:'斬',range:'near',power:11,hit:8,speed:8,weight:'light',load:2,skillNormal:true,crit:7},
 
-sword:{name:'剣',attr:'斬',range:'near',power:17,hit:3,speed:0,weight:'normal',load:5},
-spear:{name:'槍',attr:'突',range:'mid',power:18,hit:2,speed:0,weight:'normal',load:6},
-bow:{name:'長弓',attr:'突',range:'far',power:16,hit:7,speed:1,weight:'normal',load:5,skillNormal:true,crit:6},
-staff:{name:'杖',attr:'壊',range:'near',power:8,hit:0,speed:0,weight:'light',load:2},
-talisman:{name:'呪符',attr:'無',range:'near',power:6,hit:0,speed:0,weight:'light',load:1},
-whip:{name:'鞭',attr:'斬',range:'mid',power:12,hit:5,speed:3,weight:'light',load:3,skillNormal:true,crit:3},
-scythe:{name:'鎌',attr:'斬',range:'near',power:23,hit:-2,speed:-3,weight:'heavy',load:8},
-katana:{name:'刀',attr:'斬',range:'near',power:18,hit:5,speed:5,weight:'normal',load:5,skillNormal:true,crit:8},
-gun:{name:'銃',attr:'突',range:'far',power:18,hit:12,speed:0,weight:'normal',load:5,skillNormal:true,crit:5},
-fist:{name:'格闘',attr:'壊',range:'near',power:10,hit:6,speed:7,weight:'light',load:3},
-shield:{name:'小盾',attr:'壊',range:'near',power:7,hit:0,speed:-1,weight:'normal',load:4}
+sword:{name:'剣',normalStat:'PHY',attr:'斬',range:'near',power:17,hit:3,speed:0,weight:'normal',load:5},
+spear:{name:'槍',normalStat:'PHY',attr:'突',range:'mid',power:18,hit:2,speed:0,weight:'normal',load:6},
+bow:{name:'長弓',normalStat:'SKL',attr:'突',range:'far',power:16,hit:7,speed:1,weight:'normal',load:5,skillNormal:true,crit:6},
+staff:{name:'杖',normalStat:'ARC',attr:'壊',range:'near',power:8,hit:0,speed:0,weight:'light',load:2},
+talisman:{name:'呪符',normalStat:'MND',attr:'無',range:'near',power:6,hit:0,speed:0,weight:'light',load:1},
+whip:{name:'鞭',normalStat:'SKL',attr:'斬',range:'mid',power:12,hit:5,speed:3,weight:'light',load:3,skillNormal:true,crit:3},
+scythe:{name:'鎌',normalStat:'PHY',attr:'斬',range:'near',power:23,hit:-2,speed:-3,weight:'heavy',load:8},
+katana:{name:'刀',normalStat:'SKL',attr:'斬',range:'near',power:18,hit:5,speed:5,weight:'normal',load:5,skillNormal:true,crit:8},
+gun:{name:'銃',normalStat:'SKL',attr:'突',range:'far',power:18,hit:12,speed:0,weight:'normal',load:5,skillNormal:true,crit:5},
+fist:{name:'格闘',normalStat:'PHY',attr:'壊',range:'near',power:10,hit:6,speed:7,weight:'light',load:3},
+shield:{name:'小盾',normalStat:'PHY',attr:'壊',range:'near',power:7,hit:0,speed:-1,weight:'normal',load:4}
 };
 const ARM={heavy:{p:28,m:8,w:8},light:{p:15,m:11,w:3},magic:{p:7,m:20,w:2}};
 const skill=(name,kind,costType,cost,mult,attr,range,stat,extra={})=>({name,kind,costType,cost,mult,attr,range,stat,target:'enemy',scope:'single',...extra});
@@ -213,7 +213,7 @@ const CANCEL=Symbol('cancelled battle');
 function check(token){if(token!==session)throw CANCEL}
 function derived(P,S,A,M){return rulebook().derived([P,S,A,M])}
 function initUnit(source,enemy=false){const o=JSON.parse(JSON.stringify(source)),d=derived(o.PHY,o.SKL,o.ARC,o.MND),ar=ARM[o.armor]||{p:0,m:0,w:0};return{...o,enemy,maxHp:enemy?o.hp:d.hp,hp:enemy?o.hp:d.hp,maxSp:d.sp,sp:d.sp,physDef:enemy?o.physDef:o.PHY+ar.p,magDef:enemy?o.magDef:o.ARC+o.MND+ar.m,wi:0,weapon:enemy?o.weapon:W[o.weapons[0]],alive:true,defending:false,status:{poison:0,blind:0,sleep:0,agitate:0,temptation:0,stun:0,headBind:0,armBind:0,legBind:0},statusPower:{},statusBuildup:{},statusHold:{},timed:{},interrupts:0,casting:null,queued:null}}
-function weaponByName(n){const aliases={'王国剣':'sword','長槍':'spear','短杖':'staff','拳甲':'fist','古戦槌':'hammer','風裂弓':'bow','星紋杖':'staff','遺跡短剣':'dagger','呪符':'talisman'};if(!n||n==='なし')return {name:'無手',attr:'壊',range:'near',power:0,hit:0,speed:10,load:0,weight:'light'};const k=aliases[n.replace('・異品','')]||Object.keys(W).find(k=>W[k].name===n)||({'槌':'hammer','斧':'axe','短剣':'dagger','剣':'sword','槍':'spear','鞭':'whip','鎌':'scythe','刀':'katana','弓':'bow','銃':'gun','杖':'staff','盾':'shield','格闘':'fist'}[battleWeaponKind(n)]);return k?{...W[k],name:n}:null}
+function weaponByName(n){const aliases={'王国剣':'sword','長槍':'spear','短杖':'staff','拳甲':'fist','古戦槌':'hammer','風裂弓':'bow','星紋杖':'staff','遺跡短剣':'dagger','呪符':'talisman'};if(!n||n==='なし')return {name:'無手',normalStat:'PHY',attr:'壊',range:'near',power:0,hit:0,speed:10,load:0,weight:'light'};const k=aliases[n.replace('・異品','')]||Object.keys(W).find(k=>W[k].name===n)||({'槌':'hammer','斧':'axe','短剣':'dagger','剣':'sword','槍':'spear','鞭':'whip','鎌':'scythe','刀':'katana','弓':'bow','銃':'gun','杖':'staff','盾':'shield','格闘':'fist'}[battleWeaponKind(n)]);return k?{...W[k],name:n}:null}
 function battleLoad(u){const eq=u.handSets,meta=EXPCTX?.gearMeta||{},a=ARM[u.armor]||{w:0};let armor=eq?[4,5,6,7].reduce((v,k)=>v+(EXPCTX?.armorMeta?.[eq[k]?.split('：')[1]]?.[0]??{魔装:2,軽装:3,重装:8}[eq[k]?.split('：')[1]]??0),0):a.w*4;const weight=n=>meta[n]?.[2]??weaponByName(n)?.load??0;const load=eq?[0,1,2,3].reduce((v,k)=>v+weight(eq[k].split('：')[1]),0):(u.weapon?.load||0);const main=eq?.[u.wi?2:0]?.split('：')[1],off=eq?.[u.wi?3:1]?.split('：')[1],grip=main&&main!=='なし'&&off==='なし'&&!/鞭|鎌|刀|弓|銃/.test(main)?weight(main)*.2:0;return (load+armor+(eq?.[8]?.endsWith('：なし')?0:1)-grip)*(1-Math.min(.4,passive(u,'loadReduction')))}
 function updateEncumbrance(u){const weight=Math.max(0,Math.round(battleLoad(u)*100)/100),limit=Math.max(1,u.PHY),ratio=weight/limit;u.encumbrance={weight,limit,ratio,level:ratio<=1?0:ratio<=1.2?1:ratio<=1.5?2:3};return u.encumbrance}
 function setTimed(u,key,value,turns=3,source=key){u.timed=u.timed||{};const id=key+':'+source,old=u.timed[id];u.timed[id]={key,value:old&&Math.abs(old.value)>Math.abs(value)?old.value:value,turns,appliedRound:round}}
@@ -221,7 +221,7 @@ function tickTimed(u){for(const k of Object.keys(u.timed||{})){if(--u.timed[k].t
 function rowGuardMult(t){if(t.enemy)return 1;return live(party).some(g=>g.alive&&g.row===t.row&&g.rowGuard)?.9:1}
 function current(){return party[idx]}
 function weaponPassive(u,a,t){const n=u.weapon?.name||'';let m=1;if(/戦斧|斧/.test(n)&&/重装|守護機|番人/.test((t.style||'')+(t.name||'')))m*=1.15;if(/短剣/.test(n)&&Object.values(t.status||{}).some(v=>v>0))m*=1.12;if(/槍/.test(n)&&t.row==='back')m*=1.08;if(/鎌/.test(n)&&t.hp/t.maxHp<.35)m*=1.18;if(/弓/.test(n)&&/飛行|翼/.test((t.style||'')+(t.name||'')))m*=1.2;if(/杖/.test(n)&&a.kind==='spell')m*=1.08;return m}
-function normal(u){return {name:'通常攻撃',kind:'attack',range:u.weapon?.range||'near',attr:u.weapon?.attr||'壊',target:'enemy',scope:'single',stat:'PHY',mult:1,body:['arms'],hit:u.twoHandGrip?6:0,speed:0}}
+function normal(u){return {name:'通常攻撃',kind:'attack',range:u.weapon?.range||'near',attr:u.weapon?.attr||'壊',target:'enemy',scope:'single',stat:u.weapon?.normalStat||'PHY',mult:1,body:['arms'],hit:u.twoHandGrip?6:0,speed:0}}
 function getDraft(u){if(!drafts.has(u.id))drafts.set(u.id,{key:'attack',targetId:null});return drafts.get(u.id)}
 function actionFor(u,key=getDraft(u).key){return key==='throw'?throwAction(u)||normal(u):key==='attack'?normal(u):u.skills[Number(key)]||normal(u)}
 function canReach(a,t,r){if(!t?.alive||t.hp<=0)return false;if(r==='far'||r==='all')return true;const targetSide=t.enemy?enemies:party,actorSide=a.enemy?enemies:party,tr=live(targetSide).some(x=>x.row==='front')?t.row:'front',ar=live(actorSide).some(x=>x.row==='front')?a.row:'front';return r==='mid'?tr==='front'||ar==='front':ar==='front'&&tr==='front'}
@@ -296,10 +296,10 @@ async function animateSwap(a,b,text,token){check(token);clearEffects();const bef
 async function switchWeapon(){if(!editable())return;const u=current();if(u.status.armBind>0)return notify('腕封じで換装できません');u.wi=u.wi?0:1;if(u.handSets)applyHandSet(u);else{u.weapon={...(W[u.weapons[u.wi]]||weaponByName('なし'))};updateEncumbrance(u)}if(['attack','skill','carry'].includes(u.queued?.type)){u.queued=null;u.defending=false}if(passive(u,'swapReaction')&&u.interrupts<1){u.interrupts++;setTimed(u,'evade',.1,1,'換装反応')}getDraft(u).key='attack';phase='command';render()}
 const ENEMY_ARCHETYPES={
  '獣':{match:/獣|狼|海獣|毒獣|植物/,hp:135,PHY:42,SKL:40,ARC:10,MND:20,physDef:42,magDef:30,weapon:{name:'牙爪',attr:'斬',range:'near',power:18,hit:3,speed:6,weight:'light'},statusResist:{},portrait:'enemy_guard'},
- '軽装':{match:/軽装|斥候|海賊/,hp:115,PHY:28,SKL:52,ARC:12,MND:18,physDef:32,magDef:30,weapon:{name:'短剣',attr:'斬',range:'near',power:14,hit:8,speed:8,weight:'light'},statusResist:{},portrait:'enemy_guard'},
+ '軽装':{match:/軽装|斥候|海賊/,hp:115,PHY:28,SKL:52,ARC:12,MND:18,physDef:32,magDef:30,weapon:{name:'短剣',normalStat:'SKL',attr:'斬',range:'near',power:14,hit:8,speed:8,weight:'light'},statusResist:{},portrait:'enemy_guard'},
  '重装':{match:/重装|騎士|番兵/,hp:170,PHY:50,SKL:20,ARC:10,MND:24,physDef:75,magDef:40,weapon:{name:'重打武器',attr:'壊',range:'near',power:22,hit:-2,speed:-6,weight:'heavy'},statusResist:{legBind:-10,stun:15},portrait:'enemy_guard'},
- '魔術師':{match:/魔術師|術師|呪術師|神官|精霊|死霊/,hp:100,PHY:10,SKL:28,ARC:52,MND:36,physDef:25,magDef:65,weapon:{name:'術杖',attr:'壊',range:'near',power:8,hit:0,speed:0,weight:'light'},statusResist:{armBind:-20,agitate:-15},portrait:'enemy_mage'},
- '弓':{match:/弓|狙撃手/,hp:105,PHY:22,SKL:50,ARC:10,MND:20,physDef:30,magDef:32,weapon:{name:'長弓',attr:'突',range:'far',power:16,hit:7,speed:4,weight:'light'},statusResist:{armBind:-20,blind:-20},portrait:'enemy_archer'},
+ '魔術師':{match:/魔術師|術師|呪術師|神官|精霊|死霊/,hp:100,PHY:10,SKL:28,ARC:52,MND:36,physDef:25,magDef:65,weapon:{name:'術杖',normalStat:'ARC',attr:'壊',range:'near',power:8,hit:0,speed:0,weight:'light'},statusResist:{armBind:-20,agitate:-15},portrait:'enemy_mage'},
+ '弓':{match:/弓|狙撃手/,hp:105,PHY:22,SKL:50,ARC:10,MND:20,physDef:30,magDef:32,weapon:{name:'長弓',normalStat:'SKL',attr:'突',range:'far',power:16,hit:7,speed:4,weight:'light'},statusResist:{armBind:-20,blind:-20},portrait:'enemy_archer'},
  '飛行':{match:/飛行|翼|鳥/,hp:110,PHY:30,SKL:55,ARC:20,MND:20,physDef:35,magDef:35,weapon:{name:'翼爪',attr:'斬',range:'mid',power:17,hit:5,speed:10,weight:'light'},statusResist:{legBind:-20},portrait:'enemy_archer'},
  'ゴーレム':{match:/ゴーレム|機械|石像/,hp:190,PHY:55,SKL:10,ARC:20,MND:40,physDef:85,magDef:55,weapon:{name:'石拳',attr:'壊',range:'near',power:24,hit:-4,speed:-8,weight:'heavy'},statusResist:{poison:'immune',sleep:'immune',instantDeath:'immune',stun:20},portrait:'enemy_guard'}
 };
@@ -310,7 +310,7 @@ function terrainHitMod(a,act){const n=terrain.name||'';if(/暗闇|濃霧|砂嵐/
 function terrainEvadeMod(u){return /泥濘|毒沼|浅瀬|悪路/.test(terrain.name)?-10:/岩場|瓦礫|揺れる甲板/.test(terrain.name)?-5:0}
 function terrainSpeedMod(u){const n=terrain.name||'';if(/泥濘|寒冷地|罠床/.test(n))return-10;if(/岩場|瓦礫/.test(n))return-5;if(/揺れる甲板/.test(n))return-8;return 0}
 function hit(a,t,act){const magical=act.kind==='spell',acc=a.SKL+(magical?0:(a.weapon?.hit||0))+(act.hit||0)+terrainHitMod(a,act)+(magical||act.ignoreCover?0:terrain.wHit?.(a.weapon)||0)-(a.status.blind>0?30:0),pen=[0,5,15,30][t.encumbrance?.level||0],ev=t.status.legBind>0?0:(t.SKL+passive(t,'evade')+terrainEvadeMod(t)-pen)*(1+buff(t,'evade'));return clamp(90+(acc-ev)*.5,30,100)}
-function repeatMult(){return 1}function attackValue(u,a){let v;if(a.kind==='throw')v=(a.power||0)+u.SKL;else if(a.kind==='attack')v=(u.weapon?.power||0)+(u.weapon?.throwing?u.SKL:u.weapon?.skillNormal?u.PHY*.4+u.SKL*.7:u.PHY);else{const stat=a.scale?Object.entries(a.scale).reduce((v,[k,x])=>v+(u[k]||0)*x,0):u[a.stat]||u.PHY;v=(a.kind==='spell'?a.power??14:u.weapon?.power||0)+stat}if(a.kind!=='spell'){if(u.twoHandGrip)v*=1.1;else if(u.dualWield)v+=(weaponByName(u.currentOffhand)?.power||0)*.35;v*=[1,.95,.9,.8][u.encumbrance?.level||0]}return v*(1+buff(u,'attack'))*(u.status.agitate>0?.85:1)}
+function repeatMult(){return 1}function attackValue(u,a){let v;if(a.kind==='throw')v=(a.power||0)+u.SKL;else if(a.kind==='attack')v=(u.weapon?.power||0)+(u[a.stat||u.weapon?.normalStat||'PHY']||u.PHY);else{const stat=a.scale?Object.entries(a.scale).reduce((v,[k,x])=>v+(u[k]||0)*x,0):u[a.stat]||u.PHY;v=(a.kind==='spell'?a.power??14:u.weapon?.power||0)+stat}if(a.kind!=='spell'){if(u.twoHandGrip)v*=1.1;else if(u.dualWield)v+=(weaponByName(u.currentOffhand)?.power||0)*.35;v*=[1,.95,.9,.8][u.encumbrance?.level||0]}return v*(1+buff(u,'attack'))*(u.status.agitate>0?.85:1)}
 function traitMult(a,t,act){const tr=a.weaponTrait||'';let m=1;if(tr==='対獣'&&/獣/.test(t.style+t.name))m*=1.18;if(tr==='重装特効'&&/重装|守護機|番人/.test(t.style+t.name))m*=1.18;if(tr==='飛行特効'&&/飛行|鳥/.test(t.style+t.name))m*=1.18;if(tr==='状態特効'&&Object.values(t.status).some(v=>v>0))m*=1.18;if(tr==='術式補助'&&(act.kind==='spell'||['ARC','MND'].includes(act.stat)))m*=1.12;if(t.status.legBind>0&&(/狙撃/.test(act.name||'')||/長弓|銃/.test(a.weapon?.name||'')))m*=1.2;return m}
 function critChance(u,t,a){return clamp(5+(u.SKL-t.SKL)/4+(u.weapon?.crit||0)+(a.critBonus||0)+passive(u,'crit'),0,50)}
 function damage(u,t,a){const magic=a.kind==='spell',def=(magic?t.magDef:t.physDef)*(1+buff(t,'defense'))*(magic?1:1+buff(t,'physicalDefense'))*(t.status.agitate>0?.85:1)*(1-(a.defPierce||0)),aff=affinity(t,a.attr),crit=Math.random()*100<critChance(u,t,a);let mul=1;const at=Array.isArray(a.attr)?a.attr:[a.attr],n=terrain.name;if(/水辺|浅瀬|地下水辺/.test(n)){if(at.includes('火'))mul*=.85;if(at.includes('水'))mul*=1.15}if(/祭壇/.test(n)&&at.some(k=>k==='光'||k==='闇'))mul*=1.1;if(/落盤跡/.test(n)&&at.includes('壊'))mul*=1.15;if(/地下回廊/.test(n)&&a.range==='mid')mul*=1.08;if(/狭い甲板|路地/.test(n)&&a.range==='near')mul*=1.08;if(terrain.arcaneAttr&&at.includes(terrain.arcaneAttr))mul*=1.18;if(a.range==='far'&&!magic&&(/開所|広場|マスト周辺/.test(n)||n==='高台'&&u.row==='back'))mul*=/マスト周辺/.test(n)?1.08:1.1;if(/結界地/.test(n)&&magic)mul*=.85;if(aff>1)mul*=1+passive(u,'weakBonus')+buff(u,'weak');if(magic)mul*=1+passive(u,'spellBoost');if(a.kind==='throw'||a.weapons?.includes('投擲'))mul*=1+passive(u,'throwBoost');if(a.flyingBonus&&/飛行/.test(t.style))mul*=1+a.flyingBonus;if(t.enemy&&/重装|機械|ゴーレム/.test(t.style))mul*=1+passive(u,'armoredBonus');if(t.hp/t.maxHp<=.3)mul*=1+(a.executeBonus||0)+passive(u,'executeBonus');if(round===1)mul*=1+passive(u,'openingBonus');if(u.weaponBonus&&a.kind!=='spell')mul*=1+u.weaponBonus*.04;if(t.status.sleep>0)mul*=1.5;mul*=1-Math.min(.4,passive(t,'reduction'));mul*=1-Math.max(0,buff(t,'guard'));if(t.defending)mul*=Math.max(.3,.5-(t.shieldGuard||0)-passive(t,'guard'));const rguard=live(actorSide(t)).reduce((v,g)=>g.row===t.row?Math.max(v,passive(g,'rowGuard')):v,0);mul*=1-Math.min(.3,rguard);if(t.exploreResist)mul*=1-Math.min(.4,at.reduce((v,k)=>v+(t.exploreResist[k]||0),0)/at.length/100);const value=Math.floor(attackValue(u,a)*(a.mult??1)*100/(100+Math.max(0,def))*aff*(crit?1.5:1)*mul*(.95+Math.random()*.1));return {value:aff===0?0:Math.max(1,value),crit,weak:aff>1,aff}}
