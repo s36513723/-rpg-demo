@@ -18,11 +18,11 @@ assert.equal(Object.keys(R.skills).length,296);assert.equal(Object.keys(R.master
 for(const [n,d]of Object.entries(R.skills)){
  assert.equal(n,d.name);assert(['Active','Passive'].includes(d.mode));assert(d.setCost>=1&&d.setCost<=10,n+' cost');
  assert(Array.isArray(d.unlocks)&&d.unlocks.length,n+' unlocks');
- for(const u of d.unlocks){assert(R.masteries[u.mastery],n+' mastery');assert(u.rank>=0&&u.rank<=50);assert(['PHY','SKL','ARC','MND'].includes(u.stat))}
+ for(const u of d.unlocks){assert(R.masteries[u.mastery],n+' mastery');assert(u.rank>=1&&u.rank<=10);assert(['PHY','SKL','ARC','MND'].includes(u.stat))}
  if(d.mode==='Active'){assert(Number.isFinite(d.mult));assert(Number.isFinite(d.cost));assert.equal(d.costType,'SP');assert(['near','mid','far','all'].includes(d.range));assert(['single','row','all','pierce','adjacent','random'].includes(d.scope));const t=d.targeting;assert(t,n+' targeting');assert(['enemy','ally','self'].includes(t.side),n+' targeting side');assert(['same','select','self'].includes(t.column),n+' targeting column');assert(['front','through','last','ally','self'].includes(t.order),n+' targeting order');assert(['single','cross','x','vertical','horizontal','3x3'].includes(t.area),n+' targeting area');assert(typeof t.ignoreTaunt==='boolean',n+' ignoreTaunt');}
  else assert(Object.keys(d.passive).length,n+' passive');
 }
-assert.equal(R.version,10);assert.equal(R.targetRules.board.allyNear,'back');assert.equal(R.targetRules.board.enemyNear,'front');assert.equal(R.targetRules.board.forwardAxis,'vertical');
+assert.equal(R.version,11);assert.equal(R.targetRules.board.allyNear,'back');assert.equal(R.targetRules.board.enemyNear,'front');assert.equal(R.targetRules.board.forwardAxis,'vertical');
 assert.deepEqual(R.targetRules.normalAttack,{side:'enemy',column:'same',order:'front',area:'single'});
 assert.equal(R.targetRules.emptySameColumn,'choose-occupied-column');assert.equal(R.targetRules.throughFallback,'front');assert.equal(R.targetRules.counterChain,false);
 assert.equal(R.targetingText(R.skills['毒刃']),'正面・スルー・単体');
@@ -55,10 +55,10 @@ assert(hubSource.includes("awardExperience(60,'依頼達成'"),'quest EXP reward
 assert(hubSource.includes("awardExperience(100,'章報告'"),'story EXP reward');
 assert(!/grant\(\{[^\n}]*stat:/.test(exploreSource),'exploration no longer grants Stat Pt directly');
 assert(!/grant\(\{[^\n}]*stat:/.test(hubSource),'hub no longer grants Stat Pt directly');
-console.log('Syntax, local assets, unique functions, 296 skill definitions and 31 masteries: PASS');
+console.log('Syntax, local assets, unique functions, legacy 296 runtime skills and 31 masteries under Rank 1-10 rules: PASS');
 
 const caster=[10,10,60,20],old=R.legacyDerived(caster),max=R.derived(caster);
-assert.equal(R.resourceVersion,2);assert.equal(max.sp,old.sp+old.mp);assert(!('mp' in max),'current derived vitals must not expose MP');
+assert.equal(R.resourceVersion,2);assert.equal(max.sp,100);assert.equal(R.capacity(caster,[]),12);assert(!('mp' in max),'current derived vitals must not expose MP');
 const migrated=R.migrateVitals({hp:80,sp:10,mp:42,status:{poison:2}},caster);
 assert.equal(migrated.sp,52);assert(!('mp' in migrated),'migrated current vitals must not expose MP');assert.equal(migrated.status.poison,2);
 assert.deepEqual(R.migrateVitals(migrated,caster,2),migrated);
