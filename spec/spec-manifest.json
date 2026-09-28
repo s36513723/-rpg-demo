@@ -136,13 +136,26 @@
       "normal_weapon_attribute": "single physical type",
       "range_storage": "1-5"
     },
-    "enemy_combat_model": "PHY/SKL/ARC/MND + skill scaling"
+    "enemy_combat_model": "PHY/SKL/ARC/MND + skill scaling",
+    "hub_visual_identity": {
+      "member_colors": "six clearly separated hues; avoid near-duplicate character colors",
+      "palette": {
+        "warrior": "crimson",
+        "paladin": "sapphire",
+        "rogue": "violet",
+        "archer": "emerald",
+        "alchemist": "amber",
+        "mystic": "cyan"
+      },
+      "roster_resources": "HP/SP bars always visible",
+      "character_overview_header": "transparent overlay over character art"
+    }
   },
   "workstreams": {
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "canonical_315_schema_and_migration_audit_synced_2026-09-28",
+  "last_sync_status": "hub_visual_identity_synced_2026-09-28",
   "blocked_steps": [
     "Binary XLSX snapshot is maintained as the conversation artifact; repository mirror/data/code are synchronized separately.",
     "315 runtime switch is blocked: only 40 canonical rows have unique exact-name matches to the 296 runtime; 速射 is ambiguous and the remaining rows require explicit migration mapping.",
