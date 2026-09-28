@@ -87,6 +87,11 @@ Top to bottom:
 
 The first visual impression should be a stylish character-focused RPG, not a grid board game.
 
+## Character art
+- The Paladin's confirmed master standing art is the user-approved 2026-09-28 full-body blonde female knight in white / blue / gold armor with sword and large shield.
+- Turn-order, party/formation icon, and acting-character battle portrait for a character are derived from the same approved master art; UI frames remain separate reusable assets.
+- Character-art handling must scale to a growing roster: add a master standing art once, then derive standardized UI crops instead of redesigning the character separately for each UI.
+
 ## Specification status
 - Machine-readable classification: `spec/spec-status.json`.
 - Implementation existence or a passing test does not imply approval.
