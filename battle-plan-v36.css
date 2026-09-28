@@ -457,3 +457,95 @@
 @media(max-width:380px){
  .actor-art,.actor-button{left:calc(-30vw - 40px)!important}
 }
+
+
+/* v40 — visible correction from IMG_3594. */
+.order-ribbon{
+  left:55%!important;
+  width:210px!important;
+  overflow:visible!important;
+}
+.order-ribbon .order{
+  gap:4px!important;
+  overflow:visible!important;
+}
+.order-ribbon .order-face{
+  width:34px!important;
+  height:34px!important;
+  flex:0 0 34px!important;
+  transform:none!important;
+}
+.order-ribbon .order-face.ally{
+  width:39px!important;
+  height:39px!important;
+  flex:0 0 39px!important;
+}
+.order-ribbon .order-face.is-next{
+  width:41px!important;
+  height:41px!important;
+  flex:0 0 41px!important;
+  transform:none!important;
+}
+.order-ribbon .order-face .order-portrait-clip{
+  inset:3px!important;
+  width:auto!important;
+  height:auto!important;
+  border-radius:50%!important;
+  overflow:hidden!important;
+}
+.order-ribbon .order-face .order-portrait-fill{
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  border-radius:50%!important;
+  background-repeat:no-repeat!important;
+  background-size:190% auto!important;
+  background-position:50% 17%!important;
+  transform:none!important;
+}
+.order-ribbon .order-face.ally:not(.is-next) .order-frame{
+  left:-9px!important;
+  top:-9px!important;
+  width:calc(100% + 18px)!important;
+  height:calc(100% + 18px)!important;
+}
+.order-ribbon .order-face.is-next .order-frame{
+  left:-10px!important;
+  top:-12px!important;
+  width:calc(100% + 20px)!important;
+  height:calc(100% + 22px)!important;
+}
+
+/* actorArt is now a direct child of #game: this pins it to the physical left edge. */
+#game>.actor-art{
+  position:absolute!important;
+  z-index:61!important;
+  left:0!important;
+  right:auto!important;
+  bottom:0!important;
+  top:auto!important;
+  width:31%!important;
+  max-width:none!important;
+  height:34.5%!important;
+  border-radius:0 58px 0 0!important;
+  overflow:hidden!important;
+  margin:0!important;
+  transform:none!important;
+  mask-image:linear-gradient(to right,#000 0 92%,rgba(0,0,0,.88) 96%,transparent 100%)!important;
+  -webkit-mask-image:linear-gradient(to right,#000 0 92%,rgba(0,0,0,.88) 96%,transparent 100%)!important;
+}
+#game>.actor-art .actor-portrait-image{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:50% 29%!important;
+  transform:scale(1.05)!important;
+  transform-origin:50% 35%!important;
+}
+@media(max-width:380px){
+ .order-ribbon{left:55%!important;width:196px!important}
+ .order-ribbon .order-face{width:32px!important;height:32px!important;flex-basis:32px!important}
+ .order-ribbon .order-face.ally{width:36px!important;height:36px!important;flex-basis:36px!important}
+ .order-ribbon .order-face.is-next{width:38px!important;height:38px!important;flex-basis:38px!important}
+ #game>.actor-art{left:0!important;width:31%!important;height:34.5%!important}
+}
