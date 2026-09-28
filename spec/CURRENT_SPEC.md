@@ -32,7 +32,7 @@ This is the repository-readable mirror of the canonical Excel specification. It 
 ## Equipment
 - 主武器 / 副手 / 予備主武器 / 予備副手 / 防具一式 / 装飾品 / 携行具.
 - Armor categories/Mastery: 魔装 / 軽装 / 重装.
-- Weapon and armor Mastery Rank 5 unlocks their equipment categories. The talisman weapon uses 符術. Starter main-hand equipment remains usable after save migration. Market direct equip and presets follow the same requirements.
+- Weapon and armor equipment is gated by the corresponding Mastery. The talisman weapon uses 符術. Starter main-hand equipment remains usable after save migration. Market direct equip and presets follow the same requirements. The current Rank 5 threshold is an **initial implementation value**, not yet confirmed.
 - Dual wield requires two one-handed weapons and SKL 30. Two-hand grip applies to a one-handed main weapon with an empty offhand.
 - Initial balance proposal: two-hand grip reduces effective main-weapon weight by 20%, boosts physical attack by 10% and normal-attack hit by 6. A normal hit lowers target physical defense by 10% for two rounds. Dual wield adds 35% of offhand weapon power to physical attacks and reserves 4 skill-set Cost if either weapon set qualifies. These values are adjustable.
 - Unarmed, throwing and shields retain their existing handling.
@@ -51,7 +51,7 @@ Skill Masteries (0-2):
 - 探索: 盗技 / 隠密 / 索敵 / 鑑識
 - 士気: 歌唱 / 舞踏 / 奏楽 / 号令
 
-Skills are learned from requirements such as stats, Mastery, Source and spell system, and have an equip cost.
+Skills are learned from requirements such as stats, Mastery, Source and spell system, and have an equip cost. Exact Rank thresholds, Mastery Rank cap, Rank gained per Mastery Pt, skill-learning Pt costs, individual Set Costs and the Set Cost capacity formula are **initial implementation / review values unless explicitly promoted to Confirmed**.
 
 ## Growth and experience
 - Characters gain EXP from meaningful play.
@@ -86,3 +86,9 @@ Top to bottom:
 5. ally 3x3 card formation
 
 The first visual impression should be a stylish character-focused RPG, not a grid board game.
+
+## Specification status
+- Machine-readable classification: `spec/spec-status.json`.
+- Implementation existence or a passing test does not imply approval.
+- The 296 reverse-synced skill records default to **要レビュー**.
+- Balance placeholders such as Mastery Rank cap 50, +5 Rank per Mastery Pt, the Set Cost capacity formula and combo bonus percentages remain **初期実装値** until explicitly confirmed.
