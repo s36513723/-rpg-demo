@@ -81,7 +81,7 @@ const showUI=html=>{
  const secondary=document.createElement('div');secondary.className='bottom-tabs';
  panel.querySelectorAll('.ui-tabs:not(.actor-tabs .ui-tabs),.fitting-filters').forEach(el=>secondary.append(el));
  if(secondary.children.length)footer.prepend(secondary);
- if(controlsMarkup){const operation=document.createElement('div');operation.className='equipment-bottom-operation';const slots=document.createElement('div');slots.className='equipment-bottom-slots';slots.setAttribute('aria-label','装備枠');panel.querySelectorAll('.fitting-controls [data-hub="equipChoice"]').forEach(el=>{const b=el.cloneNode(true),k=Number(JSON.parse(b.dataset.args)[1]);b.textContent=({0:'主手',1:'副手',2:'予備主',3:'予備副',4:'防具',8:'装飾',9:'携行'})[k];slots.append(b)});operation.append(slots,panel.querySelector('.fitting-confirm'));secondary.before(operation)}
+ if(controlsMarkup){const operation=document.createElement('div');operation.className='equipment-bottom-operation';const slots=document.createElement('div');slots.className='equipment-bottom-slots';slots.setAttribute('aria-label','装備枠');panel.querySelectorAll('.fitting-controls [data-hub="equipChoice"]').forEach(el=>{const b=el.cloneNode(true),k=Number(JSON.parse(b.dataset.args)[1]);b.textContent=({0:'主',1:'副',2:'予主',3:'予副',4:'防具',8:'装飾',9:'携行'})[k];slots.append(b)});operation.append(slots,panel.querySelector('.fitting-confirm'));secondary.before(operation)}
  if(actorRoute){const nav=panel.querySelector('.panel-navigation'),exit=nav.querySelector('.modal-x');exit.classList.add('actor-exit');panel.querySelector('.actor-tabs .ui-tabs').append(exit);nav.remove()}
  if(cancelRoute&&panel.querySelector('.panel-back')){const back=panel.querySelector('.panel-back');back.hidden=false;back.dataset.hub=cancelRoute.action;back.dataset.args=cancelRoute.args}
  selectionOverlay();panel.setAttribute('aria-labelledby','panelTitle');document.getElementById('modal').classList.add('on');document.getElementById('app').inert=true;panel.scrollTop=0;const body=panel.querySelector('.panel-body');if(same)body.scrollTop=scroll;navState(r.name);const nextFocus=same&&focusAction?[...panel.querySelectorAll('[data-hub]')].find(e=>e.dataset.hub===focusAction&&e.dataset.args===focusArgs&&!e.disabled):null;(nextFocus||panel.querySelector('#panelTitle')).focus({preventScroll:true});
@@ -108,6 +108,7 @@ const uiActions={
  uiQuestList(){questMenu('active')},
  uiInventory(t){U.inventory=t;itemCategory(t)},
  uiSearchSkills(value){if(U.route?.name==='skills')U.search[U.route.args[0]]=value;filterSkillRows(value)},
+ uiEquipTypeMenu(){const menu=document.querySelector('#panel .fitting-filter-options'),button=document.querySelector('#panel .fitting-filter-current');if(!menu||!button)return;menu.hidden=!menu.hidden;button.setAttribute('aria-expanded',String(!menu.hidden))},
  uiEquipFilter(i,k,t){U.detail=null;fittingFilter(i,k,t)},
  uiEquipPreview(i,k,n){if(!Number.isInteger(i)||!Number.isInteger(k))return;U.detail=U.detail?.kind==='equip'&&U.detail.i===i&&U.detail.k===k&&U.detail.n===n?null:{kind:'equip',i,k,n};window.equipChoice(i,k,n)},
  uiNotify(text){toast(String(text))}

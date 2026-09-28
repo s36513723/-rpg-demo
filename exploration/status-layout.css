@@ -390,3 +390,19 @@
 #panel .equipment-left .equip-compare-grid b{font-size:9px;line-height:11px}
 #panel .equipment-left .equip-compare-grid i{font-size:7px;line-height:11px}
 }
+
+/* One-line footer navigation, with a disclosure for the long equipment type list. */
+#panel .bottom-tabs>.ui-tabs{display:grid;grid-template-columns:repeat(var(--tab-count,3),minmax(0,1fr));gap:3px;overflow:visible;flex-wrap:nowrap}
+#panel .bottom-tabs>.ui-tabs button{min-width:0;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:3px 1px;font-size:11px}
+#panel .bottom-tabs>.ui-tabs:has(>button:nth-child(4)){--tab-count:4}
+#panel .bottom-tabs>.ui-tabs:has(>button:nth-child(5)){--tab-count:5}
+#panel .bottom-tabs>.ui-tabs:has(>button:nth-child(6)){--tab-count:6}
+#panel .bottom-tabs>.ui-tabs .ui-icon,#panel .equipment-bottom-slots .ui-icon{display:none}
+#panel .equipment-bottom-slots{grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
+#panel .equipment-bottom-slots button{font-size:9px;padding:2px 0;white-space:nowrap;overflow:hidden;min-height:44px}
+#panel .bottom-tabs>.fitting-filters{display:block;position:relative;padding:2px 0 4px;overflow:visible}
+#panel .fitting-filter-current{width:100%;min-height:44px;text-align:left;padding:5px 12px;background:#233b2e;color:#f5e4b7;border:1px solid #a38b59;border-radius:6px}
+#panel .fitting-filter-options:not([hidden]){display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;position:absolute;z-index:50;bottom:100%;left:0;right:0;background:#182b22;border:1px solid #a38b59;border-radius:7px;padding:5px;box-shadow:0 -6px 18px #0009}
+#panel .fitting-filter-options[hidden]{display:none}
+#panel .fitting-filter-options button{min-width:0;min-height:38px;padding:2px;font-size:10px}
+@media(max-width:350px){#panel .bottom-tabs>.ui-tabs button{font-size:10px}#panel .equipment-bottom-slots button{font-size:8px}}

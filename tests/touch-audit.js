@@ -7,7 +7,7 @@ for(const route of routes){
   closeM();(0,eval)(route);
   const p=document.querySelector('#panel'),footer=p.querySelector('.panel-footer'),body=p.querySelector('.panel-body');
   const r=p.getBoundingClientRect(),f=footer.getBoundingClientRect();
-  const buttons=[...footer.querySelectorAll('button')].filter(b=>!b.hidden),sizes=buttons.map(b=>b.getBoundingClientRect());
+  const buttons=[...footer.querySelectorAll('button')].filter(b=>!b.hidden&&b.getClientRects().length),sizes=buttons.map(b=>b.getBoundingClientRect());
   const ok=Math.abs(r.height-innerHeight)<=1&&r.top>=-1&&r.bottom<=innerHeight+1&&f.bottom<=innerHeight+1&&f.top>=innerHeight-(p.querySelector('.fitting-controls')?240:190)&&sizes.every((x,i)=>x.height>=(buttons[i].closest('.fitting-filters,.equipment-bottom-slots')?32:44)&&x.width>=30)&&!p.querySelector('.panel-head button:not(.icon-button)')&&body.scrollWidth<=body.clientWidth+1&&[...footer.querySelectorAll('.bottom-tabs,.fitting-filters,.equipment-bottom-slots')].every(e=>e.scrollWidth<=e.clientWidth+1);
   results.push({name:'Touch navigation '+route+' '+innerWidth+'x'+innerHeight,ok,measurements:{panel:r.height,footerTop:f.top,overflow:body.scrollWidth-body.clientWidth,buttons:sizes.map(x=>[x.width,x.height])}});
  }catch(e){results.push({name:'Touch navigation '+route,ok:false,error:String(e)})}
