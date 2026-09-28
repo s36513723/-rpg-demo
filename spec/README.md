@@ -19,3 +19,6 @@ See:
 - `../AGENTS.md`
 - `CURRENT_SPEC.md`
 - `spec-manifest.json`
+
+## Automatic implementation export
+`rpg-rules.js` and `spec/spec-status.json` are the inputs for `tools/export-implementation-spec.mjs`. GitHub Actions regenerates and commits `spec/generated/implemented-skills.csv` and `spec/generated/implemented-masteries.csv` when either input changes. The skill CSV includes the explicit specification status, so reverse-synced implementation values cannot silently become Confirmed.
