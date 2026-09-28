@@ -250,3 +250,19 @@
 @media(max-height:680px){
  #panel .equipment-left .fitting-controls button{height:clamp(20px,calc((100cqh - 244px)/8),44px)}
 }
+
+/* Mastery navigation and skill candidates scroll independently. */
+#panel.status-skills>.panel-body{display:flex;min-height:0;overflow:hidden;padding:0 6px 5px}
+.skills-workspace{display:grid;grid-template-columns:28% minmax(0,1fr);gap:6px;width:100%;min-height:0;flex:1}
+.skill-masteries{overflow-y:auto;min-height:0;overscroll-behavior:contain}
+#panel .skill-masteries button{display:block;width:100%;min-height:44px;margin:0 0 4px;padding:5px 3px;border:1px solid #718361;border-radius:6px;background:#1e3328d9;color:#ded8c4;font-size:12px}
+#panel .skill-masteries button[aria-pressed=true]{background:#d5bd83;color:#17271b;font-weight:700}
+.skill-selection{display:flex;flex-direction:column;min-width:0;min-height:0}
+#panel .skill-selection .search-input{width:100%;flex:none;margin:0 0 5px;box-sizing:border-box}
+.skill-candidates{overflow-y:auto;min-height:0;overscroll-behavior:contain}
+#panel .skill-candidates .skill-toggle{width:100%;margin:0 0 5px;padding:7px 6px}
+#panel .skill-candidates .row-visual{display:none}
+#panel .skill-candidates .cost-label{display:inline-block;font-size:10px}
+#panel .mastery-branch .branch-label{min-width:0;text-align:left}
+#panel .mastery-branch .branch-label small{display:block;white-space:normal;font-size:10px;line-height:1.4;margin-top:3px;color:#d0ccb9}
+#panel .mastery-branch>.branch-toggle>span:last-child{flex:none}
