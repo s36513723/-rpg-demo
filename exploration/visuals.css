@@ -357,3 +357,37 @@
 @media(min-width:600px){
  .facility-stand{right:3%!important;max-width:62%!important}
 }
+
+
+/* UI29: centered approved facility hosts. */
+.facility-stage{
+ background-position:center!important;
+ background-size:cover!important;
+}
+.facility-stage::before{
+ background:
+  linear-gradient(90deg,rgba(4,9,7,.20),transparent 32%,transparent 68%,rgba(4,9,7,.20)),
+  linear-gradient(180deg,rgba(4,9,7,.02) 42%,rgba(4,9,7,.38) 100%)!important;
+}
+.facility-stand{
+ left:50%!important;
+ right:auto!important;
+ bottom:-1%!important;
+ width:auto!important;
+ height:97%!important;
+ max-width:82%!important;
+ margin:0!important;
+ object-fit:contain!important;
+ object-position:center bottom!important;
+ opacity:1!important;
+ mix-blend-mode:normal!important;
+ filter:drop-shadow(0 13px 24px rgba(0,0,0,.58))!important;
+ transform:translateX(-50%)!important;
+ image-rendering:auto!important;
+}
+@media(max-height:640px){
+ .facility-stand{height:95%!important;max-width:78%!important}
+}
+@media(min-width:600px){
+ .facility-stand{left:50%!important;right:auto!important;max-width:70%!important}
+}
