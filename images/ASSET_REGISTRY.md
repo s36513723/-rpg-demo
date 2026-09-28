@@ -31,12 +31,13 @@
 
 | キャラクター | 正式 | GitHub画像本体 | 状況 |
 |---|---|---|---|
-| ウォリアー | ✓ | battle-plan-v36.js 内 ORDER_PORTRAITS | 埋め込み画像としてUI接続済み・独立ファイル化待ち |
-| パラディン | ✓ | images/paladin-turn.webp + battle-plan-v36.js 内 ORDER_PORTRAITS | 独立ファイルあり・UI接続済み |
-| ローグ | ✓ | battle-plan-v36.js 内 ORDER_PORTRAITS | 埋め込み画像としてUI接続済み・独立ファイル化待ち |
-| アーチャー | ✓ | battle-plan-v36.js 内 ORDER_PORTRAITS | 埋め込み画像としてUI接続済み・独立ファイル化待ち |
-| アルケミスト | ✓ | battle-plan-v36.js 内 ORDER_PORTRAITS | 埋め込み画像としてUI接続済み・独立ファイル化待ち |
-| ミスティック | ✓ | battle-plan-v36.js 内 ORDER_PORTRAITS | 埋め込み画像としてUI接続済み・独立ファイル化待ち |
+| ウォリアー | ✓ | images/turn-warrior.svg | 保存済み・Plan戦闘UI接続済み |
+| パラディン | ✓ | images/turn-paladin.svg / images/paladin-turn.webp | 保存済み・Plan戦闘UI接続済み |
+| ローグ | ✓ | images/turn-rogue.svg | 保存済み・Plan戦闘UI接続済み |
+| アーチャー | ✓ | images/turn-archer.svg | 保存済み・Plan戦闘UI接続済み |
+| アルケミスト | ✓ | images/turn-alchemist.svg | 保存済み・Plan戦闘UI接続済み |
+| ミスティック | ✓ | images/turn-mystic.svg | 保存済み・Plan戦闘UI接続済み |
+
 
 ## 戦闘用アイコン枠
 
@@ -96,4 +97,4 @@
 - 「正式登録」= ユーザーが正式素材として確定したこと。
 - 「GitHub画像本体保存済み」= images/ 配下などに独立画像ファイルが存在すること。
 - 「UI接続済み」= 現行またはPlan UIがその画像を実際に参照していること。
-- 行動アイコン5人分は正式・UI接続済みだが、現時点では JavaScript 埋め込みであり独立画像ファイルではない。パラディンのみ独立 turn 画像も存在する。
+- 行動用アイコン6人分は独立画像ファイルとして保存済みで、Plan戦闘UIへ接続済み。
