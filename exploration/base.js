@@ -46,7 +46,7 @@ function masteryDescription(n){return rules().masteryDescription?.(n)||'この�
 function skillExplanation(d){return rules().skillExplain?.(d)||skillDescription(d)}
 function actorHero(i){
  if(!Number.isInteger(i)||i<0||i>=6)return '';
- const art=['battle-warrior.svg','battle-paladin.svg','battle-rogue.svg','battle-archer.svg','battle-alchemist.svg','battle-mystic.svg'][i],v=vitals[i],m=rules().derived(stats[i]);
+ const art=['hub-standing-warrior.webp','hub-standing-paladin.webp','hub-standing-rogue.webp','hub-standing-archer.webp','hub-standing-alchemist.webp','hub-standing-mystic.webp'][i],v=vitals[i],m=rules().derived(stats[i]);
  return '<section class="actor-hero" data-actor="'+i+'"><div class="actor-hero-art"><img src="../images/'+art+'" alt=""></div><div class="actor-hero-copy"><b>'+hesc(names[i])+'</b><small>'+hesc(battleStyle(i))+' · '+hesc(rows[i])+'</small><span>HP '+v.hp+'/'+m.hp+' · SP '+v.sp+'/'+m.sp+'</span></div></section>';
 }
 function skillDescription(d){if(d.mode==='Passive')return d.description;const targeting=rules().targetingText?.(d)||'',s=[targeting,d.mult>0?'威力'+d.mult+(d.hits?'（'+d.hits+'段合計）':''):'',d.stat,d.cast?'詠唱1ラウンド':'',d.once?'1戦1回':'',d.push?'吹飛ばし':d.pull?'引寄せ':'',d.heal?'HP回復':'',d.summon?'召喚3ラウンド':''];return s.filter(Boolean).join(' / ')}
