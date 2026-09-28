@@ -201,3 +201,11 @@
 #panel .actor-fixed .mastery-categories .row{padding:3px;margin:0;min-height:44px;text-align:center;font-size:10px}
 .armor-family-heading{font-size:12px;color:#e5cd96;border-bottom:1px solid #72845d;padding:5px 2px;margin:4px 0}
 @media(max-height:680px){.overview-masteries{min-height:19px;margin-bottom:2px}.overview-masteries>span{font-size:9px;padding:1px 5px}#panel .mastery-workspace .item-explain{font-size:10px}}
+@media(max-height:680px){
+ #panel.status-overview>.status-basics{padding:4px 8px}
+ #panel.status-overview .overview-masteries{min-height:16px;margin-bottom:1px}
+ #panel.status-overview .status-basics .resource-grid{margin-bottom:2px}
+ #panel.status-overview .basic-abilities b{font-size:14px}
+ #panel.status-overview .basic-abilities small{font-size:9px}
+ #panel.status-overview .character-experience{margin-bottom:2px}
+}
