@@ -166,13 +166,14 @@ const canonical315=root.RPG_SKILLS_315||(typeof require!=='undefined'?(()=>{try{
 if(canonical315?.count===315){
  for(const k of Object.keys(skills))delete skills[k];
  Object.assign(skills,canonical315.skills);
+ const categoryMap={無手:'武器',格闘:'武器',短剣:'武器',剣:'武器',槌:'武器',斧:'武器',槍:'武器',鞭:'武器',鎌:'武器',刀:'武器',弓:'武器',銃:'武器',杖:'武器',盾:'武器',投擲:'武器',魔装:'防具',軽装:'防具',重装:'防具',灼陽:'源泉',霊峰:'源泉',海神:'源泉',森羅:'源泉',星辰:'源泉',信仰:'術法',呪術:'術法',魔術:'術法',符術:'術法',機巧:'術法',異能:'術法',探索:'技能',士気:'技能'};
  for(const [m,branches] of Object.entries(canonical315.branches)){
-  if(masteries[m])masteries[m].branches=branches;
-  else masteries[m]={branches};
+  if(masteries[m]){masteries[m].branches=branches;masteries[m].category=categoryMap[m]||masteries[m].category}
+  else masteries[m]={category:categoryMap[m],branches};
  }
 }
 const legacyRankTo10=r=>({5:1,15:3,25:5,35:7,45:9,50:10}[r]??Math.max(1,Math.min(10,Math.ceil((Number(r)||1)/5))));
-for(const d of Object.values(skills))for(const u of d.unlocks||[])u.rank=legacyRankTo10(u.rank);
+if(!canonical315)for(const d of Object.values(skills))for(const u of d.unlocks||[])u.rank=legacyRankTo10(u.rank);
 const clone=x=>JSON.parse(JSON.stringify(x));
 const total=a=>a.reduce((s,x)=>s+x,0);
 function legacyDerived(a){const T=total(a),P=Math.max(0,a[0]-10),S=Math.max(0,a[1]-10),M=Math.max(0,a[2]+a[3]-20);return {hp:Math.floor(100+.5*(T-100)+2*P+Math.max(0,P-20)),sp:Math.floor(20+.1*(T-100)+.4*P+S),mp:Math.floor(M<=50?2*M:100+.5*(M-50))}}
