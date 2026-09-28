@@ -89,13 +89,17 @@
     "weapon_mastery_equipment_gate": true,
     "armor_mastery_equipment_gate": true,
     "dual_wield_requires_skl": 30,
-    "two_hand_grip": "one_hand_weapon_empty_offhand"
+    "two_hand_grip": "one_hand_weapon_empty_offhand",
+    "base_recovery": {
+      "auto_heal_on_return": false,
+      "rest_at_inn": "full HP/SP/status recovery and pending growth-point settlement"
+    }
   },
   "workstreams": {
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "equipment_mastery_gates_and_handling_effects_implemented",
+  "last_sync_status": "full_implementation_inventory_audited_and_exported",
   "blocked_steps": [
     "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
   ],
@@ -104,5 +108,34 @@
     "two_hand_physical_multiplier": 1.1,
     "two_hand_normal_hit_bonus": 6,
     "dual_wield_offhand_power_fraction": 0.35
+  },
+  "implementation_inventory": {
+    "skills": 296,
+    "masteries": 31,
+    "mastery_rank": {
+      "min": 0,
+      "max": 50,
+      "rank_per_mastery_point": 5,
+      "skill_learn_cost_points": 1
+    },
+    "skill_set_capacity": "10 + floor((PHY + SKL + ARC + MND) / 10)",
+    "battle_schema": 6,
+    "hub_schema": 7,
+    "hub_content": {
+      "quests": 24,
+      "region_events": 24,
+      "hidden_locations": 4,
+      "regional_craft_weapons": 12,
+      "optional_conversations": 42,
+      "formation_presets": 3,
+      "history_entries": 40
+    },
+    "generated_exports": [
+      "spec/generated/implemented-skills.csv",
+      "spec/generated/implemented-masteries.csv"
+    ]
+  },
+  "legacy_compatibility": {
+    "mp": "Obsolete gameplay resource. Old saves and a few internal legacy property names are converted to SP at runtime; do not expose MP as current specification."
   }
 }
