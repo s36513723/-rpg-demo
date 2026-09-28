@@ -406,3 +406,15 @@
 #panel .fitting-filter-options[hidden]{display:none}
 #panel .fitting-filter-options button{min-width:0;min-height:38px;padding:2px;font-size:10px}
 @media(max-width:350px){#panel .bottom-tabs>.ui-tabs button{font-size:10px}#panel .equipment-bottom-slots button{font-size:8px}}
+
+/* Keep the type picker with its candidate list, above the scrolling rows. */
+#panel .equipment-list-bar{display:flex;align-items:center;justify-content:space-between;gap:4px;flex:none;position:relative;z-index:45;min-height:42px;padding:2px 1px 3px;border-bottom:1px solid #6a775e;background:#13271d}
+#panel .equipment-list-bar>b{flex:none;font-size:11px;color:#e3d6af}
+#panel .equipment-list-bar .fitting-filters{display:block;position:relative;overflow:visible;flex:1;min-width:0;max-width:190px;padding:0}
+#panel .equipment-list-bar .fitting-filter-current{min-height:38px;padding:3px 7px;font-size:11px;text-align:center}
+#panel .equipment-list-bar .fitting-filter-options:not([hidden]){display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;position:absolute;z-index:60;top:100%;bottom:auto;right:0;left:auto;width:min(290px,calc(100vw - 26px));box-sizing:border-box;padding:5px;border:1px solid #a38b59;border-radius:7px;background:#182b22;box-shadow:0 6px 18px #000b}
+#panel .equipment-list-bar .fitting-filter-options button{min-width:0;min-height:40px;margin:0;padding:2px;font-size:10px}
+#panel .equipment-left .equip-compare-grid>span{align-items:center;gap:2px}
+#panel .equipment-left .equip-compare-grid small{flex:none;min-width:27px;white-space:nowrap;color:#d7d4bd}
+#panel .equipment-left .equip-compare-grid b{display:flex;align-items:baseline;justify-content:flex-end;gap:2px;min-width:0;white-space:nowrap;font-variant-numeric:tabular-nums}
+#panel .equipment-left .equip-compare-grid i{font-weight:700;white-space:nowrap}

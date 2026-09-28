@@ -6,13 +6,13 @@ function fittingSession(i){if(!Number.isInteger(i)||i<0||i>=names.length)return 
 function fittingDiscard(){fittingDraft=null}
 function fittingHero(i,a,b,k=0){
  const round=n=>Math.round(n*100)/100;
- const value=(x,y,suffix='',lower=false)=>{const delta=round(y-x);return '<b>'+round(y)+suffix+(delta?' <i class="'+((lower?delta<0:delta>0)?'up':'down')+'">('+(delta>0?'+':'')+delta+')</i>':'')+'</b>'};
- const metric=(name,x,y,suffix='',lower=false)=>'<span><small>'+name+'</small>'+value(x,y,suffix,lower)+'</span>';
+ const value=(x,y,suffix='',lower=false)=>{const delta=round(y-x);return '<b>'+round(y)+suffix+(delta?' <i class="'+((lower?delta<0:delta>0)?'up':'down')+'">'+(delta>0?'+':'')+delta+'</i>':'')+'</b>'};
+ const metric=(label,name,x,y,suffix='',lower=false)=>'<span aria-label="'+name+' '+round(y)+suffix+'"><small title="'+name+'">'+label+'</small>'+value(x,y,suffix,lower)+'</span>';
  const ar=characterDisplayRates(i,a),br=characterDisplayRates(i,b);
  return '<section class="fitting-summary"><div class="equip-compare" aria-live="polite">'+(k===2||k===3?'<small>予備セット使用時（換装後）</small>':'')+'<div class="equip-compare-grid">'+
- metric('最大HP',a.hp,b.hp)+metric('最大SP',a.sp,b.sp)+metric('装備重量',a.weight,b.weight,' / '+b.limit,true)+metric('物理攻撃力',a.physical,b.physical)+
- metric('魔法攻撃力',a.magicArc,b.magicArc)+metric('信仰攻撃力',a.magicMind,b.magicMind)+
- metric('物理防御力',a.pdef,b.pdef)+metric('魔法防御力',a.mdef,b.mdef)+metric('命中率',ar.hit,br.hit,'%')+metric('会心率',ar.crit,br.crit,'%')+metric('回避率',ar.evade,br.evade,'%')+metric('行動速度',a.speed,b.speed)+
+ metric('HP','最大HP',a.hp,b.hp)+metric('SP','最大SP',a.sp,b.sp)+metric('重量','装備重量',a.weight,b.weight,'/'+b.limit,true)+metric('物攻','物理攻撃力',a.physical,b.physical)+
+ metric('魔攻','魔法攻撃力',a.magicArc,b.magicArc)+metric('信攻','信仰攻撃力',a.magicMind,b.magicMind)+
+ metric('物防','物理防御力',a.pdef,b.pdef)+metric('魔防','魔法防御力',a.mdef,b.mdef)+metric('命中','命中率',ar.hit,br.hit,'%')+metric('会心','会心率',ar.crit,br.crit,'%')+metric('回避','回避率',ar.evade,br.evade,'%')+metric('速度','行動速度',a.speed,b.speed)+
  '</div></div></section>';
 }
 
@@ -21,7 +21,7 @@ function fittingScreen(i,k=0,preview){if(H.run?.battle)return pendingBattleMenu(
  if(preview!==undefined&&fittingWith(i,s.items,()=>canEquip(i,k,preview))){s.items[k]=s.items[k].split('：')[0]+'：'+preview;if(k===4)for(let z=5;z<=7;z++)s.items[z]=s.items[z].split('：')[0]+'：'+preview;if((k===0||k===2)&&isTwoHanded(preview))s.items[k+1]=s.items[k+1].split('：')[0]+'：なし'}
  const comparison=s.items.slice();if(s.blocked&&s.inspected)comparison[k]=comparison[k].split('：')[0]+'：'+s.inspected;const a=previous,b=fittingValues(i,comparison,k),dirty=JSON.stringify(s.base)!==JSON.stringify(s.items),current=s.items[k].split('：')[1],list=k<4?['なし',...inventory.weapons]:k===4?inventory.armor.filter(n=>Object.hasOwn(ARMOR_VARIANTS,n)).sort((a,b)=>['魔装','軽装','重装'].indexOf(armorFamily(a))-['魔装','軽装','重装'].indexOf(armorFamily(b))):k===9?['なし',...Object.keys(hc().tools).filter(n=>hc().tools[n].battle)]:['なし','護符'];
  const group=fittingGroup(k),types=group?['すべて',...new Set(list.filter(n=>n!=='なし').map(n=>fittingKind(k,n)))]:[];
- const filter=types.includes(s.filters[group])?s.filters[group]:'すべて';
+ const filter=types.includes(s.filters[k])?s.filters[k]:'すべて';
  const visible=list.filter(n=>filter==='すべて'||fittingKind(k,n)===filter);
  const filters=group?'<div class="fitting-filters" role="group" aria-label="装備の種類"><button class="fitting-filter-current" data-hub="uiEquipTypeMenu" aria-expanded="false" aria-label="装備の種類を選択：'+hesc(filter)+'">種類：'+hesc(filter)+' ▾</button><div class="fitting-filter-options" hidden>'+types.map(t=>'<button data-hub="uiEquipFilter" data-args="'+hesc(JSON.stringify([i,k,t]))+'" aria-pressed="'+(t===filter)+'">'+hesc(t)+'</button>').join('')+'</div></div>':'';
  const slotButtons=keys=>keys.map(n=>'<button data-hub="equipChoice" data-args="'+hesc(JSON.stringify([i,n]))+'" aria-pressed="'+(n===k)+'"><small>'+fittingSlots[n]+'</small><b>'+hesc(s.items[n].split('：')[1])+(s.items[n]!==s.base[n]?' *':'')+'</b></button>').join('');
@@ -35,7 +35,7 @@ function fittingApply(i){if(H.run?.battle||!fittingDraft||fittingDraft.i!==i)ret
 
 function fittingSwap(i){if(H.run?.battle)return;const s=fittingSession(i);if(!s)return;const v=s.items.slice(0,4).map(x=>x.split('：')[1]);for(let k=0;k<4;k++)s.items[k]=s.items[k].split('：')[0]+'：'+v[(k+2)%4];equipChoice(i,s.slot)}
 
-function fittingFilter(i,k,type){const s=fittingSession(i);if(!s||!Object.hasOwn(fittingSlots,k))return;const group=fittingGroup(k);if(!group)return;s.filters[group]=type;equipChoice(i,k);const body=document.querySelector('#panel .equipment-right>.panel-body');if(body)body.scrollTop=0}
+function fittingFilter(i,k,type){const s=fittingSession(i);if(!s||!Object.hasOwn(fittingSlots,k))return;const group=fittingGroup(k);if(!group)return;s.filters[k]=type;equipChoice(i,k);const body=document.querySelector('#panel .equipment-right>.panel-body');if(body)body.scrollTop=0}
 
 function fittingGroup(k){return k<4?'weapon':k===4?'armor':k===8?'accessory':k===9?'tool':null}
 function fittingKind(k,n){if(n==='なし')return 'なし';if(k<4)return weaponKind(n);if(k===4)return armorFamily(n);if(k===8)return '護符';return hc().tools[n]?.field?'回復・治療':['投げナイフ','鉄針','投石','爆弾'].includes(n)?'攻撃・投擲':'補助'}
