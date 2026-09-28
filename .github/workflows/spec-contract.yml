@@ -1,0 +1,25 @@
+name: Specification contract
+
+on:
+  push:
+    paths:
+      - "AGENTS.md"
+      - "spec/**"
+      - "tools/check-spec-contract.mjs"
+      - ".github/workflows/spec-contract.yml"
+  pull_request:
+    paths:
+      - "AGENTS.md"
+      - "spec/**"
+      - "tools/check-spec-contract.mjs"
+      - ".github/workflows/spec-contract.yml"
+
+jobs:
+  validate-spec-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: node tools/check-spec-contract.mjs
