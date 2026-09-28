@@ -175,3 +175,29 @@
  #panel .equipment-left .fitting-controls button b{font-size:12px}
  #panel .equipment-left .equipment-reference{font-size:10px!important}
 }
+/* One horizontal mastery strip in the overview. */
+.overview-masteries{display:flex;gap:4px;overflow-x:auto;white-space:nowrap;scrollbar-width:none;margin-bottom:5px;min-height:22px;align-items:center}
+.overview-masteries>span{flex:none;border:1px solid #71836188;background:#263923d9;border-radius:5px;padding:2px 6px;font-size:10px;color:#e6dfc8}
+.overview-masteries b{color:#edcf8a;margin-left:3px}
+#panel.status-mastery>.panel-body{display:flex;min-height:0;overflow:hidden;padding:0 6px 5px}
+#panel .mastery-workspace{display:grid;grid-template-columns:43% minmax(0,1fr);gap:6px;width:100%;min-height:0;flex:1}
+.mastery-left,.mastery-right{display:flex;flex-direction:column;min-height:0;min-width:0}
+.mastery-list,.mastery-skill-list{overflow-y:auto;min-height:0;overscroll-behavior:contain;scrollbar-width:thin}
+.mastery-list{flex:1}
+#panel .mastery-workspace button.row{margin:0 0 4px;padding:7px 5px;min-width:0;width:100%;text-align:left;min-height:44px}
+#panel .mastery-workspace button.row[aria-pressed=true]{border-color:#dcc07c;background:#42513ae6}
+#panel .mastery-workspace .row b{font-size:12px}
+#panel .mastery-workspace .row small,#panel .mastery-workspace .row .small{display:block;font-size:10px;line-height:1.35;color:var(--muted)}
+#panel .mastery-workspace .item-explain{font-size:11px;line-height:1.4;display:block}
+.mastery-branches{flex:none;border-top:1px solid #829366;padding-top:5px;background:#142a1dd9}
+.mastery-branches>b{font-size:11px;display:block;margin-bottom:4px}
+.mastery-branches>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px}
+#panel .mastery-branches>div .row{text-align:center;padding:3px;min-height:44px}
+.mastery-skill-heading{flex:none;padding:4px 5px;background:#263d29c9;border-radius:5px;margin-bottom:5px}
+.mastery-skill-heading>b{font-size:13px;color:#edd796}
+.mastery-skill-heading>p{font-size:10px;line-height:1.4;margin:3px 0}
+.learn-state{display:block;color:#eed197;font-size:11px;margin-top:5px}
+#panel .mastery-workspace .row-visual{display:none}
+#panel .actor-fixed .mastery-categories .row{padding:3px;margin:0;min-height:44px;text-align:center;font-size:10px}
+.armor-family-heading{font-size:12px;color:#e5cd96;border-bottom:1px solid #72845d;padding:5px 2px;margin:4px 0}
+@media(max-height:680px){.overview-masteries{min-height:19px;margin-bottom:2px}.overview-masteries>span{font-size:9px;padding:1px 5px}#panel .mastery-workspace .item-explain{font-size:10px}}
