@@ -9,7 +9,7 @@ async def main():
     threading.Thread(target=server.serve_forever,daemon=True).start()
     async with async_playwright() as p:
         browser=await p.chromium.launch(headless=True,args=['--no-sandbox'])
-        page=await browser.new_page(viewport={'width':390,'height':844})
+        page=await browser.new_page(viewport={'width':390,'height':640})
         errors=[]
         page.on('pageerror',lambda e: errors.append(str(e)))
         await page.goto('http://127.0.0.1:8140/play-plan-v35.html',wait_until='load')
