@@ -53,7 +53,7 @@ function attributeApply(i){
  if(spent<=0||remaining<0||!d.values.every((x,j)=>Number.isInteger(x)&&x>=d.base[j]))return;
  const old=rules().derived(d.base),next=rules().derived(d.values);
  stats[i]=d.values.slice();statPt[i]=remaining;
- for(const key of ['hp','sp','mp'])if(key!=='hp'||vitals[i].hp>0)vitals[i][key]+=next[key]-old[key];
+ for(const key of ['hp','sp'])if(key!=='hp'||vitals[i].hp>0)vitals[i][key]+=next[key]-old[key];
  attributeDiscard();persist();actorAttributes(i);
 }
 function actorAttributes(i,tab='basic'){
