@@ -218,3 +218,93 @@
 @media(min-width:600px){
  #party .m{min-height:88px;padding-top:34px}
 }
+
+
+/* UI32: dedicated turn-icon hub cards and facility visual stages. */
+#party .m>img{
+ object-position:50% 24%;
+ filter:none;
+ opacity:.94;
+}
+.person-select-card img,.formation-pick img{
+ object-position:50% 24%;
+}
+.facility-scene{
+ position:relative;
+ flex:1 1 auto;
+ min-height:0;
+ margin:0;
+ overflow:hidden;
+ border-bottom:1px solid var(--edge);
+ background:
+   linear-gradient(180deg,rgba(8,15,12,.08),rgba(8,15,12,.72)),
+   var(--facility-bg) center/cover no-repeat;
+ isolation:isolate;
+}
+.facility-scene::after{
+ content:'';
+ position:absolute;
+ inset:0;
+ z-index:1;
+ pointer-events:none;
+ background:linear-gradient(90deg,rgba(8,15,12,.08),transparent 48%,rgba(8,15,12,.48));
+}
+.facility-scene-art{
+ position:absolute;
+ inset:0;
+ z-index:2;
+ display:flex;
+ align-items:flex-end;
+ justify-content:center;
+ pointer-events:none;
+}
+.facility-scene-art img{
+ width:min(78%,390px);
+ height:100%;
+ object-fit:contain;
+ object-position:center bottom;
+ filter:drop-shadow(0 14px 18px #0009);
+}
+.facility-scene-copy{
+ position:absolute;
+ left:12px;
+ bottom:10px;
+ z-index:3;
+ padding:8px 10px;
+ border-left:2px solid var(--gold);
+ background:#0d1712b8;
+ backdrop-filter:blur(3px);
+}
+.facility-scene-copy h3{
+ margin:2px 0 0;
+ font:600 18px/1.2 'Yu Mincho',Georgia,serif;
+ color:#f0e5c8;
+}
+.facility-action-deck{
+ flex:0 0 auto;
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:6px;
+ padding:8px 12px 10px;
+ background:#102019f2;
+}
+.facility-action-deck>.row{
+ margin:0;
+ min-height:58px;
+ padding:8px 9px;
+ background:#172a20;
+}
+.facility-action-deck>.row b{font-size:12px}
+.facility-action-deck>.row .small{font-size:9px}
+#panel:has(.facility-scene)>.panel-body{
+ display:flex;
+ flex-direction:column;
+ padding:0;
+ overflow:hidden;
+}
+@media(max-height:680px){
+ .facility-action-deck{gap:4px;padding:6px 10px 8px}
+ .facility-action-deck>.row{min-height:48px;padding:6px 8px}
+ .facility-scene-copy{bottom:6px;padding:5px 8px}
+ .facility-scene-copy h3{font-size:15px}
+}
