@@ -352,3 +352,57 @@
   outline:0!important;
   box-shadow:none!important;
 }
+
+
+/* v38 — Safari-safe official turn-order artwork. */
+.order-ribbon .order-face,
+.order-ribbon .order-face.foe,
+.order-ribbon .order-face.ally,
+.order-ribbon .order-face.is-active,
+.order-ribbon .order-face.is-next{
+  position:relative!important;
+  overflow:visible!important;
+  border:0!important;
+  outline:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  border-radius:50%!important;
+}
+.order-ribbon .order-face::before,
+.order-ribbon .order-face::after,
+.order-ribbon .order-side{display:none!important}
+.order-ribbon .order-face .order-portrait-art{
+  display:block!important;
+  position:absolute!important;
+  z-index:1!important;
+  inset:4px!important;
+  width:calc(100% - 8px)!important;
+  height:calc(100% - 8px)!important;
+  border-radius:50%!important;
+  object-fit:cover!important;
+  object-position:50% 24%!important;
+  opacity:1!important;
+  filter:none!important;
+}
+.order-ribbon .order-face .order-frame{
+  display:block!important;
+  position:absolute!important;
+  z-index:5!important;
+  pointer-events:none!important;
+  left:-7px!important;
+  top:-7px!important;
+  width:calc(100% + 14px)!important;
+  height:calc(100% + 14px)!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  opacity:1!important;
+  filter:none!important;
+  border-radius:0!important;
+}
+.order-ribbon .order-face.is-next .order-frame{
+  left:-11px!important;
+  top:-13px!important;
+  width:calc(100% + 22px)!important;
+  height:calc(100% + 24px)!important;
+}
