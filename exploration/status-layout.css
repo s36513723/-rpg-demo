@@ -442,3 +442,5 @@
 #panel .skill-candidates .skill-set-action{flex:none;min-width:48px;height:40px;padding:3px 5px;border:1px solid #b7a06b;border-radius:6px;background:#253b2c;color:#ead399;font-size:11px;font-weight:700}
 #panel .skill-candidates .skill-set-action:disabled{opacity:.5}
 #panel .skill-candidates .skill-toggle.selected{border-color:#c9ad73;background:#334c34}
+
+#panel .skill-candidates .skill-toggle .ui-icon{display:none!important}
