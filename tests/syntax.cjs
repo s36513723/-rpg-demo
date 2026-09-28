@@ -10,6 +10,7 @@ const battleUi=fs.readFileSync('sanctuary-v92.js','utf8'),battleCss=fs.readFileS
 assert(fs.existsSync('images/paladin-turn.webp'),'Paladin turn-order art missing');
 assert(fs.existsSync('images/paladin-battle.webp'),'Paladin battle art missing');
 assert(battleUi.includes("run:'images/paladin-turn.webp'"),'Paladin formation/icon mapping missing');
+assert(battleUi.includes('DIRECT_FACE_SRC'),'Paladin direct face source missing');
 assert(battleUi.includes("run:['images/paladin-battle.webp',168,226]"),'Paladin battle portrait mapping missing');
 assert(battleCss.includes('data-actor-id="run"]::before{background-image:url("images/paladin-turn.webp")}'),'Paladin turn-order CSS mapping missing');
 const R=require('../rpg-rules.js');
