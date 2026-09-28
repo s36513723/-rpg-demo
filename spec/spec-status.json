@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "policy": {
     "implementation_is_confirmation": false,
     "reverse_synced_default": "要レビュー",
@@ -7,35 +7,30 @@
       "確定": "ユーザーが明示的に決定した仕様。正本・ミラー・実装・テストを同期する。",
       "初期実装値": "動作確認のため実装された暫定値。ゲームバランス決定として扱わない。",
       "要レビュー": "存在・挙動・数値をユーザー承認済みとみなさず、レビュー対象として保持する。",
-      "廃止旧仕様": "現行仕様では使用しない。互換処理に限り残置可。"
+      "廃止旧仕様": "現行仕様では使用しない。互換処理に限り残置可。",
+      "構造確定": "採用済みの仕組み。係数などはプレイテストで調整可能。"
     }
   },
   "confirmed_domains": [
     "戦闘資源はHP+SP。MPは廃止。",
     "能力値はPHY/SKL/ARC/MND。",
+    "味方6人・3x3陣形、敵も基本3x3。",
     "防具装備枠は防具一式。",
     "術法Masteryは信仰/呪術/魔術/符術/機巧/異能。",
-    "手動換装はターン消費なし。自動換装しない。",
-    "パラディン正式立ち絵は2026-09-28承認の白/青/金・金髪女性聖騎士（剣＋大盾）。",
-    "キャラクターの行動順/編成アイコン・戦闘立ち絵は同一の承認済みマスター立ち絵から派生し、UI枠は別素材とする。"
+    "Mastery Rankは1〜10、1Rank=1 Mastery Pt。",
+    "Mastery PtはRank上昇とスキル習得に共用。",
+    "Skill Set Capacityは12固定、Set Costは1〜4。",
+    "SP最大値はPHY/SKL/ARC/MNDから直接算出しない。自然回復なし、探索中持越し。",
+    "通常攻撃は武器ごとのScalingを使う。",
+    "距離は1〜5。通常攻撃は同一レーン射程内の最前敵。",
+    "無手は武器なし。拳甲・手甲は格闘武器。",
+    "投擲Masteryは携行具の投擲物を使用・強化する。",
+    "武器通常攻撃属性は斬/突/壊の1つ。",
+    "敵もPHY/SKL/ARC/MNDとSkill Scalingを使用する。",
+    "盾は副手装備。",
+    "手動換装はターン消費なし。自動換装しない。"
   ],
   "initial_implementation_values": {
-    "mastery_rank_max": {
-      "value": 50,
-      "status": "初期実装値"
-    },
-    "rank_per_mastery_point": {
-      "value": 5,
-      "status": "初期実装値"
-    },
-    "skill_learn_cost_points": {
-      "value": 1,
-      "status": "初期実装値"
-    },
-    "skill_set_capacity": {
-      "value": "10 + floor((PHY + SKL + ARC + MND) / 10)",
-      "status": "初期実装値"
-    },
     "combo_fire_to_wind_bonus": {
       "value": "+25%",
       "status": "初期実装値"
@@ -78,19 +73,14 @@
     }
   },
   "needs_review_systems": [
-    "HP/SP式",
-    "ダメージ式",
-    "命中・回避",
-    "会心",
-    "重量",
-    "状態異常成功率",
-    "封じ",
-    "弱点倍率",
-    "連打対策",
-    "行動速度",
-    "7敵タイプAI・能力値・状態耐性",
-    "地形別敵編成",
-    "315スキルRank1-10移行案"
+    "HP/防御/ダメージ係数",
+    "命中・回避・会心係数",
+    "重量超過率",
+    "二刀流/両手持ち補正",
+    "ガード/盾軽減率",
+    "EXPカーブとPt量",
+    "敗北/逃走率",
+    "装備Base/敵個体数値"
   ],
   "reverse_synced_skills": {
     "count": 296,
@@ -400,14 +390,65 @@
     "MP": {
       "status": "廃止旧仕様",
       "allowed_scope": "旧セーブ読込・互換変換のみ"
+    },
+    "mastery_rank_0_50": {
+      "status": "廃止旧仕様",
+      "allowed_scope": "old-save/runtime migration only"
+    },
+    "rank_per_point_5": {
+      "status": "廃止旧仕様",
+      "allowed_scope": "old-save/runtime migration only"
+    },
+    "ability_based_capacity": {
+      "status": "廃止旧仕様",
+      "allowed_scope": "old-save/runtime migration only"
     }
   },
   "design_targets": {
     "skill_catalog_315": {
       "path": "spec/skill-catalog-target.json",
-      "status": "要レビュー",
+      "status": "構造確定",
       "current_runtime_count": 296,
-      "exact_catalog_available": false
+      "exact_catalog_available": true,
+      "note": "Canonical workbook 08_SkillDB contains the complete 315-candidate table; runtime migration is separate."
+    }
+  },
+  "confirmed_values": {
+    "mastery_rank": {
+      "min": 1,
+      "max": 10,
+      "status": "確定"
+    },
+    "rank_per_mastery_point": {
+      "value": 1,
+      "status": "確定"
+    },
+    "skill_learn_cost_points": {
+      "standard": 1,
+      "ultimate_keystone": 2,
+      "status": "確定"
+    },
+    "skill_set_capacity": {
+      "value": 12,
+      "status": "確定"
+    },
+    "set_cost": {
+      "min": 1,
+      "max": 4,
+      "status": "確定"
+    },
+    "equipment_semantics": {
+      "unarmed": "no equipped hand weapon",
+      "fist_weapons": "格闘",
+      "throwing": "carry-item based",
+      "shield_slot": "offhand",
+      "normal_weapon_attribute": "one of 斬/突/壊",
+      "runtime_range": "numeric 1-5",
+      "status": "確定"
+    },
+    "enemy_combat_model": {
+      "value": "PHY/SKL/ARC/MND + skill scaling + enemy weapon base",
+      "status": "確定"
     }
   }
 }
