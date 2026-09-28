@@ -794,3 +794,213 @@
 .expedition>.map{border:1px solid rgba(184,166,112,.38);border-radius:12px;background:rgba(5,15,10,.16);box-shadow:inset 0 0 32px rgba(0,0,0,.24)}
 .expedition .map-node{box-shadow:0 3px 12px rgba(0,0,0,.55)}
 .expedition .route-svg path{stroke:#efe0a8;opacity:.7;filter:drop-shadow(0 1px 1px rgba(0,0,0,.75))}
+
+
+/* Facility world: same fixed frame as the capital home, only scenery/NPC/content change. */
+#app.facility-world{
+ background-size:cover;
+ background-position:center center;
+ background-repeat:no-repeat;
+}
+#app.guild-world{background-image:url("../images/hub-guild-bg.webp")}
+#app.facility-world>header{
+ position:relative;
+ z-index:3;
+ margin:0 -12px;
+ padding:3px 13px 7px;
+ border-bottom:0;
+ background:linear-gradient(180deg,rgba(5,10,8,.66),rgba(5,10,8,.30) 68%,transparent);
+ text-shadow:0 1px 5px rgba(0,0,0,.78);
+}
+#app.facility-world>header h1{color:#fff8e8}
+#app.facility-world>header .small{color:#d7dfd4;font-size:9px}
+#app.facility-world #money{color:#fff5db;text-shadow:0 1px 5px rgba(0,0,0,.8)}
+#app.facility-world #screen{
+ overflow:hidden;
+ border:0;
+ border-radius:0;
+ background:transparent;
+}
+#app.facility-world .town-scene{
+ min-height:0;
+ height:100%;
+ padding:4px 2px 2px;
+ gap:0;
+}
+.facility-world-scene{
+ position:relative;
+ overflow:hidden;
+}
+.facility-world-scene::after{
+ content:'';
+ position:absolute;
+ inset:0;
+ pointer-events:none;
+ z-index:0;
+ background:
+  linear-gradient(180deg,rgba(4,8,6,.05),transparent 34%,transparent 68%,rgba(4,8,6,.20)),
+  linear-gradient(90deg,rgba(4,8,6,.13),transparent 42%,transparent 72%,rgba(4,8,6,.06));
+}
+.facility-world-title{
+ position:absolute;
+ left:8px;
+ top:5px;
+ z-index:3;
+ display:flex;
+ flex-direction:column;
+ gap:1px;
+ padding:5px 8px;
+ border-left:2px solid rgba(224,201,146,.75);
+ background:linear-gradient(90deg,rgba(5,11,8,.52),rgba(5,11,8,.08),transparent);
+ text-shadow:0 1px 4px rgba(0,0,0,.72);
+}
+.facility-world-title .chapter-kicker{font-size:6px;color:#e5d19d}
+.facility-world-title>b{font:600 13px/1.2 'Yu Mincho',Georgia,serif;color:#fff7e6}
+.facility-world-npc{
+ position:absolute;
+ z-index:2;
+ right:1.5%;
+ bottom:19%;
+ width:auto;
+ height:76%;
+ max-width:59%;
+ object-fit:contain;
+ object-position:right bottom;
+ filter:drop-shadow(0 10px 20px rgba(0,0,0,.44));
+ pointer-events:none;
+}
+.facility-world-identity{
+ position:absolute;
+ z-index:4;
+ left:10px;
+ top:54px;
+ display:grid;
+ grid-template-columns:auto auto;
+ grid-template-rows:auto auto;
+ align-items:center;
+ column-gap:7px;
+ padding:6px 8px;
+ border-radius:7px;
+ background:rgba(6,14,10,.58);
+ backdrop-filter:blur(3px);
+}
+.facility-world-identity>b{grid-column:1;font:600 13px/1.15 'Yu Mincho',Georgia,serif;color:#f2dfb2}
+.facility-world-identity>small{grid-column:1;font-size:7px;color:#c8d0c5}
+.facility-world-identity>button{
+ grid-column:2;grid-row:1/3;
+ min-height:28px;
+ padding:0 8px;
+ border:1px solid rgba(206,187,139,.38);
+ border-radius:999px;
+ background:rgba(12,25,19,.54);
+ color:#e3d2a8;
+ font-size:7px;
+ letter-spacing:.12em;
+}
+.facility-world-dialogue{
+ position:absolute;
+ z-index:5;
+ left:8px;
+ right:8px;
+ bottom:calc(18% + 50px);
+ min-height:34px;
+ display:grid;
+ grid-template-columns:auto 1fr;
+ gap:7px;
+ align-items:center;
+ padding:6px 9px;
+ border:1px solid rgba(137,151,126,.46);
+ border-radius:8px;
+ background:rgba(7,16,12,.72);
+ backdrop-filter:blur(4px);
+ text-shadow:0 1px 3px rgba(0,0,0,.65);
+}
+.facility-world-dialogue>b{font:600 10px/1.2 'Yu Mincho',Georgia,serif;color:#e8d39e}
+.facility-world-dialogue>span{font-size:9px;line-height:1.4;color:#f2eee2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.facility-world-overlay{
+ position:absolute;
+ z-index:6;
+ left:6px;
+ right:6px;
+ bottom:2px;
+ border:1px solid rgba(104,124,108,.50);
+ border-radius:9px;
+ background:rgba(10,22,16,.66);
+ backdrop-filter:blur(5px);
+}
+.facility-world-home{
+ height:18%;
+ min-height:92px;
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ grid-template-rows:repeat(2,minmax(0,1fr));
+ gap:4px;
+ padding:5px;
+}
+.facility-world-home>.row,
+.facility-world-home>.actions>.row{
+ min-height:0;
+ height:100%;
+ margin:0;
+ padding:5px 8px;
+ border-color:rgba(118,137,118,.50);
+ background:rgba(16,32,24,.54);
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+}
+.facility-world-home>.row b,
+.facility-world-home>.actions>.row b{font-size:9px}
+.facility-world-home>.row .small,
+.facility-world-home>.actions>.row .small{font-size:6px;line-height:1.25}
+.facility-world-home>.actions{display:contents}
+.facility-world-service{
+ height:34%;
+ min-height:150px;
+ overflow-y:auto;
+ overscroll-behavior:contain;
+ padding:7px 8px 10px;
+ scrollbar-width:thin;
+ scrollbar-color:#718367 transparent;
+ background:rgba(9,19,14,.80);
+}
+.facility-world-service>.row{margin:4px 0;min-height:38px;padding:7px 9px}
+.facility-world-service>.row b{font-size:10px}
+.facility-world-service>.row .small{font-size:7px;line-height:1.35}
+.facility-world-service .ui-tabs{margin:0 0 5px;gap:4px}
+.facility-world-service .ui-tabs button{min-height:34px;padding:5px 4px;font-size:8px}
+.facility-world-service .message,
+.facility-world-service .small{font-size:8px;line-height:1.45}
+#app.facility-world #party{
+ position:relative;
+ z-index:3;
+ align-self:stretch;
+ padding:8px 0 1px;
+ background:linear-gradient(180deg,transparent,rgba(5,11,8,.36) 28%,rgba(5,11,8,.60));
+}
+#app.facility-world #party .m{
+ border-color:rgba(106,128,112,.58);
+ background:rgba(12,26,19,.72);
+ box-shadow:0 2px 9px rgba(0,0,0,.18);
+ backdrop-filter:blur(3px);
+}
+#app.facility-world #party .m img{opacity:.95}
+#app.facility-world>.hub-global-nav{position:relative;z-index:3;margin:0 -12px;padding:0 12px}
+@media(max-width:350px){
+ #app.facility-world>header{margin-left:-8px;margin-right:-8px;padding-left:9px;padding-right:9px}
+ #app.facility-world>.hub-global-nav{margin-left:-8px;margin-right:-8px;padding-left:8px;padding-right:8px}
+ .facility-world-npc{height:72%;max-width:61%;right:-1%}
+ .facility-world-dialogue{left:6px;right:6px;bottom:calc(19% + 44px);padding:5px 7px}
+ .facility-world-dialogue>span{font-size:8px}
+ .facility-world-home{height:19%;min-height:86px}
+ .facility-world-service{height:36%;min-height:140px}
+}
+@media(max-height:640px){
+ .facility-world-npc{height:69%;bottom:21%}
+ .facility-world-identity{top:45px;padding:5px 7px}
+ .facility-world-dialogue{bottom:calc(20% + 40px);min-height:30px;padding:4px 7px}
+ .facility-world-home{height:20%;min-height:76px;padding:4px}
+ .facility-world-service{height:39%;min-height:128px;padding:5px 6px 8px}
+ .facility-world-home>.row,
+ .facility-world-home>.actions>.row{padding:4px 6px}
+}
