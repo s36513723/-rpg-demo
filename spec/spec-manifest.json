@@ -141,9 +141,10 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "compact_canonical_spec_synced_2026-09-28",
+  "last_sync_status": "canonical_compact_spec_resolved_and_repo_mirror_synced_2026-09-28",
   "blocked_steps": [
-    "Binary XLSX snapshot is maintained as the conversation artifact; repository mirror/data/code are synchronized separately."
+    "Binary XLSX snapshot is maintained as the conversation artifact; repository mirror/data/code are synchronized separately.",
+    "Runtime skill catalog remains 296 until 315 Skill DB fields are normalized and save/regression migration tests pass."
   ],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
@@ -203,7 +204,7 @@
       "extra_slots": 5,
       "rank_model": "1-10",
       "status": "構造確定",
-      "exact_catalog": "canonical workbook 08_SkillDB",
+      "exact_catalog": "canonical workbook 08_SkillDB complete design table",
       "runtime_replacement": false
     },
     "enemy_archetypes": {
@@ -238,7 +239,8 @@
       "確定",
       "初期実装値",
       "要レビュー",
-      "廃止旧仕様"
+      "廃止旧仕様",
+      "構造確定"
     ]
   },
   "validation": {
