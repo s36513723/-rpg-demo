@@ -305,3 +305,56 @@
 @supports not (color:color-mix(in srgb,red,blue)){
  #party .m{background:linear-gradient(180deg,var(--card-bg),#15211b)}
 }
+
+
+/* UI34: six clearly separated character colors. */
+#party .m:nth-child(1){--card-bg:#b33a4d;--card-edge:#ef7180} /* Warrior: crimson */
+#party .m:nth-child(2){--card-bg:#376fd1;--card-edge:#82aaff} /* Paladin: sapphire */
+#party .m:nth-child(3){--card-bg:#7b43b7;--card-edge:#b986ec} /* Rogue: violet */
+#party .m:nth-child(4){--card-bg:#348657;--card-edge:#72c995} /* Archer: emerald */
+#party .m:nth-child(5){--card-bg:#cf7628;--card-edge:#f1ad58} /* Alchemist: amber */
+#party .m:nth-child(6){--card-bg:#1699a8;--card-edge:#67d4dc} /* Mystic: cyan */
+#party .m{
+ border-color:var(--card-edge)!important;
+ background:linear-gradient(180deg,var(--card-bg),color-mix(in srgb,var(--card-bg) 55%,#07100c 45%))!important;
+ box-shadow:inset 0 0 0 1px #ffffff13,0 5px 12px #0003;
+}
+#party .m>img{
+ mix-blend-mode:normal!important;
+ opacity:1!important;
+ filter:saturate(.95) contrast(1.04)!important;
+}
+#party .m::before{
+ content:'';
+ position:absolute;
+ inset:0;
+ z-index:1;
+ pointer-events:none;
+ background:linear-gradient(180deg,
+   color-mix(in srgb,var(--card-bg) 56%,transparent) 0%,
+   color-mix(in srgb,var(--card-bg) 34%,transparent) 45%,
+   rgba(5,10,8,.12) 60%,
+   rgba(5,10,8,.36) 100%);
+ mix-blend-mode:color;
+ opacity:.9;
+}
+#party .m::after{
+ z-index:2;
+ background:linear-gradient(180deg,transparent 0%,transparent 44%,rgba(5,9,7,.23) 59%,rgba(5,9,7,.88) 100%)!important;
+}
+#party .m>b,#party .m>.roster-meta,#party .m>.roster-bars,#party .m>.roster-alert{z-index:3}
+#party .m>b{font-weight:700;text-shadow:0 2px 5px #000}
+#party .m>.roster-bars{display:flex!important;flex-direction:column;gap:3px;width:100%;margin-top:2px}
+#party .m .roster-line{display:flex!important;height:8px!important;gap:3px;align-items:center;margin:0!important}
+#party .m .roster-line em{flex:0 0 8px;width:8px;font-size:6px;font-weight:800;color:#fff!important;text-shadow:0 1px 3px #000}
+#party .m .roster-line .resource-track{
+ display:block!important;flex:1;height:5px!important;min-height:5px;background:#050908d9!important;
+ box-shadow:0 0 0 1px #ffffff38,0 1px 3px #0008;border-radius:4px;
+}
+#party .m .roster-line .resource-track>i{display:block!important;height:100%!important;border-radius:4px}
+#party .m .roster-line .resource-track.hp>i{background:linear-gradient(90deg,#ff6572,#ef8790)!important}
+#party .m .roster-line .resource-track.sp>i{background:linear-gradient(90deg,#42d1c7,#7ae4dc)!important}
+@supports not (color:color-mix(in srgb,red,blue)){
+ #party .m{background:var(--card-bg)!important}
+ #party .m::before{background:rgba(0,0,0,.08)}
+}
