@@ -156,11 +156,11 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "canonical_315_skill_schema_normalized_291_of_315_2026-09-28",
+  "last_sync_status": "canonical_315_skill_schema_normalized_315_of_315_2026-09-28",
   "blocked_steps": [
-    "315 runtime switch remains blocked until the 24 special-review SkillDB rows are explicitly designed.",
-    "296->315 save migration remains blocked except for 40 unique exact-name compatibility matches; ambiguous/renamed skills require explicit mapping.",
-    "Do not invent missing special mechanics in runtime code."
+    "315 runtime switch is now blocked only by explicit 296->315 save/learned-skill migration mapping and regression validation.",
+    "Only 40 canonical rows have unique exact-name matches to the 296 runtime; 速射 is ambiguous and renamed/replaced skills require explicit mapping.",
+    "Do not migrate unmatched learned skills by fuzzy name or catalog position."
   ],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
@@ -232,8 +232,8 @@
       },
       "normalization": {
         "canonical": 315,
-        "schema_normalized": 291,
-        "needs_special_review": 24,
+        "schema_normalized": 315,
+        "needs_special_review": 0,
         "path": "spec/skill-normalization-status.json"
       }
     },
