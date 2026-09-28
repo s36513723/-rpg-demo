@@ -63,14 +63,12 @@ function actorAttributes(i,tab='basic'){
  const format=v=>hesc(String(v)),compare=(x,y)=>format(x)+(x!==y?'<span class="attribute-change"> → '+format(typeof x==='string'&&typeof y==='string'&&x.includes(' / ')&&x.split(' / ')[0]===y.split(' / ')[0]?y.split(' / ')[1]:y)+'</span>':''),cell=(k,x,y=x)=>'<div class="attribute-cell"><small>'+hesc(k)+'</small><b>'+compare(x,y)+'</b></div>';
  const rate=v=>Math.round(v*100)/100+'%',beforeRates=characterDisplayRates(i,before),afterRates=characterDisplayRates(i,s);
  const pages={basic:[['最大HP',before.hp,s.hp],['最大SP',before.sp,s.sp],['装備重量',before.weight+' / '+before.limit,s.weight+' / '+s.limit],['物理攻撃力',before.physical,s.physical],['魔法攻撃力',before.magicArc,s.magicArc],['信仰攻撃力',before.magicMind,s.magicMind],['物理防御力',before.pdef,s.pdef],['魔法防御力',before.mdef,s.mdef],['命中率',rate(beforeRates.hit),rate(afterRates.hit)],['会心率',rate(beforeRates.crit),rate(afterRates.crit)],['回避率',rate(beforeRates.evade),rate(afterRates.evade)],['行動速度',before.speed,s.speed]],resist:Object.entries(s.resistance).map(([k,v])=>[k,(v>0?'+':'')+v])};
- const notes={basic:'魔法＝ARC、信仰＝MND（術威力14）。各率はSKL30・補正なしの敵が基準。',resist:'全属性・状態異常・封じの耐性。＋は耐性、−は弱点、0は標準。',effects:'セットしたパッシブの効果。装備条件を満たしていないものは発動しません。'};
- if(!Object.hasOwn(notes,tab))tab='basic';
  const button=(label,action,args,disabled=false,aria=label)=>'<button data-hub="'+action+'" data-args="'+hesc(JSON.stringify(args))+'" aria-label="'+hesc(aria)+'"'+(disabled?' disabled':'')+'>'+label+'</button>';
  const pointbar='<div class="allocation-bar"><b>能力ポイント <span>'+remaining+' Pt</span></b>'+button(tab==='basic'?'割り振りを確定':'仮割り振りを見る',tab==='basic'?'attributeApply':'actorAttributes',tab==='basic'?[i]:[i,'basic'],tab==='basic'&&!dirty)+'</div>';
  const editor=tab==='basic'?'<div class="allocation-grid">'+['PHY','SKL','ARC','MND'].map((k,j)=>'<div class="allocation-stat">'+button('−','attributeAdjust',[i,j,-1],d.values[j]===d.base[j],k+'の仮割り振りを1戻す')+'<span><small>'+k+'</small><b>'+compare(d.base[j],d.values[j])+'</b></span>'+button('＋','attributeAdjust',[i,j,1],remaining<=0,k+'に1ポイント仮割り振り')+'</div>').join('')+'</div>':'';
  const content='<section class="attributes-overview"><div class="attribute-grid combined-attributes">'+pages.basic.map(([k,x,y])=>cell(k,x,y)).join('')+'</div><div class="resistance-heading"><b>耐性</b><small>＋耐性／−弱点／0標準</small></div><div class="attribute-grid resistance-grid">'+pages.resist.map(([k,x,y])=>cell(k,x,y)).join('')+'</div></section>';
 
- show('<h2>'+hesc(names[i])+' / 能力値</h2>'+pointbar+editor+'<p class="screen-hint">'+notes[tab]+'</p>'+content);
+ show('<h2>'+hesc(names[i])+' / 能力値</h2>'+pointbar+editor+content);
 }
 
 function initializeCharacterProgress(){
