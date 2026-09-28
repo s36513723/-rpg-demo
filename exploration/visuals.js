@@ -84,9 +84,9 @@ const glyph=(key,extra='')=>'<svg class="ui-icon '+extra+'" data-icon="'+key+'" 
 const esc=s=>hesc(s);
 const cast=['gald','lize','ern','sena','mirea','yuna'];
 const npcGlyph={'受付':'quill','鍛冶師':'forge','学者':'book','宿主':'tavern','伝令':'wind','守人':'sun'};
-const npcStand={'受付':'../images/npc_eda_stand.svg','鍛冶師':'../images/npc_balun_stand.svg','学者':'../images/npc_iris_stand.svg','宿主':'../images/npc_marta_stand.svg','伝令':'../images/npc_noa_stand.svg','守人':'../images/npc_sahir_stand.svg'};
+const npcStand={'受付':'../images/hub-guild-npc.webp','鍛冶師':'../images/hub-market-npc.webp','学者':'../images/npc_iris_stand.svg','宿主':'../images/hub-inn-npc.webp','伝令':'../images/npc_noa_stand.svg','守人':'../images/npc_sahir_stand.svg'};
 const npcImage=npcStand;
-const facilityArt={town:'../images/town_lexia.svg',inn:'../images/facility_inn.svg',guild:'../images/facility_guild.svg',market:'../images/facility_market.svg'};
+const facilityArt={town:'../images/town_lexia.svg',inn:'../images/hub-inn-bg.webp',guild:'../images/hub-guild-bg.webp',market:'../images/hub-market-bg.webp'};
 const facilityLabel={town:'王都レクシア',inn:'宿屋',guild:'ギルド',market:'市場'};
 const facilityCopy={town:'冒険者区の朝。下のタブから宿屋・ギルド・市場を切り替える。',inn:'マルタの宿屋。部屋で休み、仲間や客と話し、出撃準備を整える。',guild:'依頼と査定の窓口。探索資料や地域調査の進捗もここで整理する。',market:'武具、道具、加工、売却をまとめた装備管理の中心。'};
 const regionArt={'古代迷宮':'../images/region_maze.svg','辺境遺跡':'../images/region_frontier.svg','深淵の樹海':'../images/region_forest.svg','沈黙の砂都':'../images/region_sand.svg'};
