@@ -338,7 +338,7 @@ function renderOrder(){
   b.title=(u.enemy?'敵：':'味方：')+u.name;b.dataset.actorId=u.id;
   {
    const frameSrc=isNext?ORDER_FRAMES.next:(u.enemy?ORDER_FRAMES.enemy:ORDER_FRAMES.ally);
-   b.innerHTML=faceMarkup(u,'order-portrait')+'<img class="order-frame" src="'+frameSrc+'" alt="" aria-hidden="true" draggable="false">';
+   b.innerHTML='<span class="order-portrait-clip">'+faceMarkup(u,'order-portrait')+'</span><img class="order-frame" src="'+frameSrc+'" alt="" aria-hidden="true" draggable="false">';
   }
   b.addEventListener('click',()=>u.enemy?cardTap(u.id):toggleActor(u.id));target.append(b);
  }
