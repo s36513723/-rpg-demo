@@ -549,3 +549,81 @@
  .order-ribbon .order-face.is-next{width:38px!important;height:38px!important;flex-basis:38px!important}
  #game>.actor-art{left:0!important;width:31%!important;height:34.5%!important}
 }
+
+
+/* v41 — face-tight turn icons, lower portrait name, command row above party cards. */
+.order-ribbon .order-face .order-portrait-clip{
+  inset:0!important;
+  width:auto!important;
+  height:auto!important;
+}
+.order-ribbon .order-face .order-portrait-fill{
+  inset:0!important;
+  background-size:265% auto!important;
+  background-position:50% 7%!important;
+}
+.order-ribbon .order-face.is-next .order-portrait-fill{
+  background-size:255% auto!important;
+  background-position:50% 8%!important;
+}
+
+/* Keep the acting character label at the bottom of the standing art. */
+#game>.actor-art .actor-art-name{
+  position:absolute!important;
+  z-index:8!important;
+  left:14px!important;
+  bottom:12px!important;
+  display:block!important;
+  padding:18px 26px 5px 0!important;
+  min-width:92px!important;
+  color:#fff7ef!important;
+  font:500 17px/1.1 var(--serif)!important;
+  letter-spacing:.08em!important;
+  text-shadow:0 1px 4px #000,0 0 10px #0008!important;
+  border-bottom:1px solid rgba(255,245,232,.58)!important;
+  background:linear-gradient(90deg,rgba(18,18,28,.44),transparent)!important;
+  pointer-events:none!important;
+}
+.actor-button{display:none!important}
+
+/* Make the command strip a thin independent row, fully above the 3x3 party cards. */
+.command-panel{
+  height:38px!important;
+  min-height:38px!important;
+  bottom:26.2%!important;
+  left:calc(var(--party-left) + 34px)!important;
+  right:38px!important;
+}
+.command-content{
+  height:38px!important;
+  min-height:38px!important;
+  background:rgba(27,28,40,.13)!important;
+  box-shadow:inset 0 -1px 0 rgba(239,220,238,.18)!important;
+}
+#commandInput,.command-buttons{
+  height:38px!important;
+  min-height:38px!important;
+}
+.command-buttons>.command{
+  height:38px!important;
+  min-height:38px!important;
+}
+.command-buttons>.command b{
+  font-size:9px!important;
+  line-height:1!important;
+}
+#auto,#pace{
+  bottom:calc(26.2% + 6px)!important;
+}
+.party-hud{
+  bottom:0!important;
+  height:24.2%!important;
+}
+@media(max-width:380px){
+ .order-ribbon .order-face .order-portrait-fill{background-size:270% auto!important;background-position:50% 6%!important}
+ .order-ribbon .order-face.is-next .order-portrait-fill{background-size:260% auto!important}
+ .command-panel{height:36px!important;min-height:36px!important;bottom:26%!important;left:calc(var(--party-left) + 31px)!important;right:34px!important}
+ .command-content,#commandInput,.command-buttons,.command-buttons>.command{height:36px!important;min-height:36px!important}
+ #auto,#pace{bottom:calc(26% + 5px)!important}
+ #game>.actor-art .actor-art-name{left:11px!important;bottom:10px!important;font-size:16px!important;min-width:86px!important}
+}
