@@ -23,7 +23,7 @@ function cut(c,cls=''){
 $('environment').querySelector('.sky-art').innerHTML=cut(M.crops.sky,'scenery');
 
 const BATTLE_GRID={
- enemy:{left:.055,top:.045,width:.89,height:.70,rows:['REAR','MID','FRONT']},
+ enemy:{left:.04,top:.055,width:.92,height:.72,rows:['REAR','MID','FRONT']},
  ally:{left:.14,top:.52,width:.81,height:.42,rows:['FRONT','MID','REAR']}
 };
 function buildBattleGrid(container,side){
@@ -55,7 +55,7 @@ function paintBattleGrid(party,enemies,options){
  for(const g of [enemyGrid,allyGrid])g?.querySelectorAll('.stage-cell').forEach(x=>x.classList.remove('occupied','active-cell'));
  for(const u of enemies){
   if(!u.alive||u.hp<=0)continue;
-  enemyGrid?.querySelectorAll('.stage-cell')[stageCell('enemy',u.row,(u.slot-1)%3+1)]?.classList.add('occupied');
+  enemyGrid?.querySelectorAll('.stage-cell')[stageCell('enemy',u.row,u.gridCol||((u.slot-1)%3+1))]?.classList.add('occupied');
  }
  for(const u of party){
   if(!u.alive||u.hp<=0)continue;
@@ -111,15 +111,16 @@ function geometry(){
  for(const u of enemies){
   const el=scene.querySelector('[data-unit-id="'+u.id+'"]');if(!el)continue;
   const col=u.gridCol||((u.slot-1)%3+1),row=u.row,ri=({back:0,mid:1,front:2}[row]??2);
-  const cx=eg.x+eg.w*((col-.5)/3);
-  const feet=eg.y+eg.h*((ri+.88)/3);
-  const eh=Math.min(h*.238,eg.h*.72);
-  const ew=eg.w/3*.91;
-  el.style.left=Math.round(cx-ew/2)+'px';
-  el.style.top=Math.round(feet-eh)+'px';
+  const cellW=eg.w/3,cellH=eg.h/3;
+  const ew=cellW*.94,eh=cellH*.92;
+  const nx=eg.x+(col-1)*cellW+(cellW-ew)/2;
+  const ny=eg.y+ri*cellH+(cellH-eh)/2;
+  el.style.left=Math.round(nx)+'px';
+  el.style.top=Math.round(ny)+'px';
   el.style.width=Math.round(ew)+'px';
   el.style.height=Math.round(eh)+'px';
-  el.style.zIndex=String(({back:8,mid:11,front:14}[row]??14));el.dataset.rank=u.row;
+  el.style.zIndex=String(8+ri*3+col);
+  el.dataset.rank=row;el.dataset.col=String(col);
  }
  for(const u of party){
   let el=bodies.get(u.id);

@@ -663,3 +663,174 @@
 
 /* The generated turn frames remain separate overlays around transparent portraits. */
 .order-frame{pointer-events:none}
+
+
+/* v43 — canonical 3×3 enemy placement + always-visible turn order. */
+.order-ribbon{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  z-index:120!important;
+  top:max(8px,env(safe-area-inset-top))!important;
+  left:50%!important;
+  transform:translateX(-50%)!important;
+  width:min(236px,64vw)!important;
+  height:50px!important;
+  overflow:visible!important;
+  pointer-events:auto!important;
+}
+.order-ribbon .order{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  height:50px!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:5px!important;
+  overflow:visible!important;
+  padding:0!important;
+}
+.order-ribbon .order-face,
+.order-ribbon .order-face.ally,
+.order-ribbon .order-face.foe{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  position:relative!important;
+  width:38px!important;
+  height:38px!important;
+  flex:0 0 38px!important;
+  overflow:visible!important;
+  transform:none!important;
+}
+.order-ribbon .order-face.is-next{
+  width:42px!important;
+  height:42px!important;
+  flex-basis:42px!important;
+}
+.order-ribbon .order-face .order-portrait-clip{
+  position:absolute!important;
+  inset:4px!important;
+  overflow:hidden!important;
+  border-radius:50%!important;
+}
+.order-ribbon .order-face .order-portrait-fill{
+  position:absolute!important;
+  inset:0!important;
+  display:block!important;
+  background-repeat:no-repeat!important;
+  background-size:245% auto!important;
+  background-position:50% 8%!important;
+  border-radius:50%!important;
+}
+.order-ribbon .order-face.foe .order-portrait-fill{
+  background-size:190% auto!important;
+  background-position:50% 18%!important;
+}
+.order-ribbon .order-face .order-frame{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+.order-sign{display:none!important}
+
+/* Enemy characters are locked to their own 3×3 cells. */
+.enemy-stage{overflow:hidden!important}
+.enemy-unit{
+  position:absolute!important;
+  display:grid!important;
+  grid-template-rows:17px 4px minmax(0,1fr)!important;
+  align-items:stretch!important;
+  justify-items:center!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+  transform:none!important;
+}
+.enemy-name{
+  grid-row:1!important;
+  position:relative!important;
+  z-index:4!important;
+  order:initial!important;
+  width:100%!important;
+  height:17px!important;
+  margin:0!important;
+  font:10px/16px var(--serif)!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.enemy-hp{
+  grid-row:2!important;
+  position:relative!important;
+  z-index:4!important;
+  order:initial!important;
+  width:72%!important;
+  height:3px!important;
+  margin:0 auto!important;
+}
+.enemy-visual{
+  grid-row:3!important;
+  position:relative!important;
+  order:initial!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  overflow:hidden!important;
+  display:grid!important;
+  place-items:end center!important;
+  transform:none!important;
+}
+.enemy-unit[data-rank="back"] .enemy-visual,
+.enemy-unit[data-rank="mid"] .enemy-visual,
+.enemy-unit[data-rank="front"] .enemy-visual{
+  transform:none!important;
+}
+.enemy-cinematic-art,
+.enemy-visual>svg{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  object-fit:contain!important;
+  object-position:50% 100%!important;
+  transform:none!important;
+  margin:0!important;
+}
+.enemy-grid{
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  grid-template-rows:repeat(3,1fr)!important;
+}
+
+/* Keep the official generated UI assets as the final paint layer. */
+.party-strip .ally-unit{
+  background:transparent url("images/battle-grid-9.webp") center/122% 122% no-repeat!important;
+}
+.party-strip .ally-unit.active{
+  background:transparent url("images/battle-card-selected.webp") center/122% 122% no-repeat!important;
+}
+.command-content{
+  background:transparent url("images/battle-command.webp") center/112% 150% no-repeat!important;
+}
+.command-buttons>.command:after{
+  background:transparent url("images/battle-command-selected.webp") center/100% 100% no-repeat!important;
+}
+#auto{
+  background:transparent url("images/battle-auto.webp") center/100% 100% no-repeat!important;
+}
+#pace{
+  background:transparent url("images/battle-speed2.webp") center/100% 100% no-repeat!important;
+}
+@media(max-width:380px){
+  .order-ribbon{width:min(220px,66vw)!important}
+  .order-ribbon .order-face,
+  .order-ribbon .order-face.ally,
+  .order-ribbon .order-face.foe{width:35px!important;height:35px!important;flex-basis:35px!important}
+  .order-ribbon .order-face.is-next{width:39px!important;height:39px!important;flex-basis:39px!important}
+}

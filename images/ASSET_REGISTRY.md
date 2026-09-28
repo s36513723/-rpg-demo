@@ -60,6 +60,20 @@
 
 用途の詳細（味方／敵／NEXT等）は実装時に既存UI仕様と照合し、勝手に変更しない。
 
+## 戦闘画面UI素材
+
+| 種類 | 正式 | GitHub画像本体 | 状況 |
+|---|---|---|---|
+| 味方9マス背景 | ✓ | images/battle-grid-9.webp | 保存済み・Plan戦闘UI接続済み |
+| 味方カード選択状態 | ✓ | images/battle-card-selected.webp | 保存済み・Plan戦闘UI接続済み |
+| コマンド背景 | ✓ | images/battle-command.webp | 保存済み・Plan戦闘UI接続済み |
+| コマンド選択状態 | ✓ | images/battle-command-selected.webp | 保存済み・Plan戦闘UI接続済み |
+| AUTO | ✓ | images/battle-auto.webp | 保存済み・Plan戦闘UI接続済み |
+| 倍速 | ✓ | images/battle-speed2.webp | 保存済み・Plan戦闘UI接続済み |
+| 行動順・味方枠 | ✓ | images/order-frame-ally.svg | 保存済み・Plan戦闘UI接続済み |
+| 行動順・敵枠 | ✓ | images/order-frame-enemy.svg | 保存済み・Plan戦闘UI接続済み |
+| 行動順・NEXT枠 | ✓ | images/order-frame-next.svg | 保存済み・Plan戦闘UI接続済み |
+
 ## 戦闘背景
 
 | 種類 | 正式 | GitHub画像本体 | 状況 |
@@ -90,6 +104,7 @@
 - 戦闘用立ち絵: 6 / 6
 - 行動用アイコン: 6 / 6
 - 戦闘用アイコン枠: 3
+- 戦闘画面UI素材: 9 / 9
 - 戦闘背景: 1
 - 拠点NPC: 3
 - 拠点背景: 3
@@ -125,7 +140,7 @@
 | 飛行 | ✓ | images/enemy-flying-official.webp | 保存済み・Plan戦闘UI接続済み |
 | ゴーレム | ✓ | images/enemy-golem-official.webp | 保存済み・Plan戦闘UI接続済み |
 
-既存の `images/enemy_beast.svg` / `enemy_nature.svg` / `enemy_guard.svg` / `enemy_mage.svg` / `enemy_archer.svg` / `enemy_flying.svg` / `enemy_golem.svg` は現時点では旧簡易素材。正式画像本体を登録・接続するまで正式素材とみなさない。
+既存の `images/enemy_beast.svg` / `enemy_nature.svg` / `enemy_guard.svg` / `enemy_mage.svg` / `enemy_archer.svg` / `enemy_flying.svg` / `enemy_golem.svg` は旧簡易素材。現行Plan戦闘UIでは `enemy-*-official.webp` を正式素材として使用する。
 
 
 ## 拠点キャラクター派生素材
