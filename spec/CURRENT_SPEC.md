@@ -92,3 +92,13 @@ The first visual impression should be a stylish character-focused RPG, not a gri
 - Implementation existence or a passing test does not imply approval.
 - The 296 reverse-synced skill records default to **要レビュー**.
 - Balance placeholders such as Mastery Rank cap 50, +5 Rank per Mastery Pt, the Set Cost capacity formula and combo bonus percentages remain **初期実装値** until explicitly confirmed.
+
+## Enemy archetype implementation
+- The confirmed enemy archetype set is 獣 / 軽装 / 重装 / 魔術師 / 弓 / 飛行 / ゴーレム.
+- Runtime now distinguishes those seven archetypes in generated dungeon encounters. Their current stat lines, AI frequencies, ailment resistances and per-environment encounter mixes are **initial implementation values**, not confirmed balance.
+- 誘惑 is now connected to battle targeting: when active, its next hostile action is redirected toward its own side before 挑発 / lock-on / ordinary skill targeting is considered.
+
+## Skill catalog migration target
+- A separate-chat design currently targets **315 skills** with a **Rank 1-10** Mastery structure, recorded in `spec/skill-catalog-target.json`.
+- The current runtime remains 296 skills. The exact 315-name / Mastery / Rank table has not yet been recovered, so the runtime catalog must not be padded with invented skills or replaced from the count alone.
+- Candidate Rank bands and Set Cost / SP / power ranges in that target file are review values until explicitly confirmed.
