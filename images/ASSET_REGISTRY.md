@@ -126,3 +126,12 @@
 | ゴーレム | ✓ | 未登録 | 正式画像作成済み・本体登録待ち |
 
 既存の `images/enemy_beast.svg` / `enemy_nature.svg` / `enemy_guard.svg` / `enemy_mage.svg` / `enemy_archer.svg` / `enemy_flying.svg` / `enemy_golem.svg` は現時点では旧簡易素材。正式画像本体を登録・接続するまで正式素材とみなさない。
+
+
+## 拠点キャラクター派生素材
+
+- キャラ概要用高解像度立ち絵: images/hub-standing-warrior.webp / hub-standing-paladin.webp / hub-standing-rogue.webp / hub-standing-archer.webp / hub-standing-alchemist.webp / hub-standing-mystic.webp
+- 拠点キャラカード用透過画像: images/hub-card-warrior.webp / hub-card-paladin.webp / hub-card-rogue.webp / hub-card-archer.webp / hub-card-alchemist.webp / hub-card-mystic.webp
+- キャラカード用画像は人物を着色せず、カード背景色だけで6人を識別する。
+- キャラ概要は高解像度立ち絵を使用し、旧軽量立ち絵の拡大表示を避ける。
+- 施設NPCは正式背景の中央に配置する。
