@@ -1,11 +1,17 @@
 'use strict';
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),cp=require('node:child_process');
 const hubFiles=fs.readdirSync('exploration').filter(f=>f.endsWith('.js')).map(f=>'exploration/'+f);
-for(const file of ['battle-v29.js','rpg-rules.js','tests/battle-regression.js','tests/hub-regression.js',...hubFiles])cp.execFileSync(process.execPath,['--check',file]);
+for(const file of ['battle-v29.js','rpg-rules.js','sanctuary-v92.js','tests/battle-regression.js','tests/hub-regression.js',...hubFiles])cp.execFileSync(process.execPath,['--check',file]);
 for(const file of ['index.html','exploration/index.html']){
  const html=fs.readFileSync(file,'utf8');
  for(const [i,m]of [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].entries())new vm.Script(m[1],{filename:file+':script'+i});
 }
+const battleUi=fs.readFileSync('sanctuary-v92.js','utf8'),battleCss=fs.readFileSync('sanctuary-v92.css','utf8');
+assert(fs.existsSync('images/paladin-turn.webp'),'Paladin turn-order art missing');
+assert(fs.existsSync('images/paladin-battle.webp'),'Paladin battle art missing');
+assert(battleUi.includes("run:'images/paladin-turn.webp'"),'Paladin formation/icon mapping missing');
+assert(battleUi.includes("run:['images/paladin-battle.webp',168,226]"),'Paladin battle portrait mapping missing');
+assert(battleCss.includes('data-actor-id="run"]::before{background-image:url("images/paladin-turn.webp")}'),'Paladin turn-order CSS mapping missing');
 const R=require('../rpg-rules.js');
 assert.equal(Object.keys(R.skills).length,296);assert.equal(Object.keys(R.masteries).length,31);
 for(const [n,d]of Object.entries(R.skills)){
