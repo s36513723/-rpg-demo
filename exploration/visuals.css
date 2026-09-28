@@ -489,3 +489,59 @@
  .facility-dialogue{left:8px;right:8px;grid-template-columns:1fr;gap:2px}
  .facility-dialogue b{font-size:10px}
 }
+
+
+/* UI38: keep the guild camera fixed while commands/services change. */
+.guild-facility-page,
+.guild-service-page{
+ grid-template-rows:56% 44%!important;
+}
+.guild-facility-page>.facility-action-deck{
+ height:auto!important;
+ min-height:0!important;
+ align-content:stretch!important;
+}
+.guild-facility-page>.facility-stage,
+.guild-service-page>.facility-stage{
+ min-height:0!important;
+ height:auto!important;
+}
+.facility-stage-guild .facility-talk{
+ left:18px!important;
+ right:auto!important;
+ top:76px!important;
+ bottom:auto!important;
+ z-index:7!important;
+ display:inline-flex!important;
+ align-items:center!important;
+ gap:5px!important;
+ min-height:32px!important;
+ min-width:0!important;
+ width:auto!important;
+ padding:5px 10px!important;
+ border:1px solid rgba(203,184,136,.46)!important;
+ border-radius:999px!important;
+ background:rgba(7,16,12,.78)!important;
+ color:#ead9aa!important;
+ font-size:10px!important;
+ line-height:1!important;
+ box-shadow:0 5px 16px rgba(0,0,0,.22)!important;
+ backdrop-filter:blur(4px);
+}
+.facility-stage-guild .facility-talk .ui-icon{
+ width:14px!important;
+ height:14px!important;
+}
+.facility-stage-guild .facility-talk span{
+ display:inline!important;
+}
+@media(max-height:700px){
+ .guild-facility-page,
+ .guild-service-page{grid-template-rows:54% 46%!important}
+ .facility-stage-guild .facility-talk{top:70px!important;left:14px!important}
+}
+@media(max-width:350px){
+ .guild-facility-page,
+ .guild-service-page{grid-template-rows:53% 47%!important}
+ .facility-stage-guild .facility-talk{top:66px!important;left:10px!important;min-height:30px!important;padding:4px 9px!important}
+}
