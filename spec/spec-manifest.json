@@ -85,14 +85,24 @@
       "anti_grind_principle": true,
       "threshold_curve_status": "balance_pending",
       "reward_amount_status": "balance_pending"
-    }
+    },
+    "weapon_mastery_equipment_gate": true,
+    "armor_mastery_equipment_gate": true,
+    "dual_wield_requires_skl": 30,
+    "two_hand_grip": "one_hand_weapon_empty_offhand"
   },
   "workstreams": {
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "growth_exp_points_spec_confirmed",
+  "last_sync_status": "equipment_mastery_gates_and_handling_effects_implemented",
   "blocked_steps": [
     "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
-  ]
+  ],
+  "implementation_balance_proposal": {
+    "two_hand_weight_reduction": 0.2,
+    "two_hand_physical_multiplier": 1.1,
+    "two_hand_normal_hit_bonus": 6,
+    "dual_wield_offhand_power_fraction": 0.35
+  }
 }

@@ -21,9 +21,9 @@ function characterWeapon(n){const aliases={'王国剣':'sword','長槍':'spear',
 function characterValues(i){
  const a=stats[i],s=equipmentSnapshot(i),w=characterWeapon(eq[i][0].split('：')[1])||characterWeapon('なし');
  const enabled=skillSet[i].filter(n=>rules().meta(n)?.mode==='Passive'&&skillUsable(i,n)),effect=k=>rules().effect(enabled,k),pen=[0,5,15,30][s.weightLevel];
- const attack=(w.power+(w.throwing?a[1]:w.skillNormal?a[0]*.4+a[1]*.7:a[0]))*[1,.95,.9,.8][s.weightLevel];
- const off=eq[i][1].split('：')[1],guard=Math.round((1-Math.max(.3,.5-(/盾/.test(off)?.1:0)-effect('guard')))*100);
- return {...s,guard,offhand:off,phy:a[0],skl:a[1],arc:a[2],mnd:a[3],total:a.reduce((x,y)=>x+y,0),physical:Math.round(attack*10)/10,magicArc:a[2]+14,magicMind:a[3]+14,accuracy:a[1]+(w.hit||0),evade:a[1]+effect('evade')-pen,speed:a[1]+(w.speed||0)-pen,castSpeed:a[1]+effect('castSpeed')-pen,crit:Math.min(50,Math.max(0,5+(w.crit||0)+effect('crit'))),weaponCrit:w.crit||0,power:w.power,upgrade:(upgrades[eq[i][0].split('：')[1]]||0)*4,capacity:skillCap(i),cost:skillCost(i),resistance:calcResist(i),enabled};
+ const off=eq[i][1].split('：')[1],grip=eq[i][0].split('：')[1]!=='なし'&&off==='なし'&&!isTwoHanded(eq[i][0].split('：')[1]),dual=off!=='なし'&&!off.includes('盾')&&a[1]>=30,offWeapon=characterWeapon(off);const attack=(w.power+(w.throwing?a[1]:w.skillNormal?a[0]*.4+a[1]*.7:a[0]))*(grip?1.1:1)+(dual?(offWeapon?.power||0)*.35:0);
+ const guard=Math.round((1-Math.max(.3,.5-(/盾/.test(off)?.1:0)-effect('guard')))*100);
+ return {...s,guard,offhand:off,phy:a[0],skl:a[1],arc:a[2],mnd:a[3],total:a.reduce((x,y)=>x+y,0),physical:Math.round(attack*[1,.95,.9,.8][s.weightLevel]*10)/10,magicArc:a[2]+14,magicMind:a[3]+14,accuracy:a[1]+(w.hit||0)+(grip?6:0),evade:a[1]+effect('evade')-pen,speed:a[1]+(w.speed||0)-pen,castSpeed:a[1]+effect('castSpeed')-pen,crit:Math.min(50,Math.max(0,5+(w.crit||0)+effect('crit'))),weaponCrit:w.crit||0,power:w.power,upgrade:(upgrades[eq[i][0].split('：')[1]]||0)*4,capacity:skillCap(i),cost:skillCost(i),resistance:calcResist(i),enabled};
 }
 // Rates share one neutral SKL 30 opponent across character and equipment screens.
 function characterDisplayRates(i,v){

@@ -32,7 +32,10 @@ This is the repository-readable mirror of the canonical Excel specification. It 
 ## Equipment
 - 主武器 / 副手 / 予備主武器 / 予備副手 / 防具一式 / 装飾品 / 携行具.
 - Armor categories/Mastery: 魔装 / 軽装 / 重装.
-- Supported handling concepts include dual wield, two-hand use, unarmed, throwing and shields.
+- Weapon and armor Mastery Rank 5 unlocks their equipment categories. The talisman weapon uses 符術. Starter main-hand equipment remains usable after save migration. Market direct equip and presets follow the same requirements.
+- Dual wield requires two one-handed weapons and SKL 30. Two-hand grip applies to a one-handed main weapon with an empty offhand.
+- Initial balance proposal: two-hand grip reduces effective main-weapon weight by 20%, boosts physical attack by 10% and normal-attack hit by 6; dual wield adds 35% of the offhand weapon power to physical attacks. These values are adjustable.
+- Unarmed, throwing and shields retain their existing handling.
 
 ## Mastery
 Weapon Masteries:
