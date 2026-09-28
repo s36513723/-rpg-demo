@@ -106,7 +106,11 @@ const portrait=(p,cls='')=>!p?'':p.image?'<img class="visual-portrait '+cls+(p.k
 const peopleHeader=(ps,label='')=>'<div class="conversation-cast">'+ps.filter(Boolean).map(p=>'<div>'+portrait(p)+'<span><b>'+esc(p.name)+'</b><small>'+esc(p.role)+'</small></span></div>').join('')+(label?'<span class="scene-label">'+esc(label)+'</span>':'')+'</div>';
 const dialogue=(p,text)=>'<figure class="dialogue-block">'+portrait(p)+'<figcaption><b class="speaker">'+esc(p.name)+'</b><small>'+esc(p.role)+'</small><blockquote>'+esc(text)+'</blockquote></figcaption></figure>';
 const npcStage=(p,text)=>'<section class="npc-stage"><div class="npc-stage-art"><img class="npc-stand" src="'+esc(p.stand||p.image)+'" alt=""><div class="npc-identity"><b>'+esc(p.name)+'</b><small>'+esc(p.role)+'</small></div></div><div class="npc-speech"><p>'+esc(text)+'</p></div></section>';
-const facilityStage=(p,id,kind='inn',speech='')=>'<section class="facility-stage facility-stage-'+esc(kind)+'"><button class="facility-host" type="button" data-hub="npcTalk" data-args="'+esc(JSON.stringify([id]))+'"><span class="facility-word" aria-hidden="true">'+esc(({inn:'INN',guild:'GUILD',market:'MARKET'})[kind]||'FACILITY')+'</span><img class="facility-stand" src="'+esc(p.stand||p.image)+'" alt=""><span class="facility-identity"><b>'+esc(p.name)+'</b><small>'+esc(p.role)+'</small></span><span class="facility-talk">'+glyph('speech')+' 話す</span>'+(speech?'<span class="facility-dialogue"><b>'+esc(p.name)+'</b><span>'+esc(speech)+'</span></span>':'')+'</button></section>';
+const facilityStage=(p,id,kind='inn',speech='')=>{
+ const word='<span class="facility-word" aria-hidden="true">'+esc(({inn:'INN',guild:'GUILD',market:'MARKET'})[kind]||'FACILITY')+'</span>',art='<img class="facility-stand" src="'+esc(p.stand||p.image)+'" alt="">',identity='<span class="facility-identity"><b>'+esc(p.name)+'</b><small>'+esc(p.role)+'</small></span>',talk='<button class="facility-talk" type="button" data-hub="npcTalk" data-args="'+esc(JSON.stringify([id]))+'">'+glyph('speech')+'<span>話す</span></button>',dialog=speech?'<span class="facility-dialogue"><b>'+esc(p.name)+'</b><span>'+esc(speech)+'</span></span>':'';
+ if(kind==='guild')return '<section class="facility-stage facility-stage-guild">'+word+art+identity+talk+dialog+'</section>';
+ return '<section class="facility-stage facility-stage-'+esc(kind)+'"><button class="facility-host" type="button" data-hub="npcTalk" data-args="'+esc(JSON.stringify([id]))+'">'+word+art+identity+'<span class="facility-talk">'+glyph('speech')+' 話す</span>'+dialog+'</button></section>';
+};
 const guildContextRoutes=new Set(['guildDesk','questMenu','questSelect','reportChapter','infoMenu','dungeonIntel','regionRecords','regionRecord','enemyBook','enemyRecord','clueRecord','recordList','appraiseMenu','rareAppraise','storageMenu','depositMenu','guildMembers','guildSellMenu','guildSaleQuantity','guildSaleConfirm']);
 const guildSpeech=(name,args=[])=>{
  if(name==='guild')return 'おかえりなさい。今日はどのご用件ですか？';
@@ -224,7 +228,7 @@ const dialoguePage=(panel,route)=>{
  if(['inn','guild','market'].includes(name)){
   const id={inn:'宿主',guild:'受付',market:'鍛冶師'}[name],host=person('npc',id),deck=document.createElement('div');deck.className='facility-action-deck';
   [...body.children].forEach(el=>{if(el.matches('button.row')){if(el.dataset.hub==='closeM')el.remove();else deck.append(el)}else if(el.classList.contains('actions')){[...el.querySelectorAll('button.row')].forEach(b=>{if(b.dataset.hub!=='closeM')deck.append(b)});el.remove()}});
-  body.insertAdjacentHTML('afterbegin',facilityStage(host,id,name,name==='guild'?guildSpeech(name,args):''));body.append(deck);body.classList.add('facility-stage-page');
+  body.insertAdjacentHTML('afterbegin',facilityStage(host,id,name,name==='guild'?guildSpeech(name,args):''));body.append(deck);body.classList.add('facility-stage-page');if(name==='guild')body.classList.add('guild-facility-page');
  }else if(guildContextRoutes.has(name)){
   const host=person('npc','受付'),content=document.createElement('div');content.className='guild-service-content';
   [...body.children].forEach(el=>content.append(el));
