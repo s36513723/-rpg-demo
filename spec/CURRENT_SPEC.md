@@ -92,6 +92,8 @@ The first visual impression should be a stylish character-focused RPG, not a gri
 - Turn-order, party/formation icon, and acting-character battle portrait for a character are derived from the same approved master art; UI frames remain separate reusable assets.
 - Character-art handling must scale to a growing roster: add a master standing art once, then derive standardized UI crops instead of redesigning the character separately for each UI.
 
+- The Guild receptionist NPC (Eda) has a confirmed master standing art: an elegant adult female receptionist with long ash-blonde hair, navy/ivory/gold guild uniform, ledger and quill. Hub dialogue/profile derivatives should use this master art.
+
 ## Specification status
 - Machine-readable classification: `spec/spec-status.json`.
 - Implementation existence or a passing test does not imply approval.
