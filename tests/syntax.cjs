@@ -38,6 +38,16 @@ const hubNames=hubFiles.flatMap(file=>[...fs.readFileSync(file,'utf8').matchAll(
 assert.equal(new Set(hubNames).size,hubNames.length,'hub duplicate function definitions');
 const path=require('node:path');
 for(const m of fs.readFileSync('exploration/index.html','utf8').matchAll(/(?:src|href)="([^"]+)"/g)){const target=m[1].split('?')[0];if(target.startsWith('#'))continue;assert(!/^https?:/.test(target),'hub dependency must be local');assert(fs.existsSync(path.resolve('exploration',target)),'missing hub resource '+target);}
+const growthSource=fs.readFileSync('exploration/character-stats.js','utf8');
+assert(growthSource.includes('function awardExperience('),'shared EXP award function');
+assert(growthSource.includes('H.pendingGrowth.stat+=growth;H.pendingGrowth.mastery+=growth'),'EXP threshold grants both growth point types');
+const exploreSource=fs.readFileSync('exploration/explore.js','utf8'),hubSource=fs.readFileSync('exploration/hub.js','utf8');
+assert(exploreSource.includes("awardExperience(40,'強敵撃破'"),'elite EXP reward');
+assert(exploreSource.includes("awardExperience(80,'ボス撃破'"),'boss EXP reward');
+assert(hubSource.includes("awardExperience(60,'依頼達成'"),'quest EXP reward');
+assert(hubSource.includes("awardExperience(100,'章報告'"),'story EXP reward');
+assert(!/grant\(\{[^\n}]*stat:/.test(exploreSource),'exploration no longer grants Stat Pt directly');
+assert(!/grant\(\{[^\n}]*stat:/.test(hubSource),'hub no longer grants Stat Pt directly');
 console.log('Syntax, local assets, unique functions, 296 skill definitions and 31 masteries: PASS');
 
 const caster=[10,10,60,20],old=R.legacyDerived(caster),max=R.derived(caster);
