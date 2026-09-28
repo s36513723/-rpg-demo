@@ -226,3 +226,13 @@
 #panel .fitting-confirm button{width:100%;min-height:44px;background:#d5bd83;color:#17271b;border:1px solid #e1d29d;border-radius:7px;font-size:14px;font-weight:700}
 #panel .fitting-confirm button:disabled{opacity:.4}
 @media(min-width:380px){#panel .equipment-left .fitting-controls button small{font-size:10px}#panel .equipment-left .fitting-controls button b{font-size:11px}}
+
+/* Mastery branches expand in place on the right, one at a time. */
+#panel .mastery-training{flex:none;padding-top:5px;border-top:1px solid #829366;background:#142a1dd9}
+#panel .mastery-training button.row{margin-bottom:0}
+#panel .mastery-right{display:block;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+#panel .mastery-right .mastery-skill-heading{margin-bottom:5px}
+#panel .mastery-branch>.branch-toggle{display:flex;align-items:center;justify-content:space-between;gap:5px;min-height:44px}
+#panel .mastery-branch>.branch-toggle[aria-expanded=true]{border-color:#dcc07c;background:#42513ae6;color:#f0d894}
+#panel .mastery-branch-skills{padding:0 0 4px 5px;border-left:2px solid #bca774;margin:0 0 5px 3px}
+#panel .mastery-branch-skills[hidden]{display:none}
