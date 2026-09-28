@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "purpose": "戦闘主要数値の現行実装を可視化し、実戦テスト後に確定するためのレビュー台帳。ここにある値は確定仕様ではない。",
+  "overall_status": "要レビュー",
+  "diagnostic": {
+    "script": "tests/balance-diagnostic.js",
+    "artifact": "balance-results.json",
+    "source_engine": "index.html",
+    "rule_source": "rpg-rules.js"
+  },
+  "systems": {
+    "hp_sp": {
+      "status": "要レビュー",
+      "current_implementation": {
+        "hp": "floor(100 + 0.5*(totalStats-100) + 2*max(PHY-10,0) + max(max(PHY-10,0)-20,0))",
+        "sp": "legacySP + legacyMP converted into one SP pool",
+        "legacySP": "floor(20 + 0.1*(totalStats-100) + 0.4*max(PHY-10,0) + max(SKL-10,0))",
+        "legacyMP": "floor(M<=50 ? 2*M : 100 + 0.5*(M-50)), M=max(ARC+MND-20,0)"
+      },
+      "review_goal": "PHY/SKL/ARC/MNDの役割差と、物理型・術型のSP量が戦闘回数に対して適正か確認"
+    },
+    "damage": {
+      "status": "要レビュー",
+      "current_implementation": "attackValue * skillMultiplier * 100/(100+defense) * affinity * critical * situationalModifiers * randomVariance",
+      "random_variance": "0.95-1.05",
+      "critical_multiplier": 1.5,
+      "review_goal": "通常攻撃・単体技・範囲技・術のTTKと防御価値を比較"
+    },
+    "hit_evade": {
+      "status": "要レビュー",
+      "current_implementation": "clamp(90 + (accuracy-evade)*0.5, 30, 100)",
+      "floor_percent": 30,
+      "cap_percent": 100,
+      "blind_accuracy_penalty": 30,
+      "review_goal": "SKL差・盲目・地形で命中が極端にならないか確認"
+    },
+    "critical": {
+      "status": "要レビュー",
+      "current_implementation": "clamp(5 + (attackerSKL-targetSKL)/4 + weaponCrit + skillCrit + passiveCrit, 0, 50)",
+      "cap_percent": 50,
+      "multiplier": 1.5,
+      "review_goal": "SKL型の伸びとクリティカル特化の価値を確認"
+    },
+    "weight": {
+      "status": "要レビュー",
+      "ratios": [
+        1,
+        1.2,
+        1.5
+      ],
+      "speed_evade_penalties": [
+        0,
+        5,
+        15,
+        30
+      ],
+      "physical_weapon_multipliers": [
+        1,
+        0.95,
+        0.9,
+        0.8
+      ],
+      "review_goal": "重量超過を許容する選択が成立するか、重装・予備武器が過剰罰にならないか確認"
+    },
+    "status_and_binds": {
+      "status": "要レビュー",
+      "current_implementation": "clamp(baseChance + 0.75*(statusStat-targetMND) + bonuses - resistance, 5, cap)",
+      "normal_cap_percent": 95,
+      "instant_death_caps_percent": {
+        "normal": 35,
+        "elite": 10,
+        "boss": 5
+      },
+      "resistance_bonus": {
+        "elite": 25,
+        "boss_non_instant_death": 25,
+        "boss_instant_death": 100
+      },
+      "buildup": {
+        "success_normal": 35,
+        "success_boss": 50,
+        "failure": 10,
+        "round_decay": 10
+      },
+      "review_goal": "封じで大技を止める戦術が強すぎず弱すぎず、連続成功もしにくい状態にする"
+    },
+    "weakness": {
+      "status": "要レビュー",
+      "normalized_affinity": {
+        "weak": 2,
+        "normal": 1,
+        "resist": 0.5,
+        "immune": 0
+      },
+      "compound": "複合属性は各属性の正規化倍率を平均",
+      "review_goal": "相性を体感できる一方、弱点必須ゲームになりすぎない倍率へ調整"
+    },
+    "repeat_action": {
+      "status": "要レビュー",
+      "current_multiplier": 1,
+      "current_state": "専用の同技連打ペナルティは未実装。SP・対象条件・連携・位置・状態異常などの間接制約のみ。",
+      "review_goal": "同技連打が最適解にならない仕組みを、敵行動・リソース・技側制約を含めて決める"
+    },
+    "action_speed": {
+      "status": "要レビュー",
+      "current_implementation": "SKL*(1+speedBuff) + weapon/cast/item speed + skill speed + terrain + temporary modifiers - weight penalty + opening speed",
+      "review_goal": "高速型の先手価値と、重装・詠唱・大技の遅さが適切か確認"
+    }
+  },
+  "promotion_rule": "実戦診断・プレイテスト結果を確認し、ユーザーが明示的に承認した値だけを確定へ変更する。"
+}
