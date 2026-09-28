@@ -84,7 +84,9 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - Current hub identity palette: Warrior crimson / Paladin sapphire / Rogue violet / Archer emerald / Alchemist amber / Mystic cyan.
 - HP and SP bars on hub member cards remain permanently visible over character art.
 - Character overview artwork should not be hidden by an opaque top header; navigation may overlay the artwork.
-- Temporary facility NPC placeholder art must not dominate the facility screen. Facility atmosphere and commands remain primary until final NPC/background masters are connected.
+- Inn / Guild / Market use their registered approved facility backgrounds and transparent NPC standing art. Legacy facility/NPC placeholder SVGs are not used for these three facility screens.
+- Hub member portraits remain untinted; character identity color belongs to the card background, not the portrait pixels.
+- HP/SP on hub cards use slim always-visible line gauges.
 
 ## Battle UI
 1. ROUND / AUTO / speed / settings
