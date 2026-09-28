@@ -304,3 +304,51 @@
 /* A little more breathing room between command words. */
 .command-buttons{gap:8px!important}
 @media(max-width:380px){#auto{left:calc(var(--party-left) - 8px)!important}.command-buttons{gap:5px!important}}
+
+
+/* v37 — official turn-order icon artwork and frame assets. */
+.order-face{
+  overflow:visible!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.order-face::before,.order-face::after{display:none!important}
+.order-face .order-portrait,
+.order-face img.order-portrait-art{
+  position:absolute!important;
+  z-index:1!important;
+  left:3px!important;
+  top:3px!important;
+  width:calc(100% - 6px)!important;
+  height:calc(100% - 6px)!important;
+  border-radius:50%!important;
+  object-fit:cover!important;
+  object-position:50% 25%!important;
+  overflow:hidden!important;
+}
+.order-frame{
+  position:absolute!important;
+  z-index:3!important;
+  pointer-events:none!important;
+  left:-5px!important;
+  top:-5px!important;
+  width:calc(100% + 10px)!important;
+  height:calc(100% + 10px)!important;
+  max-width:none!important;
+  object-fit:contain!important;
+  opacity:1!important;
+  filter:none!important;
+}
+.order-face.is-next .order-frame{
+  left:-7px!important;
+  top:-8px!important;
+  width:calc(100% + 14px)!important;
+  height:calc(100% + 14px)!important;
+}
+.order-side{display:none!important}
+.order-face.is-active,
+.order-face.is-next{
+  outline:0!important;
+  box-shadow:none!important;
+}
