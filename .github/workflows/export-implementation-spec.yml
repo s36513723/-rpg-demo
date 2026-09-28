@@ -6,6 +6,7 @@ on:
       - "rpg-rules.js"
       - "spec/spec-status.json"
       - "tools/export-implementation-spec.mjs"
+      - "tools/review-skills.mjs"
       - ".github/workflows/export-implementation-spec.yml"
   workflow_dispatch:
 
@@ -23,16 +24,18 @@ jobs:
         with:
           node-version: 22
       - name: Generate implementation mirrors
-        run: node tools/export-implementation-spec.mjs
+        run: |
+          node tools/export-implementation-spec.mjs
+          node tools/review-skills.mjs
       - name: Commit generated mirrors when changed
         run: |
-          if git diff --quiet -- spec/generated/implemented-skills.csv spec/generated/implemented-masteries.csv; then
+          if git diff --quiet -- spec/generated/implemented-skills.csv spec/generated/implemented-masteries.csv spec/generated/skill-review.json; then
             echo "Generated mirrors already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add spec/generated/implemented-skills.csv spec/generated/implemented-masteries.csv
+          git add spec/generated/implemented-skills.csv spec/generated/implemented-masteries.csv spec/generated/skill-review.json
           git commit -m "Sync generated implementation spec"
           git push
       - uses: actions/upload-artifact@v4
@@ -41,4 +44,5 @@ jobs:
           path: |
             spec/generated/implemented-skills.csv
             spec/generated/implemented-masteries.csv
+            spec/generated/skill-review.json
           retention-days: 7
