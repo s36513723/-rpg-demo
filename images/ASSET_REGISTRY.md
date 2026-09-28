@@ -39,7 +39,18 @@
 | ミスティック | ✓ | images/turn-mystic.svg | 保存済み・Plan戦闘UI接続済み |
 
 
-## 戦闘用アイコン枠
+## 拠点キャラカード
+
+| キャラクター | GitHub画像本体 | 状況 |
+|---|---|---|
+| ウォリアー | images/hub-card-warrior.webp | 行動用画像から背景透過・原色維持 |
+| パラディン | images/hub-card-paladin.webp | 行動用画像から背景透過・原色維持 |
+| ローグ | images/hub-card-rogue.webp | 行動用画像から背景透過・原色維持 |
+| アーチャー | images/hub-card-archer.webp | 行動用画像から背景透過・原色維持 |
+| アルケミスト | images/hub-card-alchemist.webp | 行動用画像から背景透過・原色維持 |
+| ミスティック | images/hub-card-mystic.webp | 行動用画像から背景透過・原色維持 |
+
+
 
 | 種類 | 正式 | GitHub画像本体 | 状況 |
 |---|---|---|---|
@@ -61,17 +72,17 @@
 
 | 施設 | 正式 | GitHub画像本体 | 状況 |
 |---|---|---|---|
-| ギルド NPC | ✓ | 未整理 | 作成済み |
-| 宿屋 NPC | ✓ | 未整理 | 作成済み |
-| 市場 NPC | ✓ | 未整理 | 作成済み |
+| ギルド NPC | ✓ | images/hub-guild-npc.webp | 保存済み・拠点UI接続済み |
+| 宿屋 NPC | ✓ | images/hub-inn-npc.webp | 保存済み・拠点UI接続済み |
+| 市場 NPC | ✓ | images/hub-market-npc.webp | 保存済み・拠点UI接続済み |
 
 ## 拠点背景
 
 | 施設 | 正式 | GitHub画像本体 | 状況 |
 |---|---|---|---|
-| ギルド背景 | ✓ | 未整理 | 作成済み |
-| 宿屋背景 | ✓ | 未整理 | 作成済み |
-| 市場背景 | ✓ | 未整理 | 作成済み |
+| ギルド背景 | ✓ | images/hub-guild-bg.webp | 保存済み・拠点UI接続済み |
+| 宿屋背景 | ✓ | images/hub-inn-bg.webp | 保存済み・拠点UI接続済み |
+| 市場背景 | ✓ | images/hub-market-bg.webp | 保存済み・拠点UI接続済み |
 
 ## 現在の正式素材数
 
@@ -88,7 +99,7 @@
 - 「正式」と記載された画像を旧仮SVG・旧顔画像より優先する。
 - 画像が作成済みでもGitHub画像本体未整理なら、未作成扱いにしない。
 - 旧 `gald.svg / lize.svg / ern.svg / sena.svg / mirea.svg / yuna.svg` 等を正式マスターと誤認しない。
-- 旧 `facility_*.svg`・`npc_*_stand.svg` は正式NPC／背景へ置換するまでの仮素材。
+- 旧 `facility_*.svg`・`npc_*_stand.svg` は拠点3施設では使用しない。正式 `hub-*-bg.webp` / `hub-*-npc.webp` を使用する。
 - 戦闘・拠点・ステータス・行動順UIは最終的に本台帳の正式素材へ統一する。
 
 
