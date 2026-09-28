@@ -902,7 +902,7 @@
  z-index:5;
  left:8px;
  right:8px;
- bottom:calc(18% + 50px);
+ bottom:calc(18% + 7px);
  min-height:34px;
  display:grid;
  grid-template-columns:auto 1fr;
@@ -917,6 +917,7 @@
 }
 .facility-world-dialogue>b{font:600 10px/1.2 'Yu Mincho',Georgia,serif;color:#e8d39e}
 .facility-world-dialogue>span{font-size:9px;line-height:1.4;color:#f2eee2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.facility-world-mode-service .facility-world-dialogue{bottom:calc(34% + 7px)}
 .facility-world-overlay{
  position:absolute;
  z-index:6;
@@ -990,7 +991,8 @@
  #app.facility-world>header{margin-left:-8px;margin-right:-8px;padding-left:9px;padding-right:9px}
  #app.facility-world>.hub-global-nav{margin-left:-8px;margin-right:-8px;padding-left:8px;padding-right:8px}
  .facility-world-npc{height:72%;max-width:61%;right:-1%}
- .facility-world-dialogue{left:6px;right:6px;bottom:calc(19% + 44px);padding:5px 7px}
+ .facility-world-dialogue{left:6px;right:6px;bottom:calc(19% + 6px);padding:5px 7px}
+ .facility-world-mode-service .facility-world-dialogue{bottom:calc(36% + 6px)}
  .facility-world-dialogue>span{font-size:8px}
  .facility-world-home{height:19%;min-height:86px}
  .facility-world-service{height:36%;min-height:140px}
@@ -998,7 +1000,8 @@
 @media(max-height:640px){
  .facility-world-npc{height:69%;bottom:21%}
  .facility-world-identity{top:45px;padding:5px 7px}
- .facility-world-dialogue{bottom:calc(20% + 40px);min-height:30px;padding:4px 7px}
+ .facility-world-dialogue{bottom:calc(20% + 5px);min-height:30px;padding:4px 7px}
+ .facility-world-mode-service .facility-world-dialogue{bottom:calc(39% + 5px)}
  .facility-world-home{height:20%;min-height:76px;padding:4px}
  .facility-world-service{height:39%;min-height:128px;padding:5px 6px 8px}
  .facility-world-home>.row,
