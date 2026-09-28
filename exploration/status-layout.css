@@ -444,3 +444,38 @@
 #panel .skill-candidates .skill-toggle.selected{border-color:#c9ad73;background:#334c34}
 
 #panel .skill-candidates .skill-toggle .ui-icon{display:none!important}
+
+
+/* UI37: transparent character overview header over artwork. */
+#panel.status-overview{position:relative}
+#panel.status-overview>.panel-head{
+ position:absolute;
+ top:env(safe-area-inset-top);
+ left:0;
+ right:0;
+ z-index:20;
+ min-height:54px;
+ border-bottom:0!important;
+ background:linear-gradient(180deg,rgba(6,13,10,.74),rgba(6,13,10,.18),transparent)!important;
+ backdrop-filter:none!important;
+}
+#panel.status-overview>.panel-head h2{
+ color:rgba(240,232,212,.9);
+ text-shadow:0 2px 12px #000;
+}
+#panel.status-overview>.panel-head .icon-button{
+ border:1px solid #ffffff2c;
+ border-radius:999px;
+ background:#07100ca8;
+ backdrop-filter:blur(5px);
+}
+#panel.status-overview>.status-cover{
+ margin:0 0 6px!important;
+ min-height:0!important;
+}
+#panel.status-overview>.actor-backdrop img,
+#panel.status-overview>.status-cover .actor-hero-art img{
+ image-rendering:auto!important;
+ transform:none!important;
+ filter:none!important;
+}
