@@ -158,3 +158,63 @@
  .actor-hero{min-height:218px}
  .actor-hero-copy{min-height:218px}
 }
+
+
+/* UI31: character art roles — full-body on overview, battle crop on hub cards. */
+#party .m{
+ position:relative;
+ isolation:isolate;
+ display:flex;
+ flex-direction:column;
+ justify-content:flex-end;
+ min-height:76px;
+ padding:29px 4px 4px;
+ background:#14221b;
+ overflow:hidden;
+}
+#party .m>img{
+ position:absolute;
+ inset:0;
+ z-index:0;
+ width:100%;
+ height:100%;
+ border-radius:0;
+ object-fit:cover;
+ object-position:50% 16%;
+ opacity:.82;
+ filter:saturate(.94) contrast(1.03);
+}
+#party .m::after{
+ content:'';
+ position:absolute;
+ inset:0;
+ z-index:1;
+ pointer-events:none;
+ background:linear-gradient(180deg,rgba(8,15,12,.04) 0%,rgba(8,15,12,.16) 34%,rgba(8,15,12,.78) 65%,rgba(8,15,12,.97) 100%);
+}
+#party .m>b,
+#party .m>.roster-meta,
+#party .m>.roster-bars,
+#party .m>.roster-alert{
+ position:relative;
+ z-index:2;
+ text-shadow:0 1px 4px #000;
+}
+#party .m>b{color:#f6edda}
+#party .m .roster-meta{color:#d1d8cf}
+#party .m .roster-line em{color:#d5d8ce}
+#party .m .roster-line .resource-track{background:#0a100dbd}
+.person-select-card img,
+.formation-pick img{
+ object-fit:cover;
+ object-position:50% 16%;
+}
+@media(max-height:720px){
+ #party .m{min-height:68px;padding-top:25px}
+}
+@media(max-height:640px){
+ #party .m{min-height:60px;padding-top:21px}
+}
+@media(min-width:600px){
+ #party .m{min-height:88px;padding-top:34px}
+}
