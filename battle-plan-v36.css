@@ -918,3 +918,6 @@ html,body{height:100%;overflow:hidden}
 #game:after{background:linear-gradient(to bottom,transparent 0%,rgba(31,30,43,.13) 12%,rgba(28,28,42,.32) 32%,rgba(24,25,38,.60) 62%,rgba(18,20,32,.82) 100%)!important}
 #game>.actor-art{width:36%!important}
 #game>.actor-art .actor-portrait-image{transform:scale(1.19)!important}
+
+.party-hud{z-index:65!important}
+#more{color:#f8f3ff!important;background:rgba(57,54,72,.48)!important}
