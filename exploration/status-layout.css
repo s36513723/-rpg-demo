@@ -323,3 +323,16 @@
  #panel.status-overview .resource-grid>div>b{text-align:right}
  #panel.status-overview .resource-grid>div>.resource-track{grid-column:1/-1}
 }
+
+/* Compact selectable rows, with details over the bottom navigation. */
+#panel .candidate button.row,#panel .skill-candidates .skill-toggle{display:flex;align-items:center;min-height:40px;height:40px;padding:5px 7px;gap:4px;margin-bottom:3px}
+#panel .candidate button.row>.small,#panel .candidate .row-visual,#panel .skill-candidates .item-explain,#panel .skill-candidates .small,#panel .skill-candidates .inline-warning,#panel .skill-candidates .row-visual{display:none}
+#panel .candidate button.row>b,#panel .skill-candidates .skill-toggle>b{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+#panel .skill-candidates .skill-toggle.inspected{outline:1px solid #e4c987}
+#panel .panel-footer:has(.selection-overlay){position:relative;overflow:visible}
+#panel .selection-overlay{position:absolute;z-index:30;inset:auto 0 0;min-height:100%;box-sizing:border-box;background:#182b22fa;border:1px solid #b49d69;border-radius:9px 9px 0 0;padding:7px 10px;box-shadow:0 -5px 20px #0008;text-align:left}
+#panel .selection-overlay>div{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#panel .selection-overlay b{font-size:13px}
+#panel .selection-overlay p{font-size:11px;line-height:1.45;margin:3px 0;white-space:normal}
+#panel .selection-overlay button{min-height:36px;padding:3px 10px;margin:0;width:auto}
+#panel .selection-overlay>button{float:right;background:#d5bd83;color:#17271b;min-height:40px}
