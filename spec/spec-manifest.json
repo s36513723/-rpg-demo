@@ -109,6 +109,12 @@
         "master": "2026-09-28 user-approved white/blue/gold blonde female knight with sword and large shield",
         "derivation_policy": "turn-order, party/formation and battle portraits derive from the same master art",
         "frame_policy": "UI frames are separate reusable assets"
+      },
+      "guild_receptionist_eda": {
+        "status": "確定",
+        "role": "ギルド受付",
+        "master": "2026-09-28 user-approved elegant adult female receptionist with long ash-blonde hair, navy/ivory/gold guild uniform, ledger and quill",
+        "derivation_policy": "hub dialogue/profile/card derivatives use the same master art"
       }
     }
   },
@@ -116,7 +122,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "paladin_art_registered_runtime_updated_regression_passed",
+  "last_sync_status": "guild_receptionist_art_registered",
   "blocked_steps": [
     "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
   ],
