@@ -4,6 +4,7 @@ const manifest = JSON.parse(fs.readFileSync("spec/spec-manifest.json", "utf8"));
 const spec = fs.readFileSync("spec/CURRENT_SPEC.md", "utf8");
 const contract = fs.readFileSync("AGENTS.md", "utf8");
 const status = JSON.parse(fs.readFileSync("spec/spec-status.json", "utf8"));
+const balance = JSON.parse(fs.readFileSync("spec/balance-review.json", "utf8"));
 
 const errors = [];
 const mustEqual = [
@@ -41,6 +42,8 @@ for (const key of ["mastery_rank_max","rank_per_mastery_point","skill_set_capaci
   if (status.initial_implementation_values?.[key]?.status !== "初期実装値") errors.push(`${key} must remain initial implementation until explicitly confirmed`);
 }
 if (status.obsolete_legacy?.MP?.status !== "廃止旧仕様") errors.push("MP must be classified as obsolete legacy");
+if (balance.overall_status !== "要レビュー") errors.push("battle balance registry must remain review-controlled until explicit confirmation");
+for (const key of ["hp_sp","damage","hit_evade","critical","weight","status_and_binds","weakness","repeat_action","action_speed"]) if (balance.systems?.[key]?.status !== "要レビュー") errors.push(`balance system ${key} must remain 要レビュー until explicitly confirmed`);
 
 for (const token of ["Mandatory workflow","Definition of done","canonical specification workbook"]) {
   if (!contract.includes(token)) errors.push(`AGENTS contract missing: ${token}`);
