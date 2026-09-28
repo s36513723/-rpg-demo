@@ -231,6 +231,7 @@ const ORDER_PORTRAITS={
  war:'images/turn-warrior.svg',rog:'images/turn-paladin.svg',run:'images/turn-rogue.svg',
  ran:'images/turn-archer.svg',arc:'images/turn-alchemist.svg',mys:'images/turn-mystic.svg'
 };
+const ORDER_FRAMES={ally:'images/order-frame-ally.svg',enemy:'images/order-frame-enemy.svg',next:'images/order-frame-next.svg'};
 function enemyArtMarkup(u){
  const src=ENEMY_CINEMATIC[u.id];
  return src?'<img class="enemy-cinematic-art" src="'+src+'" alt="" draggable="false">':spriteMarkup(enemyCrop(u));
@@ -338,7 +339,10 @@ function renderOrder(){
   const isActive=(busy?u.id===activeTurnId:(commandOpen&&u.id===current()?.id));const isNext=busy?orderIndex===1:orderIndex===0;b.className='order-face'+(u.enemy?' foe':' ally')+(isActive?' is-active':'')+(isNext?' is-next':'');b.dataset.orderIndex=String(orderIndex);
   b.setAttribute('aria-label',u.name+(u.enemy?'、敵':'、味方'));
   b.title=(u.enemy?'敵：':'味方：')+u.name;b.dataset.actorId=u.id;
-  b.innerHTML=faceMarkup(u,'order-portrait')+'<span class="order-side" aria-hidden="true"></span>';
+  {
+   const frameSrc=isNext?ORDER_FRAMES.next:(u.enemy?ORDER_FRAMES.enemy:ORDER_FRAMES.ally);
+   b.innerHTML=faceMarkup(u,'order-portrait')+'<img class="order-frame" src="'+frameSrc+'" alt="" aria-hidden="true" draggable="false">';
+  }
   b.addEventListener('click',()=>u.enemy?cardTap(u.id):toggleActor(u.id));target.append(b);
  }
  if(busy){
