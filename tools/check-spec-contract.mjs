@@ -6,6 +6,7 @@ const contract = fs.readFileSync("AGENTS.md", "utf8");
 const status = JSON.parse(fs.readFileSync("spec/spec-status.json", "utf8"));
 const balance = JSON.parse(fs.readFileSync("spec/balance-review.json", "utf8"));
 const skillTarget = JSON.parse(fs.readFileSync("spec/skill-catalog-target.json", "utf8"));
+const skillMigration = JSON.parse(fs.readFileSync("spec/skill-migration-296-to-315.json", "utf8"));
 
 const errors = [];
 const mustEqual = [
@@ -51,6 +52,9 @@ if (skillTarget.current_runtime?.skills !== 296) errors.push("skill target regis
 if (skillTarget.target_candidate?.total_skills !== 315 || skillTarget.target_candidate?.base_slots !== 310 || skillTarget.target_candidate?.extra_slots !== 5) errors.push("315-skill target arithmetic mismatch");
 if (skillTarget.exact_catalog?.known_complete_list !== true) errors.push("canonical workbook 315 catalog must be marked available");
 if (!skillTarget.migration_policy?.do_not_invent_missing_names) errors.push("skill migration must never invent names");
+if (skillMigration.canonical_count !== 315 || skillMigration.legacy_runtime_count !== 296) errors.push("skill migration audit counts must remain 315 vs 296");
+if (skillMigration.exact_unique_name_matches !== 40) errors.push("skill migration audit exact-match baseline changed; regenerate from canonical workbook before migration");
+if (!skillMigration.ambiguous_canonical_rows?.includes("速射")) errors.push("skill migration audit must preserve the bow/gun 速射 ambiguity");
 
 for (const token of ["Mandatory workflow","Definition of done","canonical specification workbook"]) {
   if (!contract.includes(token)) errors.push(`AGENTS contract missing: ${token}`);
