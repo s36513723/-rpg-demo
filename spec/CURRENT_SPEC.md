@@ -82,8 +82,10 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 ## Hub visual identity
 - The six party-member cards must use clearly separated character identity colors; near-duplicate hues across members are avoided.
 - Current hub identity palette: Warrior crimson / Paladin sapphire / Rogue violet / Archer emerald / Alchemist amber / Mystic cyan.
-- HP and SP bars on hub member cards remain permanently visible over character art.
+- Hub member cards use full-bleed, untinted character art over a member-specific background color. The character image itself must not be colorized.
+- HP and SP are permanent slim hairline gauges at the bottom of each hub member card.
 - Character overview artwork should not be hidden by an opaque top header; navigation may overlay the artwork.
+- Character overview uses the high-resolution standing-art derivative rather than enlarging the lightweight battle/status asset.
 - Inn / Guild / Market use their registered approved facility backgrounds and transparent NPC standing art. Legacy facility/NPC placeholder SVGs are not used for these three facility screens.
 - Hub member portraits remain untinted; character identity color belongs to the card background, not the portrait pixels.
 - HP/SP on hub cards use slim always-visible line gauges.
