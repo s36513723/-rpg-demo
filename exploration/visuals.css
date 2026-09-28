@@ -391,3 +391,101 @@
 @media(min-width:600px){
  .facility-stand{left:50%!important;right:auto!important;max-width:70%!important}
 }
+
+
+/* UI37: guild stays a conversation with the receptionist while services change below. */
+.facility-dialogue{
+ position:absolute;
+ left:12px;
+ right:12px;
+ bottom:12px;
+ z-index:5;
+ display:grid;
+ grid-template-columns:auto 1fr;
+ align-items:start;
+ gap:7px;
+ padding:9px 11px;
+ border:1px solid rgba(203,184,136,.48);
+ border-radius:10px;
+ background:rgba(7,16,12,.84);
+ box-shadow:0 8px 24px rgba(0,0,0,.24);
+ backdrop-filter:blur(5px);
+ text-align:left;
+ pointer-events:none;
+}
+.facility-dialogue b{
+ font:600 11px/1.4 'Yu Mincho',Georgia,serif;
+ color:#e7d39e;
+ white-space:nowrap;
+}
+.facility-dialogue span{
+ font-size:11px;
+ line-height:1.55;
+ color:#f2eee2;
+}
+.facility-stage-guild .facility-talk{
+ top:12px;
+ right:12px;
+ bottom:auto;
+ z-index:6;
+}
+.facility-stage-guild .facility-stand{
+ height:96%!important;
+ max-width:54%!important;
+ right:2%!important;
+ opacity:1!important;
+ filter:drop-shadow(0 12px 22px rgba(0,0,0,.48))!important;
+}
+.guild-service-page{
+ padding:0!important;
+ overflow:hidden!important;
+ display:grid!important;
+ grid-template-rows:minmax(190px,40dvh) minmax(0,1fr);
+ gap:0!important;
+ background:#0f1813;
+}
+.guild-service-page>.facility-stage{
+ min-height:0;
+ border-bottom:1px solid #4a5949;
+}
+.guild-service-content{
+ min-height:0;
+ overflow-y:auto;
+ overscroll-behavior:contain;
+ display:flex;
+ flex-direction:column;
+ gap:6px;
+ padding:10px 14px 18px;
+ background:linear-gradient(180deg,#111c16,#0c1511);
+ scrollbar-width:thin;
+ scrollbar-color:#718367 transparent;
+}
+.guild-service-content>.row,
+.guild-service-content>.actions,
+.guild-service-content>.ui-tabs,
+.guild-service-content>.message,
+.guild-service-content>.small,
+.guild-service-content>.ui-section{
+ flex:0 0 auto;
+ margin-top:0;
+ margin-bottom:0;
+}
+.guild-service-content>.actions{
+ display:grid;
+ gap:6px;
+}
+.guild-service-content .row{
+ margin-top:0;
+ margin-bottom:0;
+}
+@media(max-height:700px){
+ .guild-service-page{grid-template-rows:minmax(165px,35dvh) minmax(0,1fr)}
+ .facility-dialogue{padding:7px 9px;bottom:8px}
+ .facility-dialogue span{font-size:10px;line-height:1.45}
+ .facility-stage-guild .facility-stand{height:94%!important}
+}
+@media(max-width:350px){
+ .guild-service-page{grid-template-rows:minmax(160px,37dvh) minmax(0,1fr)}
+ .facility-dialogue{left:8px;right:8px;grid-template-columns:1fr;gap:2px}
+ .facility-dialogue b{font-size:10px}
+}
