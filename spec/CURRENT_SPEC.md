@@ -98,3 +98,10 @@ Commands sit immediately above ally cards. Character appeal has priority over ti
 - Implementation or passing tests do not imply approval.
 - Rank 0-50, +5 Rank per Mastery Pt and ability-dependent Set Capacity are obsolete implementation rules.
 - Structural rules and balance values must remain distinguishable.
+
+## 315 Skill DB normalization
+- Canonical workbook 08_SkillDB contains all 315 candidate rows with stable SK0001-SK0315 IDs.
+- 291/315 rows have normalized implementation schema fields (scaling, attributes, numeric range, target rule, defense reference, status/position metadata where determinable).
+- 24/315 rows are intentionally marked needs_special_review because their short design labels do not uniquely determine concrete mechanics.
+- Runtime remains the 296 compatibility catalog until those 24 rows and explicit save-migration mappings are resolved.
+- Machine-readable normalization status: spec/skill-normalization-status.json.
