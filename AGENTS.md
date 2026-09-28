@@ -21,6 +21,16 @@ Priority when information conflicts:
 
 Never restore an old implementation merely because it already exists in code.
 
+## Specification status discipline
+
+Every rule or numeric value must be distinguishable as one of: **確定 / 初期実装値 / 要レビュー / 廃止旧仕様**. The machine-readable registry is `spec/spec-status.json`.
+
+- A value found in code, tests, generated CSV, or reverse-synced Excel is **not** confirmed merely because it exists or passes tests.
+- Reverse-synced skill rows default to **要レビュー** until the user explicitly approves them.
+- Balance numbers introduced only to make the game runnable are **初期実装値**.
+- Only explicit user decisions may promote an item to **確定**.
+- **廃止旧仕様** may remain only where compatibility requires it; it must not leak back into current UI, data names, or gameplay rules.
+
 ## Mandatory workflow for a specification change
 
 When the user makes a decision that changes game behavior, data, UI, terminology, or content:
