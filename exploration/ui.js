@@ -10,7 +10,7 @@ function canEquip(i,k,n){if(!Number.isInteger(i)||i<0||i>=6||![0,1,2,3,4,8,9].in
 function candidateWeight(i,k,n){const old=eq[i].slice();const label=old[k].split('：')[0];eq[i][k]=label+'：'+n;if(k===4)for(let z=5;z<=7;z++)eq[i][z]=old[z].split('：')[0]+'：'+n;if((k===0||k===2)&&isTwoHanded(n))eq[i][k+1]=old[k+1].split('：')[0]+'：なし';const w=weightInfo(i);eq[i]=old;return w}
 function equipmentSnapshot(i){
  const a=stats[i],d=rules().derived(a),armor=ARM[eq[i][4].split('：')[1]]||[0,'',0,0],w=weightInfo(i),main=eq[i][0].split('：')[1],weapon=WM[main],set=skillSet[i].filter(n=>rules().meta(n)?.mode==='Active'),usable=set.filter(n=>skillUsable(i,n)).length;
- return {hp:d.hp,sp:d.sp,mp:d.mp,pdef:a[0]+(armor[2]||0),mdef:a[2]+a[3]+(armor[3]||0),weight:w.weight,limit:w.limit,weightLevel:w.level,weightText:w.text,attack:weapon?weapon[0]+'・'+weapon[1]:'壊・近',usable,setCount:set.length,stance:stanceInfo(i).name};
+ return {hp:d.hp,sp:d.sp,pdef:a[0]+(armor[2]||0),mdef:a[2]+a[3]+(armor[3]||0),weight:w.weight,limit:w.limit,weightLevel:w.level,weightText:w.text,attack:weapon?weapon[0]+'・'+weapon[1]:'壊・近',usable,setCount:set.length,stance:stanceInfo(i).name};
 }
 function candidateEquipmentSnapshot(i,k,n){
  const old=eq[i].slice(),label=old[k].split('：')[0];
