@@ -192,7 +192,7 @@ const decorateScene=(root,route)=>{
   else if(route.name==='dungeonForge')banner=sceneCard({kind:'forge',image:facilityArt.market,kicker:'FIELD FORGE',title:'探索工房',text:'この地点で一度だけ武具を加工できます。',icon:'forge'});
   else if(route.name==='stairsMenu')banner=themeBanner(theme,'次の層へ',theme+'の出口。資源を保持したまま次の環境へ進みます。','stairs');
   else if(route.name==='enemyRecord')banner=enemyBanner(route.args?.[0]);
-  else if(['deployment','dungeonIntel','regionRecord','questSelect','historyDetail','mechanismMenu','secretNode','runJournal','battlePrep'].includes(route.name)){const region=regionOf(route);banner=regionBanner(region)}
+  else if(['deployment','dungeonIntel','regionRecord','questSelect','historyDetail','mechanismMenu','secretNode','runJournal','battlePrep'].includes(route.name)&&!guildContextRoutes.has(route.name)){const region=regionOf(route);banner=regionBanner(region)}
   if(banner){body.insertAdjacentHTML('afterbegin',banner);body.dataset.sceneVisual='1'}
  }
  if(route.name==='town'){
@@ -228,12 +228,20 @@ const dialoguePage=(panel,route)=>{
  if(['inn','guild','market'].includes(name)){
   const id={inn:'宿主',guild:'受付',market:'鍛冶師'}[name],host=person('npc',id),deck=document.createElement('div');deck.className='facility-action-deck';
   [...body.children].forEach(el=>{if(el.matches('button.row')){if(el.dataset.hub==='closeM')el.remove();else deck.append(el)}else if(el.classList.contains('actions')){[...el.querySelectorAll('button.row')].forEach(b=>{if(b.dataset.hub!=='closeM')deck.append(b)});el.remove()}});
-  body.insertAdjacentHTML('afterbegin',facilityStage(host,id,name,name==='guild'?guildSpeech(name,args):''));body.append(deck);body.classList.add('facility-stage-page');if(name==='guild')body.classList.add('guild-facility-page');
+  if(name==='guild'){
+   const shell=document.createElement('div');shell.className='guild-shell';
+   shell.innerHTML=facilityStage(host,id,name,guildSpeech(name,args));
+   deck.classList.add('guild-overlay-sheet','guild-overlay-home');
+   shell.append(deck);body.replaceChildren(shell);body.classList.add('guild-facility-page');
+  }else{
+   body.insertAdjacentHTML('afterbegin',facilityStage(host,id,name,''));body.append(deck);body.classList.add('facility-stage-page');
+  }
  }else if(guildContextRoutes.has(name)){
-  const host=person('npc','受付'),content=document.createElement('div');content.className='guild-service-content';
+  const host=person('npc','受付'),content=document.createElement('div');content.className='guild-service-content guild-overlay-sheet';
   [...body.children].forEach(el=>content.append(el));
-  body.insertAdjacentHTML('afterbegin',facilityStage(host,'受付','guild',guildSpeech(name,args)));
-  body.append(content);body.classList.add('guild-service-page');
+  const shell=document.createElement('div');shell.className='guild-shell';
+  shell.innerHTML=facilityStage(host,'受付','guild',guildSpeech(name,args));
+  shell.append(content);body.replaceChildren(shell);body.classList.add('guild-service-page');
  }
 };
 const decorate=(root,route={name:'town',args:[]})=>{
