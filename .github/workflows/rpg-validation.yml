@@ -54,6 +54,7 @@ jobs:
           name: rpg-regression-results
           path: |
             test-results.json
+            balance-results.json
             plan-debug.json
             plan-current.png
             plan-compact.png
