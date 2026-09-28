@@ -106,12 +106,12 @@
     "base": {
       "home": [
         "次にやること",
-        "通知",
-        "次の出撃先",
+        "必要時のみ通知",
         "宿屋",
         "ギルド",
         "市場"
       ],
+      "entry_policy": "宿起点。ホームから出撃準備へ直接遷移しない",
       "facilities": {
         "宿屋": [
           "休息",
@@ -146,14 +146,15 @@
       ],
       "return_auto_heal": false,
       "inn_rest": "full HP/SP/status recovery and pending growth-point settlement",
-      "facility_owns_character_management": false
+      "facility_owns_character_management": false,
+      "rumors": "NPC会話へ統合。既知手掛かりは記録で再閲覧"
     }
   },
   "workstreams": {
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "latest_base_spec_integrated_pending_regression",
+  "last_sync_status": "latest_base_spec_fetched_then_implemented_pending_regression",
   "blocked_steps": [
     "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
   ],
