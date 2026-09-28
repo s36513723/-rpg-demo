@@ -180,274 +180,114 @@
  .command-buttons{gap:4px!important}
 }
 
+/* v31 — visual pass after automated screenshot comparison. */
+#environment::before,#environment::after,.environment::before,.environment::after{display:none!important}
+#environment{background:radial-gradient(ellipse at 50% 27%,rgba(255,255,255,.50),transparent 43%),linear-gradient(180deg,#e3e4ef 0%,#e7e5ef 30%,#eee7e8 59%,#c8c5d4 78%,#454655 100%)!important}
+.sky-art{inset:0 0 28% 0!important;opacity:.96!important;mask-image:linear-gradient(#000 0 88%,transparent)!important;-webkit-mask-image:linear-gradient(#000 0 88%,transparent)!important}
+.marble-ground{top:25%!important;height:140%!important;opacity:.40!important}
+.order-face img.order-portrait-art{display:block!important;opacity:1!important;visibility:visible!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:50% 34%!important;border-radius:50%!important}
+.order-ribbon{top:max(7px,env(safe-area-inset-top))!important}.order-face{background:#f3eef4!important}
+.enemy-unit[data-rank="back"] .enemy-visual{transform:scale(1.13)!important;transform-origin:50% 100%!important}
+.enemy-unit[data-rank="mid"] .enemy-visual{transform:scale(1.12)!important;transform-origin:50% 100%!important}
+.enemy-unit[data-rank="front"] .enemy-visual{transform:scale(1.10)!important;transform-origin:50% 100%!important}
+.actor-art,.actor-button{width:114px!important;max-width:114px!important}.actor-art{left:-133px!important}.actor-button{left:-133px!important}
+.party-hud{background:linear-gradient(180deg,rgba(25,27,39,.02),rgba(22,24,36,.34) 20%,rgba(17,20,30,.72) 100%)!important}.command-content{background:rgba(27,28,40,.10)!important}
+.target-pointer{height:10px!important;border-color:rgba(223,118,152,.32)!important}
+#more{background:rgba(52,50,65,.16)!important;border-color:rgba(92,78,106,.24)!important}
 
-/* v31 — measured from automated 390×844 screenshot against locked reference. */
+/* v32 — asset/content correction; geometry already matches the reference. */
 
-/* The target keeps the architecture visible through almost the whole battlefield.
-   v30 masked it out around y=250, creating the large blank white field. */
-.sky-art{
-  inset:0 0 8% 0!important;
-  opacity:.93!important;
-  mask-image:linear-gradient(#000 0 82%,rgba(0,0,0,.82) 91%,transparent 100%)!important;
-  -webkit-mask-image:linear-gradient(#000 0 82%,rgba(0,0,0,.82) 91%,transparent 100%)!important;
-}
+/* The large white horizontal break was the transformed floor layer carrying
+   inherited paint. Make every scene layer explicitly transparent. */
 .marble-ground{
-  top:34%!important;
-  opacity:.38!important;
+ background-color:transparent!important;
+ background-image:
+   repeating-linear-gradient(0deg,transparent 0 74px,rgba(158,143,166,.16) 75px 76px),
+   repeating-linear-gradient(90deg,transparent 0 94px,rgba(153,141,165,.13) 95px 96px)!important;
+}
+.atmosphere{background:radial-gradient(ellipse at 50% 42%,rgba(255,255,255,.11),transparent 59%)!important}
+.enemy-stage,.enemy-lane,.enemy-row,#partyScene{background:transparent!important}
+
+/* Active art now uses the portrait/body sheet rather than magnifying a tiny crop. */
+.actor-portrait-image{
+ width:100%!important;height:100%!important;
+ object-fit:cover!important;object-position:50% 20%!important;
+ filter:saturate(.96) contrast(1.035)!important;
 }
 
-/* Target enemies begin substantially lower than v30. */
-.enemy-stage{
-  top:105px!important;
-  bottom:calc(24.2% + var(--cmd-h) + 2px)!important;
-}
-.enemy-grid{
-  top:0!important;
-  height:88%!important;
-}
-
-/* More separation between middle and front silhouettes. */
-.enemy-unit[data-rank="back"] .enemy-visual{transform:scale(1.08)!important}
-.enemy-unit[data-rank="mid"] .enemy-visual{transform:scale(.98)!important}
-.enemy-unit[data-rank="front"] .enemy-visual{transform:scale(.96)!important}
-
-/* The lower cinematic transition starts earlier in the target. */
-#game:after{
-  height:45%!important;
-  background:linear-gradient(180deg,
-    transparent 0%,
-    rgba(31,31,44,.07) 14%,
-    rgba(28,29,42,.34) 34%,
-    rgba(22,24,36,.72) 59%,
-    rgba(17,20,30,.93) 100%)!important;
-}
-
-/* Portrait begins above the command line by about 100 px on a 390×844 viewport. */
-.actor-art{
-  top:-103px!important;
-  height:calc(24.2vh + var(--cmd-h) + 103px)!important;
-}
-.actor-button{
-  top:calc(24.2vh + var(--cmd-h) - 28px)!important;
-}
-
-/* Party information sits slightly higher and with more vertical rhythm. */
-.party-hud{height:24.2%!important}
-.ally-unit{padding-top:6px!important}
-.card-name{height:18px!important;line-height:18px!important}
-.resource-list{margin-top:2px!important}
-
-/* Safari-safe order portraits: direct WebP data URLs, no SVG-with-WebP nesting. */
-.order-face img.order-portrait-art{
-  display:block!important;
-  opacity:1!important;
-  visibility:visible!important;
-  width:100%!important;height:100%!important;
-  object-fit:cover!important;
-  object-position:50% 34%!important;
-  border-radius:50%!important;
-}
-
-/* Keep the target's airy top row. */
-.order-ribbon{top:max(7px,env(safe-area-inset-top))!important}
-.round-meta{top:2px!important}
-
-
-/* v32 — second automated visual comparison pass. */
-
-/* Stretch the existing architectural art deeper into the battlefield instead of
-   letting it disappear into a blank white floor halfway down. */
-.sky-art .scenery{
-  transform:scale(1.12,2.72)!important;
-  transform-origin:50% 0!important;
-}
-.sky-art{
-  opacity:.90!important;
-  filter:saturate(.86) contrast(.96)!important;
-}
-
-/* Reference party information begins about 12–16px higher than v31. */
-.party-hud{
-  bottom:12px!important;
-}
-.command-panel{
-  bottom:calc(24.2% + 12px)!important;
-}
-#auto,#pace{
-  bottom:calc(24.2% + 19px)!important;
-}
-
-/* Portrait is flush to the viewport edge and follows the raised lower composition. */
-.actor-art{
-  left:-161px!important;
-  top:-103px!important;
-}
-.actor-button{
-  left:-161px!important;
-  top:calc(24.2vh + var(--cmd-h) - 16px)!important;
-}
-.actor-portrait-svg{
-  transform:none!important;
-  width:100%!important;height:100%!important;
-  preserveAspectRatio:xMidYMin meet;
-}
-
-/* Fine tune enemy lanes from the actual overlay: back row +10, middle +6,
-   front remains nearly aligned. */
-.enemy-unit[data-rank="back"]{transform:translateY(10px)!important}
-.enemy-unit[data-rank="mid"]{transform:translateY(6px)!important}
-
-/* Reference command typography is a little larger and more open. */
-.command-buttons>.command b{
-  font-size:9.5px!important;
-  letter-spacing:.055em!important;
-}
-
-/* Slightly more luminous HP/SP against the dark field. */
-.resource[data-resource=hp] .bar i{background:linear-gradient(90deg,#70cdc2,#a9e1d8)!important}
-.resource[data-resource=sp] .bar i{background:linear-gradient(90deg,#d4aa50,#f0d27b)!important}
-
-
-/* v33 — final geometry pass after v32 screenshot overlay. */
-.party-hud{
-  bottom:0!important;
-  height:25.6%!important;
-}
-.command-panel{
-  bottom:25.6%!important;
-}
-#auto,#pace{
-  bottom:calc(25.6% + 7px)!important;
-}
-.actor-art{
-  top:-88px!important;
-  height:calc(25.6vh + var(--cmd-h) + 88px)!important;
-}
-.actor-button{
-  top:calc(25.6vh + var(--cmd-h) - 94px)!important;
-}
-
-/* The target portrait is a true lower-left layer, not a rounded portrait card. */
-.actor-art{
-  border-radius:58px 58px 0 0!important;
-  mask-image:linear-gradient(to bottom,#000 0 94%,rgba(0,0,0,.92) 97%,transparent 100%)!important;
-  -webkit-mask-image:linear-gradient(to bottom,#000 0 94%,rgba(0,0,0,.92) 97%,transparent 100%)!important;
-}
-.actor-button{
-  background:linear-gradient(90deg,rgba(24,22,32,.70),rgba(24,22,32,.24),transparent)!important;
-  font-size:11px!important;
-}
-
-/* Preserve the target's very thin separation line under commands. */
-.command-content{
-  box-shadow:inset 0 -1px 0 rgba(238,221,239,.28)!important;
-}
-
-/* Slightly soften the stretched environment so it reads as distant architecture. */
-.sky-art .scenery{
-  filter:blur(.15px) saturate(.88)!important;
-}
-
-
-/* v34 — pixel alignment pass from v33 automated screenshot. */
-:root{--party-left:28.5%!important}
-
-/* Portrait must continue to the physical bottom like the locked reference. */
-.actor-art{
-  top:-88px!important;
-  bottom:calc(-25.6vh)!important;
-  height:auto!important;
-  left:-151px!important;
-}
-.actor-button{
-  left:-151px!important;
-  top:159px!important;
-}
-
-/* Re-center utility/action row after moving the party field left. */
-.command-panel{
-  left:calc(var(--party-left) + 40px)!important;
-  right:40px!important;
-}
-#auto{left:calc(var(--party-left) + 1px)!important}
-
-/* Enemy figures: target has larger silhouettes and slightly lower feet. */
-.enemy-unit[data-unit-id="arch"],
-.enemy-unit[data-unit-id="arch2"]{transform:translateY(10px)!important}
-.enemy-unit[data-unit-id="arch"] .enemy-visual,
-.enemy-unit[data-unit-id="arch2"] .enemy-visual{transform:scale(1.18)!important;transform-origin:50% 100%!important}
-.enemy-unit[data-unit-id="g3"]{transform:translateY(18px)!important}
-.enemy-unit[data-unit-id="g3"] .enemy-visual{transform:scale(1.20)!important;transform-origin:50% 100%!important}
-.enemy-unit[data-unit-id="mage"]{transform:translateY(10px)!important}
-.enemy-unit[data-unit-id="mage"] .enemy-visual{transform:scale(1.05)!important;transform-origin:50% 100%!important}
-.enemy-unit[data-unit-id="g1"],
-.enemy-unit[data-unit-id="g2"]{transform:translateY(15px)!important}
-.enemy-unit[data-unit-id="g1"] .enemy-visual,
-.enemy-unit[data-unit-id="g2"] .enemy-visual{transform:scale(1.08)!important;transform-origin:50% 100%!important}
-
-/* A soft ruined foreground band approximates the target's dark architectural
-   transition while remaining independent from gameplay/UI. */
-#environment:after{
-  content:"";position:absolute;left:0;right:0;top:54%;height:24%;pointer-events:none;
-  background:
-    linear-gradient(90deg,transparent 0 9%,rgba(52,54,67,.28) 10% 14%,transparent 15% 28%,rgba(46,48,61,.30) 29% 35%,transparent 36% 48%,rgba(44,47,60,.34) 49% 56%,transparent 57% 70%,rgba(48,50,63,.27) 71% 78%,transparent 79% 91%,rgba(50,52,65,.24) 92% 96%,transparent 97%),
-    linear-gradient(180deg,transparent 0%,rgba(48,49,62,.10) 38%,rgba(37,39,51,.30) 100%);
-  filter:blur(2.5px);
-  mask-image:linear-gradient(transparent,#000 38%,transparent 100%);
-  -webkit-mask-image:linear-gradient(transparent,#000 38%,transparent 100%);
-}
-
-
-/* v35 — visual-density pass after geometry converged. */
-
-/* Cooler, more reflective battlefield instead of the washed white middle in v34. */
+/* Match target's continuous luminous stone field behind all three enemy ranks. */
 #environment{
-  background:
-    radial-gradient(ellipse at 49% 24%,rgba(255,255,255,.90),rgba(232,232,243,.48) 34%,transparent 58%),
-    linear-gradient(180deg,#e4e4ef 0%,#e0e1ec 27%,#d8d9e4 49%,#cbcbd7 66%,#555767 100%)!important;
+ background:
+ radial-gradient(ellipse at 50% 24%,rgba(255,255,255,.40),transparent 42%),
+ linear-gradient(180deg,#e1e3ee 0%,#e5e4ee 31%,#ebe6e9 59%,#c5c2d1 79%,#484958 100%)!important
 }
-.sky-art{
-  opacity:.96!important;
-  filter:saturate(.90) contrast(1.055)!important;
-}
+
+/* Slightly richer enemy contrast against the now-continuous field. */
+.enemy-visual>svg,.enemy-cinematic-art{filter:saturate(.98) contrast(1.055) drop-shadow(0 5px 5px rgba(67,58,76,.055))!important}
+
+/* v33 — visual asset correction after inspecting both automated captures. */
+
+/* The old sky crop physically ended around y=248px. Stretch its vertical
+   architecture so towers continue behind middle/front ranks like the target. */
+.sky-art{overflow:hidden!important}
 .sky-art .scenery{
-  filter:saturate(.92) contrast(1.045)!important;
-}
-.marble-ground{
-  opacity:.53!important;
-  background-image:
-    linear-gradient(180deg,rgba(255,255,255,.22),rgba(117,117,143,.11)),
-    repeating-linear-gradient(0deg,transparent 0 74px,rgba(141,132,153,.24) 75px 76px),
-    repeating-linear-gradient(90deg,transparent 0 94px,rgba(139,132,153,.20) 95px 96px)!important;
+ display:block!important;width:100%!important;height:100%!important;
+ transform:scale(1.06,4.05)!important;
+ transform-origin:50% 0!important;
+ opacity:.82!important
 }
 
-/* Target typography is intentionally editorial and more legible than v34. */
-.command-buttons>.command b{
-  font-size:10.5px!important;
-  letter-spacing:.065em!important;
-}
-#auto,#pace{
-  font-size:8px!important;
-}
-.card-name{
-  font-size:10.5px!important;
-  line-height:19px!important;
-}
-.resource-value span{font-size:5.5px!important}
-.resource-value b{font-size:8.5px!important}
-.resource .bar{height:5px!important}
-
-/* Turn portraits match the reference's stronger visual presence. */
-.order-ribbon{width:181px!important}
-.order-face{
-  width:33px!important;height:33px!important;flex:0 0 33px!important;
-}
-.order{gap:4px!important}
-.order-face.is-next:after{
-  font-size:6.5px!important;
-  top:-10px!important;
+/* Blend the stretched architecture into the reflective floor rather than
+   exposing a hard horizontal edge. */
+#environment:after{
+ content:""!important;display:block!important;position:absolute!important;
+ left:0!important;right:0!important;top:24%!important;height:48%!important;
+ background:linear-gradient(180deg,transparent,rgba(241,237,242,.08) 36%,rgba(236,231,237,.20) 72%,transparent)!important;
+ pointer-events:none!important
 }
 
-/* Enemy labels and HP rules are slightly stronger against the richer background. */
-.enemy-name{font-size:11.5px!important}
-.enemy-hp{height:3px!important}
+/* Face portrait is intentionally enlarged/cropped to read as a character
+   illustration in the same reserved geometry as the target. */
+.actor-portrait-image{
+ object-fit:cover!important;
+ object-position:50% 34%!important;
+ transform:scale(1.18)!important;
+ transform-origin:50% 30%!important;
+}
+
+/* Give the active portrait a softer edge into the dark field. */
+.actor-art{
+ border-radius:60px 60px 0 0!important;
+ mask-image:linear-gradient(to right,#000 0 91%,rgba(0,0,0,.88) 96%,transparent 100%)!important;
+ -webkit-mask-image:linear-gradient(to right,#000 0 91%,rgba(0,0,0,.88) 96%,transparent 100%)!important
+}
+
+/* Target's dark field begins subtly behind the front row rather than at the
+   command bar. */
+#game:after{
+ height:43%!important;
+ background:linear-gradient(180deg,transparent 0%,rgba(31,31,44,.06) 14%,rgba(28,29,42,.30) 35%,rgba(22,24,36,.70) 65%,rgba(17,20,30,.93) 100%)!important
+}
+
+/* v34 — dedicated per-character active portraits + less distorted architecture. */
+.sky-art .scenery{
+ transform:scale(1.05,2.75)!important;
+ opacity:.88!important;
+ mask-image:linear-gradient(#000 0 56%,rgba(0,0,0,.82) 70%,transparent 94%)!important;
+ -webkit-mask-image:linear-gradient(#000 0 56%,rgba(0,0,0,.82) 70%,transparent 94%)!important
+}
+.actor-portrait-image{
+ transform:none!important;
+ width:100%!important;height:100%!important;
+ object-fit:cover!important;object-position:50% 22%!important;
+ image-rendering:auto!important
+}
+.actor-art{
+ background:radial-gradient(ellipse at 50% 38%,rgba(242,231,240,.08),transparent 70%)!important
+}
+/* More of the pale reflective floor is visible, as in the target. */
+.marble-ground{top:29%!important;opacity:.34!important}
+
+/* v35 — identity-correct active art while preserving reference geometry. */
+.actor-portrait-svg{display:block!important;width:100%!important;height:100%!important;overflow:visible!important;transform:scale(1.34)!important;transform-origin:50% 18%!important}
+.actor-portrait-image{transform:scale(1.10)!important;transform-origin:50% 28%!important;object-position:50% 35%!important}
