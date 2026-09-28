@@ -10,7 +10,13 @@
     "current_spec": "spec/CURRENT_SPEC.md",
     "contract": "AGENTS.md",
     "status_registry": "spec/spec-status.json",
-    "balance_review": "spec/balance-review.json"
+    "balance_review": "spec/balance-review.json",
+    "review_artifacts": {
+      "balance_measurement": "docs/BALANCE_CURRENT.md",
+      "balance_registry": "spec/balance-review.json",
+      "skill_mechanical_review": "spec/generated/skill-review.json",
+      "enemy_matchup_audit": "docs/ENEMY_AUDIT.md"
+    }
   },
   "sync_policy": {
     "trigger": "confirmed specification decision",
@@ -101,7 +107,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "balance_diagnostic_and_review_registry_added",
+  "last_sync_status": "sp_native_627_pass_auto_sync_balance_skill_enemy_review_ready",
   "blocked_steps": [
     "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
   ],
@@ -150,6 +156,12 @@
       "generator": "tools/export-implementation-spec.mjs",
       "workflow": ".github/workflows/export-implementation-spec.yml",
       "auto_commit": true
+    },
+    "skill_review": {
+      "source": "tools/review-skills.mjs",
+      "current_runtime_skills": 296,
+      "generated_report": "spec/generated/skill-review.json",
+      "policy": "mechanical triage only; user approval required for design changes"
     }
   },
   "legacy_compatibility": {
