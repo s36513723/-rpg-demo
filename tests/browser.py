@@ -67,7 +67,7 @@ async def main():
    def log_message(self,*args):pass
   server=http.server.ThreadingHTTPServer(('127.0.0.1',8139),Handler)
   threading.Thread(target=server.serve_forever,daemon=True).start()
- out=[]
+ out=[];balance_report=None
  async with async_playwright() as p:
   browser=await p.chromium.launch(executable_path=os.getenv('CHROMIUM_PATH'),headless=True,args=['--no-sandbox'])
   for hub in [True,False]:
@@ -90,6 +90,7 @@ async def main():
      stands=await page.evaluate("""async()=>{const src=[...Object.values(HUB_VISUAL.npcStand||{})];const images=src.map(s=>{const i=new Image();i.src=s;return i});await Promise.all(images.map(i=>i.decode().catch(()=>{})));return src.length===6&&images.every(i=>i.naturalWidth>0&&i.naturalHeight>0)}""")
      out.append({'name':'UI17 six NPC standing assets load on HTTP origin','ok':stands})
    if not hub:
+    balance_report=await page.evaluate((ROOT/'tests/balance-diagnostic.js').read_text())
     await page.evaluate('window.__test.context(null);window.__test.openSheet()')
     await page.wait_for_selector('.touch-dialog-footer')
     dims=await page.evaluate("""()=>{const d=document.querySelector('#choiceSheet'),b=d.querySelector('.touch-dialog-footer button'),r=d.getBoundingClientRect(),f=b.getBoundingClientRect();return {fit:r.bottom<=innerHeight+1&&r.top>=0,bottom:f.bottom<=innerHeight&&f.top>innerHeight-100,height:f.height}}""")
@@ -120,6 +121,7 @@ async def main():
   await modern.close()
   await browser.close()
  (ROOT/'test-results.json').write_text(json.dumps({'mode':'offline DOM/Storage adapter' if OFFLINE else 'native Chromium HTTP','tests':out},ensure_ascii=False,indent=2))
+ if balance_report is not None:(ROOT/'balance-results.json').write_text(json.dumps(balance_report,ensure_ascii=False,indent=2))
  for r in out:
   print(('PASS' if r['ok'] else 'FAIL')+' '+r['name'])
   if not r['ok']:print(r.get('error',r.get('errors',r.get('measurements'))))
