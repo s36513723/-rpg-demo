@@ -73,7 +73,7 @@ const renderGuildWorld=(html,r)=>{
  temp.querySelectorAll('button').forEach(b=>{const t=b.textContent.trim();if(b.dataset.hub==='closeM'||/^(戻る|一覧へ|一覧|ギルドへ|拠点へ)$/.test(t))b.remove()});
  temp.querySelectorAll('.actions').forEach(a=>{if(!a.children.length)a.remove()});
  const home=r.name==='guild';
- screen.innerHTML='<section class="town-scene facility-world-scene guild-world-scene"><div class="facility-world-title"><span class="chapter-kicker">GUILD</span><b>'+hesc(title)+'</b></div><img class="facility-world-npc" src="../images/hub-guild-npc.webp" alt="ギルド受付 エダ"><div class="facility-world-identity"><b>エダ</b><small>ギルド受付</small><button type="button" data-hub="uiGuildTalk">TALK</button></div><div class="facility-world-dialogue"><b>エダ</b><span>'+hesc(guildLine(r.name,r.args||[]))+'</span></div><section class="facility-world-overlay '+(home?'facility-world-home':'facility-world-service')+'">'+temp.innerHTML+'</section></section>';
+ screen.innerHTML='<section class="town-scene facility-world-scene guild-world-scene '+(home?'facility-world-mode-home':'facility-world-mode-service')+'"><div class="facility-world-title"><span class="chapter-kicker">GUILD</span><b>'+hesc(title)+'</b></div><img class="facility-world-npc" src="../images/hub-guild-npc.webp" alt="ギルド受付 エダ"><div class="facility-world-identity"><b>エダ</b><small>ギルド受付</small><button type="button" data-hub="uiGuildTalk">TALK</button></div><div class="facility-world-dialogue"><b>エダ</b><span>'+hesc(guildLine(r.name,r.args||[]))+'</span></div><section class="facility-world-overlay '+(home?'facility-world-home':'facility-world-service')+'">'+temp.innerHTML+'</section></section>';
  renderRoster();renderSaveStatus();navState(r.name);
 };
 
