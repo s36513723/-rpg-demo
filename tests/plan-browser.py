@@ -12,7 +12,7 @@ async def main():
         page=await browser.new_page(viewport={'width':390,'height':640})
         errors=[]
         page.on('pageerror',lambda e: errors.append(str(e)))
-        await page.goto('http://127.0.0.1:8140/play-plan-v35.html',wait_until='load')
+        await page.goto('http://127.0.0.1:8140/play-plan-v31.html',wait_until='load')
         await page.wait_for_timeout(1400)
         await page.click('.ally-unit[data-unit-id="war"]')
         await page.wait_for_timeout(250)
