@@ -27,7 +27,7 @@ function masteryRebuild(d){
  v.points--;kept.push(step);
  }d.value=v;d.steps=kept;
 }
-function masteryDraftRender(i){const s=masterySelection;return masteryWorkspace(i,s?.i===i?s.t:'習得済み',s?.i===i?s.g:undefined,s?.i===i?s.b:undefined)}
+function masteryDraftRender(i){const s=masterySelection;return s?.i===i&&s.g?window.masterySkills(i,s.g,s.b):window.mastery(i)}
 function masteryRankAdjust(i,g,delta){if(H.run?.battle)return;const d=masterySession(i);if(delta===1)d.steps.push({type:'rank',g});else{const idx=d.steps.findLastIndex(s=>s.type==='rank'&&s.g===g);if(idx>=0)d.steps.splice(idx,1)}masteryRebuild(d);masteryDraftRender(i)}
 function masterySkillToggle(i,g,b,n){if(H.run?.battle)return;const d=masterySession(i),idx=d.steps.findIndex(s=>s.type==='skill'&&s.n===n);if(idx>=0)d.steps.splice(idx,1);else d.steps.push({type:'skill',g,b,n});masteryRebuild(d);masteryDraftRender(i)}
 function masteryApply(i){if(H.run?.battle||masteryDraft?.i!==i)return;const d=masteryDraft;if(JSON.stringify(masteryDraftBase(i))!==JSON.stringify(d.base)){masteryDiscard();return masteryDraftRender(i)}masteryRebuild(d);if(!d.steps.length)return;window.masteryRanks[i]=cp(d.value.ranks);masteryOwned[i]=cp(d.value.owned);learned[i]=d.value.learned.slice();learnedTree[i]=d.value.tree.slice();mp[i]=d.value.points;masteryDiscard();persist();masteryDraftRender(i)}
