@@ -156,12 +156,8 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "canonical_315_skill_schema_normalized_315_of_315_2026-09-28",
-  "blocked_steps": [
-    "315 runtime switch is now blocked only by explicit 296->315 save/learned-skill migration mapping and regression validation.",
-    "Only 40 canonical rows have unique exact-name matches to the 296 runtime; 速射 is ambiguous and renamed/replaced skills require explicit mapping.",
-    "Do not migrate unmatched learned skills by fuzzy name or catalog position."
-  ],
+  "last_sync_status": "canonical_315_runtime_active_2026-09-28",
+  "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
     "two_hand_physical_multiplier": 1.1,
@@ -172,7 +168,7 @@
     "two_hand_defense_reduction_rounds": 2
   },
   "implementation_inventory": {
-    "skills": 296,
+    "skills": 315,
     "masteries": 31,
     "mastery_rank": {
       "min": 1,
@@ -182,7 +178,7 @@
     },
     "skill_set_capacity": 12,
     "battle_schema": 6,
-    "hub_schema": 7,
+    "hub_schema": 8,
     "hub_content": {
       "quests": 24,
       "region_events": 24,
@@ -210,7 +206,7 @@
     },
     "skill_review": {
       "source": "tools/review-skills.mjs",
-      "current_runtime_skills": 296,
+      "current_runtime_skills": 315,
       "generated_report": "spec/generated/skill-review.json",
       "policy": "mechanical triage only; user approval required for design changes"
     },
@@ -221,14 +217,14 @@
       "rank_model": "1-10",
       "status": "構造確定",
       "exact_catalog": "canonical workbook 08_SkillDB complete design table",
-      "runtime_replacement": false,
+      "runtime_replacement": true,
       "migration_audit": {
         "path": "spec/skill-migration-296-to-315.json",
         "exact_unique_name_matches": 40,
         "ambiguous_names": [
           "速射"
         ],
-        "policy": "No runtime 315 switch until explicit stable mapping exists for renamed/replaced skills and required implementation schema fields are complete."
+        "policy": "Legacy 296 audit retained for traceability. Active migration archives unmatched old learned skills and refunds their learned-skill points."
       },
       "normalization": {
         "canonical": 315,
@@ -260,7 +256,8 @@
     }
   },
   "legacy_compatibility": {
-    "mp": "廃止旧仕様。旧セーブ読込・互換変換以外ではMP名称・MP資源を使用しない。"
+    "mp": "廃止旧仕様。旧セーブ読込・互換変換以外ではMP名称・MP資源を使用しない。",
+    "skills_296": "旧習得スキルは曖昧な名称変換をしない。現行315に存在しない習得スキルはlegacySkillsへ退避し、Mastery Ptを返還。"
   },
   "status_policy": {
     "implementation_is_confirmation": false,
