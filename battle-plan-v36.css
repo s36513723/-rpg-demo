@@ -853,3 +853,50 @@ html.battle-bg-ready #environment::before,
 html.battle-bg-ready #environment::after{
   display:none!important;
 }
+
+/* v44 final layout: one scene, nine bounded enemy coordinates and one party plate. */
+:root{--party-left:31%;--party-h:24.2%;--cmd-h:5%}
+#game{min-height:0;overflow:hidden}
+#environment{background-image:var(--battle-background-image)!important;background-size:cover!important;background-position:center top!important}
+#environment .sky-art,#environment .marble-ground,#environment .atmosphere{display:none!important}
+#environment::before,#environment::after{display:none!important}
+#game:after{height:43%!important;background:linear-gradient(to bottom,transparent 0%,rgba(37,36,53,.08) 15%,rgba(36,35,51,.33) 43%,rgba(24,25,39,.62) 74%,rgba(18,20,34,.81) 100%)!important;mask-image:none!important;-webkit-mask-image:none!important}
+.hud{left:4%;right:4%;height:9%;top:0!important}
+.round-meta{max-width:27%;overflow:hidden}
+.terrain-toggle{font-size:8px!important}.terrain-toggle:after{display:none}
+.order-ribbon{top:1%!important;left:51%!important;width:57%!important;height:46px!important}
+.order-ribbon .order{height:46px!important;gap:2px!important;justify-content:space-between!important}
+.order-ribbon .order-face,.order-ribbon .order-face.ally,.order-ribbon .order-face.foe{width:34px!important;height:34px!important;flex:0 0 34px!important}
+.order-ribbon .order-face.is-next{width:39px!important;height:39px!important;flex-basis:39px!important}
+.order-ribbon .order-face .order-portrait-clip{inset:3px!important;overflow:hidden!important;border-radius:50%!important}
+.order-ribbon .order-face .order-frame{inset:-5px!important;width:calc(100% + 10px)!important;height:calc(100% + 10px)!important}
+#more{width:38px;height:38px;top:3px}
+.enemy-stage{top:8.5%!important;bottom:30.5%!important;overflow:hidden!important}
+.enemy-unit{overflow:hidden!important;grid-template-rows:18px 5px minmax(0,1fr)!important;pointer-events:auto!important}
+.enemy-name{height:18px!important;font-size:11px!important;line-height:18px!important;color:#5b4b62!important}
+.enemy-hp{height:4px!important;width:78%!important}
+.enemy-visual{width:100%!important;height:100%!important;overflow:hidden!important}
+.enemy-cinematic-art,.enemy-visual>svg{width:67%!important;height:80%!important;max-width:100%!important;object-fit:contain!important;object-position:bottom center!important}
+.enemy-unit[data-rank="back"] .enemy-cinematic-art{width:75%!important;height:78%!important}
+.enemy-unit[data-rank="mid"] .enemy-cinematic-art{width:72%!important;height:81%!important}
+.enemy-unit[data-rank="front"] .enemy-cinematic-art{width:78%!important;height:85%!important}
+.enemy-unit[data-unit-id="g1"] .enemy-visual,.enemy-unit[data-unit-id="g2"] .enemy-visual,.enemy-unit[data-unit-id="mage"] .enemy-visual{transform:none!important}
+.party-hud{left:var(--party-left)!important;height:var(--party-h)!important;background:linear-gradient(to bottom,rgba(28,28,43,.08),rgba(22,24,38,.25))!important;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.party-strip{background:transparent url("images/battle-grid-9.webp") center/100% 100% no-repeat!important}
+.party-strip .ally-unit,.party-strip .ally-unit:not(.active){background:none!important;overflow:hidden!important;padding:5px 7px!important}
+.party-strip .ally-unit.active{background:transparent url("images/battle-card-selected.webp") center/100% 100% no-repeat!important}
+.party-strip .ally-unit.active:before{display:none!important}
+.card-name{height:17px!important;line-height:17px!important;font-size:10px!important}
+.resource-list{gap:6px!important;margin-top:2px!important}
+.command-panel{bottom:var(--party-h)!important;height:5.5%!important;left:calc(var(--party-left) + 34px)!important;right:38px!important}
+.command-content,#commandInput,.command-buttons,.command-buttons>.command{height:100%!important;min-height:0!important}
+.command-content{background:transparent url("images/battle-command.webp") center/100% 100% no-repeat!important;box-shadow:none!important}
+.command-buttons{gap:0!important}
+.command-buttons>.command b{font-size:9px!important}
+.command-buttons>.command:after{left:4%!important;right:4%!important;bottom:1px!important;height:100%!important;background:transparent url("images/battle-command-selected.webp") center/100% 100% no-repeat!important;z-index:-1}
+#auto,#pace{bottom:calc(var(--party-h) + 1.1%)!important;width:34px!important;height:24px!important;min-height:24px!important}
+#auto{left:calc(var(--party-left) + 1px)!important}#pace{right:2px!important}
+#game>.actor-art{width:31%!important;height:32%!important;bottom:0!important;top:auto!important;left:0!important}
+#game>.actor-art .actor-portrait-image{object-fit:cover!important;object-position:50% 26%!important;transform:none!important}
+#game>.actor-art .actor-art-name{bottom:5%!important;left:10%!important}
+@media(max-width:380px){.order-ribbon{width:55%!important;left:53%!important}.order-ribbon .order-face,.order-ribbon .order-face.ally,.order-ribbon .order-face.foe{width:29px!important;height:29px!important;flex-basis:29px!important}.order-ribbon .order-face.is-next{width:34px!important;height:34px!important;flex-basis:34px!important}.command-panel{left:calc(var(--party-left) + 29px)!important;right:33px!important}.command-buttons>.command b{font-size:8px!important}.party-strip .ally-unit{padding:3px 5px!important}.card-name{font-size:9px!important}}
