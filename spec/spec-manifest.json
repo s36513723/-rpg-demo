@@ -102,59 +102,13 @@
     "base_recovery": {
       "auto_heal_on_return": false,
       "rest_at_inn": "full HP/SP/status recovery and pending growth-point settlement"
-    },
-    "base": {
-      "home": [
-        "次にやること",
-        "必要時のみ通知",
-        "宿屋",
-        "ギルド",
-        "市場"
-      ],
-      "entry_policy": "宿起点。ホームから出撃準備へ直接遷移しない",
-      "facilities": {
-        "宿屋": [
-          "休息",
-          "仲間と会話",
-          "客と会話",
-          "出撃準備"
-        ],
-        "ギルド": [
-          "依頼・報告",
-          "探索資料",
-          "査定・買取",
-          "保管庫"
-        ],
-        "市場": [
-          "武具",
-          "道具",
-          "加工",
-          "売却"
-        ]
-      },
-      "sortie_tabs": [
-        "陣形",
-        "仲間",
-        "行き先"
-      ],
-      "character_tabs": [
-        "概要",
-        "能力値",
-        "装備",
-        "スキル",
-        "習練"
-      ],
-      "return_auto_heal": false,
-      "inn_rest": "full HP/SP/status recovery and pending growth-point settlement",
-      "facility_owns_character_management": false,
-      "rumors": "NPC会話へ統合。既知手掛かりは記録で再閲覧"
     }
   },
   "workstreams": {
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "latest_base_spec_fetched_then_implemented_pending_regression",
+  "last_sync_status": "cross_chat_integration_630_of_630_pass",
   "blocked_steps": [
     "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
   ],
