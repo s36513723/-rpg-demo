@@ -219,3 +219,89 @@
  #party .m{min-height:88px;padding-top:34px}
 }
 
+
+
+/* UI33: colored roster cards and visible resources. */
+#party .m{
+ --card-bg:#536472;
+ background:
+   radial-gradient(circle at 50% 12%,rgba(255,255,255,.14),transparent 42%),
+   linear-gradient(180deg,color-mix(in srgb,var(--card-bg) 88%,#ffffff 12%),color-mix(in srgb,var(--card-bg) 74%,#08110d 26%));
+ border-color:color-mix(in srgb,var(--card-bg) 68%,#d8d1bd 32%);
+}
+#party .m:nth-child(1){--card-bg:#8b4654}
+#party .m:nth-child(2){--card-bg:#5a79a8}
+#party .m:nth-child(3){--card-bg:#765f91}
+#party .m:nth-child(4){--card-bg:#66805a}
+#party .m:nth-child(5){--card-bg:#56789a}
+#party .m:nth-child(6){--card-bg:#8c6888}
+#party .m>img{
+ background:transparent!important;
+ mix-blend-mode:multiply;
+ opacity:.9;
+ filter:saturate(.96) contrast(1.04);
+}
+#party .m::before{
+ content:'';
+ position:absolute;
+ inset:0;
+ z-index:1;
+ pointer-events:none;
+ background:linear-gradient(180deg,rgba(255,255,255,.06) 0%,rgba(7,12,10,.05) 38%,rgba(7,12,10,.46) 66%,rgba(7,12,10,.84) 100%);
+}
+#party .m::after{
+ background:linear-gradient(180deg,transparent 0%,transparent 40%,rgba(7,12,10,.18) 58%,rgba(7,12,10,.72) 100%);
+}
+#party .m>b,
+#party .m>.roster-meta,
+#party .m>.roster-bars,
+#party .m>.roster-alert{
+ z-index:3;
+}
+#party .m>.roster-bars{
+ display:flex!important;
+ flex-direction:column;
+ gap:2px;
+ margin-top:2px;
+ width:100%;
+}
+#party .m .roster-line{
+ display:flex!important;
+ align-items:center;
+ gap:3px;
+ width:100%;
+ height:7px;
+ margin:0;
+ opacity:1!important;
+}
+#party .m .roster-line em{
+ flex:0 0 7px;
+ width:7px;
+ font-size:6px;
+ font-weight:700;
+ color:#f7f4e9;
+ text-shadow:0 1px 3px #000;
+}
+#party .m .roster-line .resource-track{
+ display:block!important;
+ position:relative;
+ flex:1 1 auto;
+ height:4px!important;
+ min-height:4px;
+ border-radius:4px;
+ overflow:hidden;
+ background:#07100bcc!important;
+ box-shadow:0 0 0 1px #ffffff2b;
+}
+#party .m .roster-line .resource-track>i{
+ display:block!important;
+ height:100%;
+ min-width:1px;
+ border-radius:inherit;
+ opacity:1!important;
+}
+#party .m .roster-line .resource-track.hp>i{background:#e0717b!important}
+#party .m .roster-line .resource-track.sp>i{background:#68c1b7!important}
+@supports not (color:color-mix(in srgb,red,blue)){
+ #party .m{background:linear-gradient(180deg,var(--card-bg),#15211b)}
+}
