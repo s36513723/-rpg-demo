@@ -10,7 +10,7 @@ async def main():
   browser=await p.chromium.launch(headless=True,args=['--no-sandbox'])
   page=await browser.new_page(viewport={'width':390,'height':844})
   errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
-  await page.goto('http://127.0.0.1:8140/play-plan-v33.html',wait_until='load');await page.wait_for_timeout(1500)
+  await page.goto('http://127.0.0.1:8140/play-plan-v34.html',wait_until='load');await page.wait_for_timeout(1500)
   await page.screenshot(path='plan-current.png',full_page=False)
   data=await page.evaluate("""()=>{const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)],r=e=>{const x=e.getBoundingClientRect();return {left:x.left,right:x.right,top:x.top,bottom:x.bottom,width:x.width,height:x.height}};return {cards:qa('.ally-unit').length,enemies:qa('.enemy-unit').length,order:qa('.order-face').length,orderImages:qa('.order-face img').filter(x=>x.complete&&x.naturalWidth>0).length,active:q('.ally-unit.active')?.dataset.unitId||null,cmd:r(q('#commandPanel')),party:r(q('#allies')),portrait:r(q('#actorArt')),labels:['attack','skills','swap','defend'].map(id=>q('#'+id+' b')?.textContent.trim())}}""")
   await page.set_viewport_size({'width':390,'height':640});await page.wait_for_timeout(250)
