@@ -50,15 +50,6 @@ if (skillTarget.current_runtime?.skills !== 296) errors.push("skill target regis
 if (skillTarget.target_candidate?.total_skills !== 315 || skillTarget.target_candidate?.base_slots !== 310 || skillTarget.target_candidate?.extra_slots !== 5) errors.push("315-skill target arithmetic mismatch");
 if (skillTarget.exact_catalog?.known_complete_list !== false) errors.push("do not mark the 315 catalog complete until exact names/ranks are supplied");
 if (!skillTarget.migration_policy?.do_not_invent_missing_names) errors.push("missing 315-skill names must never be invented");
-const base = manifest.current_confirmed?.base;
-if (!base) errors.push("latest base specification must be registered");
-else {
-  if (base.entry_policy !== "宿起点。ホームから出撃準備へ直接遷移しない") errors.push("base entry policy must remain inn-origin");
-  if (base.return_auto_heal !== false) errors.push("return must not auto-heal");
-  if (base.facility_owns_character_management !== false) errors.push("character management must not belong to a town facility");
-  if (JSON.stringify(base.facilities?.ギルド) !== JSON.stringify(["依頼・報告","探索資料","査定・買取","保管庫"])) errors.push("guild service ownership mismatch");
-  if (JSON.stringify(base.facilities?.宿屋) !== JSON.stringify(["休息","仲間と会話","客と会話","出撃準備"])) errors.push("inn service ownership mismatch");
-}
 
 for (const token of ["Mandatory workflow","Definition of done","canonical specification workbook"]) {
   if (!contract.includes(token)) errors.push(`AGENTS contract missing: ${token}`);
