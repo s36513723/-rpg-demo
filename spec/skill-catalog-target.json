@@ -4,10 +4,10 @@
   "source": "canonical workbook 08_SkillDB",
   "implementation_is_confirmation": false,
   "current_runtime": {
-    "skills": 296,
+    "skills": 315,
     "mastery_count": 31,
-    "rank_model": "1-10 compatibility runtime",
-    "status": "現行296互換ランタイム。Rank/Capacityは現行正本へ移行済み、個別スキル内容は要レビュー"
+    "rank_model": "1-10 canonical runtime",
+    "status": "現行315正式ランタイム"
   },
   "target_candidate": {
     "total_skills": 315,
@@ -116,7 +116,7 @@
   "exact_catalog": {
     "status": "取得済み",
     "known_complete_list": true,
-    "note": "Canonical workbook 08_SkillDB contains the complete 315-candidate name/Mastery/Rank/design table. Runtime remains 296 until the remaining implementation fields (Power/Scaling/attribute/range/target rules) are normalized into the machine-readable Skill DB and migration tests pass.",
+    "note": "Canonical workbook 08_SkillDB is the active 315 runtime source. skill-catalog-315.js carries the runtime catalog; balance coefficients remain test-adjustable.",
     "required_fields": [
       "skill_id",
       "name",
@@ -158,17 +158,18 @@
       "migration_status",
       "legacy_name"
     ],
-    "runtime_switch_ready": false
+    "runtime_switch_ready": true
   },
   "migration_policy": {
     "do_not_invent_missing_names": true,
     "do_not_delete_current_skills_from_target_count_alone": true,
     "do_not_convert_rank_0_50_to_1_10_without_exact_mapping": false,
-    "promotion_rule": "Use canonical workbook 08_SkillDB as the exact name/Mastery/Rank source. Normalize the remaining runtime fields into one Skill DB, then migrate by stable ID/name mapping with save-compatibility and regression tests.",
+    "promotion_rule": "Old 296 learned skills are not fuzzily renamed. Exact current names survive; unmatched old learned skills are archived in legacySkills and refunded as Mastery Pt.",
     "audit": "spec/skill-migration-296-to-315.json",
     "exact_unique_name_matches": 40,
     "ambiguous_names": [
       "速射"
-    ]
+    ],
+    "runtime_migration": "refund_unmatched_legacy_skills"
   }
 }
