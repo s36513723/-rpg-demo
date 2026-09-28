@@ -1,0 +1,29 @@
+name: Build capital background
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/assets/capital-bg.part*'
+      - '.github/workflows/build-capital-bg.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decode capital background
+        run: |
+          cat tools/assets/capital-bg.part* | tr -d '\n\r' | base64 -d > images/hub-capital-bg.webp
+          test "$(stat -c %s images/hub-capital-bg.webp)" -eq 20086
+          echo "2125ece46476300e2ab25d41c23e29eeb36a3200a9a9ce0b375aca1c0b4bb9d5  images/hub-capital-bg.webp" | sha256sum -c -
+          rm tools/assets/capital-bg.part*
+      - name: Commit generated asset
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git diff --cached --quiet || git commit -m "Build approved capital background asset"
+          git push
