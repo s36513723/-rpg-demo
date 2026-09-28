@@ -290,3 +290,8 @@
  #panel .equipment-left .equip-compare-grid i{font-size:7px}
  #panel .equipment-left .reserve-slots>button b{font-size:9px}
 }
+
+#panel.status-mastery .ui-icon,#panel.status-mastery .row-visual{display:none!important}
+#panel.status-mastery .has-icon{padding-left:6px}
+#panel.status-overview .overview-masteries{margin:5px 0 0}
+@media(max-height:680px){#panel.status-overview .overview-masteries{margin:2px 0 0}}

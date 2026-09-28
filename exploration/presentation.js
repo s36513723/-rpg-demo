@@ -15,8 +15,8 @@ const section=(name,html)=>'<section class="ui-section"><h3>'+hesc(name)+'</h3>'
 const hint=text=>'<p class="screen-hint">'+hesc(text)+'</p>';
 const tabs=(items,chosen,fn,args=[])=>'<div class="ui-tabs" role="group" aria-label="表示切替">'+items.map(([v,n])=>'<button type="button"'+data(fn,[...args,v])+' aria-pressed="'+(v===chosen)+'">'+hesc(n)+'</button>').join('')+'</div>';
 const resources=i=>{const v=vitals[i],m=rules().derived(stats[i]);return '<div class="resource-grid">'+['hp','sp'].map(k=>'<div><span>'+k.toUpperCase()+'</span><b>'+v[k]+'<small> / '+m[k]+'</small></b><i class="resource-track '+k+'"><i style="width:'+(m[k]?Math.max(0,v[k]/m[k]*100):0)+'%"></i></i></div>').join('')+'</div>'};
-const actorTabs=(i,active)=>'<div class="actor-tabs">'+tabs([['overview','概要'],['attributes','能力値'],['equip','装備'],['skills','スキル'],['growth','育成']],active,'uiActor',[i])+'</div>';
-const actorBasics=i=>'<section class="status-basics">'+masteryBadges(i)+characterExperience()+resources(i)+'<div class="basic-abilities">'+attrs.map((n,j)=>'<span><small>'+n+' · '+['肉体','技能','異能','精神'][j]+'</small><b>'+stats[i][j]+'</b></span>').join('')+'</div></section>';
+const actorTabs=(i,active)=>'<div class="actor-tabs">'+tabs([['overview','概要'],['attributes','能力値'],['equip','装備'],['skills','スキル'],['growth','習練']],active,'uiActor',[i])+'</div>';
+const actorBasics=i=>'<section class="status-basics">'+characterExperience()+resources(i)+'<div class="basic-abilities">'+attrs.map((n,j)=>'<span><small>'+n+' · '+['肉体','技能','異能','精神'][j]+'</small><b>'+stats[i][j]+'</b></span>').join('')+'</div>'+masteryBadges(i)+'</section>';
 const statusPortrait=i=>'<section class="actor-hero status-cover"><div class="status-caption"><b>'+hesc(names[i])+'</b><span>'+hesc(battleStyle(i))+' · '+rows[i]+'</span></div></section>';
 
 const actorKey=new Set(['character','charOverview','actorAttributes','charAbility','equip','skills','mastery','charMastery','equipChoice']);
