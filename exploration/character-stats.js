@@ -93,4 +93,4 @@ function awardExperience(amount,source='冒険',key=''){
 function awardExplorationExperience(r,n){
  awardExperience(20,'初踏破',r.dungeon+':'+r.floor+':'+n.id);
 }
-function characterExperience(){const exp=H.experience||0,part=exp%GROWTH_EXP_STEP,left=part?GROWTH_EXP_STEP-part:GROWTH_EXP_STEP;return '<div class="character-experience"><div><b>EXP '+part+' / '+GROWTH_EXP_STEP+'</b><small>戦闘・探索・依頼で獲得 · 次の成長まで '+left+'</small></div><div class="experience-track" role="progressbar" aria-label="経験値" aria-valuemin="0" aria-valuemax="'+GROWTH_EXP_STEP+'" aria-valuenow="'+part+'"><i style="width:"+(part/GROWTH_EXP_STEP*100)+"%"></i></div></div>'}
+function characterExperience(){const exp=H.experience||0,part=exp%GROWTH_EXP_STEP,left=part?GROWTH_EXP_STEP-part:GROWTH_EXP_STEP;return '<div class="character-experience"><div><b>EXP '+part+' / '+GROWTH_EXP_STEP+'</b><small>戦闘・探索・依頼で獲得 · 次の成長まで '+left+'</small></div><div class="experience-track" role="progressbar" aria-label="経験値" aria-valuemin="0" aria-valuemax="'+GROWTH_EXP_STEP+'" aria-valuenow="'+part+'"><i style="width:'+(part/GROWTH_EXP_STEP*100)+'%"></i></div></div>'}
