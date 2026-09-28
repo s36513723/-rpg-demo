@@ -51,13 +51,25 @@ assert(!/grant\(\{[^\n}]*stat:/.test(hubSource),'hub no longer grants Stat Pt di
 console.log('Syntax, local assets, unique functions, 296 skill definitions and 31 masteries: PASS');
 
 const caster=[10,10,60,20],old=R.legacyDerived(caster),max=R.derived(caster);
-assert.equal(max.sp,old.sp+old.mp);assert.equal(max.mp,0);
+assert.equal(R.resourceVersion,2);assert.equal(max.sp,old.sp+old.mp);assert(!('mp' in max),'current derived vitals must not expose MP');
 const migrated=R.migrateVitals({hp:80,sp:10,mp:42,status:{poison:2}},caster);
-assert.equal(migrated.sp,52);assert.equal(migrated.mp,0);assert.equal(migrated.status.poison,2);
-assert.deepEqual(R.migrateVitals(migrated,caster,1),migrated);
+assert.equal(migrated.sp,52);assert(!('mp' in migrated),'migrated current vitals must not expose MP');assert.equal(migrated.status.poison,2);
+assert.deepEqual(R.migrateVitals(migrated,caster,2),migrated);
 assert.equal(R.migrateVitals({hp:10,sp:30,mp:80},caster,0,4).sp,max.sp);
 assert.equal(R.migrateVitals({hp:0,sp:0,mp:0},caster).sp,0);
 assert.equal(R.skills['動力炉'].resourceRecovery.sp,18);
+assert.equal(R.skills['気力節約'].passive.spDiscount,2);assert.equal(R.skills['気力回復'].passive.spOnce,6);
 assert(!R.skills['MP回復']);assert(R.skills['気力回復']);
-for(const d of Object.values(R.skills))assert(!R.skillExplain(d).includes('MP'),d.name);
-console.log('Unified SP costs, recovery and old-save migration: PASS');
+for(const d of Object.values(R.skills)){
+ assert.notEqual(d.costType,'MP',d.name+' old costType');
+ assert(!('mpDiscount' in (d.passive||{})),d.name+' old mpDiscount');
+ assert(!('mpOnce' in (d.passive||{})),d.name+' old mpOnce');
+ assert(!('mp' in (d.resourceRecovery||{})),d.name+' old recovery key');
+ assert(!String(d.description||'').includes('MP'),d.name+' old description');
+ assert(!R.skillExplain(d).includes('MP'),d.name+' explanation');
+}
+const baseSource=fs.readFileSync('exploration/base.js','utf8'),stateSource=fs.readFileSync('exploration/state.js','utf8');
+assert(!/\bvar\s+mp\s*=/.test(baseSource),'Mastery Pt runtime variable must not be named mp');
+assert(baseSource.includes('var masteryPt='),'Mastery Pt has explicit runtime name');
+assert(stateSource.includes("'masteryPt'"),'save schema stores Mastery Pt explicitly');
+console.log('Unified SP costs, recovery, Mastery Pt naming and old-save migration: PASS');
