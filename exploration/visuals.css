@@ -886,3 +886,52 @@
  .guild-facility-page .facility-dialogue,
  .guild-service-page .facility-dialogue{bottom:calc(42% + 7px)!important}
 }
+
+
+/* UI42: guild reuses the hub shell; header and six party cards stay visible. */
+#modal.guild-screen-modal{
+ top:70px!important;
+ bottom:calc(max(28px, env(safe-area-inset-bottom)) + 104px)!important;
+ left:50%!important;
+ right:auto!important;
+ width:min(100%,620px)!important;
+ height:auto!important;
+ transform:translateX(-50%);
+ padding:0 12px!important;
+ align-items:stretch!important;
+ justify-content:center!important;
+ background:transparent!important;
+ backdrop-filter:none!important;
+}
+#modal.guild-screen-modal #panel.guild-screen-panel{
+ width:100%!important;
+ height:100%!important;
+ max-height:none!important;
+ min-height:0!important;
+ padding-top:0!important;
+ padding-bottom:0!important;
+ border:1px solid var(--edge)!important;
+ border-radius:13px!important;
+ box-shadow:none!important;
+}
+#modal.guild-screen-modal #panel.guild-screen-panel>.panel-head{
+ flex:0 0 52px!important;
+ min-height:52px!important;
+ padding:6px 10px!important;
+}
+#modal.guild-screen-modal #panel.guild-screen-panel>.panel-footer{
+ flex:0 0 auto!important;
+}
+#modal.guild-screen-modal #panel.guild-screen-panel>.panel-body{
+ min-height:0!important;
+}
+@media(max-height:640px){
+ #modal.guild-screen-modal{
+  top:66px!important;
+  bottom:calc(max(24px, env(safe-area-inset-bottom)) + 96px)!important;
+ }
+ #modal.guild-screen-modal #panel.guild-screen-panel>.panel-head{
+  flex-basis:46px!important;
+  min-height:46px!important;
+ }
+}
