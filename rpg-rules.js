@@ -162,20 +162,22 @@ function skillExplain(d){
  const body=out.length?out.slice(0,3).join('。'):(d.description||'固有効果を発動する').replace(/。+$/,'');
  return (head?head+'。':'')+body.replace(/。+$/,'')+'。';
 }
+const legacyRankTo10=r=>({5:1,15:3,25:5,35:7,45:9,50:10}[r]??Math.max(1,Math.min(10,Math.ceil((Number(r)||1)/5))));
+for(const d of Object.values(skills))for(const u of d.unlocks||[])u.rank=legacyRankTo10(u.rank);
 const clone=x=>JSON.parse(JSON.stringify(x));
 const total=a=>a.reduce((s,x)=>s+x,0);
 function legacyDerived(a){const T=total(a),P=Math.max(0,a[0]-10),S=Math.max(0,a[1]-10),M=Math.max(0,a[2]+a[3]-20);return {hp:Math.floor(100+.5*(T-100)+2*P+Math.max(0,P-20)),sp:Math.floor(20+.1*(T-100)+.4*P+S),mp:Math.floor(M<=50?2*M:100+.5*(M-50))}}
 function has(set,e){return set.some(n=>skills[n]?.passive?.[e])}
 function effect(set,e){return set.reduce((v,n)=>v+(skills[n]?.passive?.[e]||0),0)}
 function cost(n,set=[]){return Math.max(1,(skills[n]?.setCost||3)-(has(set,'costDiscount')?1:0))}
-function capacity(a,set=[]){return 10+Math.floor(total(a)/10)+(has(set,'capacity')?4:0)}
+function capacity(){return 12}
 function setCost(set){return set.reduce((v,n)=>v+cost(n,set),0)}
 function fits(a,set){return set.every(n=>skills[n])&&new Set(set).size===set.length&&setCost(set)<=capacity(a,set)}
 function canLearn(n,mastery,ranks,stats){const def=skills[n],idx={PHY:0,SKL:1,ARC:2,MND:3};return !!def?.unlocks?.some(u=>u.mastery===mastery&&(ranks[mastery]||0)>=u.rank&&stats[idx[u.stat]]>=u.value)}
 function meta(n){return skills[n]||null}
 
 // MP fields remain zero only for old battle/save protocol compatibility.
-function derived(a){const d=legacyDerived(a);return {hp:d.hp,sp:d.sp+d.mp}}
+function derived(a){const d=legacyDerived(a);return {hp:d.hp,sp:100}}
 function migrateVitals(v,a,version=0,saveVersion=7){
  const m=derived(a),old=legacyDerived(a),x={...(v||{})};
  if(version<1){
@@ -186,6 +188,6 @@ function migrateVitals(v,a,version=0,saveVersion=7){
  delete x.mp;
  return {...x,hp,sp};
 }
-const api={version:10,resourceVersion:2,legacyDerived,migrateVitals,skills,masteries,targetRules,targetingText,skillExplain,masteryDescription,branchDescription,clone,total,derived,has,effect,cost,capacity,setCost,fits,canLearn,meta};
+const api={version:11,resourceVersion:2,legacyDerived,migrateVitals,skills,masteries,targetRules,targetingText,skillExplain,masteryDescription,branchDescription,clone,total,derived,has,effect,cost,capacity,setCost,fits,canLearn,meta};
 if(typeof module!=='undefined')module.exports=api;root.RPG_RULES=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
