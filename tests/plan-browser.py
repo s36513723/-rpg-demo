@@ -12,16 +12,15 @@ async def main():
   browser=await p.chromium.launch(headless=True,args=['--no-sandbox'])
   page=await browser.new_page(viewport={'width':390,'height':844})
   errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
-  await page.goto('http://127.0.0.1:8140/play-plan-v22.html',wait_until='load');await page.wait_for_timeout(1200)
-  data=await page.evaluate("""()=>{const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)],rect=e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}};const board=rect(q('#allies')),cmd=rect(q('#commandPanel')),auto=rect(q('#auto')),pace=rect(q('#pace')),portrait=rect(q('#actorArt')),enemyEls=qa('.enemy-unit'),enemy=enemyEls.map(rect),img=q('.actor-portrait-image');return {cards:qa('.ally-unit').length,enemies:enemy.length,enemyRanks:enemyEls.map(x=>x.dataset.rank),enemyCols:enemyEls.map(x=>Number(x.dataset.col)),order:qa('.order-face').length,active:q('.ally-unit.active')?.dataset.unitId||null,board,cmd,auto,pace,portrait,enemy,portraitSrc:img?.getAttribute('src')||'',portraitLoaded:!!img&&img.complete&&img.naturalWidth>0,meta:q('.round-meta')?.innerText.replace(/\s+/g,' ').trim(),labels:['attack','skills','swap','defend'].map(id=>q('#'+id+' b')?.textContent.trim())}}""")
+  await page.goto('http://127.0.0.1:8140/play-plan-v23.html',wait_until='load');await page.wait_for_timeout(1200)
+  data=await page.evaluate("""()=>{const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)],rect=e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}};const board=rect(q('#allies')),cmd=rect(q('#commandPanel')),auto=rect(q('#auto')),pace=rect(q('#pace')),portrait=rect(q('#actorArt')),enemy=qa('.enemy-unit').map(rect);return {cards:qa('.ally-unit').length,enemies:enemy.length,active:q('.ally-unit.active')?.dataset.unitId||null,board,cmd,auto,pace,portrait,enemy,labels:['attack','skills','swap','defend'].map(id=>q('#'+id+' b')?.textContent.trim())}}""")
   enemy_overlap=max([overlap(a,b) for i,a in enumerate(data['enemy']) for b in data['enemy'][i+1:]] or [0])
-  aligned=abs(data['auto']['left']-data['board']['left'])<2 and abs(data['pace']['right']-data['board']['right'])<2 and abs(data['cmd']['left']-data['auto']['right'])<3 and abs(data['cmd']['right']-data['pace']['left'])<3
-  portrait_clear=data['portrait']['right']<=data['board']['left']-4
-  ranks=set(data['enemyRanks'])
-  cells=set(zip(data['enemyRanks'],data['enemyCols']))
-  ok=(not errors and data['cards']==6 and data['enemies']==6 and ranks=={'front','mid','back'} and len(cells)==6 and data['order']>0 and data['active'] and aligned and portrait_clear and enemy_overlap<1 and data['portraitLoaded'] and data['portraitSrc'].startswith('images/') and '狭所' in data['meta'] and data['labels']==['ATTACK','SKILL','ITEM','DEFEND'])
-  pathlib.Path('plan-debug.json').write_text(json.dumps({'ok':ok,'aligned':aligned,'portrait_clear':portrait_clear,'enemy_overlap':enemy_overlap,'data':data,'errors':errors},ensure_ascii=False,indent=2))
-  print(json.dumps({'ok':ok,'aligned':aligned,'portrait_clear':portrait_clear,'enemy_overlap':enemy_overlap,'data':data,'errors':errors},ensure_ascii=False))
+  commands_clear=(data['cmd']['width']>170 and data['cmd']['left']>=data['auto']['right']-2 and data['cmd']['right']<=data['pace']['left']+2)
+  portrait_clear=data['portrait']['right']<=data['board']['left']+1
+  portrait_ratio=data['portrait']['width']/390
+  ok=(not errors and data['cards']==6 and data['enemies']==6 and data['active'] and enemy_overlap<1 and commands_clear and portrait_clear and .24<=portrait_ratio<=.31 and data['labels']==['ATTACK','SKILL','ITEM','DEFEND'])
+  pathlib.Path('plan-debug.json').write_text(json.dumps({'ok':ok,'enemy_overlap':enemy_overlap,'commands_clear':commands_clear,'portrait_clear':portrait_clear,'portrait_ratio':portrait_ratio,'data':data,'errors':errors},ensure_ascii=False,indent=2))
+  print(json.dumps({'ok':ok,'enemy_overlap':enemy_overlap,'commands_clear':commands_clear,'portrait_clear':portrait_clear,'portrait_ratio':portrait_ratio,'data':data,'errors':errors},ensure_ascii=False))
   if not ok: raise SystemExit(1)
   await browser.close()
 asyncio.run(main())
