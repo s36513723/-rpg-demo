@@ -27,6 +27,7 @@ assert.equal(R.version,12);assert.equal(R.targetRules.board.allyNear,'back');ass
 assert.deepEqual(R.targetRules.normalAttack,{side:'enemy',column:'same',order:'front',area:'single'});
 assert.equal(R.targetRules.emptySameColumn,'choose-occupied-column');assert.equal(R.targetRules.throughFallback,'front');assert.equal(R.targetRules.counterChain,false);
 assert(R.skills['毒刃'].poison);assert(R.skills['頭封じの符'].headBind);assert(R.skills['誘惑'].temptation);assert(R.skills['盾撃'].stun);
+assert(R.skills['照準器'].special?.lockOn);assert(R.skills['大元素術'].cast===1&&R.skills['大元素術'].mult>0);assert(R.skills['蘇生祈願'].revive);assert(R.skills['誘惑'].special?.temptation);
 assert.equal(R.skills['解錠'].mode,'Field');assert.equal(R.skills['魔装極意'].mode,'Passive');
 for(const [n,d] of Object.entries(R.skills)){const text=R.skillExplain(d);assert.equal(typeof text,'string',n+' explanation type');assert(text.trim().length>=2,n+' explanation')}
 for(const [n,d] of Object.entries(R.masteries)){assert(R.masteryDescription(n).trim().length>=8,n+' mastery explanation');for(const b of Object.keys(d.branches))assert(R.branchDescription(n,b).trim().length>=2,n+' / '+b+' branch explanation')}
@@ -78,5 +79,5 @@ for(const d of Object.values(R.skills)){
 const baseSource=fs.readFileSync('exploration/base.js','utf8'),stateSource=fs.readFileSync('exploration/state.js','utf8');
 assert(!/\bvar\s+mp\s*=/.test(baseSource),'Mastery Pt runtime variable must not be named mp');
 assert(baseSource.includes('var masteryPt='),'Mastery Pt has explicit runtime name');
-assert(stateSource.includes("'masteryPt'"),'save schema stores Mastery Pt explicitly');
+assert(stateSource.includes("'masteryPt'"),'save schema stores Mastery Pt explicitly');assert(stateSource.includes('progressionVersion:7'),'save schema must mark canonical 315 progression');assert(stateSource.includes('migrateSkillCatalog315'),'legacy 296 saves must migrate explicitly');
 console.log('Unified SP costs, recovery, Mastery Pt naming and old-save migration: PASS');
