@@ -109,3 +109,14 @@ HP 70% / 40%でフェーズが変化する。
 - 固有配置干渉
 
 を与える段階へ進める。
+
+## 2026-09-28 implementation update
+
+The audit gaps now have a first runtime implementation:
+- seven archetypes are classified explicitly instead of sharing only generic front/ranged/magic templates;
+- forest/cave/ruins/mountain/swamp/desert/ship/temple encounters draw from different mixed archetype pools;
+- 獣, 軽装, 重装, 魔術師, 弓, 飛行, ゴーレム now have separate initial AI profiles;
+- status-counter identities are represented (for example mage/archer arm-bind vulnerability and golem poison/sleep immunity);
+- 誘惑 now participates in the targeting priority and redirects the next hostile action to the affected unit's own side.
+
+These are implementation prototypes for playtest. Numerical stats, action frequencies, resistance values, and encounter compositions remain **初期実装値 / 要レビュー**.
