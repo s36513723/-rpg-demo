@@ -935,3 +935,78 @@
   min-height:46px!important;
  }
 }
+
+
+/* UI43: compact guild exit + large fixed receptionist art. */
+#modal.guild-screen-modal #panel.guild-screen-panel>.panel-head{
+ align-items:center!important;
+ padding:5px 10px!important;
+}
+.guild-head-copy{
+ display:flex;
+ flex-direction:column;
+ align-items:flex-start;
+ justify-content:center;
+ min-width:0;
+ gap:1px;
+ flex:1;
+}
+.guild-head-copy h2{
+ margin:0!important;
+ font-size:17px!important;
+ line-height:1.25!important;
+}
+.guild-home-return{
+ border:0!important;
+ background:transparent!important;
+ color:var(--muted)!important;
+ padding:0!important;
+ min-height:20px!important;
+ min-width:0!important;
+ font-size:10px!important;
+ line-height:1.3!important;
+ text-align:left!important;
+}
+.guild-home-return:active,
+.guild-home-return:focus-visible{
+ color:var(--gold)!important;
+}
+#modal.guild-screen-modal #panel.guild-screen-panel>.panel-footer:empty{
+ display:none!important;
+}
+#modal.guild-screen-modal #panel.guild-screen-panel .panel-navigation .modal-x{
+ display:none!important;
+}
+.guild-shell>.facility-stage-guild .facility-stand{
+ height:92%!important;
+ width:auto!important;
+ max-width:60%!important;
+ max-height:none!important;
+ right:-1%!important;
+ bottom:0!important;
+ top:auto!important;
+ left:auto!important;
+ object-fit:contain!important;
+ object-position:right bottom!important;
+ transform:none!important;
+ opacity:1!important;
+}
+@media(max-height:700px){
+ .guild-shell>.facility-stage-guild .facility-stand{
+  height:89%!important;
+  width:auto!important;
+  max-width:58%!important;
+  right:-1%!important;
+  bottom:0!important;
+ }
+ .guild-head-copy h2{font-size:16px!important}
+ .guild-home-return{font-size:9px!important}
+}
+@media(max-width:350px){
+ .guild-shell>.facility-stage-guild .facility-stand{
+  height:86%!important;
+  width:auto!important;
+  max-width:59%!important;
+  right:-2%!important;
+ }
+}
