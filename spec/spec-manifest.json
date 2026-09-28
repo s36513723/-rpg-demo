@@ -8,7 +8,8 @@
   },
   "repository_mirror": {
     "current_spec": "spec/CURRENT_SPEC.md",
-    "contract": "AGENTS.md"
+    "contract": "AGENTS.md",
+    "status_registry": "spec/spec-status.json"
   },
   "sync_policy": {
     "trigger": "confirmed specification decision",
@@ -99,7 +100,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "dual_wield_cost_and_two_hand_stagger_implemented",
+  "last_sync_status": "equipment_regressions_green_and_spec_status_registry_added",
   "blocked_steps": [
     "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
   ],
@@ -136,9 +137,22 @@
     "generated_exports": [
       "spec/generated/implemented-skills.csv",
       "spec/generated/implemented-masteries.csv"
-    ]
+    ],
+    "mastery_rank_status": "初期実装値",
+    "skill_set_capacity_status": "初期実装値",
+    "skill_records_status": "要レビュー"
   },
   "legacy_compatibility": {
-    "mp": "Obsolete gameplay resource. Old saves and a few internal legacy property names are converted to SP at runtime; do not expose MP as current specification."
+    "mp": "廃止旧仕様。旧セーブ読込・互換変換以外ではMP名称・MP資源を使用しない。"
+  },
+  "status_policy": {
+    "implementation_is_confirmation": false,
+    "reverse_synced_skill_default": "要レビュー",
+    "allowed": [
+      "確定",
+      "初期実装値",
+      "要レビュー",
+      "廃止旧仕様"
+    ]
   }
 }
