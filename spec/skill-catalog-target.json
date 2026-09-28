@@ -1,7 +1,7 @@
 {
-  "schema_version": 1,
-  "status": "要レビュー",
-  "source": "別チャット最新設計候補",
+  "schema_version": 2,
+  "status": "構造確定",
+  "source": "canonical workbook 08_SkillDB",
   "implementation_is_confirmation": false,
   "current_runtime": {
     "skills": 296,
@@ -50,7 +50,8 @@
         "1-2": "基礎",
         "3-4": "個性",
         "6-8": "発展"
-      }
+      },
+      "status": "確定"
     },
     "initial_balance_bands": {
       "status": "初期実装値",
@@ -113,9 +114,9 @@
     }
   },
   "exact_catalog": {
-    "status": "未取得",
-    "known_complete_list": false,
-    "note": "315件の完全な名称・Mastery・Rank対応表は別チャット履歴から回収できていない。296→315を単純な19件追加とはみなさず、改名・統合・削除を含む正確な差分表が得られるまで現行カタログを置換しない。",
+    "status": "取得済み",
+    "known_complete_list": true,
+    "note": "Canonical workbook 08_SkillDB contains the complete 315-candidate table. Runtime remains 296 until machine-readable export and migration tests are complete.",
     "required_fields": [
       "skill_id",
       "name",
@@ -136,7 +137,7 @@
   "migration_policy": {
     "do_not_invent_missing_names": true,
     "do_not_delete_current_skills_from_target_count_alone": true,
-    "do_not_convert_rank_0_50_to_1_10_without_exact_mapping": true,
-    "promotion_rule": "別チャットで個別表が確定したら、差分を機械比較し、ユーザーが確定した内容だけruntime/specへ反映する。"
+    "do_not_convert_rank_0_50_to_1_10_without_exact_mapping": false,
+    "promotion_rule": "Use canonical workbook 08_SkillDB as the mapping source; migrate by stable mapping and tests."
   }
 }
