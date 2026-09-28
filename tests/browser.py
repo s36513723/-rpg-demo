@@ -121,7 +121,9 @@ async def main():
   await modern.close()
   await browser.close()
  (ROOT/'test-results.json').write_text(json.dumps({'mode':'offline DOM/Storage adapter' if OFFLINE else 'native Chromium HTTP','tests':out},ensure_ascii=False,indent=2))
- if balance_report is not None:(ROOT/'balance-results.json').write_text(json.dumps(balance_report,ensure_ascii=False,indent=2))
+ if balance_report is not None:
+  (ROOT/'balance-results.json').write_text(json.dumps(balance_report,ensure_ascii=False,indent=2))
+  print('BALANCE_JSON '+json.dumps(balance_report,ensure_ascii=False,separators=(',',':')))
  for r in out:
   print(('PASS' if r['ok'] else 'FAIL')+' '+r['name'])
   if not r['ok']:print(r.get('error',r.get('errors',r.get('measurements'))))
