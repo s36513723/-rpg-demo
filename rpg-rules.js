@@ -162,6 +162,15 @@ function skillExplain(d){
  const body=out.length?out.slice(0,3).join('。'):(d.description||'固有効果を発動する').replace(/。+$/,'');
  return (head?head+'。':'')+body.replace(/。+$/,'')+'。';
 }
+const canonical315=root.RPG_SKILLS_315||(typeof require!=='undefined'?(()=>{try{return require('./skill-catalog-315.js')}catch(_){return null}})():null);
+if(canonical315?.count===315){
+ for(const k of Object.keys(skills))delete skills[k];
+ Object.assign(skills,canonical315.skills);
+ for(const [m,branches] of Object.entries(canonical315.branches)){
+  if(masteries[m])masteries[m].branches=branches;
+  else masteries[m]={branches};
+ }
+}
 const legacyRankTo10=r=>({5:1,15:3,25:5,35:7,45:9,50:10}[r]??Math.max(1,Math.min(10,Math.ceil((Number(r)||1)/5))));
 for(const d of Object.values(skills))for(const u of d.unlocks||[])u.rank=legacyRankTo10(u.rank);
 const clone=x=>JSON.parse(JSON.stringify(x));
@@ -188,6 +197,6 @@ function migrateVitals(v,a,version=0,saveVersion=7){
  delete x.mp;
  return {...x,hp,sp};
 }
-const api={version:11,resourceVersion:2,legacyDerived,migrateVitals,skills,masteries,targetRules,targetingText,skillExplain,masteryDescription,branchDescription,clone,total,derived,has,effect,cost,capacity,setCost,fits,canLearn,meta};
+const api={version:12,catalogVersion:315,resourceVersion:2,legacyDerived,migrateVitals,skills,masteries,targetRules,targetingText,skillExplain,masteryDescription,branchDescription,clone,total,derived,has,effect,cost,capacity,setCost,fits,canLearn,meta};
 if(typeof module!=='undefined')module.exports=api;root.RPG_RULES=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
