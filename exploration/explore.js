@@ -38,7 +38,32 @@ function moraleMenu(){if(currentNode()?.type!=='camp')return;const options=[['�
 function setMorale(n){if(currentNode()?.type!=='camp')return;const groups={歌唱:['鼓舞歌','回復歌','戦歌'],舞踏:['回避舞','速度舞','連携舞'],奏楽:['旋律','律動','SP支援'],号令:['攻勢号令','防勢号令','追撃号令']};if(!groups[n]?.some(hasSkill))return;H.run.morale=n;persist();camp()}
 function stairsMenu(){if(currentNode()?.type!=='stairs')return;show('<h2>第'+H.run.floor+'層の出口</h2><p class="message">この先は'+hesc(H.run.themes[H.run.floor])+'。HP・SPと残った状態異常は持ち越します。</p>'+ha(HB('準備を見直す','','partyMenu'),HB('次の層へ','','nextFloor')))}
 function nextFloor(){const r=H.run;if(!r||r.floor>=3||currentNode()?.type!=='stairs')return;awardExperience(40,'階層踏破',r.dungeon+':floor:'+r.floor);dungeonProgress[r.dungeon].best=Math.max(dungeonProgress[r.dungeon].best,r.floor);currentNode().done=true;r.pending=null;r.phase=null;r.floor++;r.hazard=Math.max(0,r.hazard-1);logRun('第'+r.floor+'層へ');persist();closeM();drawDungeon()}
-function encounterData(){const n=currentNode(),r=H.run;if(!n)return {front:[],back:[]};if(n.encounter)return n.encounter;if(n.type==='boss')return n.encounter={front:[region().boss],back:[]};const td=themeData(),tags=td.enemy.split('・'),front=tags.filter(x=>!/弓|飛行|魔術|神官|精霊|呪術/.test(x)),back=tags.filter(x=>/弓|飛行|魔術|神官|精霊|呪術/.test(x));const count=n.type==='elite'?5:n.threat===3?4:3;const ef=[],eb=[];for(let i=0;i<count;i++){if((i===2||i===4)&&back.length)eb.push(back[(i+Math.floor(n.roll*5))%back.length]);else ef.push((front.length?front:tags)[i%(front.length||tags.length)])}return n.encounter={front:ef,back:eb}}
+const ENCOUNTER_ARCHETYPES={
+ '森林':{front:['獣','軽装'],back:['弓','魔術師'],elite:'獣'},
+ '洞窟':{front:['ゴーレム','獣'],back:['魔術師'],elite:'ゴーレム'},
+ '廃墟都市':{front:['重装','軽装'],back:['魔術師','弓'],elite:'重装'},
+ '山岳':{front:['重装','獣'],back:['飛行','弓'],elite:'飛行'},
+ '沼地':{front:['獣','軽装'],back:['魔術師'],elite:'獣'},
+ '砂漠遺跡':{front:['重装','ゴーレム'],back:['魔術師','弓'],elite:'ゴーレム'},
+ '海上・船':{front:['軽装','獣'],back:['弓','飛行'],elite:'軽装'},
+ '地下神殿':{front:['ゴーレム','重装'],back:['魔術師'],elite:'魔術師'}
+};
+function encounterData(){
+ const n=currentNode(),r=H.run;if(!n)return {front:[],back:[]};if(n.encounter)return n.encounter;if(n.type==='boss')return n.encounter={front:[region().boss],back:[]};
+ const theme=themeData().t,p=ENCOUNTER_ARCHETYPES[theme]||{front:['獣','重装'],back:['魔術師'],elite:'重装'},count=n.type==='elite'?5:n.threat===3?4:3,backCount=Math.min(p.back.length?count>=5?2:1:0,count-1),frontCount=count-backCount,seed=Math.floor((n.roll||0)*97);
+ const front=[],back=[];
+ for(let i=0;i<frontCount;i++)front.push(p.front[(seed+i)%p.front.length]);
+ for(let i=0;i<backCount;i++)back.push(p.back[(seed+i)%p.back.length]);
+ if(n.type==='elite'){
+  const existing=front.indexOf(p.elite);
+  if(existing>0)[front[0],front[existing]]=[front[existing],front[0]];
+  else if(existing<0){
+   if(['弓','飛行','魔術師'].includes(p.elite)){if(back.length)back[0]=p.elite;else back.push(p.elite)}
+   else front[0]=p.elite
+  }
+ }
+ return n.encounter={front,back}
+}
 function nodeInfo(){return battlePrep()}
 function battlePrep(){const r=H.run,n=currentNode();if(!n||!['battle','elite','boss'].includes(n.type))return;if(r.battle)return pendingBattleMenu();const enc=encounterData(),intel=intelLevel(),units=[...new Set([...enc.front,...enc.back])],known=units.map(k=>enemyIntelLine(k,intel));persist();show('<h2>'+hesc(nodeName(n))+'</h2>'+HT(n.terrain,terrainEffect(n.terrain))+HT('敵 '+(enc.front.length+enc.back.length)+'体','前列 '+enc.front.join('・')+' / 後列 '+(enc.back.join('・')||'なし'))+HT('探索情報',intel===0?'探索技能なし：編成だけ確認できます':intel===1?'索敵：危険度と遭遇履歴を確認':'索敵＋鑑定：既知の属性・状態異常・部位まで確認')+(intel?HT('既知情報',known.join('\n')):'')+HB('装備・スキル・列を確認','6人 / 資源を持ち越して戦闘','partyMenu')+(n.type==='battle'?HB('隠密で通過',r.stealth>0?'潜伏：この探索の残り '+r.stealth+'回':'煙玉1個 / 所持 '+inventory.tools.煙玉,'skipBattle',[],!r.stealth&&!inventory.tools.煙玉):'')+ha(HB('地図へ','','closeM'),HB('戦闘へ','','battleDemo')))}
 function skipBattle(){const r=H.run,n=currentNode();if(!n||n.type!=='battle'||r.battle)return;if(r.stealth>0)r.stealth--;else if(inventory.tools.煙玉>0)inventory.tools.煙玉--;else return;r.escapes++;logRun('隠密で戦闘を回避');completeNode();closeM();drawDungeon()}
