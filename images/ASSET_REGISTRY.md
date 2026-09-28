@@ -20,23 +20,23 @@
 
 | キャラクター | 正式 | GitHub画像本体 | 状況 |
 |---|---|---|---|
-| ウォリアー | ✓ | 未整理 | 作成済み |
-| パラディン | ✓ | images/paladin-battle.webp | UI接続済み |
-| ローグ | ✓ | 未整理 | 作成済み |
-| アーチャー | ✓ | 未整理 | 作成済み |
-| アルケミスト | ✓ | 未整理 | 作成済み |
-| ミスティック | ✓ | 未整理 | 作成済み |
+| ウォリアー | ✓ | images/battle-warrior.svg | 保存済み・Plan戦闘UI接続済み |
+| パラディン | ✓ | images/battle-paladin.svg / images/paladin-battle.webp | 保存済み・戦闘UI接続済み |
+| ローグ | ✓ | images/battle-rogue.svg | 保存済み・Plan戦闘UI接続済み |
+| アーチャー | ✓ | images/battle-archer.svg | 保存済み・Plan戦闘UI接続済み |
+| アルケミスト | ✓ | images/battle-alchemist.svg | 保存済み・Plan戦闘UI接続済み |
+| ミスティック | ✓ | images/battle-mystic.svg | 保存済み・Plan戦闘UI接続済み |
 
 ## 行動用アイコン
 
 | キャラクター | 正式 | GitHub画像本体 | 状況 |
 |---|---|---|---|
-| ウォリアー | ✓ | 未整理 | 作成済み |
-| パラディン | ✓ | images/paladin-turn.webp | UI接続済み |
-| ローグ | ✓ | 未整理 | 作成済み |
-| アーチャー | ✓ | 未整理 | 作成済み |
-| アルケミスト | ✓ | 未整理 | 作成済み |
-| ミスティック | ✓ | 未整理 | 作成済み |
+| ウォリアー | ✓ | battle-plan-v36.js 内 ORDER_PORTRAITS | 埋め込み画像としてUI接続済み・独立ファイル化待ち |
+| パラディン | ✓ | images/paladin-turn.webp + battle-plan-v36.js 内 ORDER_PORTRAITS | 独立ファイルあり・UI接続済み |
+| ローグ | ✓ | battle-plan-v36.js 内 ORDER_PORTRAITS | 埋め込み画像としてUI接続済み・独立ファイル化待ち |
+| アーチャー | ✓ | battle-plan-v36.js 内 ORDER_PORTRAITS | 埋め込み画像としてUI接続済み・独立ファイル化待ち |
+| アルケミスト | ✓ | battle-plan-v36.js 内 ORDER_PORTRAITS | 埋め込み画像としてUI接続済み・独立ファイル化待ち |
+| ミスティック | ✓ | battle-plan-v36.js 内 ORDER_PORTRAITS | 埋め込み画像としてUI接続済み・独立ファイル化待ち |
 
 ## 戦闘用アイコン枠
 
@@ -89,3 +89,11 @@
 - 旧 `gald.svg / lize.svg / ern.svg / sena.svg / mirea.svg / yuna.svg` 等を正式マスターと誤認しない。
 - 旧 `facility_*.svg`・`npc_*_stand.svg` は正式NPC／背景へ置換するまでの仮素材。
 - 戦闘・拠点・ステータス・行動順UIは最終的に本台帳の正式素材へ統一する。
+
+
+## 登録状態の読み方
+
+- 「正式登録」= ユーザーが正式素材として確定したこと。
+- 「GitHub画像本体保存済み」= images/ 配下などに独立画像ファイルが存在すること。
+- 「UI接続済み」= 現行またはPlan UIがその画像を実際に参照していること。
+- 行動アイコン5人分は正式・UI接続済みだが、現時点では JavaScript 埋め込みであり独立画像ファイルではない。パラディンのみ独立 turn 画像も存在する。
