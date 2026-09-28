@@ -99,7 +99,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "full_implementation_inventory_audited_and_exported",
+  "last_sync_status": "dual_wield_cost_and_two_hand_stagger_implemented",
   "blocked_steps": [
     "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
   ],
@@ -107,7 +107,10 @@
     "two_hand_weight_reduction": 0.2,
     "two_hand_physical_multiplier": 1.1,
     "two_hand_normal_hit_bonus": 6,
-    "dual_wield_offhand_power_fraction": 0.35
+    "dual_wield_offhand_power_fraction": 0.35,
+    "dual_wield_cost": 4,
+    "two_hand_physical_defense_reduction": 0.1,
+    "two_hand_defense_reduction_rounds": 2
   },
   "implementation_inventory": {
     "skills": 296,

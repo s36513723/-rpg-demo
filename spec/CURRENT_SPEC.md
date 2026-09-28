@@ -34,7 +34,7 @@ This is the repository-readable mirror of the canonical Excel specification. It 
 - Armor categories/Mastery: 魔装 / 軽装 / 重装.
 - Weapon and armor Mastery Rank 5 unlocks their equipment categories. The talisman weapon uses 符術. Starter main-hand equipment remains usable after save migration. Market direct equip and presets follow the same requirements.
 - Dual wield requires two one-handed weapons and SKL 30. Two-hand grip applies to a one-handed main weapon with an empty offhand.
-- Initial balance proposal: two-hand grip reduces effective main-weapon weight by 20%, boosts physical attack by 10% and normal-attack hit by 6; dual wield adds 35% of the offhand weapon power to physical attacks. These values are adjustable.
+- Initial balance proposal: two-hand grip reduces effective main-weapon weight by 20%, boosts physical attack by 10% and normal-attack hit by 6. A normal hit lowers target physical defense by 10% for two rounds. Dual wield adds 35% of offhand weapon power to physical attacks and reserves 4 skill-set Cost if either weapon set qualifies. These values are adjustable.
 - Unarmed, throwing and shields retain their existing handling.
 
 ## Mastery
