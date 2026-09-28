@@ -100,3 +100,13 @@
 }
 
 #panel .magic-attribute em{font-style:normal;font-size:8px;color:#c9d2bd;float:left}
+
+#panel .fitting-summary .equip-compare-grid>span{min-width:0}
+#panel .fitting-summary .equip-compare-grid small{font-size:9px;white-space:nowrap}
+#panel .fitting-summary .equip-compare-grid b{font-size:11px;white-space:normal}
+#panel .fitting-summary .equip-compare-grid i{font-size:9px;white-space:nowrap}
+#panel .fitting-summary .equip-compare-grid .up{color:#b7eabe}
+#panel .fitting-summary .equip-compare-grid .down{color:#f4b899}
+.equipment-magic>div{display:flex;align-items:baseline;gap:3px}
+.equipment-magic em{font-style:normal;font-size:8px;color:var(--muted)}
+.equipment-reference{display:block;margin-top:4px;font-size:9px!important;line-height:1.3}

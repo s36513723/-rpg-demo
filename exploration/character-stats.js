@@ -23,7 +23,12 @@ function characterValues(i){
  const enabled=skillSet[i].filter(n=>rules().meta(n)?.mode==='Passive'&&skillUsable(i,n)),effect=k=>rules().effect(enabled,k),pen=[0,5,15,30][s.weightLevel];
  const attack=(w.power+(w.throwing?a[1]:w.skillNormal?a[0]*.4+a[1]*.7:a[0]))*[1,.95,.9,.8][s.weightLevel];
  const off=eq[i][1].split('：')[1],guard=Math.round((1-Math.max(.3,.5-(/盾/.test(off)?.1:0)-effect('guard')))*100);
- return {...s,guard,offhand:off,phy:a[0],skl:a[1],arc:a[2],mnd:a[3],total:a.reduce((x,y)=>x+y,0),physical:Math.round(attack*10)/10,magicArc:a[2]+14,magicMind:a[3]+14,accuracy:a[1]+(w.hit||0),evade:a[1]+effect('evade')-pen,speed:a[1]+(w.speed||0)-pen,castSpeed:a[1]+effect('castSpeed')-pen,crit:Math.min(50,Math.max(0,5+(w.crit||0)+effect('crit'))),power:w.power,upgrade:(upgrades[eq[i][0].split('：')[1]]||0)*4,capacity:skillCap(i),cost:skillCost(i),resistance:calcResist(i),enabled};
+ return {...s,guard,offhand:off,phy:a[0],skl:a[1],arc:a[2],mnd:a[3],total:a.reduce((x,y)=>x+y,0),physical:Math.round(attack*10)/10,magicArc:a[2]+14,magicMind:a[3]+14,accuracy:a[1]+(w.hit||0),evade:a[1]+effect('evade')-pen,speed:a[1]+(w.speed||0)-pen,castSpeed:a[1]+effect('castSpeed')-pen,crit:Math.min(50,Math.max(0,5+(w.crit||0)+effect('crit'))),weaponCrit:w.crit||0,power:w.power,upgrade:(upgrades[eq[i][0].split('：')[1]]||0)*4,capacity:skillCap(i),cost:skillCost(i),resistance:calcResist(i),enabled};
+}
+// Rates share one neutral SKL 30 opponent across character and equipment screens.
+function characterDisplayRates(i,v){
+ const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
+ return {hit:clamp(90+(v.accuracy-30)*.5,30,100),evade:100-clamp(90+(30-v.evade)*.5,30,100),crit:clamp(5+(v.skl-30)/4+(v.weaponCrit||0)+rules().effect(v.enabled,'crit'),0,50)};
 }
 // Allocation is a transient preview. Saving and battle exports use only committed stats.
 let attributeDraft=null;
@@ -56,10 +61,8 @@ function actorAttributes(i,tab='basic'){
  if(tab==='combat')tab='basic';
  const before=characterValues(i),s=attributeWith(i,d.values,()=>characterValues(i)),remaining=attributeRemaining(d),dirty=remaining!==d.points;
  const format=v=>hesc(String(v)),compare=(x,y)=>format(x)+(x!==y?'<span class="attribute-change"> → '+format(typeof x==='string'&&typeof y==='string'&&x.includes(' / ')&&x.split(' / ')[0]===y.split(' / ')[0]?y.split(' / ')[1]:y)+'</span>':''),cell=(k,x,y=x)=>'<div class="attribute-cell"><small>'+hesc(k)+'</small><b>'+compare(x,y)+'</b></div>';
- const rate=v=>Math.round(v*100)/100+'%',clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
- const hitRate=v=>rate(clamp(90+(v.accuracy-30)*.5,30,100)),evadeRate=v=>rate(100-clamp(90+(30-v.evade)*.5,30,100));
- const critRate=v=>rate(clamp(5+(v.skl-30)/4+(characterWeapon(eq[i][0].split('：')[1])?.crit||0)+rules().effect(v.enabled,'crit'),0,50));
- const pages={basic:[['最大HP',before.hp,s.hp],['最大SP',before.sp,s.sp],['最大装備重量',before.limit,s.limit],['物理攻撃力',before.physical,s.physical],['魔法攻撃力',before.magicArc,s.magicArc],['物理防御力',before.pdef,s.pdef],['魔法防御力',before.mdef,s.mdef],['命中率',hitRate(before),hitRate(s)],['会心率',critRate(before),critRate(s)],['回避率',evadeRate(before),evadeRate(s)],['行動速度',before.speed,s.speed]],resist:Object.entries(s.resistance).map(([k,v])=>[k,(v>0?'+':'')+v])};
+ const rate=v=>Math.round(v*100)/100+'%',beforeRates=characterDisplayRates(i,before),afterRates=characterDisplayRates(i,s);
+ const pages={basic:[['最大HP',before.hp,s.hp],['最大SP',before.sp,s.sp],['装備重量',before.weight+' / '+before.limit,s.weight+' / '+s.limit],['物理攻撃力',before.physical,s.physical],['魔法攻撃力',before.magicArc,s.magicArc],['物理防御力',before.pdef,s.pdef],['魔法防御力',before.mdef,s.mdef],['命中率',rate(beforeRates.hit),rate(afterRates.hit)],['会心率',rate(beforeRates.crit),rate(afterRates.crit)],['回避率',rate(beforeRates.evade),rate(afterRates.evade)],['行動速度',before.speed,s.speed]],resist:Object.entries(s.resistance).map(([k,v])=>[k,(v>0?'+':'')+v])};
  const notes={basic:'＋／−で仮割り振り。魔攻は威力14のARC／MND術。各率はSKL30・補正なしの敵への目安。',resist:'全属性・状態異常・封じの耐性。＋は耐性、−は弱点、0は標準。',effects:'セットしたパッシブの効果。装備条件を満たしていないものは発動しません。'};
  if(!Object.hasOwn(notes,tab))tab='basic';
  const button=(label,action,args,disabled=false,aria=label)=>'<button data-hub="'+action+'" data-args="'+hesc(JSON.stringify(args))+'" aria-label="'+hesc(aria)+'"'+(disabled?' disabled':'')+'>'+label+'</button>';
