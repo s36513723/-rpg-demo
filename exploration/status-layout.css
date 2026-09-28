@@ -418,6 +418,9 @@
 #panel .equipment-left .equip-compare-grid small{flex:none;min-width:27px;white-space:nowrap;color:#d7d4bd}
 #panel .equipment-left .equip-compare-grid b{display:flex;align-items:baseline;justify-content:flex-end;gap:2px;min-width:0;white-space:nowrap;font-variant-numeric:tabular-nums}
 #panel .equipment-left .equip-compare-grid i{font-weight:700;white-space:nowrap}
+#panel .equipment-list-bar .fitting-filter-options:not([hidden]){grid-template-columns:repeat(4,minmax(0,1fr));width:min(310px,calc(100vw - 10px))}
+#panel .equipment-list-bar .fitting-filter-options button{min-height:38px}
+#panel .fitting-empty{margin:10px 3px;padding:10px 6px;border:1px dashed #718361;border-radius:6px;color:#dfd6bd;font-size:11px;line-height:1.4}
 
 /* A short phone viewport must still keep all twelve values in one column. */
 @media(max-height:680px){
