@@ -213,6 +213,8 @@
 }
 #app.in-expedition>.hub-global-nav{display:none!important}
 @media(max-width:350px){
+ #app.town-world>header{margin-left:-8px;margin-right:-8px;padding-left:9px;padding-right:9px}
+ #app.town-world>.hub-global-nav{margin-left:-8px;margin-right:-8px;padding-left:8px;padding-right:8px}
  #app.town-world .town-scene{padding-left:0;padding-right:0}
  .town-objective-button{min-height:44px;padding:5px 8px}
  .town-objective-button b{font-size:11px}
