@@ -57,4 +57,5 @@ jobs:
             plan-debug.json
             plan-current.png
             plan-compact.png
+            portrait-debug.png
           retention-days: 7
