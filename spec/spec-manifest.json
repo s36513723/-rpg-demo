@@ -116,7 +116,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "paladin_art_registered_runtime_updated_pending_regression",
+  "last_sync_status": "paladin_art_registered_runtime_updated_regression_passed",
   "blocked_steps": [
     "Binary XLSX cannot currently be committed through the available GitHub text-file connector; repository mirror is mandatory until binary handoff is available."
   ],
@@ -223,6 +223,12 @@
       "status": "success",
       "head_sha": "9cea0fc52475920fbcf988df4b6f7a0f55500814"
     },
-    "spec_contract": "success"
+    "spec_contract": "success",
+    "paladin_art": {
+      "status": "success",
+      "workflow": "RPG validation",
+      "run_id": 36412828388,
+      "validated_head_sha": "53d741b0c7a8edaef96e1a62bb55e7da95119bbe"
+    }
   }
 }
