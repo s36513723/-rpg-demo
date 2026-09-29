@@ -1308,4 +1308,5 @@ html,body{height:100%;overflow:hidden}
 /* Only the small violet cursor above the enemy name denotes the chosen target. */
 #game .enemy-unit.target-selected .enemy-visual,#game:has(.targeting) .enemy-unit.target-valid .enemy-visual,#game:has(.targeting) .enemy-unit.target-selected .enemy-visual{filter:none!important}
 #game .enemy-unit.target-selected .target-pointer,#game:has(.targeting) .enemy-unit.target-selected .target-pointer{border-color:rgba(231,172,154,.35)!important;background:rgba(237,186,178,.06)!important;box-shadow:0 0 8px rgba(236,180,169,.14)!important}
+#game .enemy-unit.target-selected .enemy-name{overflow:visible!important}
 #game .enemy-unit.target-selected .enemy-name:before{content:"";position:absolute;z-index:5;left:50%;top:-12px;transform:translateX(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid #b55be9;filter:drop-shadow(0 0 3px #8d3fcb);pointer-events:none}
