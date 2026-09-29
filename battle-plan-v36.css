@@ -1379,3 +1379,8 @@ html,body{height:100%;overflow:hidden}
 #game .enemy-unit.dead{pointer-events:none!important;animation:enemy-defeat-vanish .72s ease-in forwards!important}
 #game .enemy-unit.dead .target-pointer{visibility:hidden!important}
 @media(prefers-reduced-motion:reduce){#game .enemy-unit.dead{animation-duration:.15s!important}}
+
+/* Enemy target state is communicated by the inverse triangle only. */
+#game .enemy-unit .target-pointer{display:none!important}
+#game .enemy-unit.target-valid .enemy-visual,#game .enemy-unit.target-selected .enemy-visual,#game .enemy-unit.target-confirm .enemy-visual{filter:none!important}
+#game .enemy-unit:focus,#game .enemy-unit:focus-visible,#game .enemy-unit:active{outline:none!important;box-shadow:none!important}
