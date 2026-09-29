@@ -1373,3 +1373,9 @@ html,body{height:100%;overflow:hidden}
 #game>.battle-message{left:24%!important;right:24%!important;top:auto!important;bottom:max(.8%,env(safe-area-inset-bottom))!important;width:auto!important;height:clamp(54px,8dvh,72px)!important;min-height:0!important;max-height:none!important;box-sizing:border-box!important;padding:7px 14px!important;display:flex!important;align-items:center!important;gap:6px!important;border:0!important;border-radius:0!important;clip-path:none!important;background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M11 2 H89 L99 97 H1 Z' fill='%23223857' fill-opacity='.54' stroke='%23d7ebff' stroke-opacity='.84' stroke-width='2'/%3E%3C/svg%3E")!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 #game>.battle-message p{min-width:0!important;max-height:58px!important;overflow:auto!important;font:clamp(10px,2.7vw,12px)/1.3 var(--serif)!important}
 #game>.battle-message .playback-tools button{min-width:29px!important;width:29px!important;height:34px!important}
+
+/* A defeated enemy flashes, recedes, then stays absent from the battlefield. */
+@keyframes enemy-defeat-vanish{0%{opacity:1;visibility:visible;filter:brightness(1);transform:translateY(0) scale(1)}20%{opacity:1;filter:brightness(2.1) drop-shadow(0 0 12px rgba(225,218,255,.85));transform:translateY(-3px) scale(1.025)}100%{opacity:0;visibility:hidden;filter:brightness(1.4) blur(3px);transform:translateY(-17px) scale(.9)}}
+#game .enemy-unit.dead{pointer-events:none!important;animation:enemy-defeat-vanish .72s ease-in forwards!important}
+#game .enemy-unit.dead .target-pointer{visibility:hidden!important}
+@media(prefers-reduced-motion:reduce){#game .enemy-unit.dead{animation-duration:.15s!important}}
