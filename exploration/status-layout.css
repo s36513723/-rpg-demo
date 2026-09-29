@@ -936,3 +936,8 @@
  #panel.actor-workspace>.actor-fixed>.screen-hint,
  #panel.actor-workspace>.actor-fixed>p.small{line-height:1.25}
 }
+
+@media(max-width:350px){
+ #panel .attribute-grid{gap:2px;padding:2px 0}
+ #panel .resistance-grid .attribute-cell{padding-top:4px;padding-bottom:4px}
+}
