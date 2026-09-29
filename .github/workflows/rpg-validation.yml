@@ -60,4 +60,5 @@ jobs:
             plan-compact.png
             portrait-debug.png
             background-debug.png
+            hub-audit-*.png
           retention-days: 7
