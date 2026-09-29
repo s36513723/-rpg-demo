@@ -2,15 +2,16 @@ const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/st
 const source=fs.readFileSync('exploration/explore.js','utf8');
 const growth=fs.readFileSync('exploration/character-stats.js','utf8');
 const hub=fs.readFileSync('exploration/hub.js','utf8');
+const state=fs.readFileSync('exploration/state.js','utf8');
 function get(src,name){const start=src.indexOf('function '+name+'(');assert(start>=0,`function ${name}`);const opening=src.indexOf('{',start);let depth=0;for(let i=opening;i<src.length;i++){if(src[i]==='{')depth++;if(src[i]==='}'&&!--depth)return src.slice(start,i+1)}throw Error(`unterminated ${name}`)}
-const names=['askReturn','returnTown','finishExpedition','escrowRunLoot','finalizeExpedition','appraiseRunLoot','growthCount','awardExperience'];
+const names=['askReturn','returnTown','finishExpedition','escrowRunLoot','finalizeExpedition','appraiseRunLoot','selectSaveSlot','growthCount','awardExperience'];
 const context={Date,Math,Object,Number,console};vm.createContext(context);
-vm.runInContext(names.map(n=>get(['growthCount','awardExperience'].includes(n)?growth:n==='appraiseRunLoot'?hub:source,n)).join('\n'),context);
+vm.runInContext(names.map(n=>get(['growthCount','awardExperience'].includes(n)?growth:n==='appraiseRunLoot'?hub:n==='selectSaveSlot'?state:source,n)).join('\n'),context);
 let saveCount=0;
 Object.assign(context,{H:{run:null,history:[],unappraised:{materials:{},tools:{},weapons:[]},pendingGrowth:{stat:0,mastery:0},experience:0,milestones:{}},
  loot:{皮:0},inventory:{tools:{回復薬:2}},gold:100,rareGear:[],lastExpedition:null,
  dungeonProgress:{古代迷宮:{best:0}},expeditionActive:false,expeditionStartLoot:null,
- RPG_STORE:{removeItem(){}},cp:x=>JSON.parse(JSON.stringify(x)),moneyText:x=>x+'G',
+ RPG_STORE:{values:{},removeItem(key){delete this.values[key]},setItem(key,value){this.values[key]=value},getItem(key){return this.values[key]??null}},cp:x=>JSON.parse(JSON.stringify(x)),moneyText:x=>x+'G',
  persist:()=>saveCount++,town:()=>{},requireTown:()=>true,addUnique:(a,x)=>{if(!a.includes(x))a.push(x)},note:()=>{},activeRun:()=>!!context.H.run,
  confirmAction:(title,body,fn,args)=>context[fn](...args),pendingBattleMenu:()=>{throw Error('battle pending')},
  hc:()=>({labels:{}}),logRun:()=>{}});
@@ -20,4 +21,5 @@ start();context.finalizeExpedition('敗北');assert.equal(context.H.run,null);as
 assert.deepEqual([99,100,219,220,599,600].map(n=>context.growthCount(n).count),[0,1,1,2,4,4]);
 context.awardExperience(600,'QA');assert.equal(context.H.experience,600);assert.equal(context.H.pendingGrowth.stat,4);assert.equal(context.H.pendingGrowth.mastery,8);
 context.awardExperience(300,'QA');assert.equal(context.H.pendingGrowth.stat,7);assert.equal(context.H.pendingGrowth.mastery,12);
-console.log('Voluntary return, defeat loot retention, EXP curve and point distribution: PASS');
+let slotLoaded=0;Object.assign(context,{HUB_SLOT:1,HUB_SAVE:'rpg.exploration.save1',HUB_BACKUP:'rpg.exploration.backup7',HUB_DEFAULTS:{loot:{皮:0}},saveGame:()=>true,loadGame:()=>slotLoaded++});context.window=context;context.selectSaveSlot(2);assert.equal(context.HUB_SLOT,2);assert.equal(context.HUB_SAVE,'rpg.exploration.save2');assert.equal(slotLoaded,1);context.selectSaveSlot(1);assert.equal(context.HUB_BACKUP,'rpg.exploration.backup7');
+console.log('Voluntary return, defeat loot retention, appraisal, EXP curve and two save slots: PASS');
