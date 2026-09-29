@@ -473,5 +473,12 @@
     "portrait": "拠点と同じ最終透過素材6枚",
     "commands": "アイコン上・ラベル下の中央寄せと適切な間隔",
     "enemy_pointer": "通常白／候補赤／一度選択金色の細い多面体風の縁と控えめな光"
+  },
+  "battle_ui_action_selection_2026_09_29": {
+    "status": "確定",
+    "initial_attack": "攻撃可能な敵に赤い候補カーソル。1回目は金色の仮選択、2回目で予約",
+    "command_focus": "表示中のATTACK / SKILL / ITEM / DEFENDに紫の選択表現を同期",
+    "ally_tap": "敵向け行動中の味方タップは警告なしで操作キャラを切替",
+    "queued_ally": "金色輪郭と完了印。タップで予約解除して選び直す"
   }
 }
