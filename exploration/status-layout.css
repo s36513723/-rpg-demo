@@ -1022,3 +1022,27 @@
  backdrop-filter:none!important;
  -webkit-backdrop-filter:none!important;
 }
+
+/* Character navigation: compact actions at the portrait's feet and persistent cards. */
+#panel.actor-workspace>.panel-footer{position:relative;padding:0 6px 4px!important;background:transparent!important;border:0;backdrop-filter:none}
+#panel.actor-workspace .actor-bottom-chrome{gap:3px}
+#panel.actor-workspace .actor-commands{display:flex;justify-content:center;gap:5px}
+#panel.actor-workspace .actor-commands button{min-height:26px;padding:3px 8px;border-radius:999px;background:rgba(8,22,15,.47);border-color:rgba(216,196,139,.52);font-size:9px;letter-spacing:.03em;backdrop-filter:blur(3px)}
+#panel.actor-workspace .actor-commands button[aria-pressed="true"]{background:rgba(80,89,57,.72)}
+#panel.actor-workspace .actor-member-cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px}
+#panel.actor-workspace .actor-member-card{position:relative;min-width:0;height:58px;padding:0;overflow:hidden;border:1px solid rgba(205,193,153,.45);border-radius:5px;background:rgba(13,30,22,.72);color:#f5ecd5}
+#panel.actor-workspace .actor-member-card[aria-pressed="true"]{border-color:#f0d17c;box-shadow:inset 0 0 0 1px #f0d17c}
+#panel.actor-workspace .actor-member-card img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 20%}
+#panel.actor-workspace .actor-member-card b{position:absolute;bottom:0;left:0;right:0;padding:3px 0 2px;background:linear-gradient(transparent,rgba(3,9,6,.95));font-size:8px;text-shadow:0 1px 3px #000}
+#panel.actor-workspace.status-equipment .character-equipment-side{top:42px;bottom:34px;width:24%;justify-content:center;gap:5px}
+#panel.actor-workspace.status-equipment .character-equipment-side.left{left:6px;align-items:center}
+#panel.actor-workspace.status-equipment .character-equipment-side.right{right:6px;align-items:center}
+#panel.actor-workspace.status-equipment .character-equip-slot,
+#panel.actor-workspace.status-equipment .character-equip-weight{width:min(100%,68px);min-height:0;aspect-ratio:1;padding:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border-color:rgba(196,208,177,.43);background:rgba(9,25,18,.32);box-shadow:none;backdrop-filter:blur(2px)}
+#panel.actor-workspace.status-equipment .character-equip-slot[aria-pressed="true"]{background:rgba(73,84,51,.55);border-color:#e3ca86}
+#panel.actor-workspace.status-equipment .character-equip-slot small{font-size:7px;line-height:1.1}
+#panel.actor-workspace.status-equipment .character-equip-slot b{position:relative;margin-top:3px;font-size:21px;line-height:1}
+#panel.actor-workspace.status-equipment .character-equip-slot b em{position:absolute;top:-5px;right:-8px;color:#f4d982;font-style:normal;font-size:15px}
+#panel.actor-workspace.status-equipment .character-equip-weight small{font-size:7px}
+#panel.actor-workspace.status-equipment .character-equip-weight b{font-size:9px;white-space:normal}
+@media(max-height:640px){#panel.actor-workspace .actor-member-card{height:45px}#panel.actor-workspace.status-equipment .character-equipment-side{top:34px;bottom:20px;gap:3px}#panel.actor-workspace.status-equipment .character-equip-slot,#panel.actor-workspace.status-equipment .character-equip-weight{width:min(100%,52px)}}
