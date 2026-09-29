@@ -532,7 +532,7 @@ function openSheet(mode='skills'){sheet.dataset.mode=mode;
  if(editable())cancelTarget();
  const u=current();
  $('sheetKicker').textContent=['skills','formation'].includes(mode)?u.name:'';
- $('sheetTitle').textContent={skills:'技',formation:'FORMATION',members:'仲間',more:'',terrain:terrain.name,history:'履歴'}[mode]||'';
+ $('sheetTitle').textContent={skills:'技',formation:'FORMATION',members:'仲間',more:'設定',terrain:terrain.name,history:'履歴'}[mode]||'';
  $('sheetHint').textContent='';const list=$('sheetList');list.replaceChildren();
  if(mode==='formation'){
   $('sheetHint').textContent='SHIFT · 1 ACTION';
@@ -561,7 +561,7 @@ function openSheet(mode='skills'){sheet.dataset.mode=mode;
  }else if(mode==='terrain'){
   const p=document.createElement('p');p.className='terrain-detail';p.textContent=terrain.desc;list.append(p);
  }else if(mode==='more'){
-  const entries=[['restart','新しい戦闘',()=>fresh(),false],['book','履歴',()=>{closeSheet();toggleHistory()},false],['exit','逃走',()=>{closeSheet();simpleCommand('escape')},!editable()||u?.status.legBind>0]];
+  const entries=[['fast','表示速度',()=>{$('pace').click();closeSheet()},false],['restart','新しい戦闘',()=>fresh(),false],['book','履歴',()=>{closeSheet();toggleHistory()},false],['exit','逃走',()=>{closeSheet();simpleCommand('escape')},!editable()||u?.status.legBind>0]];
   for(const [ic,label,fn,disabled]of entries){const b=document.createElement('button');b.type='button';b.className='menu-action';b.innerHTML=icon(ic)+esc(label);b.disabled=disabled;b.addEventListener('click',fn);list.append(b)}
  }else{
   for(const[key,a]of u.skills.map((s,i)=>[String(i),s])){
