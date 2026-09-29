@@ -228,8 +228,8 @@ const ACTOR_CROPS={
  ran:M.crops['back-ran'],arc:M.crops['portrait-arc'],mys:M.crops['back-mys']
 };
 const ACTOR_PORTRAITS={
- war:'images/hub-standing-warrior.webp',rog:'images/hub-standing-paladin.webp',run:'images/hub-standing-rogue.webp',
- ran:'images/hub-standing-archer.webp',arc:'images/hub-standing-alchemist.webp',mys:'images/hub-standing-mystic.webp'
+ war:'images/hub-standing-warrior-clean.webp',rog:'images/hub-standing-paladin-transparent.webp',run:'images/hub-standing-rogue-clean.webp',
+ ran:'images/hub-standing-archer-clean.webp',arc:'images/hub-standing-alchemist-clean.webp',mys:'images/hub-standing-mystic-clean.webp'
 };
 function enemyCrop(u){return u.id==='g3'?[542, 159, 210, 135]:CROPS[u.id==='mage'?'mage':['arch','arch2'].includes(u.id)?'archer':'guard']}
 const ENEMY_ARCHETYPE_ART={
