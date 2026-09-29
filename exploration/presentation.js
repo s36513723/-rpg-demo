@@ -99,6 +99,17 @@ const facilityLine=(kind,name,args=[])=>{
  const p=facilityProfiles[kind],npc=hc().npcs.find(n=>n.id===p?.npcId);
  return npc?.text?.[0]||'ご用件を確認しますね。';
 };
+const facilityGuestPeople=(kind,r,temp)=>{
+ if(kind!=='inn'||!window.HUB_VISUAL?.person||!window.HUB_VISUAL?.portrait)return '';
+ const V=window.HUB_VISUAL,people=[];
+ if(r.name==='memberTalk')people.push(V.person('ally',r.args?.[0]));
+ else if(r.name==='npcTalk')people.push(V.person('npc',r.args?.[0]));
+ else if(r.name==='readPair'){const pair=hc().pairs[r.args?.[0]];if(pair){people.push(V.person('ally',pair[0]),V.person('ally',pair[1]))}}
+ else if(r.name==='talkArchive')people.push(V.person(r.args?.[0]==='npc'?'npc':'ally',r.args?.[1]));
+ else if(r.name==='returnTalk'){const m=temp.querySelector('.message')?.textContent?.match(/^([^「]+)「/);if(m)people.push(V.person('ally',m[1]))}
+ const ps=people.filter(Boolean);if(!ps.length)return '';
+ return '<div class="facility-world-guests" aria-label="会話相手">'+ps.map(p=>V.portrait(p,'facility-world-guest-face')).join('')+'</div>';
+};
 const renderFacilityWorld=(kind,html,r)=>{
  const p=facilityProfiles[kind];if(!p)return;
  const app=document.getElementById('app'),screen=document.getElementById('screen'),modal=document.getElementById('modal'),panel=document.getElementById('panel');
@@ -109,8 +120,8 @@ const renderFacilityWorld=(kind,html,r)=>{
  const title=temp.querySelector('h2')?.textContent||p.label;temp.querySelector('h2')?.remove();
  temp.querySelectorAll('button').forEach(b=>{const t=b.textContent.trim();if(b.dataset.hub==='closeM'||/^(戻る|一覧へ|一覧|ギルドへ|市場へ|宿・酒場へ|拠点へ)$/.test(t))b.remove()});
  temp.querySelectorAll('.actions').forEach(a=>{if(!a.children.length)a.remove()});
- const home=r.name===p.home;
- screen.innerHTML='<section class="town-scene facility-world-scene '+p.world+'-scene '+(home?'facility-world-mode-home':'facility-world-mode-service')+'">'+(home?'':'<div class="facility-world-title"><span class="chapter-kicker">'+p.kicker+'</span><b>'+hesc(title)+'</b></div>')+'<img class="facility-world-npc" src="'+p.npc+'" alt="'+hesc(p.role+' '+p.npcName)+'"><div class="facility-world-identity"><b>'+hesc(p.npcName)+'</b><small>'+hesc(p.role)+'</small><button type="button" data-hub="uiFacilityTalk">TALK</button></div><div class="facility-world-controls"><div class="facility-world-dialogue"><b>'+hesc(p.npcName)+'</b><span>'+hesc(facilityLine(kind,r.name,r.args||[]))+'</span></div><section class="facility-world-overlay '+(home?'facility-world-home facility-world-home-'+kind:'facility-world-service')+'">'+temp.innerHTML+'</section></div></section>';
+ const home=r.name===p.home,guests=facilityGuestPeople(kind,r,temp);
+ screen.innerHTML='<section class="town-scene facility-world-scene '+p.world+'-scene '+(home?'facility-world-mode-home':'facility-world-mode-service')+'">'+(home?'':'<div class="facility-world-title"><span class="chapter-kicker">'+p.kicker+'</span><b>'+hesc(title)+'</b></div>')+'<img class="facility-world-npc" src="'+p.npc+'" alt="'+hesc(p.role+' '+p.npcName)+'">'+guests+'<div class="facility-world-identity"><b>'+hesc(p.npcName)+'</b><small>'+hesc(p.role)+'</small><button type="button" data-hub="uiFacilityTalk">TALK</button></div><div class="facility-world-controls"><div class="facility-world-dialogue"><b>'+hesc(p.npcName)+'</b><span>'+hesc(facilityLine(kind,r.name,r.args||[]))+'</span></div><section class="facility-world-overlay '+(home?'facility-world-home facility-world-home-'+kind:'facility-world-service')+'">'+temp.innerHTML+'</section></div></section>';
  if(window.HUB_VISUAL?.decorate)window.HUB_VISUAL.decorate(screen,r);
  if(window.HUB_VISUAL?.chrome)window.HUB_VISUAL.chrome();
  renderRoster();renderSaveStatus();navState(r.name);
