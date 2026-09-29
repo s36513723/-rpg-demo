@@ -308,8 +308,8 @@
   },
   "hub_character_ui_2026_09_29": {
     "status": "確定",
-    "implementation": "exploration/style.css, exploration/status-layout.css, exploration/presentation.js, exploration/fitting.js, exploration/state.js",
+    "implementation": "exploration/presentation.js, exploration/fitting.js, exploration/state.js, exploration/style.css, exploration/status-layout.css, exploration/hub-roster-panel.css",
     "workbook_sync": "pending: canonical workbook not present in current checkout; repository mirror updated",
-    "revision": "共通カードの表示崩れを修正、装備画面を共通高さへ統一、装備左右を反転、顔前のSWAPパネルを撤去し候補画面へ移動、EXP/HP/SPをステータスへ追加"
+    "revision": "拠点の描画上書きを修正して共通カードに統一。キャラ画面下にSTATUS/ABILITY/SKILL/MASTERYの左右2段パネルを配置"
   }
 }
