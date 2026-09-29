@@ -14,11 +14,12 @@ for(const route of routes){
    results.push({name:'Touch navigation '+route+' '+innerWidth+'x'+innerHeight,ok,measurements:{screen:sr.height,overlay:or?.height,overflow:screen.scrollWidth-screen.clientWidth,buttons:sizes.map(x=>[x.width,x.height])}});
    continue;
   }
-  const p=document.querySelector('#panel'),footer=p.querySelector('.panel-footer'),body=p.querySelector('.panel-body');
-  const r=p.getBoundingClientRect(),f=footer.getBoundingClientRect();
+  const p=document.querySelector('#panel'),footer=p.querySelector('.panel-footer'),body=p.querySelector('.panel-body'),modal=document.querySelector('#modal'),nav=document.querySelector('.hub-global-nav');
+  const r=p.getBoundingClientRect(),f=footer.getBoundingClientRect(),mr=modal.getBoundingClientRect(),hub=modal.classList.contains('hub-overlay-modal'),limit=hub?mr.bottom:innerHeight;
   const buttons=[...footer.querySelectorAll('button')].filter(b=>!b.hidden&&b.getClientRects().length),sizes=buttons.map(b=>b.getBoundingClientRect());
-  const ok=Math.abs(r.height-innerHeight)<=1&&r.top>=-1&&r.bottom<=innerHeight+1&&f.bottom<=innerHeight+1&&f.top>=innerHeight-(p.querySelector('.fitting-controls')?240:190)&&sizes.every((x,i)=>x.height>=(buttons[i].closest('.fitting-filters,.equipment-bottom-slots')?32:44)&&x.width>=30)&&!p.querySelector('.panel-head button:not(.icon-button)')&&body.scrollWidth<=body.clientWidth+1&&[...footer.querySelectorAll('.bottom-tabs,.fitting-filters,.equipment-bottom-slots')].every(e=>e.scrollWidth<=e.clientWidth+1);
-  results.push({name:'Touch navigation '+route+' '+innerWidth+'x'+innerHeight,ok,measurements:{panel:r.height,footerTop:f.top,overflow:body.scrollWidth-body.clientWidth,buttons:sizes.map(x=>[x.width,x.height])}});
+  const navOk=!hub||(!nav.inert&&[...nav.querySelectorAll('button')].filter(b=>!b.disabled).every(b=>b.getBoundingClientRect().height>=40));
+  const ok=Math.abs(r.height-(hub?mr.height:innerHeight))<=1&&r.top>=-1&&r.bottom<=limit+1&&f.bottom<=limit+1&&f.top>=limit-(p.querySelector('.fitting-controls')?240:190)&&sizes.every((x,i)=>x.height>=(buttons[i].closest('.fitting-filters,.equipment-bottom-slots')?32:44)&&x.width>=30)&&!p.querySelector('.panel-head button:not(.icon-button)')&&body.scrollWidth<=body.clientWidth+1&&[...footer.querySelectorAll('.bottom-tabs,.fitting-filters,.equipment-bottom-slots')].every(e=>e.scrollWidth<=e.clientWidth+1)&&navOk;
+  results.push({name:'Touch navigation '+route+' '+innerWidth+'x'+innerHeight,ok,measurements:{panel:r.height,modal:mr.height,footerTop:f.top,overflow:body.scrollWidth-body.clientWidth,nav:navOk,buttons:sizes.map(x=>[x.width,x.height])}});
  }catch(e){results.push({name:'Touch navigation '+route,ok:false,error:String(e)})}
 }
 try{
