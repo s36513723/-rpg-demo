@@ -65,9 +65,9 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - No conventional displayed level with automatic stat growth.
 - EXP creates pending growth; inn rest settles pending Stat Pt / Mastery Pt. Exact EXP curve and reward quantities are balance-controlled.
 - Permanent growth is Stat Pt + Mastery Pt. Stat Pt develops base abilities; Mastery Pt permanently expands a character's specialties and available options.
-- Run-only growth uses a separate **ラン内スキルPt（仮称）**. It is not battle SP, and its allocation resets when the expedition ends.
-- Mastery defines what the character can potentially do; run-only Skill Pt chooses what to acquire, strengthen or branch into during the current expedition. Basic skills remain usable from the start of the expedition.
-- Candidate run-only uses include advanced-skill acquisition, skill strengthening, SP-cost reduction, range/area changes, status-performance changes and branch effects. Exact costs and gain amounts are provisional.
+- Run-only growth uses **Tactical Pt (TP)**. TP is separate from permanent Stat Pt / Mastery Pt and from battle SP.
+- TP is used only to temporarily acquire an unlearned skill for the current expedition. Normal Mastery / skill prerequisites still apply; permanently learned skills remain available without TP.
+- TP balance (gain sources, gain amount and TP cost per temporary skill) remains undecided. TP remaining and temporary acquisitions reset when the expedition ends.
 - A respec item can reset stat allocations, Mastery ranks and learned skills, including the chosen Source, and return their spent points. Initial placement: first clear of each chapter boss and one one-time high-difficulty quest; it is not sold normally.
 - One dungeon expedition is basically **3 layers, with a boss at the end of every layer**. The Layer 3 boss is the dungeon's final boss.
 - Each dungeon has its own fixed theme, scenery, enemies, terrain, events, materials, treasure, bosses and story. Random generation stays inside that dungeon theme.
@@ -75,11 +75,14 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - A place may contain normal enemies, strong enemies, a merchant, treasure, a trap, rest, an NPC, an exploration target, a special event, nothing, or a combination of these.
 - Routes should have different risk/reward character such as a dangerous shortcut, safer detour, or treasure-oriented route. Exploration skills can increase route information and available choices.
 - Unchosen places are not carried over to the next expedition. The map is regenerated on the next run.
-- Initial map-size target: about 10-12 generated places per layer, with about 5-7 actually traversed on one route. These counts are provisional and balance-controlled.
-- Rest is represented as an in-world place such as a camp site, spring or safe room rather than an abstract rest node. Current rule: once per layer, HP35% + SP35% + status recovery; no KO revival.
+- Each layer randomly generates **10-12 places**, and one route traverses **5-7 places**.
+- The full connection graph for the current layer is visible from the start, while each place's contents remain partially unknown. Exploration skills reveal more detail.
+- Rest is represented as an in-world place such as a camp site, spring or safe room rather than an abstract rest node. **One rest place is guaranteed per layer, with an additional rest place appearing at low probability.** Current rest effect remains HP35% + SP35% + status recovery; no KO revival.
+- Each layer boss fully restores the party after victory before the next progression step.
+- Voluntary return is available **only from designated return locations** on the exploration map; no return item is consumed.
 - No equipment durability/repair.
 - Successful return after defeating the Layer 3 boss grants/settles expedition loot and EXP. Exact quantities are balance-controlled.
-- On defeat: **forced return to base; current expedition progress is lost; consumed items are not restored.** Treatment of expedition loot and EXP on defeat is currently **undecided** and must not be inferred as either retained or lost.
+- On defeat: **forced return to base; current expedition progress is lost; consumed items are not restored.**
 
 ## Base
 - Home: next objective / notifications / next sortie + Inn / Guild / Market.
@@ -88,7 +91,7 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - Guild: member management / quests & reports / exploration records / relic appraisal / storage.
 - Three formation presets save formation/equipment/skills with validity checks.
 - Two independent save slots each auto-save their own progress. Settings can switch slots, save manually, export/import JSON and restore the current slot's backup.
-- Materials, tools and equipment acquired during an expedition remain sealed until return and guild appraisal. Existing tools taken into the expedition remain usable. Treatment of newly acquired loot on defeat is currently undecided.
+- Materials, tools and equipment acquired during an expedition remain sealed until return and guild appraisal. Existing tools taken into the expedition remain usable.
 - Market: equipment / items / processing / selling. Processing: regional crafting / +3 enhancement / trait processing.
 - Records: up to 40 expedition-history entries plus statistics / people / regions / enemy observations.
 - Rumors come through NPC conversation, not a separate daily menu.
