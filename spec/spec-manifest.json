@@ -316,7 +316,7 @@
     "battle_ui_v44": {
       "implementation": "battle-v44.html / battle-plan-v36.css / battle-plan-v36.js",
       "browser": "GitHub Pagesで選択一覧・対象演出・ラウンド進行・スクロールなし・console error 0を確認",
-      "workbook_sync": "保留: 正本xlsxはこのGitHub作業環境に存在しないため、リポジトリミラーへ先に反映。正本に同じUI行を同期する必要がある。"
+      "workbook_sync": "保留: リポジトリに正本xlsxがなく、Libraryには類似名の2冊が存在する。どちらが現行正本か特定できないため上書きせず、リポジトリミラーを先に同期した。"
     }
   },
   "hub_character_ui_2026_09_29": {
