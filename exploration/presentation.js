@@ -6,7 +6,7 @@ const old={};
 const originals=['town','drawDungeon','closeM','skills','equip','character','partyMenu','settings','charAbility','charMastery','mastery','masteryType','growMastery','masterySkills','toggleLearnedSkill'];
 for(const n of originals)old[n]=window[n];
 const portraits=['gald','lize','ern','sena','mirea','yuna'];
-const standArts=['hub-standing-warrior-clean.webp','hub-standing-paladin-clean.webp','hub-standing-rogue-clean.webp','hub-standing-archer-clean.webp','hub-standing-alchemist-clean.webp','hub-standing-mystic-clean.webp'];
+const standArts=['hub-standing-warrior-clean.webp','hub-standing-paladin-transparent.webp','hub-standing-rogue-clean.webp','hub-standing-archer-clean.webp','hub-standing-alchemist-clean.webp','hub-standing-mystic-clean.webp'];
 const standArtCache=standArts.map(src=>{
  const img=new Image();img.decoding='async';img.fetchPriority='high';img.src='../images/'+src;
  const state={img,ready:false,promise:null};
@@ -275,7 +275,7 @@ const uiActions={
 Object.assign(window,uiActions);
 const views={
  back(){return ''},show:showUI,closeM:closeUI,
- statusView(i){const max=rules().derived(stats[i]),v=vitals[i];show('<h2>'+hesc(names[i])+' / ステータス</h2><section class="status-basics">'+characterExperience()+resources(i)+'</section>'+HT('戦闘状態',v.hp<=0?'戦闘不能':statusText(i)||'正常')+HT('装備重量',weightInfo(i).weight+' / '+weightInfo(i).limit))},
+ statusView(i){const v=vitals[i],s=characterValues(i),values=[['PHY',s.phy],['SKL',s.skl],['ARC',s.arc],['MND',s.mnd],['物理攻撃力',s.physical],['魔法攻撃力',s.magicArc],['物理防御力',s.pdef],['魔法防御力',s.mdef]];show('<h2>'+hesc(names[i])+' / ステータス</h2><section class="status-basics">'+characterExperience()+resources(i)+'</section><section class="status-value-grid" aria-label="能力と戦闘値">'+values.map(([label,value])=>'<div><small>'+label+'</small><b>'+value+'</b></div>').join('')+'</section>'+HT('戦闘状態',v.hp<=0?'戦闘不能':statusText(i)||'正常')+HT('装備重量',s.weight+' / '+s.limit))},
  town(){if(activeRun()){closeM();return drawDungeon()}
  const app=document.getElementById('app');app.classList.add('town-world');app.classList.remove('actor-overlay-open');app.classList.remove('in-expedition','facility-world','guild-world','market-world','inn-world');delete app.dataset.facility;
  document.getElementById('modal').classList.remove('on','hub-overlay-modal','hub-location-modal','hub-map-modal');setHubContentInert(false);app.inert=false;U.route=null;U.stack=[];

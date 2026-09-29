@@ -91,13 +91,12 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - HP/SP on hub cards use slim always-visible line gauges.
 
 ## Battle UI
-- The fixed portrait battle stage keeps the official background visible from top to bottom.
-- ROUND, terrain, turn order and settings occupy the top edge. Nine enemy cells form three ranks, with the front rank visibly larger.
-- The acting ally illustration sits at lower left. Its name remains clear of the party formation.
-- Six ally status plates occupy a centered 3x3 formation with three faint empty cells. Four commands sit in one horizontal row beneath those plates; AUTO and speed stack vertically to their right.
-- Skill and item choices appear in two columns with one line per choice, without a visible close/back control. Choosing a skill enters target selection; valid targets and the selected target receive distinct effects.
-- The selected skill's explanation and battle playback text sit in the open band between the enemies and ally cards. The choice tray and message use the battle stage's translucent plate styling.
-- These are confirmed UI placement and presentation decisions. They do not promote the demo's provisional character, skill or balance data to confirmed game rules.
+1. ROUND / AUTO / speed / settings
+2. turn order
+3. main enemy + current acting ally presentation
+4. commands
+5. ally 3x3 cards
+Commands sit immediately above ally cards. Character appeal has priority over tiny board-token presentation.
 
 ## Status discipline
 - Implementation or passing tests do not imply approval.
@@ -128,6 +127,13 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - 装備画面の高さは他の拠点画面と揃える。装備枠は左に主武器・予備主武器・携行具・重量、右に副手・予備副手・防具一式・装飾品を配置する。
 - 顔の前にあったSWAPパネルを廃止する。換装操作は装備候補内で利用できる。
 - 下部ステータスにはEXP・HP・SPと基本能力・攻撃・防御を文字と数値だけで表示する。
+
+## キャラ詳細の視覚調整（2026-09-29 確定）
+- 共通キャラカードは拠点の操作パネルと同じ金色の細い縁と暗い半透明面・書体に揃え、HP/SPゲージは細線にする。
+- キャラの立ち絵をすべて約1.5cm下げる。装備や能力の操作パネルは動かさない。
+- キャラ能力系画面の外枠と一面の緑色背景を廃止し、場所の背景と立ち絵を見せる。個別の情報セルには読みやすい中立色の半透明面を使う。
+- ステータス画面はEXP・HP・SP・状態・重量に加え、PHY/SKL/ARC/MND・物理攻撃力・魔法攻撃力・物理防御力・魔法防御力を表示する。
+- パラディンの保管済み素材には白い背景片が残っていたため、デザインを引き継いだ追加透過版を拠点立ち絵として使う。
 
 ## キャラ画面の4パネル（2026-09-29 確定）
 - キャラ画面の下側に装備枠と同じ半透明表現の4パネルを配置。左下にSTATUS（EXP・HP・SP）とABILITYを縦に、右下にSKILLとMASTERYを縦に並べる。

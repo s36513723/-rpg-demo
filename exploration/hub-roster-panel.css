@@ -78,3 +78,37 @@
 #app:not(.in-expedition) #party .m .hub-roster-metric{height:10px!important;line-height:9px!important;text-shadow:0 1px 3px #000!important}
 #app:not(.in-expedition) #party .m .hub-roster-metric small,
 #app:not(.in-expedition) #party .m .hub-roster-metric b{line-height:9px!important}
+
+/* Shared roster: the same fine gold edge and dark translucent surface as the hub controls. */
+#app:not(.in-expedition) #party .m{height:46px!important;min-height:46px!important;padding:3px 4px!important;border:1px solid rgba(220,199,146,.42)!important;border-radius:8px!important;background:rgba(8,18,15,.48)!important;box-shadow:none!important}
+#app:not(.in-expedition) #party .m .hub-roster-name{font:600 10px/12px ui-serif,"Yu Mincho",serif!important;letter-spacing:.02em!important;color:#f3e7d1!important}
+#app:not(.in-expedition) #party .m .hub-roster-meter{height:11px!important;min-height:11px!important}
+#app:not(.in-expedition) #party .m .hub-roster-metric{height:10px!important;padding:0 1px!important;text-shadow:0 1px 3px #000!important}
+#app:not(.in-expedition) #party .m .hub-roster-metric small,
+#app:not(.in-expedition) #party .m .hub-roster-metric b{font:600 7px/9px sans-serif!important;color:#f2e9d9!important}
+#app:not(.in-expedition) #party .m .hub-roster-track{height:2px!important;min-height:2px!important;border-radius:1px!important}
+#app:not(.in-expedition) #party .m .hub-roster-track>span{border-radius:1px!important}
+
+/* Character sheets have no enclosing green window; information remains readable on small neutral panes. */
+#modal.hub-overlay-modal.hub-location-modal:has(#panel.actor-workspace){background:transparent!important}
+#modal.hub-location-modal #panel.actor-workspace{border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important}
+#modal.hub-location-modal #panel.actor-workspace>.actor-backdrop{background-image:var(--hub-place-bg)!important;background-size:100vw 100dvh!important;background-position:var(--hub-place-pos,center center)!important;background-repeat:no-repeat!important}
+#modal.hub-location-modal #panel.actor-workspace>.panel-head,
+#modal.hub-location-modal #panel.actor-workspace>.panel-body,
+#modal.hub-location-modal #panel.actor-workspace>.actor-fixed,
+#modal.hub-location-modal #panel.actor-workspace>.status-basics{background:transparent!important;border-color:transparent!important}
+#modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) button.row,
+#modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .attribute-cell,
+#modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .allocation-stat,
+#modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .skill-masteries button,
+#modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .skill-toggle,
+#modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .mastery-workspace button.row{background:rgba(16,19,21,.52)!important}
+#modal.hub-location-modal #panel.actor-workspace:not(.status-equipment)>.actor-backdrop img{opacity:1!important}
+
+/* About 1.5 cm on a CSS pixel display, without moving the fixed controls or the scene. */
+#modal.hub-location-modal #panel.actor-workspace>.actor-backdrop img{transform:translateY(57px)!important}
+
+#panel.actor-workspace .status-value-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;padding:5px 7px}
+#panel.actor-workspace .status-value-grid>div{display:flex;align-items:center;justify-content:space-between;gap:4px;min-height:33px;padding:4px 8px;border:1px solid rgba(219,199,142,.35);border-radius:6px;background:rgba(16,19,21,.52);font-variant-numeric:tabular-nums}
+#panel.actor-workspace .status-value-grid small{font-size:10px;color:#e2dfd3}
+#panel.actor-workspace .status-value-grid b{font-size:13px;color:#f6e3b7}

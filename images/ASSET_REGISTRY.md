@@ -169,7 +169,7 @@
 
 ## 拠点キャラクター派生素材
 
-- キャラ概要用高解像度立ち絵: images/hub-standing-warrior-clean.webp / hub-standing-paladin-clean.webp / hub-standing-rogue-clean.webp / hub-standing-archer-clean.webp / hub-standing-alchemist-clean.webp / hub-standing-mystic-clean.webp
+- キャラ概要用高解像度立ち絵: images/hub-standing-warrior-clean.webp / hub-standing-paladin-transparent.webp / hub-standing-rogue-clean.webp / hub-standing-archer-clean.webp / hub-standing-alchemist-clean.webp / hub-standing-mystic-clean.webp
 - 拠点キャラカード用透過画像: images/hub-card-warrior.webp / hub-card-paladin.webp / hub-card-rogue.webp / hub-card-archer.webp / hub-card-alchemist.webp / hub-card-mystic.webp
 - キャラカード用画像は人物を着色せず、カード背景色だけで6人を識別する。
 - キャラ概要は高解像度立ち絵を使用し、旧軽量立ち絵の拡大表示を避ける。
