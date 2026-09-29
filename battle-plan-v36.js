@@ -23,7 +23,7 @@ function cut(c,cls=''){
 $('environment').querySelector('.sky-art').innerHTML=cut(M.crops.sky,'scenery');
 
 const BATTLE_GRID={
- enemy:{left:.065,top:.09,width:.95,height:.78,rows:['REAR','MID','FRONT']},
+ enemy:{left:.025,top:.09,width:.95,height:.78,rows:['REAR','MID','FRONT']},
  ally:{left:.14,top:.52,width:.81,height:.42,rows:['FRONT','MID','REAR']}
 };
 function buildBattleGrid(container,side){
