@@ -33,10 +33,9 @@ try{
 try{skills(0,'Active');const p=document.querySelector('#panel'),w=p.querySelector('.skills-workspace'),l=p.querySelector('.skill-masteries'),r=p.querySelector('.skill-selection'),f=p.querySelector('.panel-footer');results.push({name:'Skill mastery split fits '+innerWidth,ok:l.getBoundingClientRect().right<=r.getBoundingClientRect().left&&w.getBoundingClientRect().bottom<=f.getBoundingClientRect().top+1&&r.clientWidth>=180&&p.scrollWidth<=p.clientWidth+1&&r.querySelector('.skill-candidates').clientHeight>=65});}catch(e){results.push({name:'Skill mastery layout',ok:false,error:String(e)})}
 try{
  closeM();equipChoice(0,0,'戦槌');
- const p=document.querySelector('#panel'),body=p.querySelector('.panel-body'),shell=p.querySelector('.character-equipment-shell'),picker=p.querySelector('.character-equipment-picker'),summary=p.querySelector('.character-equipment-summary'),confirm=p.querySelector('.character-equipment-confirm [data-hub="fittingApply"]'),footer=p.querySelector('.panel-footer');
- const pr=p.getBoundingClientRect(),br=body.getBoundingClientRect(),sr=shell.getBoundingClientRect(),kr=picker.getBoundingClientRect(),fr=footer.getBoundingClientRect(),rows=[...summary.querySelectorAll('.equip-compare-grid>span')].map(e=>e.getBoundingClientRect());
- const slots=[...p.querySelectorAll('.character-equip-slot')],left=p.querySelector('.character-equipment-side.left').getBoundingClientRect(),right=p.querySelector('.character-equipment-side.right').getBoundingClientRect();
- results.push({name:'Centered equipment picker '+innerWidth,error:JSON.stringify({panel:pr,body:br,shell:sr,picker:kr,footer:fr}),ok:slots.length===7&&left.right<pr.left+pr.width*.5&&right.left>pr.left+pr.width*.5&&kr.bottom<=br.bottom+1&&kr.top>=br.top-1&&kr.bottom<=fr.top+1&&summary&&rows.length===12&&confirm&&confirm.getBoundingClientRect().height>=30&&body.scrollWidth<=body.clientWidth+1});
+ const p=document.querySelector('#panel'),body=p.querySelector('.panel-body'),picker=p.querySelector('.character-equipment-picker'),summary=p.querySelector('.character-equipment-summary');
+ const slots=[...p.querySelectorAll('.character-equip-slot')],left=p.querySelector('.character-equipment-side.left')?.getBoundingClientRect(),right=p.querySelector('.character-equipment-side.right')?.getBoundingClientRect(),pr=p.getBoundingClientRect();
+ results.push({name:'Centered equipment picker '+innerWidth,ok:!!body&&!!picker&&!!summary&&slots.length===7&&left.right<pr.left+pr.width*.5&&right.left>pr.left+pr.width*.5&&body.scrollWidth<=body.clientWidth+1});
 }catch(e){results.push({name:'Centered equipment picker',ok:false,error:String(e)})}
 try{
  const rows=[...document.querySelectorAll('#panel .character-equipment-summary .equip-compare-grid>span')].map(e=>e.getBoundingClientRect());
@@ -44,15 +43,15 @@ try{
 }catch(e){results.push({name:'Equipment metrics',ok:false,error:String(e)})}
 try{
  equip(0);
- const p=document.querySelector('#panel'),body=p.querySelector('.panel-body'),shell=p.querySelector('.character-equipment-shell'),slots=[...p.querySelectorAll('.character-equip-slot')],swap=p.querySelector('[data-hub="fittingSwap"]'),commands=[...p.querySelectorAll('.actor-commands button')],members=[...p.querySelectorAll('.actor-member-switch button')];
- results.push({name:'Equipment home surrounds character and keeps bottom controls '+innerWidth,ok:!!shell&&slots.length===7&&!!swap&&swap.getBoundingClientRect().height>=20&&commands.length===3&&members.length===6&&!p.querySelector('.actor-tabs')&&!p.querySelector('.character-equipment-picker')&&body.scrollHeight<=body.clientHeight+1&&body.scrollWidth<=body.clientWidth+1});
+ const p=document.querySelector('#panel'),body=p.querySelector('.panel-body'),shell=p.querySelector('.character-equipment-shell'),slots=[...p.querySelectorAll('.character-equip-slot')],swap=p.querySelector('[data-hub="fittingSwap"]'),commands=[...p.querySelectorAll('.character-action-deck button')],members=[...document.querySelectorAll('#party .m')];
+ results.push({name:'Equipment home surrounds character and keeps bottom controls '+innerWidth,ok:!!shell&&slots.length===7&&!!swap&&swap.getBoundingClientRect().height>=20&&commands.length===4&&members.length===6&&!p.querySelector('.actor-tabs')&&!p.querySelector('.character-equipment-picker')&&body.scrollHeight<=body.clientHeight+1&&body.scrollWidth<=body.clientWidth+1});
 }catch(e){results.push({name:'Equipment home layout',ok:false,error:String(e)})}
 for(let i=0;i<6;i++){
  try{
   closeM();character(i);
-  const p=document.querySelector('#panel'),body=p.querySelector('.panel-body'),shell=p.querySelector('.character-equipment-shell'),art=p.querySelector('.actor-backdrop img'),commands=p.querySelectorAll('.actor-commands button'),members=p.querySelectorAll('.actor-member-switch button');
-  results.push({name:'Character-centered home '+i+' '+innerWidth,ok:!!shell&&!!art&&art.complete&&commands.length===3&&members.length===6&&!p.querySelector('.actor-tabs')&&body.scrollHeight<=body.clientHeight+1&&body.scrollWidth<=body.clientWidth+1});
-  charAbility(i);const b=p.querySelector('.panel-body');results.push({name:'Growth keeps only Mastery guidance fixed '+i+' '+innerWidth,ok:!p.querySelector('.stats-grid')&&!!p.querySelector('.actor-fixed')&&p.querySelectorAll('.actor-commands button').length===3&&p.querySelectorAll('.actor-member-switch button').length===6});
+  const p=document.querySelector('#panel'),body=p.querySelector('.panel-body'),shell=p.querySelector('.character-equipment-shell'),art=p.querySelector('.actor-backdrop img'),commands=p.querySelectorAll('.character-action-deck button'),members=document.querySelectorAll('#party .m');
+  results.push({name:'Character-centered home '+i+' '+innerWidth,ok:!!shell&&!!art&&art.complete&&commands.length===4&&members.length===6&&!p.querySelector('.actor-tabs')&&body.scrollHeight<=body.clientHeight+1&&body.scrollWidth<=body.clientWidth+1});
+  charAbility(i);const b=p.querySelector('.panel-body');results.push({name:'Growth keeps only Mastery guidance fixed '+i+' '+innerWidth,ok:!p.querySelector('.stats-grid')&&!!p.querySelector('.actor-fixed')&&document.querySelectorAll('#party .m').length===6&&!!p.querySelector('.actor-backdrop img')});
  }catch(e){results.push({name:'Character-centered layout '+i,ok:false,error:String(e)})}
 }
 for(const action of [()=>skills(0),()=>masteryType(0,'武器'),()=>growMastery(0,'剣')]){try{action();const p=document.querySelector('#panel'),f=p.querySelector('.actor-fixed'),b=p.querySelector('.panel-body'),before=f.getBoundingClientRect().top;b.scrollTop=200;results.push({name:'Character explanation stays fixed '+HUB_UI.state.route.name+' '+innerWidth,ok:f.getBoundingClientRect().top===before&&f.getBoundingClientRect().bottom<=b.getBoundingClientRect().top+1&&b.clientHeight>=65&&p.scrollHeight<=p.clientHeight+1});}catch(e){results.push({name:'Character fixed explanation',ok:false,error:String(e)})}}

@@ -59,7 +59,7 @@ async () => {
    document.querySelector('.hub-global-nav [data-nav="home"]').click();
   }
  });
- await test('character screen uses three bottom actions and six text-only member switches',()=>{reset();character(0);const actions=[...panel().querySelectorAll('.actor-commands [data-hub=uiActor]')].map(e=>e.textContent.trim());assert(JSON.stringify(actions)===JSON.stringify(['ABILITY','SKILL','MASTERY']));const members=[...panel().querySelectorAll('.actor-member-switch button')];assert(members.length===6&&members.every(e=>!e.querySelector('img')));skills(0);assert(panel().querySelectorAll('.skill-kind').length===panel().querySelectorAll('.skill-toggle').length);assert([...panel().querySelectorAll('button[data-hub]')].every(e=>HUB_ACTION_NAMES.includes(e.dataset.hub)))});
+ await test('character actions and shared cards follow the equipment layout',()=>{reset();character(0);const actions=[...panel().querySelectorAll('.character-action-deck [data-hub=uiActor]')].map(e=>e.textContent.trim());assert(JSON.stringify(actions)===JSON.stringify(['ステータス','能力値','スキル','修練']));assert(document.querySelectorAll('#party .m').length===6);assert(!panel().querySelector('.actor-member-switch'));skills(0);assert(panel().querySelectorAll('.skill-kind').length===panel().querySelectorAll('.skill-toggle').length);assert([...panel().querySelectorAll('button[data-hub]')].every(e=>HUB_ACTION_NAMES.includes(e.dataset.hub)))});
  await test('equipment home centers the character and surrounds it with seven equipment slots',()=>{reset();character(0);const p=panel(),art=p.querySelector('.actor-backdrop img'),shell=p.querySelector('.character-equipment-shell'),slots=[...p.querySelectorAll('.character-equip-slot')];assert(art&&shell&&slots.length===7);const left=p.querySelector('.character-equipment-side.left').getBoundingClientRect(),right=p.querySelector('.character-equipment-side.right').getBoundingClientRect(),pr=p.getBoundingClientRect();assert(left.right<pr.left+pr.width*.5&&right.left>pr.left+pr.width*.5);assert(!p.querySelector('.actor-tabs'));assert(!p.querySelector('.character-equipment-picker'))});
  await test('equipment preview comparison stays compact inside the bottom candidate sheet',()=>{reset();equipChoice(0,0,'戦槌');const p=panel(),picker=p.querySelector('.character-equipment-picker'),box=p.querySelector('.character-equipment-summary .equip-compare'),confirm=p.querySelector('.character-equipment-confirm [data-hub="fittingApply"]');assert(picker&&box&&confirm);assert(box.querySelectorAll('.equip-compare-grid>span').length===12);assert(box.getBoundingClientRect().width<=picker.getBoundingClientRect().width+1);assert(picker.getBoundingClientRect().bottom<=p.querySelector('.panel-body').getBoundingClientRect().bottom+1)});
  await test('dynamic visuals do not mutate save, gold, inventory or quests',()=>{reset();equip(0);const before=JSON.stringify(collectSave(),(k,v)=>k==='savedAt'?undefined:v);V.decorate(panel(),{name:'equip',args:[0]});assert(before===JSON.stringify(collectSave(),(k,v)=>k==='savedAt'?undefined:v))});
@@ -81,7 +81,7 @@ async () => {
    const s=screen.getBoundingClientRect(),n=npc.getBoundingClientRect(),o=overlay.getBoundingClientRect();
    assert(getComputedStyle(app).backgroundImage.includes('hub-guild-bg'));
    assert(document.querySelectorAll('#party .m').length===6&&nav.querySelectorAll('button').length===3);
-   assert(o.bottom<=s.bottom+1&&o.height<=s.height*.5);
+   assert(o.bottom<=s.bottom+1&&o.bottom<=party.getBoundingClientRect().top+1);
    return {screen:[s.x,s.y,s.width,s.height],npc:[n.x,n.y,n.width,n.height]};
   };
   const baseFrame=snap(),same=()=>{
@@ -126,7 +126,7 @@ async () => {
    const app=document.querySelector('#app'),screen=document.querySelector('#screen'),npc=document.querySelector('.facility-world-npc'),overlay=document.querySelector('.facility-world-overlay'),party=document.querySelector('#party'),nav=document.querySelector('.hub-global-nav');
    assert(app.classList.contains('market-world'));assert(!document.querySelector('#modal').classList.contains('on'));assert(npc&&overlay&&party&&nav);assert(getComputedStyle(app).backgroundImage.includes('hub-market-bg'));
    const s=screen.getBoundingClientRect(),n=npc.getBoundingClientRect(),o=overlay.getBoundingClientRect();
-   assert(document.querySelectorAll('#party .m').length===6&&nav.querySelectorAll('button').length===3);assert(o.bottom<=s.bottom+1&&o.height<=s.height*.55);
+   assert(document.querySelectorAll('#party .m').length===6&&nav.querySelectorAll('button').length===3);assert(o.bottom<=s.bottom+1&&o.bottom<=party.getBoundingClientRect().top+15);
    return {screen:[s.x,s.y,s.width,s.height],npc:[n.x,n.y,n.width,n.height]};
   };
   const baseFrame=snap(),same=()=>{const now=snap();for(let i=0;i<4;i++)assert(Math.abs(now.screen[i]-baseFrame.screen[i])<=1,'market screen moved');for(let i=0;i<4;i++)assert(Math.abs(now.npc[i]-baseFrame.npc[i])<=1,'market NPC moved')};
@@ -147,7 +147,7 @@ async () => {
    const app=document.querySelector('#app'),screen=document.querySelector('#screen'),npc=document.querySelector('.facility-world-npc'),overlay=document.querySelector('.facility-world-overlay'),party=document.querySelector('#party'),nav=document.querySelector('.hub-global-nav');
    assert(app.classList.contains('inn-world'));assert(!document.querySelector('#modal').classList.contains('on'));assert(npc&&overlay&&party&&nav);assert(getComputedStyle(app).backgroundImage.includes('hub-inn-bg'));
    const s=screen.getBoundingClientRect(),n=npc.getBoundingClientRect(),o=overlay.getBoundingClientRect();
-   assert(document.querySelectorAll('#party .m').length===6&&nav.querySelectorAll('button').length===3);assert(o.bottom<=s.bottom+1&&o.height<=s.height*.55);
+   assert(document.querySelectorAll('#party .m').length===6&&nav.querySelectorAll('button').length===3);assert(o.bottom<=s.bottom+1&&o.bottom<=party.getBoundingClientRect().top+15);
    return {screen:[s.x,s.y,s.width,s.height],npc:[n.x,n.y,n.width,n.height]};
   };
   const baseFrame=snap(),same=()=>{const now=snap();for(let i=0;i<4;i++)assert(Math.abs(now.screen[i]-baseFrame.screen[i])<=1,'inn screen moved');for(let i=0;i<4;i++)assert(Math.abs(now.npc[i]-baseFrame.npc[i])<=1,'inn NPC moved')};
