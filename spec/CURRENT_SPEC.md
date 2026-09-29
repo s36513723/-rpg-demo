@@ -68,6 +68,7 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - Nodes include normal battle / strong enemy / event / camp / merchant / exploration / smith-workshop / boss.
 - No equipment durability/repair.
 - Camp once per layer: HP35% + SP35% + battle-status recovery; no KO revival.
+- On defeat, keep all loot acquired during the run, including materials and rare gear, and all earned EXP. The expedition ends; start a new one from MAP. Defeat does not automatically heal the party.
 
 ## Base
 - Home: next objective / notifications / next sortie + Inn / Guild / Market.

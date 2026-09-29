@@ -105,6 +105,13 @@
       "auto_heal_on_return": false,
       "rest_at_inn": "full HP/SP/status recovery and pending growth-point settlement"
     },
+    "expedition_defeat": {
+      "status": "確定",
+      "loot_retention": "all acquired materials and rare gear",
+      "experience_retention": "all earned EXP",
+      "next_action": "end expedition; begin a new one from MAP",
+      "auto_heal": false
+    },
     "character_art": {
       "paladin": {
         "status": "確定",
@@ -187,7 +194,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "hub_sortie_composition_formation_no_scroll_2026-09-29",
+  "last_sync_status": "expedition_defeat_full_loot_retention_2026-09-29",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
