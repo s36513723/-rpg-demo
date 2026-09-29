@@ -467,5 +467,11 @@
     "multi_target": "対象ごと順次演出・処理",
     "command_icons": "iPhoneでも表示",
     "invalid_target_notice": "戦闘UIと同じ浮遊プレート"
+  },
+  "battle_ui_legibility_2026_09_29": {
+    "status": "確定",
+    "portrait": "拠点と同じ最終透過素材6枚",
+    "commands": "アイコン上、ラベル下で重なりなし",
+    "enemy_pointer": "白／赤／黄の三角を拡大して明暗背景上の輪郭を強める"
   }
 }
