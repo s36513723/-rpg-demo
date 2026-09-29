@@ -1135,3 +1135,12 @@ html,body{height:100%;overflow:hidden}
 .terrain-toggle{gap:2px!important;font-size:clamp(9px,2.3vw,12px)!important}
 .terrain-toggle .icon{width:clamp(14px,3.3vw,19px)!important;height:clamp(14px,3.3vw,19px)!important}
 @media(max-width:410px){.round-meta{max-width:25%!important}.order-ribbon{left:50%!important;width:47%!important}.order-ribbon .order-face,.order-ribbon .order-face.ally,.order-ribbon .order-face.foe{width:clamp(27px,7.4vw,31px)!important;height:clamp(27px,7.4vw,31px)!important;flex-basis:clamp(27px,7.4vw,31px)!important}.order-ribbon .order-face.is-next{width:clamp(32px,8.4vw,35px)!important;height:clamp(32px,8.4vw,35px)!important;flex-basis:clamp(32px,8.4vw,35px)!important}}
+
+/* Center the visible sprites inside their wider tactical cells. */
+#game .enemy-unit{justify-content:center!important}
+/* Let the acting portrait emerge from the battlefield without a cut top edge. */
+#game>.actor-art .actor-portrait-image{mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.75) 9%,#000 16%)!important;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.75) 9%,#000 16%)!important}
+/* Keep both auxiliary controls centered as one group at every viewport width. */
+#game #auto,#game #pace{width:clamp(45px,11vw,62px)!important;right:auto!important}
+#game #auto{left:calc(50% - clamp(45px,11vw,62px) - 4px)!important}
+#game #pace{left:calc(50% + 4px)!important}
