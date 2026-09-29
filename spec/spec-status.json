@@ -73,7 +73,8 @@
     "environment_encounter_mix": {
       "value": "8 environment-specific archetype pools",
       "status": "初期実装値"
-    }
+    },
+    "skill_effect_design_84": "84 Active技の対象・条件・係数・持続は初期案。skill-effect-design-84.js。戦闘実装・実戦検証前。"
   },
   "needs_review_systems": [
     "HP/防御/ダメージ係数",
