@@ -304,8 +304,26 @@
         "purpose": "temporarily acquire an unlearned skill for the current expedition",
         "normal_prerequisites_apply": true,
         "reset_at_expedition_end": true,
-        "gain_and_cost_status": "未決定",
-        "status": "確定・数値未決定"
+        "gain_and_cost_status": "獲得量は初期実装値・取得コストは未決定",
+        "status": "確定・獲得量は初期実装値・取得コスト未決定",
+        "gain_status": "初期実装値",
+        "gain_schedule": {
+          "expedition_start": 0,
+          "normal_battle": 0,
+          "strong_enemy_victory": 1,
+          "special_event_tp_reward": 1,
+          "hidden_area_discovery_or_clear": 1,
+          "special_treasure": 1,
+          "layer_1_boss": 2,
+          "layer_2_boss": 2,
+          "layer_3_boss": 0,
+          "rest": 0,
+          "merchant": 0,
+          "ordinary_trap_disarm": 0
+        },
+        "expected_full_clear_total": "6-9",
+        "gain_cap": "none",
+        "cost_status": "未決定"
       }
     },
     "expedition_success": {
@@ -322,7 +340,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "exploration_tp_route_recovery_2026-09-30",
+  "last_sync_status": "exploration_tp_gain_initial_values_2026-09-30",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
