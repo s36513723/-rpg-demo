@@ -179,3 +179,7 @@ Commands sit immediately above ally cards. Character appeal has priority over ti
 - 戦闘の大型立ち絵は拠点と同じ最終透過素材（warrior/rogue/archer/alchemist/mystic は `hub-standing-*-clean.webp`、paladin は `hub-standing-paladin-transparent.webp`）を参照する。
 - ATTACK / SKILL / ITEM / DEFEND はアイコンを上、文字を下に置き、重ならない。
 - 敵の逆三角カーソルは明るい背景・敵本体の上でも見える寸法と輪郭にする。通常白、候補赤、一度選択した対象は黄色発光という既存の状態区分を維持する。
+
+## 戦闘コマンドと敵カーソルの造形（2026-09-29 確定）
+- コマンドプレート内のアイコンと文字は中央で一体に見える間隔へ整える。
+- 敵の逆三角カーソルは細い多面体風の縁と控えめな光を持たせ、通常白・候補赤・一度選択した対象の金色を見分けられるようにする。対象選択と確定の挙動は維持する。
