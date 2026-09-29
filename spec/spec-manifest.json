@@ -378,5 +378,12 @@
     "implementation": "exploration/presentation.js, exploration/sortie-layout.css, exploration/index.html, tests/browser.py",
     "revision": "編成6人を3×2固定グリッドへ統合。陣形の3行を画面内へ均等配置し、別操作の44pxボタンを画像の隅へ重ねる。両タブの内部スクロールを廃止。",
     "verification": "スマホ幅を含むブラウザ回帰テストでコンテンツ高と操作対象を確認。"
+  },
+  "hub_ui_audit_followup_2026_09_29": {
+    "status": "確定・実装・ローカル実画面検証済み",
+    "workbook_sync": "Library正本 version 18・07_UI仕様 A44:D47",
+    "implementation": "exploration/ui.js, exploration/hub.js, exploration/presentation.js, exploration/sortie-layout.css, exploration/hub-roster-panel.css, tests/hub-regression.js, tests/ui-regression.js, tests/browser.py, exploration/index.html, exploration/boot.js, exploration/visuals.js, exploration/mastery-layout.js",
+    "revision": "盾の副手制限と店頭の修練判定、依頼・スキルの初期表示、ギルドの重複カード撤去、陣形の視認性、会話文、強化素材、保管庫の数量選択・確認、ステータスの横幅を改善。",
+    "verification": "Native Chromium HTTP: 746/746 PASS。320/375/390/430/768pxの拠点、施設、編成、陣形、ステータス、技能、設定などを確認。"
   }
 }
