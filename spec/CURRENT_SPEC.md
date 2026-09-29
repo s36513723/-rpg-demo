@@ -82,7 +82,7 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - Voluntary return is available **only from designated return locations** on the exploration map; no return item is consumed.
 - No equipment durability/repair.
 - Successful return after defeating the Layer 3 boss grants/settles expedition loot and EXP. Exact quantities are balance-controlled.
-- On defeat: **forced return to base; current expedition progress is lost; consumed items are not restored.**
+- On defeat: **forced return to base; current expedition progress is lost. Earned loot and EXP are retained and settled. Consumed items are not restored; HP/SP/status are not automatically healed.**
 
 ## Base
 - Home: next objective / notifications / next sortie + Inn / Guild / Market.
@@ -222,7 +222,7 @@ Commands sit immediately above ally cards. Character appeal has priority over ti
 
 ## 探索から戦闘デモへの接続（2026-09-29 確定）
 - 探索の戦闘地点から現在の `battle-v44.html` へ移動する。探索の出撃編成・陣形・HP/SP・敵編成・地形を引き継ぎ、勝敗または逃走後に結果と資源を探索へ返す。単独で開く戦闘デモは維持する。
-- 戦闘敗北では拠点へ強制帰還し、今回の探索進行を失い、使用済み道具は戻らない。敗北時の戦利品・EXPの扱いは未決定。宿で休むまでHP/SPは自動回復しない。
+- 戦闘敗北では拠点へ強制帰還し、今回の探索進行を失い、使用済み道具は戻らない。獲得済みの戦利品・EXPは保持して帰還時に精算する。宿で休むまでHP/SPは自動回復しない。
 
 ## 探索戦闘の背景（2026-09-29 確定）
 - 探索から `battle-v44.html` へ移る戦闘では、現在の階層テーマ（森林／洞窟／廃墟都市／山岳／沼地／砂漠遺跡／海上・船／地下神殿）に対応する登録済み正式背景画像を戦闘画面全体へ表示する。階層テーマが変われば次の戦闘背景も変わる。戦闘画面を単独で開いた場合は従来の白い幻想都市背景を維持する。

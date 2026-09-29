@@ -340,7 +340,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "exploration_place_boss_return_tp_runtime_2026-09-29",
+  "last_sync_status": "exploration_defeat_loot_exp_confirmed_2026-09-30",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
@@ -558,7 +558,7 @@
     "runtime": "未接続。主エンジン監査で84件の実行効果フィールドなし、battle-v44は旧296技。84技の実戦効果検証は未実施。"
   },
   "exploration_runtime_sync_2026_09_29": {
-    "workbook_source": "Library 正本 2026-09-29 16:40 UTC 版（同一内容 version 25）",
+    "workbook_source": "Library 正本 version 26（2026-09-30）",
     "implementation": "exploration/explore.js, character-stats.js, state.js, base.js, ui.js, presentation.js, boot.js, index.html",
     "features": [
       "各層10〜11地点のテーマ別地名と接続図",
@@ -570,9 +570,19 @@
       "一時スキル1件に1 TP",
       "場所踏査20 EXP、層ボス80 EXPなど既存バランス値"
     ],
-    "unresolved": [
-      "敗北時の戦利品・EXPの最終扱いは正本で未決定。EXPは履歴の未確定値として記録し恒久成長へ加算しない"
-    ],
-    "validation": "Chromium 390x844で地図・メニューを確認。構文テスト成功、ローカルブラウザ回帰755/755成功。"
+    "unresolved": [],
+    "validation": "Chromium 390x844で地図・メニューを確認。構文テスト成功、ローカルブラウザ回帰755/755成功。",
+    "defeat_rewards": "敗北時も獲得済み戦利品とEXPを保持・精算。探索進行のみ失い、使用済み道具は戻らず、HP/SP/状態は自動回復しない。確定。"
+  },
+  "exploration_defeat_rewards_2026_09_30": {
+    "status": "確定",
+    "loot": "獲得済みを保持。帰還後の鑑定まで使用不可",
+    "exp": "獲得済みを強制帰還時に精算",
+    "progress": "失う",
+    "consumed_tools": "戻らない",
+    "hp_sp_status": "自動回復しない",
+    "workbook_sync": "Library 正本 version 26。03_能力成長Mastery C30:D30、05_拠点探索仕様 C34、12_仮値バランス調整 D12・D19",
+    "implementation": "exploration/explore.js, exploration/hub.js, exploration/index.html, tests/hub-regression.js",
+    "validation": "構文検査成功。Chromiumブラウザ回帰755/755成功。敗北後の戦利品・EXP・HP/SP・保存再読込を確認。"
   }
 }
