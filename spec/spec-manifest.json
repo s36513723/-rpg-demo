@@ -369,7 +369,8 @@
     "implementation": "battle-v44.html",
     "workbook_sync": "Library正本 version 15・07_UI仕様 A40:D40",
     "assets": "images/theme-{forest,cave,ruins,mountain,swamp,desert,sea,temple}-official.webp",
-    "validation": "GitHub Pages探索デモで第1層・森林→battle-v44のtheme-forest-official.webp、第2層・洞窟→theme-cave-official.webpへ実操作で切替を確認。敵3体／4体と地形表示も維持。単独起動は従来の白い幻想都市背景・敵9体を確認。アプリのコンソールエラー0。"
+    "validation": "GitHub Pages探索デモで第1層・森林→battle-v44のtheme-forest-official.webp、第2層・洞窟→theme-cave-official.webpへ実操作で切替を確認。敵3体／4体と地形表示も維持。単独起動は従来の白い幻想都市背景・敵9体を確認。アプリのコンソールエラー0。",
+    "ci": "Specification contract 成功。RPG validation #793 は 743/745、探索ルートの UI8・UI11 が失敗（背景読込とは別の既存テスト領域）。公開画面で森林・洞窟・単独背景を確認。"
   },
   "sortie_no_scroll_2026_09_29": {
     "status": "確定・実装済み",
