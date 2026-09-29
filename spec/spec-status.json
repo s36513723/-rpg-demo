@@ -497,5 +497,9 @@
   "exploration_battle_v44_link_2026_09_29": {
     "status": "確定",
     "value": "探索の戦闘地点からbattle-v44へ遷移し、編成・資源・敵・地形を渡す。戦闘結果を探索へ返す"
+  },
+  "exploration_battle_background_2026_09_29": {
+    "status": "確定",
+    "value": "探索の現在階層テーマに対応する正式背景画像をbattle-v44の全画面へ表示。単独起動は従来背景"
   }
 }
