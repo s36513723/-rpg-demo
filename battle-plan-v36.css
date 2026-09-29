@@ -1206,3 +1206,9 @@ html,body{height:100%;overflow:hidden}
 #game #auto,#game #pace{top:71%!important;bottom:auto!important}
 #game #pace{right:.5%!important}
 #game #auto{right:calc(.5% + clamp(44px,10.5vw,57px) + 6px)!important}
+
+/* Tie the lower row to the commands while keeping the portrait caption clear. */
+#game .party-hud{bottom:12%!important}
+#game .party-strip .card-name{font-size:clamp(11px,2.5vw,14px)!important;text-shadow:0 1px 4px #14233d,0 0 5px #14233d!important}
+#game .party-strip .ally-unit:not(.active):after{background:rgba(24,42,75,.20)!important}
+#game #auto,#game #pace{border:0!important;border-radius:0!important;box-shadow:none!important;background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='1,50 12,1 88,1 99,50 88,99 12,99' fill='%23223857' fill-opacity='.25' stroke='%23d7ebff' stroke-opacity='.72' stroke-width='2'/%3E%3C/svg%3E")!important;color:#fff!important;text-shadow:0 1px 4px #172442!important}
