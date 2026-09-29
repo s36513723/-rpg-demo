@@ -61,6 +61,9 @@ const guildLine=(name,args=[])=>{
  if(name==='storageMenu'||name==='depositMenu'||name==='withdraw')return '保管品を確認します。必要なものだけ手元に戻せますよ。';
  if(name==='guildMembers')return '登録メンバーの情報ですね。確認したい方を選んでください。';
  if(/^guildSale/.test(name))return '装備の整理ですね。売却内容を一緒に確認します。';
+ if(name==='confirmAction')return '内容を確認してから手続きを進めてください。';
+ if(name==='checkpointResult')return '手続きが完了しました。結果を確認してください。';
+ if(name==='note')return 'ご案内があります。内容を確認してください。';
  return 'ご用件を確認しますね。';
 };
 const renderGuildWorld=(html,r)=>{
@@ -74,6 +77,8 @@ const renderGuildWorld=(html,r)=>{
  temp.querySelectorAll('.actions').forEach(a=>{if(!a.children.length)a.remove()});
  const home=r.name==='guild';
  screen.innerHTML='<section class="town-scene facility-world-scene guild-world-scene '+(home?'facility-world-mode-home':'facility-world-mode-service')+'">'+(home?'':'<div class="facility-world-title"><span class="chapter-kicker">GUILD</span><b>'+hesc(title)+'</b></div>')+'<img class="facility-world-npc" src="../images/hub-guild-npc.webp" alt="ギルド受付 エダ"><div class="facility-world-identity"><b>エダ</b><small>ギルド受付</small><button type="button" data-hub="uiGuildTalk">TALK</button></div><div class="facility-world-controls"><div class="facility-world-dialogue"><b>エダ</b><span>'+hesc(guildLine(r.name,r.args||[]))+'</span></div><section class="facility-world-overlay '+(home?'facility-world-home':'facility-world-service')+'">'+temp.innerHTML+'</section></div></section>';
+ if(window.HUB_VISUAL?.decorate)window.HUB_VISUAL.decorate(screen,r);
+ if(window.HUB_VISUAL?.chrome)window.HUB_VISUAL.chrome();
  renderRoster();renderSaveStatus();navState(r.name);
 };
 
