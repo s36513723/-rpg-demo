@@ -1030,3 +1030,7 @@ html,body{height:100%;overflow:hidden}
 #more .icon{display:none!important}
 #more:after{content:"";display:block;width:18px;height:13px;border-top:1.5px solid currentColor;border-bottom:1.5px solid currentColor;background:linear-gradient(currentColor,currentColor) center/18px 1.5px no-repeat}
 #game #commandPanel .command-buttons>.command.plan-hidden-equip{display:none!important}
+.enemy-unit[data-rank="back"]{--sprite-scale-x:1.24;--sprite-scale-y:1.14}
+.enemy-unit[data-rank="mid"]{--sprite-scale-x:1.25;--sprite-scale-y:1.17}
+.enemy-unit[data-rank="front"]{--sprite-scale-x:1.39;--sprite-scale-y:1.24}
+.enemy-unit[data-unit-id="g3"]{--sprite-scale-x:1.31;--sprite-scale-y:1.19}
