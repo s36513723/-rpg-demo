@@ -310,6 +310,6 @@
     "status": "確定",
     "implementation": "exploration/presentation.js, exploration/fitting.js, exploration/state.js, exploration/style.css, exploration/status-layout.css, exploration/hub-roster-panel.css",
     "workbook_sync": "pending: canonical workbook not present in current checkout; repository mirror updated",
-    "revision": "拠点の描画上書きを修正して共通カードに統一。キャラ画面下にSTATUS/ABILITY/SKILL/MASTERYの左右2段パネルを配置"
+    "revision": "装備画面の外枠を廃止。4操作を装備枠と同寸のアイコンパネルに変更。STATUS詳細を追加。共通カードにHP/SP数値を表示。拠点UIのbackdrop blurを廃止"
   }
 }
