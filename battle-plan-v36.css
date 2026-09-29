@@ -1287,8 +1287,8 @@ html,body{height:100%;overflow:hidden}
 
 /* Place the status tracks across the broad middle of each low hex plate. */
 #game .party-strip .ally-unit{position:relative!important}
-#game .party-strip .card-name{position:absolute!important;top:7px!important;left:8%!important;right:8%!important;width:auto!important;z-index:3!important;text-align:center!important}
-#game .party-strip .resource-list,#game .party-strip .ally-unit[data-col="3"] .resource-list{position:absolute!important;top:20px!important;left:5%!important;width:90%!important;height:17px!important;transform:none!important;gap:3px!important;z-index:3!important}
+#game .party-strip .card-name{position:absolute!important;grid-row:auto!important;grid-column:auto!important;top:7px!important;left:8%!important;right:8%!important;width:auto!important;z-index:3!important;text-align:center!important}
+#game .party-strip .resource-list,#game .party-strip .ally-unit[data-col="3"] .resource-list{position:absolute!important;grid-row:auto!important;grid-column:auto!important;top:20px!important;left:5%!important;width:90%!important;height:17px!important;transform:none!important;gap:3px!important;z-index:3!important}
 #game .party-strip .resource .bar{bottom:5px!important}
 
 /* Command pictograms are legible above their labels and the glass outline. */
