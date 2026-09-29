@@ -1161,3 +1161,32 @@ html,body{height:100%;overflow:hidden}
 #game #commandPanel{width:14%!important;right:.5%!important;bottom:max(2.5%,env(safe-area-inset-bottom))!important}
 #game #commandPanel .command-buttons>.command:before{top:10%!important;height:82%!important;background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='1,50 7,3 93,3 99,50 93,97 7,97' fill='%23223857' fill-opacity='.27' stroke='%23c7e2ff' stroke-opacity='.72' stroke-width='2'/%3E%3C/svg%3E")!important}
 #game #commandPanel .command-buttons>.command.is-active:before,#game #commandPanel .command-buttons>.command:active:before{background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='1,50 7,3 93,3 99,50 93,97 7,97' fill='%235b367f' fill-opacity='.36' stroke='%23e5b4ff' stroke-width='3'/%3E%3C/svg%3E")!important}
+
+/* v44 lower stage: reserve the portrait name, tactical formation and commands. */
+#game>.actor-art .actor-art-name{min-width:0!important;width:max-content!important;max-width:22vw!important;left:5%!important;padding:2px 3px!important;z-index:4!important}
+#game .party-hud{left:25%!important;right:25%!important;bottom:2%!important;height:28%!important;z-index:65!important}
+#game .party-strip{gap:2px!important}
+#game .party-strip .ally-unit{height:clamp(47px,5.5dvh,54px)!important;align-self:center!important}
+#game .party-strip .ally-unit{grid-template-rows:8px 17px 17px!important;align-content:center!important;padding:2px 3px!important}
+#game .party-strip .card-status{position:relative!important;grid-row:1!important;left:auto!important;right:auto!important;top:auto!important;height:8px!important;max-height:8px!important;font-size:8px!important}
+#game .party-strip .card-name{grid-row:2!important;height:17px!important;line-height:17px!important;font-size:clamp(10px,2.4vw,13px)!important}
+#game .party-strip .resource-list,#game .party-strip .ally-unit[data-col="3"] .resource-list{grid-row:3!important;width:calc(100% - 4px)!important;transform:none!important;height:17px!important;gap:2px!important;align-self:center!important}
+#game .party-strip .resource-value span{font-size:clamp(6px,1.5vw,8px)!important}
+#game .party-strip .resource-value b{font-size:clamp(8px,2.1vw,11px)!important}
+#game .party-strip .ally-unit[data-rank="front"]{transform:scale(1.015)!important}
+#game .party-strip .ally-unit[data-rank="mid"]{transform:scale(.98)!important}
+#game .party-strip .ally-unit[data-rank="rear"]{transform:scale(.95)!important}
+#game .party-strip .ally-unit.active{transform:translateY(-2px) scale(1.08)!important;filter:drop-shadow(0 0 8px rgba(195,85,255,.8))!important}
+/* Matching glass plates leave a full quarter of the screen for touch input. */
+#game #commandPanel{top:60%!important;bottom:max(10%,calc(env(safe-area-inset-bottom) + 6%))!important;right:1%!important;width:22.5%!important;z-index:70!important}
+#game #commandPanel .command-buttons{gap:2px!important}
+#game #commandPanel .command-buttons>.command{min-height:44px!important}
+#game #commandPanel .command-buttons>.command:before{left:3%!important;width:94%!important;top:10%!important;height:82%!important;transform:perspective(220px) rotateX(17deg) skewY(-4deg)!important;background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='1,50 12,1 88,1 99,50 88,99 12,99' fill='%23223857' fill-opacity='.24' stroke='%23d7ebff' stroke-opacity='.72' stroke-width='2'/%3E%3C/svg%3E")!important}
+#game #commandPanel .command-buttons>.command.is-active,#game #commandPanel .command-buttons>.command:active{transform:translateX(-2px) scale(1.04)!important;filter:drop-shadow(0 0 8px rgba(195,85,255,.8))!important}
+#game #commandPanel .command-buttons>.command.is-active:before,#game #commandPanel .command-buttons>.command:active:before{background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='1,50 12,1 88,1 99,50 88,99 12,99' fill='%235b367f' fill-opacity='.32' stroke='%23e9b9ff' stroke-width='3'/%3E%3C/svg%3E")!important}
+/* Secondary controls belong to the command cluster, just below the plates. */
+#game #auto,#game #pace{left:auto!important;width:max(44px,10.5vw)!important;height:clamp(29px,3.9dvh,36px)!important;bottom:max(4%,env(safe-area-inset-bottom))!important;z-index:72!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#game #pace{right:1%!important}
+#game #auto{right:calc(1% + max(44px,10.5vw) + 6px)!important}
+/* The front rank crowds forward while retaining all nine targeting cells. */
+#game .enemy-unit[data-rank="front"]{--sprite-height:202%;--sprite-scale-x:1.76;--sprite-scale-y:1.55}
