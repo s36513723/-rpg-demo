@@ -220,7 +220,7 @@ const showUI=html=>{
  panel.querySelectorAll('.ui-tabs:not(.actor-tabs .ui-tabs)').forEach(el=>secondary.append(el));
  if(secondary.children.length)footer.prepend(secondary);
  if(controlsMarkup){const operation=document.createElement('div');operation.className='equipment-bottom-operation';const slots=document.createElement('div');slots.className='equipment-bottom-slots';slots.setAttribute('aria-label','装備枠');panel.querySelectorAll('.fitting-controls [data-hub="equipChoice"]').forEach(el=>{const b=el.cloneNode(true),k=Number(JSON.parse(b.dataset.args)[1]);b.textContent=({0:'主',1:'副',2:'予主',3:'予副',4:'防具',8:'装飾',9:'携行'})[k];slots.append(b)});operation.append(slots,panel.querySelector('.fitting-confirm'));footer.prepend(operation)}
- if(actorRoute){const nav=panel.querySelector('.panel-navigation'),exit=nav?.querySelector('.modal-x');if(!hubOverlay&&exit){exit.classList.add('actor-exit');panel.querySelector('.actor-tabs .ui-tabs').append(exit)}nav?.remove()}
+ if(actorRoute){const nav=panel.querySelector('.panel-navigation'),exit=nav?.querySelector('.modal-x');if(!hubOverlay&&exit){exit.classList.add('actor-exit');exit.textContent='地図へ';exit.setAttribute('aria-label','地図へ戻る');panel.querySelector('.panel-head')?.append(exit)}nav?.remove()}
  if(cancelRoute&&panel.querySelector('.panel-back')){const back=panel.querySelector('.panel-back');back.hidden=false;back.dataset.hub=cancelRoute.action;back.dataset.args=cancelRoute.args}
  if(hubOverlay){
   const nav=panel.querySelector('.panel-navigation');
