@@ -160,15 +160,15 @@
       "status": "確定",
       "inn": {
         "background": "images/hub-inn-bg.webp",
-        "npc": "images/hub-inn-npc.webp"
+        "npc": "images/hub-inn-npc-cutout.webp"
       },
       "guild": {
         "background": "images/hub-guild-bg.webp",
-        "npc": "images/hub-guild-npc.webp"
+        "npc": "images/hub-guild-npc-cutout.webp"
       },
       "market": {
         "background": "images/hub-market-bg.webp",
-        "npc": "images/hub-market-npc.webp"
+        "npc": "images/hub-market-npc-cutout.webp"
       },
       "legacy_placeholders": "not used for the three main facility screens"
     }
@@ -310,6 +310,6 @@
     "status": "確定",
     "implementation": "exploration/presentation.js, exploration/fitting.js, exploration/state.js, exploration/style.css, exploration/status-layout.css, exploration/hub-roster-panel.css",
     "workbook_sync": "pending: canonical workbook not present in current checkout; repository mirror updated",
-    "revision": "装備画面の外枠を廃止。12枠を同じ51px正方形・左右位置・間隔・線色・透明度に統一。拠点背景の暗幕を外す。キャラ詳細の共通ABILITY/SKILL/MASTERYタブ列を廃止。共通カードの透過枠を控えめにし、HP/SPの細線ゲージと数値を同じ行に配置。立ち絵6枚は透過済みの現行WebPを継続使用。拠点UIのbackdrop blurを廃止"
+    "revision": "装備画面の外枠を廃止。12枠を同じ51px正方形・左右位置・間隔・線色・透明度に統一。拠点背景の暗幕を外す。キャラ詳細の共通ABILITY/SKILL/MASTERYタブ列を廃止。共通カードの透過枠を控えめにし、HP/SPの細線ゲージと数値を同じ行に配置。保管済み最終切り抜き素材からキャラ6人と施設NPC3人を再接続。拠点UIのbackdrop blurを廃止"
   }
 }

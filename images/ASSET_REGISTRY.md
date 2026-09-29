@@ -99,9 +99,9 @@
 
 | 施設 | 正式 | GitHub画像本体 | 状況 |
 |---|---|---|---|
-| ギルド NPC | ✓ | images/hub-guild-npc.webp | 保存済み・拠点UI接続済み |
-| 宿屋 NPC | ✓ | images/hub-inn-npc.webp | 保存済み・拠点UI接続済み |
-| 市場 NPC | ✓ | images/hub-market-npc.webp | 保存済み・拠点UI接続済み |
+| ギルド NPC | ✓ | images/hub-guild-npc-cutout.webp | 保存済み・拠点UI接続済み |
+| 宿屋 NPC | ✓ | images/hub-inn-npc-cutout.webp | 保存済み・拠点UI接続済み |
+| 市場 NPC | ✓ | images/hub-market-npc-cutout.webp | 保存済み・拠点UI接続済み |
 
 ## 探索・会話NPC
 
@@ -169,7 +169,7 @@
 
 ## 拠点キャラクター派生素材
 
-- キャラ概要用高解像度立ち絵: images/hub-standing-warrior.webp / hub-standing-paladin.webp / hub-standing-rogue.webp / hub-standing-archer.webp / hub-standing-alchemist.webp / hub-standing-mystic.webp
+- キャラ概要用高解像度立ち絵: images/hub-standing-warrior-clean.webp / hub-standing-paladin-clean.webp / hub-standing-rogue-clean.webp / hub-standing-archer-clean.webp / hub-standing-alchemist-clean.webp / hub-standing-mystic-clean.webp
 - 拠点キャラカード用透過画像: images/hub-card-warrior.webp / hub-card-paladin.webp / hub-card-rogue.webp / hub-card-archer.webp / hub-card-alchemist.webp / hub-card-mystic.webp
 - キャラカード用画像は人物を着色せず、カード背景色だけで6人を識別する。
 - キャラ概要は高解像度立ち絵を使用し、旧軽量立ち絵の拡大表示を避ける。

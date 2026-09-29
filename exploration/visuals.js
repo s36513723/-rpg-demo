@@ -85,7 +85,7 @@ const esc=s=>hesc(s);
 const cast=['gald','lize','ern','sena','mirea','yuna'];
 const npcGlyph={'受付':'quill','鍛冶師':'forge','学者':'book','宿主':'tavern','伝令':'wind','守人':'sun'};
 const fieldNpcImage={'学者':'../images/hub-scholar-npc.webp','伝令':'../images/hub-messenger-npc.webp','守人':'../images/hub-keeper-npc.webp','旅商人':'../images/hub-merchant-npc.webp'};
-const npcStand={'受付':'../images/hub-guild-npc.webp','鍛冶師':'../images/hub-market-npc.webp','学者':fieldNpcImage['学者'],'宿主':'../images/hub-inn-npc.webp','伝令':fieldNpcImage['伝令'],'守人':fieldNpcImage['守人']};
+const npcStand={'受付':'../images/hub-guild-npc-cutout.webp','鍛冶師':'../images/hub-market-npc-cutout.webp','学者':fieldNpcImage['学者'],'宿主':'../images/hub-inn-npc-cutout.webp','伝令':fieldNpcImage['伝令'],'守人':fieldNpcImage['守人']};
 const npcImage=npcStand;
 const facilityArt={town:'../images/town_lexia.svg',inn:'../images/hub-inn-bg.webp',guild:'../images/hub-guild-bg.webp',market:'../images/hub-market-bg.webp'};
 const facilityLabel={town:'王都レクシア',inn:'宿屋',guild:'ギルド',market:'市場'};
