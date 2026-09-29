@@ -84,12 +84,18 @@ async def audit_nonbattle(page):
    if dims['facility'] and dims['service']:
     fit=fit and dims['service']['bottom']<=dims['dialogue']['top'] and dims['dialogue']['bottom']<=dims['party']['top']+1
    results.append({'name':f'Nonbattle UI {label} {width}x{height}','ok':fit,'measurements':dims})
-   if width==390 and label in ('inn','inn command','composition','formation','dungeon','sortie from inn','presets','equipment','status','skills','mastery'):
-    await page.screenshot(path=str(ROOT/f'hub-audit-{label.replace(" ", "-")}.png'))
+   if (width==390 and label in ('inn','inn command','composition','formation','dungeon','sortie from inn','presets','equipment','status','skills','mastery')) or (width==320 and label in ('composition','formation','dungeon')):
+    await page.screenshot(path=str(ROOT/f'hub-audit-{label.replace(" ", "-")}-{width}.png'))
    if label in ('composition','formation','dungeon','sortie from inn'):
     tab=await page.evaluate("""()=>{const t=document.querySelector('#panel>.panel-footer>.sortie-tabs');const labels=[...(t?.querySelectorAll('button')||[])].map(x=>x.textContent.trim());const f=t?.getBoundingClientRect(),b=document.querySelector('#party').getBoundingClientRect(),m=document.querySelector('#modal').getBoundingClientRect();const bg=getComputedStyle(document.querySelector('#modal'));return {labels,footer:!!t,bottom:f?.bottom,party:b.top,modalTop:m.top,background:bg.backgroundImage,backgroundColor:bg.backgroundColor}}""")
     ok=tab['footer'] and tab['labels']==['編成','陣形','ダンジョン'] and tab['bottom']<=tab['party']+1 and 'hub-' in tab['background'] and tab['backgroundColor']!='rgba(0, 0, 0, 0)'
     results.append({'name':f'Nonbattle sortie tabs/background {label} {width}x{height}','ok':ok,'measurements':tab})
+   if label in ('composition','formation'):
+    portraits=await page.evaluate(r"""async()=>{const cards=[...document.querySelectorAll('#panel .sortie-member-face img,#panel .formation-pick img')];const boxes=cards.map(x=>x.closest('.sortie-member,.formation-member'));const taps=[...document.querySelectorAll('#panel .sortie-member-action,#panel .formation-config,#panel .sortie-preset-link,#panel .sortie-tabs button')];await Promise.all(cards.map(i=>i.decode().catch(()=>{})));return {count:cards.length,cutouts:cards.map(i=>{const c=document.createElement('canvas');c.width=c.height=1;const g=c.getContext('2d');g.drawImage(i,0,0);return /hub-standing-(?:[^/]*-clean|paladin-transparent)\.webp/.test(i.src)&&i.naturalWidth>=640&&g.getImageData(0,0,1,1).data[3]<16}),geometry:boxes.every(b=>{const r=b.getBoundingClientRect(),p=b.querySelector('img').getBoundingClientRect();return p.width>=r.width-2&&p.height>=70&&r.left>=0&&r.right<=innerWidth+1}),tapSizes:taps.map(x=>Math.round(x.getBoundingClientRect().height))}}""")
+    results.append({'name':f'Nonbattle sortie art and touch {label} {width}x{height}','ok':portraits['count']==6 and all(portraits['cutouts']) and portraits['geometry'] and all(x>=44 for x in portraits['tapSizes']),'measurements':portraits})
+   if label=='composition' and width==390:
+    flow=await page.evaluate("""()=>{const initial=H.formation.filter(x=>x!==null).length;document.querySelector('[data-hub="uiRosterBench"]').click();const benched=H.formation.filter(x=>x!==null).length;document.querySelector('[data-hub="uiRosterDeploy"]').click();const restored=H.formation.filter(x=>x!==null).length;partyMenu('formation');document.querySelector('.formation-pick').click();const opened=HUB_UI.state.route?.name;document.querySelector('.hub-global-nav [data-nav="back"]').click();return {initial,benched,restored,opened,returned:HUB_UI.state.route?.name,tab:HUB_UI.state.sortie}}""")
+    results.append({'name':'Nonbattle sortie composition and portrait return','ok':flow=={'initial':6,'benched':5,'restored':6,'opened':'character','returned':'partyMenu','tab':'formation'},'measurements':flow})
  await page.set_viewport_size({'width':390,'height':844})
  await page.evaluate('base=>{installSave(base);closeM();town()}',baseline)
  return results

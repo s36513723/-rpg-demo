@@ -18,10 +18,9 @@ let actorRenderToken=0;
 const ensureStandArt=i=>standArtCache[i]?.promise||Promise.resolve();
 const standArtReady=i=>!!standArtCache[i]?.ready;
 const actorRouteName=n=>/^(character|charOverview|statusView|actorAttributes|charAbility|charMastery|equip|equipChoice|skills|mastery|masteryType|growMastery|masterySkills|resistView)$/.test(n);
-// Battle-card artwork is intentionally separate from full-body status artwork.
-// Paladin has its finalized turn icon in-repo; the other five use official full-body art cropped
-// by the card CSS until their finalized battle icons are registered as individual assets.
-const battleCardArts=['hub-card-warrior.webp','hub-card-paladin.webp','hub-card-rogue.webp','hub-card-archer.webp','hub-card-alchemist.webp','hub-card-mystic.webp'];
+// Shared character thumbnails use the same final transparent artwork as the status view.
+// The old square card files retain painted backgrounds, especially the Paladin asset.
+const battleCardArts=standArts;
 const standArt=i=>'../images/'+standArts[i];
 const battleCardArt=i=>'../images/'+battleCardArts[i];
 const attrs=['PHY','SKL','ARC','MND'];
