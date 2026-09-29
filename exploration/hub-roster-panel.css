@@ -148,3 +148,13 @@
 #app:not(.in-expedition) #party .m .hub-roster-track{height:2px!important;min-height:2px!important;background:rgba(0,0,0,.55)!important}
 /* Dissolve the lowered figure into the sharp location image above the dock. */
 #modal.hub-location-modal #panel.actor-workspace>.actor-backdrop img{-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 82%,transparent 99%)!important;mask-image:linear-gradient(to bottom,#000 0%,#000 82%,transparent 99%)!important}
+
+/* Put the small HP/SP labels and values directly over their gauges. */
+#app:not(.in-expedition) #party .m .hub-roster-meter{position:relative!important;height:11px!important;min-height:11px!important}
+#app:not(.in-expedition) #party .m .hub-roster-track{position:absolute!important;top:2px!important;right:0!important;bottom:auto!important;left:0!important;width:100%!important;height:8px!important;min-height:8px!important;border-radius:2px!important;background:rgba(2,10,9,.74)!important}
+#app:not(.in-expedition) #party .m .hub-roster-track>span{height:100%!important;border-radius:2px!important;opacity:.72!important}
+#app:not(.in-expedition) #party .m .hub-roster-metric{position:absolute!important;z-index:1!important;inset:0!important;display:flex!important;align-items:center!important;justify-content:space-between!important;height:11px!important;padding:0 2px!important}
+#app:not(.in-expedition) #party .m .hub-roster-metric small,#app:not(.in-expedition) #party .m .hub-roster-metric b{color:#fff7e5!important;text-shadow:0 1px 2px #000,0 0 2px #000!important}
+
+/* Keep the complete lowered portrait, including toes, above the member dock. */
+#modal.hub-location-modal #panel.actor-workspace>.actor-backdrop img{height:calc(100% - 72px)!important;object-fit:contain!important;object-position:center top!important;-webkit-mask-image:none!important;mask-image:none!important}

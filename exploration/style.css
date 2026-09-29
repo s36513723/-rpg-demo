@@ -1089,5 +1089,12 @@
 #app:not(.in-expedition) #party .hub-roster-track>span{position:static;display:block;height:100%;border-radius:3px}
 #app:not(.in-expedition) #party .hub-roster-track.hp>span{background:#e98791}
 #app:not(.in-expedition) #party .hub-roster-track.sp>span{background:#70cfc6}
+
+/* Facility dialogue stays at the bottom; opened commands use a fixed left window. */
+.facility-world-mode-home .facility-world-dialogue{order:2}
+.facility-world-mode-home .facility-world-overlay{order:1}
+.facility-world-mode-service .facility-world-controls{inset:0;display:block}
+.facility-world-mode-service .facility-world-dialogue{position:absolute;left:6px;right:6px;bottom:2px;min-height:42px}
+.facility-world-mode-service .facility-world-overlay{position:absolute;left:6px;top:105px;width:min(50%,280px);height:min(380px,50%,calc(100% - 170px));max-height:none;box-sizing:border-box;overflow-y:auto}
 #modal.hub-overlay-modal{bottom:calc(max(28px,env(safe-area-inset-bottom)) + 98px)!important;padding:0!important}
 #modal.hub-overlay-modal #panel{height:100%!important;max-height:100%!important}
