@@ -85,7 +85,25 @@
       "value": "8 environment-specific archetype pools",
       "status": "初期実装値"
     },
-    "skill_effect_design_84": "84 Active技の対象・条件・係数・持続・反応トリガーは初期案。11件の対象/条件解釈は要レビュー。ランタイム未接続。"
+    "skill_effect_design_84": "84 Active技の対象・条件・係数・持続・反応トリガーは初期案。11件の対象/条件解釈は要レビュー。ランタイム未接続。",
+    "tactical_point_gain_schedule": {
+      "expedition_start": 0,
+      "normal_battle": 0,
+      "strong_enemy_victory": 1,
+      "special_event_tp_reward": 1,
+      "hidden_area_discovery_or_clear": 1,
+      "special_treasure": 1,
+      "layer_1_boss": 2,
+      "layer_2_boss": 2,
+      "layer_3_boss": 0,
+      "rest": 0,
+      "merchant": 0,
+      "ordinary_trap_disarm": 0,
+      "expected_full_clear_total": "6-9",
+      "cap": "none",
+      "note": "未習得スキルごとの必要TPは未決定",
+      "status": "初期実装値"
+    }
   },
   "needs_review_systems": [
     "HP/防御/ダメージ係数",
@@ -96,7 +114,7 @@
     "EXPカーブとPt量",
     "逃走率",
     "装備Base/敵個体数値",
-    "Tactical Ptの入手量・取得コスト"
+    "Tactical Ptの獲得量バランス・取得コスト"
   ],
   "reverse_synced_skills": {
     "count": 296,
