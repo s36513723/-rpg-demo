@@ -1190,3 +1190,8 @@ html,body{height:100%;overflow:hidden}
 #game #auto{right:calc(1% + max(44px,10.5vw) + 6px)!important}
 /* The front rank crowds forward while retaining all nine targeting cells. */
 #game .enemy-unit[data-rank="front"]{--sprite-height:202%;--sprite-scale-x:1.76;--sprite-scale-y:1.55}
+
+/* Full-height empty cells remain tappable; only their visible plate is low. */
+#game .plan-move-cell:before,#game .plan-move-cell:after{top:50%!important;bottom:auto!important;height:clamp(47px,5.5dvh,54px)!important;transform:translateY(-50%)!important}
+#game #auto,#game #pace{width:clamp(44px,10.5vw,57px)!important}
+#game #auto{right:calc(1% + clamp(44px,10.5vw,57px) + 6px)!important}
