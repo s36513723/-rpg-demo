@@ -467,6 +467,7 @@ function render(){
  $('pace').textContent=['1×','1.4×','2.5×'][paceIndex];
  $('pace').title=paceOptions[paceIndex].name;
  $('pace').setAttribute('aria-label','再生速度：'+paceOptions[paceIndex].name+'。押すと変更');
+ syncActionDescription();
  $('pause').innerHTML=icon(paused?'play':'pause');
  $('pause').setAttribute('aria-label',paused?'再開':'一時停止');
  $('pause').setAttribute('aria-pressed',String(paused));
@@ -526,7 +527,8 @@ function queueMove(rank,gridCol){
 const sheet=$('choiceSheet');
 function closeSheet(){if(sheet.open)sheet.close()}
 function effectText(a){const out=[];if(a.heal)out.push('HP回復');else out.push('威力 ×'+a.mult);for(const[k,n]of STATUS)if(a[k])out.push(n+' 基礎'+a[k]+'%');if(a.critBonus)out.push('会心率＋'+a.critBonus);return out.join(' / ')}
-function chooseSkill(key,chooseTarget=false){if(!editable())return;const u=current(),a=actionFor(u,key),reason=unavailable(u,a);if(reason){notify(reason);return}const previous=targetMode?.actorId===u.id?targetMode.previous:{...getDraft(u)};getDraft(u).key=key;ensureTarget(u,a);targetMode={actorId:u.id,key,previous};if(a.target==='ally'){closeSheet();render();return}document.querySelectorAll('.skill-choice').forEach(b=>b.classList.toggle('is-preview',b.dataset.action===key));render()}
+function syncActionDescription(){const box=$('actionDescription');if(!box)return;const u=current(),a=targetMode&&u?actionFor(u,targetMode.key):null;box.hidden=!a;if(!a)return;box.innerHTML='<b>'+esc(a.name)+'</b><span>'+esc(scopeName(a)+' · '+rangeName(a.range)+' · '+effectText(a))+'</span><em>対象を選択</em>'}
+function chooseSkill(key){if(!editable())return;const u=current(),a=actionFor(u,key),reason=unavailable(u,a);if(reason){notify(reason);return}const previous=targetMode?.actorId===u.id?targetMode.previous:{...getDraft(u)};getDraft(u).key=key;ensureTarget(u,a);targetMode={actorId:u.id,key,previous};closeSheet();render()}
 function openSheet(mode='skills'){sheet.dataset.mode=mode;
  if(!editable()&&!['more','terrain','history'].includes(mode))return;
  if(editable())cancelTarget();
@@ -565,14 +567,13 @@ function openSheet(mode='skills'){sheet.dataset.mode=mode;
   for(const [ic,label,fn,disabled]of entries){const b=document.createElement('button');b.type='button';b.className='menu-action';b.innerHTML=icon(ic)+esc(label);b.disabled=disabled;b.addEventListener('click',fn);list.append(b)}
  }else{
   for(const[key,a]of u.skills.map((s,i)=>[String(i),s])){
-   const reason=unavailable(u,a),t=defaultTarget(u,a),item=document.createElement('div');item.className='skill-item';
+   const reason=unavailable(u,a),item=document.createElement('div');item.className='skill-item';
    item.style.setProperty('--skill-color',a.heal?'#b5d3b8':a.attr==='火'?'#d9ac92':a.kind==='spell'?'#c7bde0':'#d8c396');
    const b=document.createElement('button');b.type='button';b.className='skill-choice';b.dataset.action=key;b.setAttribute('aria-disabled',String(!!reason));
-   b.innerHTML=icon(skillIcon(a))+'<span class="skill-line"><b>'+esc(a.name)+'</b><small>'+scopeName(a)+' · '+rangeName(a.range)+' · '+esc(a.attr)+' · '+esc(reason||effectText(a))+'</small></span><span class="cost">'+a.costType+' '+a.cost+'</span>';
+   b.innerHTML='<span class="skill-line"><b>'+esc(a.name)+'</b></span><span class="cost">'+a.costType+' '+a.cost+'</span>';
+   b.setAttribute('aria-label',a.name+'、'+scopeName(a)+'、'+rangeName(a.range)+'、'+(reason||effectText(a))+'、'+a.costType+' '+a.cost);
    b.addEventListener('click',()=>chooseSkill(key));item.append(b);
-   const f=document.createElement('div');f.className='skill-target';f.innerHTML='<span>→ '+esc(t?t.name:'―')+'</span>';
-   const change=document.createElement('button');change.type='button';change.textContent='対象変更';change.disabled=!!reason;
-   change.setAttribute('aria-label',a.name+'の対象変更');change.addEventListener('click',()=>chooseSkill(key,true));f.append(change);item.append(f);list.append(item);
+   list.append(item);
   }
  }
  if(!sheet.open)(mode==='skills'?sheet.show():sheet.showModal());
@@ -643,7 +644,8 @@ if(window.__RPG_TEST__)window.__test={get units(){return{party,enemies}},fresh,r
  const ensureMoveCells=()=>{if(!partyBoard||partyBoard.querySelector('.plan-move-layer'))return;const layer=document.createElement('div');layer.className='plan-move-layer';for(let r=1;r<=3;r++)for(let c=1;c<=3;c++){const b=document.createElement('button');b.type='button';b.className='plan-move-cell';b.dataset.rank=['front','mid','rear'][r-1];b.dataset.col=String(c);b.style.gridRow=String(r);b.style.gridColumn=String(c);b.addEventListener('click',e=>{if(!cardMoveMode)return;e.preventDefault();e.stopPropagation();window.RPGDemo?.moveActorUI?.(b.dataset.rank,Number(b.dataset.col));clearMoveMode()});layer.append(b)}partyBoard.prepend(layer)};
  new MutationObserver(ensureMoveCells).observe(partyBoard,{childList:true});ensureMoveCells();
  partyBoard?.addEventListener('click',e=>{const card=e.target.closest('.ally-unit');if(!card)return;const snap=window.RPGDemo?.snapshot?.();if(!snap||snap.busy||snap.over||snap.targetMode)return;const id=card.dataset.unitId,target=snap.party.find(x=>x.id===id);if(!target)return;e.preventDefault();e.stopImmediatePropagation();if(cardMoveMode){if(id===snap.active){clearMoveMode();return}window.RPGDemo?.moveActorUI?.(target.rank,target.col);clearMoveMode();return}if(id===snap.active){cardMoveMode=true;syncMoveState();return}window.RPGDemo?.selectActorUI?.(id);clearMoveMode()},true);
- const itemBtn=$('swap');itemBtn?.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();clearMoveMode();const sheet=$('choiceSheet'),list=$('sheetList');$('sheetKicker').textContent='';$('sheetTitle').textContent='道具';$('sheetHint').textContent='';list.replaceChildren();for(const [name,desc,fn] of [['回復薬','HPを40回復',()=>sheet.close()],['解毒薬','猛毒を解除',()=>sheet.close()],['換装','予備武器に持ち替える',()=>{sheet.close();$('switch').click()}]]){const b=document.createElement('button');b.type='button';b.className='menu-action';b.innerHTML='<span>'+name+'<small>'+desc+'</small></span>';b.addEventListener('click',fn);list.append(b)}if(!sheet.open)sheet.showModal()},true);
+ const itemBtn=$('swap');itemBtn?.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();clearMoveMode();const sheet=$('choiceSheet'),list=$('sheetList');sheet.dataset.mode='items';$('sheetKicker').textContent='';$('sheetTitle').textContent='道具';$('sheetHint').textContent='';list.replaceChildren();for(const [name,desc,fn] of [['回復薬','HPを40回復',()=>sheet.close()],['解毒薬','猛毒を解除',()=>sheet.close()],['換装','予備武器に持ち替える',()=>{sheet.close();$('switch').click()}]]){const b=document.createElement('button');b.type='button';b.className='menu-action';b.setAttribute('aria-label',name+'、'+desc);b.textContent=name;b.addEventListener('click',fn);list.append(b)}if(!sheet.open)sheet.show()},true);
+ document.addEventListener('click',e=>{const sheet=$('choiceSheet');if(sheet.open&&['skills','items'].includes(sheet.dataset.mode)&&!sheet.contains(e.target)&&!e.target.closest('#skills,#swap'))sheet.close()});
  const openPlanBook=e=>{e?.preventDefault();e?.stopImmediatePropagation();clearMoveMode();const sheet=$('choiceSheet'),list=$('sheetList');$('sheetKicker').textContent='';$('sheetTitle').textContent='BOOK';$('sheetHint').textContent='';list.replaceChildren();const help=document.createElement('button');help.type='button';help.className='menu-action';help.innerHTML='<span>操作の説明<small>戦闘操作・移動・対象選択</small></span>';help.addEventListener('click',()=>{list.innerHTML='<div class="plan-help"><b>基本操作</b><p>味方カードをタップして操作キャラを選択。同じカードをもう一度タップすると移動選択になり、空きマスで移動、別の味方カードで位置交換します。</p><p>ATTACK＝攻撃 / SKILL＝技 / ITEM＝道具・換装 / DEFEND＝防御。</p></div>'});const formation=document.createElement('button');formation.type='button';formation.className='menu-action';formation.innerHTML='<span>陣形<small>敵味方の3×3配置を確認・変更</small></span>';formation.addEventListener('click',()=>{sheet.close();$('formationButton').click()});const log=document.createElement('button');log.type='button';log.className='menu-action';log.innerHTML='<span>戦闘履歴<small>これまでの行動を確認</small></span>';log.addEventListener('click',()=>{sheet.close();$('history').open=true});const settings=document.createElement('button');settings.type='button';settings.className='menu-action';settings.innerHTML='<span>設定<small>戦闘表示・速度</small></span>';settings.addEventListener('click',()=>{list.replaceChildren();const speedButton=document.createElement('button');speedButton.type='button';speedButton.className='menu-action';speedButton.innerHTML='<span>戦闘速度<small>右下の速度と同じ設定</small></span>';speedButton.addEventListener('click',()=>{$('pace').click()});const display=document.createElement('button');display.type='button';display.className='menu-action';display.innerHTML='<span>コマンド表記<small>English</small></span>';display.disabled=true;list.append(speedButton,display)});list.append(help,formation,log,settings);if(!sheet.open)sheet.showModal()};$('historyButton')?.addEventListener('click',openPlanBook,true);$('more')?.addEventListener('click',openPlanBook,true);
 
  const formationSheet=$('formationSheet'),allyFormationBoard=$('allyFormationBoard'),enemyFormationBoard=$('enemyFormationBoard');
