@@ -315,7 +315,7 @@
     },
     "battle_ui_v44": {
       "implementation": "battle-v44.html / battle-plan-v36.css / battle-plan-v36.js",
-      "browser": "GitHub Pagesで選択一覧・対象演出・ラウンド進行・スクロールなし・console error 0を確認",
+      "browser": "GitHub Pages公開版で9敵・6味方、コマンド4アイコン、敵名上の紫カーソル、HP減少、味方カード点滅・ダメージ数値、AUTOから次ラウンドへの進行を確認。ページ由来の新規console errorなし。",
       "workbook_sync": "保留: リポジトリに正本xlsxがなく、Libraryには類似名の2冊が存在する。どちらが現行正本か特定できないため上書きせず、リポジトリミラーを先に同期した。"
     }
   },
