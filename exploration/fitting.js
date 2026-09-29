@@ -53,7 +53,7 @@ function fittingScreen(i,k=null,preview){
  const comparisonMarkup=fittingHero(i,a,b,k).replace('class="fitting-summary"','class="character-equipment-summary"');
  const picker=home?'':'<section class="character-equipment-picker" aria-label="'+hesc(fittingSlots[k])+'の変更"><div class="character-equipment-picker-head"><div><small>'+hesc(fittingSlots[k])+'</small><b>'+hesc(current)+'</b></div>'+filters+'</div>'+comparisonMarkup+(costBlocked?'<p class="inline-warning">二刀流にセットCost 4が必要です。スキルを外してください。</p>':'')+'<div class="fitting-list"><div class="fitting-list-title">'+hesc(fittingSlots[k])+'の候補'+(k===2||k===3?'（攻撃性能は換装後に反映）':'')+'</div>'+(candidateRows||'<p class="fitting-empty">この種類に装備可能な所持品はありません</p>')+'</div><div class="character-equipment-confirm"><button data-hub="fittingApply" data-args="'+hesc(JSON.stringify([i]))+'"'+(!dirty||s.blocked||costBlocked?' disabled':'')+'>'+(s.blocked?'条件不足':'変更を確定')+'</button></div></section>';
  const draft=home&&dirty?'<div class="character-equipment-draft"><span>装備変更あり</span>'+comparisonMarkup+'<button data-hub="fittingApply" data-args="'+hesc(JSON.stringify([i]))+'"'+(s.blocked||costBlocked?' disabled':'')+'>変更を確定</button></div>':'';
- show('<h2>'+hesc(names[i])+'</h2>'+shell+picker+draft+(statusText(i)?'<p class="status-warning character-equipment-warning">'+hesc(statusText(i))+'</p>':''));
+ show('<h2>'+hesc(names[i])+'</h2>'+shell+picker+draft);
  if(changedSlot){const list=document.querySelector('#panel .character-equipment-picker .fitting-list');if(list)list.scrollTop=0}
 }
 
