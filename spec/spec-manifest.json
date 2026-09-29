@@ -171,6 +171,14 @@
         "npc": "images/hub-market-npc-cutout.webp"
       },
       "legacy_placeholders": "not used for the three main facility screens"
+    },
+    "battle_ui_v44": {
+      "status": "確定",
+      "top": "ROUND・地形・行動順・設定",
+      "field": "敵3列×3段、前列ほど大きく表示",
+      "lower": "左下の手番立ち絵、中央下の味方3x3カード、カード下の横並び4コマンド、カード右の縦並びAUTO・倍速",
+      "selection": "スキル・道具は2列で各項目1行。スキル選択後に対象を指定し、対象・効果を強調表示",
+      "description": "選択中スキルと戦闘中メッセージは敵と味方カードの間"
     }
   },
   "workstreams": {
@@ -304,6 +312,11 @@
       "workflow": "RPG validation",
       "run_id": 36412828388,
       "validated_head_sha": "53d741b0c7a8edaef96e1a62bb55e7da95119bbe"
+    },
+    "battle_ui_v44": {
+      "implementation": "battle-v44.html / battle-plan-v36.css / battle-plan-v36.js",
+      "browser": "GitHub Pagesで選択一覧・対象演出・ラウンド進行・スクロールなし・console error 0を確認",
+      "workbook_sync": "保留: 正本xlsxはこのGitHub作業環境に存在しないため、リポジトリミラーへ先に反映。正本に同じUI行を同期する必要がある。"
     }
   },
   "hub_character_ui_2026_09_29": {
