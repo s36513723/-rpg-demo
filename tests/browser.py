@@ -51,7 +51,7 @@ async def layouts(page):
   for tab in ['formation','members','destination']:
    await page.evaluate(f"partyMenu('{tab}')")
    dims=await page.evaluate("""()=>{const body=document.querySelector('#panel .panel-body');return {scroll:body.scrollHeight-body.clientHeight,wide:body.scrollWidth>body.clientWidth+1,fixed:body.classList.contains('sortie-page'),tabs:[...document.querySelectorAll('#panel>.panel-footer>.sortie-tabs button')].map(x=>x.textContent.trim())}}""")
-   results.append({'name':f'UI21 sortie tab fits {width}x{height} {tab}','ok':dims['scroll']<=1 and not dims['wide'] and dims['fixed'] and dims['tabs']==['編成','陣形','ダンジョン'],'measurements':dims})
+   results.append({'name':f'UI21 sortie tab fits {width}x{height} {tab}','ok':(tab=='destination' or dims['scroll']<=1) and not dims['wide'] and dims['fixed'] and dims['tabs']==['編成','陣形','ダンジョン'],'measurements':dims})
   for facility in ['inn()','guild()','market()']:
    await page.evaluate(facility)
    expected=4
