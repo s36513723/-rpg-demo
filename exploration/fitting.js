@@ -58,7 +58,7 @@ function fittingScreen(i,k=null,preview){
 }
 
 function fittingCancel(i){if(H.run?.battle)return;fittingDiscard();equip(i)}
-function fittingApply(i){if(H.run?.battle||!fittingDraft||fittingDraft.i!==i)return;const s=fittingDraft;if(s.blocked)return;if(JSON.stringify(s.base)!==JSON.stringify(eq[i])){fittingDiscard();return equip(i)}const valid=fittingWith(i,s.items,()=>Object.keys(fittingSlots).every(k=>{k=Number(k);return s.items[k]===s.base[k]||canEquip(i,k,s.items[k].split('：')[1])})&&skillFits(i,skillSet[i],s.items));if(!valid)return note('装備条件または二刀流のCostが不足しています。スキルを外してから確定してください。');eq[i]=s.items.slice();fittingDiscard();persist();equip(i)
+function fittingApply(i){if(H.run?.battle||!fittingDraft||fittingDraft.i!==i)return;const s=fittingDraft;if(s.blocked)return;if(JSON.stringify(s.base)!==JSON.stringify(eq[i])){fittingDiscard();return equip(i)}const valid=fittingWith(i,s.items,()=>Object.keys(fittingSlots).every(k=>{k=Number(k);return s.items[k]===s.base[k]||canEquip(i,k,s.items[k].split('：')[1])})&&skillFits(i,skillSet[i],s.items));if(!valid)return note('装備条件または二刀流のCostが不足しています。スキルを外してから確定してください。');eq[i]=s.items.slice();fittingDiscard();persist();equip(i)}
 
 function fittingSwap(i){if(H.run?.battle)return;const s=fittingSession(i);if(!s)return;const v=s.items.slice(0,4).map(x=>x.split('：')[1]);for(let k=0;k<4;k++)s.items[k]=s.items[k].split('：')[0]+'：'+v[(k+2)%4];equipChoice(i,s.slot)}
 
