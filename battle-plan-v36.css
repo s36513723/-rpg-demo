@@ -1195,3 +1195,14 @@ html,body{height:100%;overflow:hidden}
 #game .plan-move-cell:before,#game .plan-move-cell:after{top:50%!important;bottom:auto!important;height:clamp(47px,5.5dvh,54px)!important;transform:translateY(-50%)!important}
 #game #auto,#game #pace{width:clamp(44px,10.5vw,57px)!important}
 #game #auto{right:calc(1% + clamp(44px,10.5vw,57px) + 6px)!important}
+
+/* Horizontal commands sit below the projected 3×3 formation. */
+#game .party-hud{bottom:14%!important;height:28%!important}
+#game #commandPanel{left:25%!important;right:25%!important;top:auto!important;bottom:max(4%,env(safe-area-inset-bottom))!important;width:auto!important;height:clamp(54px,8dvh,72px)!important;min-height:0!important}
+#game #commandPanel .command-buttons{grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:1fr!important;gap:2px!important}
+#game #commandPanel .command-buttons>.command{min-width:0!important;min-height:44px!important;padding:0!important}
+#game #commandPanel .command-buttons>.command .icon{width:clamp(15px,3.8vw,22px)!important;height:clamp(15px,3.8vw,22px)!important}
+#game #commandPanel .command-buttons>.command b{font-size:clamp(8px,2vw,11px)!important;white-space:nowrap!important}
+#game #auto,#game #pace{top:71%!important;bottom:auto!important}
+#game #pace{right:.5%!important}
+#game #auto{right:calc(.5% + clamp(44px,10.5vw,57px) + 6px)!important}
