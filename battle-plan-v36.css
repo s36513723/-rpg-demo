@@ -1029,3 +1029,4 @@ html,body{height:100%;overflow:hidden}
 #game #commandPanel .command-buttons>.command:before{transform:rotate(45deg) scale(.94)!important;background:rgba(29,48,91,.23)!important;box-shadow:0 0 9px rgba(174,207,255,.65)!important}
 #more .icon{display:none!important}
 #more:after{content:"";display:block;width:18px;height:13px;border-top:1.5px solid currentColor;border-bottom:1.5px solid currentColor;background:linear-gradient(currentColor,currentColor) center/18px 1.5px no-repeat}
+#game #commandPanel .command-buttons>.command.plan-hidden-equip{display:none!important}
