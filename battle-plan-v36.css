@@ -1081,3 +1081,24 @@ html,body{height:100%;overflow:hidden}
 .enemy-unit[data-unit-id="g3"],.enemy-unit[data-unit-id="g4"]{--sprite-height:165%;--sprite-scale-x:1.26;--sprite-scale-y:1.20}
 
 #game .party-strip .resource[data-resource="mp"]{display:none!important}
+
+/* v44 spatial HUD: three quiet information layers on perspective plates. */
+#game .party-strip .ally-unit{height:clamp(55px,7.5dvh,70px)!important;grid-template-rows:11px 19px 23px!important;align-content:center!important;transform-origin:50% 70%!important;filter:drop-shadow(0 2px 5px rgba(145,194,245,.18))!important}
+#game .party-strip .ally-unit[data-rank="front"]{transform:scale(1.025)!important}
+#game .party-strip .ally-unit[data-rank="mid"]{transform:scale(.98)!important}
+#game .party-strip .ally-unit[data-rank="rear"]{transform:scale(.94)!important}
+#game .party-strip .ally-unit.active{transform:scale(1.13)!important;filter:drop-shadow(0 0 10px rgba(195,85,255,.8))!important}
+#game .party-strip .card-status{position:relative!important;grid-row:1!important;left:auto!important;right:auto!important;top:auto!important;align-items:center!important;height:11px!important;max-height:11px!important;font-size:9px!important}
+#game .party-strip .card-name{grid-row:2!important;height:19px!important;line-height:19px!important}
+#game .party-strip .resource-list{grid-row:3!important;height:23px!important;align-self:start!important;gap:4px!important}
+#game .party-strip .resource{height:23px!important;display:grid!important;grid-template-rows:13px 4px!important;gap:2px!important}
+#game .party-strip .resource-value{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;width:100%!important;height:13px!important;justify-content:space-between!important}
+#game .party-strip .resource-value span{display:block!important;font:7px/13px sans-serif!important;color:rgba(239,247,255,.85)!important}
+#game .party-strip .resource-value b{font-size:clamp(10px,2.7vw,12px)!important;line-height:13px!important}
+#game .party-strip .resource .bar{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;width:100%!important;height:4px!important}
+#game #commandPanel{bottom:3%!important}
+#game #commandPanel .command-buttons>.command{position:relative!important;transition:transform .2s ease,filter .2s ease!important}
+#game #commandPanel .command-buttons>.command:before{left:0!important;top:17%!important;width:100%!important;height:65%!important;aspect-ratio:auto!important;border:0!important;border-radius:0!important;transform:perspective(180px) rotateX(20deg) skewY(-7deg)!important;clip-path:none!important;background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='1,50 14,2 86,2 99,50 86,98 14,98' fill='%23223857' fill-opacity='.27' stroke='%23c7e2ff' stroke-opacity='.72' stroke-width='2'/%3E%3C/svg%3E")!important;box-shadow:none!important;filter:drop-shadow(0 0 5px rgba(143,194,255,.44))!important}
+#game #commandPanel .command-buttons>.command.is-active,#game #commandPanel .command-buttons>.command:active{transform:translateX(-3px) scale(1.07)!important;filter:drop-shadow(0 0 6px rgba(211,147,255,.6))!important}
+#game #commandPanel .command-buttons>.command.is-active:before,#game #commandPanel .command-buttons>.command:active:before{background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='1,50 14,2 86,2 99,50 86,98 14,98' fill='%235b367f' fill-opacity='.36' stroke='%23e5b4ff' stroke-width='3'/%3E%3C/svg%3E")!important;filter:drop-shadow(0 0 8px rgba(203,118,255,.85))!important}
+.enemy-unit[data-rank="front"] .target-pointer{border-color:rgba(235,193,143,.54)!important;box-shadow:0 0 11px rgba(235,211,187,.20),0 0 3px rgba(255,255,255,.28) inset!important}
