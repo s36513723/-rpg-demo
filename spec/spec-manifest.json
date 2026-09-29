@@ -95,7 +95,32 @@
       ],
       "anti_grind_principle": true,
       "threshold_curve_status": "balance_pending",
-      "reward_amount_status": "balance_pending"
+      "reward_amount_status": "balance_pending",
+      "permanent_growth": [
+        "Stat Pt",
+        "Mastery Pt"
+      ],
+      "successful_return_rewards": [
+        "戦利品",
+        "EXP"
+      ],
+      "run_growth": {
+        "status": "構造確定・名称仮",
+        "resource": "ラン内スキルPt（仮称）",
+        "separate_from_battle_sp": true,
+        "reset": "expedition_end",
+        "permanent_gate": "Mastery",
+        "base_skills_available_at_start": true,
+        "candidate_uses": [
+          "advanced_skill_acquisition",
+          "skill_strengthening",
+          "SP_cost_reduction",
+          "range_or_area_change",
+          "status_performance_change",
+          "branch_effect"
+        ],
+        "exact_costs": "balance_pending"
+      }
     },
     "weapon_mastery_equipment_gate": true,
     "armor_mastery_equipment_gate": true,
@@ -106,11 +131,12 @@
       "rest_at_inn": "full HP/SP/status recovery and pending growth-point settlement"
     },
     "expedition_defeat": {
-      "status": "確定",
-      "loot_retention": "all acquired materials and rare gear",
-      "experience_retention": "all earned EXP",
-      "next_action": "end expedition; begin a new one from MAP",
-      "auto_heal": false
+      "status": "確定・戦利品EXP扱い未決定",
+      "next_action": "forced_return_to_base",
+      "exploration_progress": "lost",
+      "consumed_items": "not_restored",
+      "loot_retention": "undecided",
+      "experience_retention": "undecided"
     },
     "hub_save_and_appraisal": {
       "status": "確定",
@@ -202,13 +228,77 @@
       "enemy_target": "敵本体の選択発光を廃止し、名前上の小さな紫逆三角カーソル"
     },
     "battle_party_size_max": 6,
-    "deployment": "1-6 registered members selected from the guild roster; remaining members wait at the guild"
+    "deployment": "1-6 registered members selected from the guild roster; remaining members wait at the guild",
+    "exploration": {
+      "status": "構造確定",
+      "party_size": 6,
+      "layers": 3,
+      "boss_each_layer": true,
+      "final_boss_layer": 3,
+      "themed_dungeons": true,
+      "random_generation_within_theme": true,
+      "presentation": "place_first_not_function_node",
+      "universal_place_types_count": 10,
+      "universal_place_types": [
+        "入口・境界",
+        "狭路・通路",
+        "広間・開けた場所",
+        "分岐路",
+        "高所・低所",
+        "水辺・特殊地形",
+        "崩落・障害区域",
+        "遺構・人工物",
+        "隠し区画・脇道",
+        "深部・主室"
+      ],
+      "place_type_labels_status": "名称仮",
+      "place_occurrences": [
+        "通常敵",
+        "強敵",
+        "商人",
+        "宝",
+        "罠",
+        "休息",
+        "NPC",
+        "探索対象",
+        "特殊イベント",
+        "何も起きない"
+      ],
+      "route_archetypes": [
+        "危険な近道",
+        "安全な迂回",
+        "宝が期待できるルート"
+      ],
+      "unselected_places_persist": false,
+      "next_run_regenerates": true,
+      "rest": {
+        "representation": "in_world_place",
+        "per_layer": 1,
+        "hp_recovery": "35%",
+        "sp_recovery": "35%",
+        "status_recovery": true,
+        "revive_ko": false
+      },
+      "provisional_map_size": {
+        "generated_places_per_layer": "10-12",
+        "traversed_places_per_route": "5-7"
+      }
+    },
+    "expedition_success": {
+      "status": "構造確定",
+      "trigger": "defeat_layer_3_boss",
+      "rewards": [
+        "戦利品",
+        "EXP"
+      ],
+      "quantities": "balance_pending"
+    }
   },
   "workstreams": {
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "hub_confirmed_save_appraisal_auto_respec_2026-09-29",
+  "last_sync_status": "exploration_run_structure_2026-09-30",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
@@ -413,7 +503,7 @@
     "report": "spec/battle-audit-2026-09-30.md",
     "results": "battle-audit-results.json",
     "validation": "主エンジンの53戦は決着53/53、独立逃走53試行は31成功。旧敗北時の素材・希少装備半減を修正し、通常ブラウザ回帰746/746成功。battle-v44はまだ旧296カタログ・固定12技で、315個別実戦と初期化アイテム、3層連続攻略は未達。",
-    "workbook_sync": "敗北時の戦利品保持は既存のユーザー確定指示に従う。正本Excelへの監査結果の同期は未実施。"
+    "workbook_sync": "監査時点では敗北時の戦利品保持を既定仕様として扱っていたが、2026-09-30の正本更新で敗北時の戦利品・EXP扱いは未決定へ変更。監査記録は履歴として参照する。"
   },
   "skill_effect_design_84_2026_09_29": {
     "status": "初期実装値・要レビュー・設計検証済み（ランタイム未接続）",
