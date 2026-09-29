@@ -916,8 +916,8 @@
  .character-equip-slot b,.character-equip-weight b{font-size:8px}
  .character-equipment-core{left:34%;right:34%;padding:3px}
  .character-equipment-core>b{font-size:10px}
- .actor-commands button{min-height:33px;font-size:7px}
- .actor-member-switch button{min-height:25px;font-size:6px}
+ .actor-commands button{min-height:31px;font-size:7px}
+ .actor-member-switch button{min-height:23px;font-size:6px}
  .character-equipment-picker{max-height:52%}
  .character-equipment-summary .equip-compare-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
