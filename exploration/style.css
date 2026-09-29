@@ -1053,3 +1053,10 @@
  .facility-world-home>.row,
  .facility-world-home>.actions>.row{padding:4px 6px}
 }
+
+/* The town home roster is a quiet text and resource strip. */
+#app.town-world:not(.facility-world):not(.actor-overlay-open) #party .m{background:transparent!important;border-color:rgba(218,210,173,.25)!important}
+#app.town-world:not(.facility-world):not(.actor-overlay-open) #party .m>img{display:none!important}
+#app.town-world:not(.facility-world):not(.actor-overlay-open) #party .m::after{display:none!important}
+#app.town-world:not(.facility-world):not(.actor-overlay-open) #party .m>b{top:18px!important;bottom:auto!important;font-size:10px!important}
+#app.town-world:not(.facility-world):not(.actor-overlay-open) #party .m>.roster-meta{top:36px!important;bottom:auto!important}
