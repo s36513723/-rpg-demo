@@ -63,14 +63,23 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 
 ## Growth / dungeon
 - No conventional displayed level with automatic stat growth.
-- EXP creates pending growth; inn rest settles pending Stat Pt / Mastery Pt.
-- Exact EXP curve and reward quantities are balance-controlled.
+- EXP creates pending growth; inn rest settles pending Stat Pt / Mastery Pt. Exact EXP curve and reward quantities are balance-controlled.
+- Permanent growth is Stat Pt + Mastery Pt. Stat Pt develops base abilities; Mastery Pt permanently expands a character's specialties and available options.
+- Run-only growth uses a separate **ラン内スキルPt（仮称）**. It is not battle SP, and its allocation resets when the expedition ends.
+- Mastery defines what the character can potentially do; run-only Skill Pt chooses what to acquire, strengthen or branch into during the current expedition. Basic skills remain usable from the start of the expedition.
+- Candidate run-only uses include advanced-skill acquisition, skill strengthening, SP-cost reduction, range/area changes, status-performance changes and branch effects. Exact costs and gain amounts are provisional.
 - A respec item can reset stat allocations, Mastery ranks and learned skills, including the chosen Source, and return their spent points. Initial placement: first clear of each chapter boss and one one-time high-difficulty quest; it is not sold normally.
-- A run is basically 3 layers. Environments: 森林 / 洞窟 / 廃墟都市 / 山岳 / 沼地 / 砂漠遺跡 / 海上・船 / 地下神殿.
-- Nodes include normal battle / strong enemy / event / camp / merchant / exploration / smith-workshop / boss.
+- One dungeon expedition is basically **3 layers, with a boss at the end of every layer**. The Layer 3 boss is the dungeon's final boss.
+- Each dungeon has its own fixed theme, scenery, enemies, terrain, events, materials, treasure, bosses and story. Random generation stays inside that dungeon theme.
+- Exploration is presented as **places**, not abstract function nodes. Ten shared place archetypes are used across dungeons, with theme-specific names/visuals: 入口・境界 / 狭路・通路 / 広間・開けた場所 / 分岐路 / 高所・低所 / 水辺・特殊地形 / 崩落・障害区域 / 遺構・人工物 / 隠し区画・脇道 / 深部・主室. The exact labels are provisional.
+- A place may contain normal enemies, strong enemies, a merchant, treasure, a trap, rest, an NPC, an exploration target, a special event, nothing, or a combination of these.
+- Routes should have different risk/reward character such as a dangerous shortcut, safer detour, or treasure-oriented route. Exploration skills can increase route information and available choices.
+- Unchosen places are not carried over to the next expedition. The map is regenerated on the next run.
+- Initial map-size target: about 10-12 generated places per layer, with about 5-7 actually traversed on one route. These counts are provisional and balance-controlled.
+- Rest is represented as an in-world place such as a camp site, spring or safe room rather than an abstract rest node. Current rule: once per layer, HP35% + SP35% + status recovery; no KO revival.
 - No equipment durability/repair.
-- Camp once per layer: HP35% + SP35% + battle-status recovery; no KO revival.
-- On defeat, keep all loot acquired during the run, including materials and rare gear, and all earned EXP. The expedition ends; start a new one from MAP. Defeat does not automatically heal the party.
+- Successful return after defeating the Layer 3 boss grants/settles expedition loot and EXP. Exact quantities are balance-controlled.
+- On defeat: **forced return to base; current expedition progress is lost; consumed items are not restored.** Treatment of expedition loot and EXP on defeat is currently **undecided** and must not be inferred as either retained or lost.
 
 ## Base
 - Home: next objective / notifications / next sortie + Inn / Guild / Market.
@@ -79,7 +88,7 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - Guild: member management / quests & reports / exploration records / relic appraisal / storage.
 - Three formation presets save formation/equipment/skills with validity checks.
 - Two independent save slots each auto-save their own progress. Settings can switch slots, save manually, export/import JSON and restore the current slot's backup.
-- Materials, tools and equipment acquired during an expedition remain sealed until return and guild appraisal. Existing tools taken into the expedition remain usable. Defeat retains the sealed loot.
+- Materials, tools and equipment acquired during an expedition remain sealed until return and guild appraisal. Existing tools taken into the expedition remain usable. Treatment of newly acquired loot on defeat is currently undecided.
 - Market: equipment / items / processing / selling. Processing: regional crafting / +3 enhancement / trait processing.
 - Records: up to 40 expedition-history entries plus statistics / people / regions / enemy observations.
 - Rumors come through NPC conversation, not a separate daily menu.
@@ -210,7 +219,7 @@ Commands sit immediately above ally cards. Character appeal has priority over ti
 
 ## 探索から戦闘デモへの接続（2026-09-29 確定）
 - 探索の戦闘地点から現在の `battle-v44.html` へ移動する。探索の出撃編成・陣形・HP/SP・敵編成・地形を引き継ぎ、勝敗または逃走後に結果と資源を探索へ返す。単独で開く戦闘デモは維持する。
-- 戦闘敗北ではその探索中に獲得した素材・希少装備を失わず持ち帰り、探索経路は終了する。宿で休むまでHP/SPは自動回復しない。
+- 戦闘敗北では拠点へ強制帰還し、今回の探索進行を失い、使用済み道具は戻らない。敗北時の戦利品・EXPの扱いは未決定。宿で休むまでHP/SPは自動回復しない。
 
 ## 探索戦闘の背景（2026-09-29 確定）
 - 探索から `battle-v44.html` へ移る戦闘では、現在の階層テーマ（森林／洞窟／廃墟都市／山岳／沼地／砂漠遺跡／海上・船／地下神殿）に対応する登録済み正式背景画像を戦闘画面全体へ表示する。階層テーマが変われば次の戦闘背景も変わる。戦闘画面を単独で開いた場合は従来の白い幻想都市背景を維持する。
