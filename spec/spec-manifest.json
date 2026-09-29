@@ -359,9 +359,9 @@
     "verification": "実画面の計算済みスタイルとブラウザ回帰テストで確認。"
   },
   "exploration_battle_v44_link_2026_09_29": {
-    "status": "実装・公開画面検証中",
+    "status": "実装・公開画面検証済み",
     "implementation": "exploration/explore.js, exploration/index.html, battle-v44.html, battle-plan-v36.js",
     "workbook_sync": "Library正本 version 13・07_UI仕様 A38:D38",
-    "validation": "GitHub Pagesで探索→戦闘→探索の導線を確認中"
+    "validation": "GitHub Pagesで探索の戦闘地点→battle-v44.htmlを実操作。初回は敵3体・地形水辺、AUTOで勝利後「探索へ戻る」で次地点へ進む。次の戦闘は敵4体・地形開所に更新。単独起動は従来の9敵デモと帰還ボタン非表示を維持。アプリのコンソールエラー0。"
   }
 }
