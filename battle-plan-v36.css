@@ -1144,3 +1144,18 @@ html,body{height:100%;overflow:hidden}
 #game #auto,#game #pace{width:clamp(45px,11vw,62px)!important;right:auto!important}
 #game #auto{left:calc(50% - clamp(45px,11vw,62px) - 4px)!important}
 #game #pace{left:calc(50% + 4px)!important}
+
+/* Bring the whole opposing formation forward and upward without moving its target cells. */
+#game .enemy-stage{transform:translateY(-3.6dvh)!important}
+#game .enemy-unit[data-rank="front"]{--sprite-height:195%;--sprite-scale-x:1.64;--sprite-scale-y:1.47}
+/* Clear glass for the small controls, with no frosted blur. */
+#game #auto,#game #pace{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+/* Longer cards keep both short gauges safely inside their chamfered ends. */
+#game .party-hud{left:11%!important;right:11%!important}
+#game .party-strip .resource-list{width:calc(100% - 12px)!important;min-width:0!important;justify-self:center!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px!important;overflow:hidden!important}
+#game .party-strip .resource{min-width:0!important;max-width:100%!important;overflow:hidden!important}
+#game .party-strip .resource .bar{max-width:100%!important}
+/* Shallow side points give each command more usable width. */
+#game #commandPanel{width:14%!important;right:.5%!important;bottom:max(2.5%,env(safe-area-inset-bottom))!important}
+#game #commandPanel .command-buttons>.command:before{top:10%!important;height:82%!important;background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='1,50 7,3 93,3 99,50 93,97 7,97' fill='%23223857' fill-opacity='.27' stroke='%23c7e2ff' stroke-opacity='.72' stroke-width='2'/%3E%3C/svg%3E")!important}
+#game #commandPanel .command-buttons>.command.is-active:before,#game #commandPanel .command-buttons>.command:active:before{background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='1,50 7,3 93,3 99,50 93,97 7,97' fill='%235b367f' fill-opacity='.36' stroke='%23e5b4ff' stroke-width='3'/%3E%3C/svg%3E")!important}
