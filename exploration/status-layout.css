@@ -1059,3 +1059,8 @@
 #panel.actor-workspace.status-equipment .character-equipment-stats b{font-size:10px;color:#f4e4bc}
 #panel.actor-workspace.status-equipment .character-equipment-picker{z-index:9}
 @media(max-height:640px){#panel.actor-workspace.status-equipment .character-equip-slot,#panel.actor-workspace.status-equipment .character-equip-weight{width:min(100%,42px)}#panel.actor-workspace.status-equipment .character-equipment-stats{gap:1px 3px;padding:3px}}
+
+#panel.actor-workspace.status-equipment .character-equipment-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:3px 6px;padding:7px}
+#panel.actor-workspace.status-equipment .character-equipment-stats span{min-width:0}
+#panel.actor-workspace.status-equipment .character-equipment-stats b{font-size:9px;white-space:nowrap}
+#panel.actor-workspace.status-equipment .character-equipment-picker-head>button[data-hub="fittingSwap"]{flex:0 0 auto;min-height:30px;padding:3px 8px;border:1px solid rgba(215,191,132,.6);border-radius:7px;background:rgba(43,57,37,.8);color:#f0ddaa;font-size:9px}
