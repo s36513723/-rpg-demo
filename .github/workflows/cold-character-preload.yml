@@ -1,0 +1,63 @@
+name: Cold character preload check
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/cold-character-preload.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install playwright
+      - run: python -m playwright install --with-deps chromium
+      - name: Cold-load check
+        run: |
+          python -m http.server 8139 >/tmp/preload-http.log 2>&1 &
+          python - <<'PY'
+          import asyncio, json, time
+          from playwright.async_api import async_playwright
+
+          async def main():
+              async with async_playwright() as p:
+                  browser=await p.chromium.launch(headless=True)
+                  context=await browser.new_context(viewport={"width":390,"height":844})
+                  page=await context.new_page()
+                  async def slow(route):
+                      if "hub-standing-" in route.request.url:
+                          await asyncio.sleep(0.8)
+                      await route.continue_()
+                  await page.route("**/*",slow)
+                  await page.goto("http://127.0.0.1:8139/exploration/",wait_until="domcontentloaded")
+                  await page.wait_for_selector("#party .m")
+                  t=time.perf_counter()
+                  await page.click("#party .m")
+                  immediate=await page.evaluate("""()=>({
+                    modal:document.querySelector('#modal').classList.contains('on'),
+                    actor:!!document.querySelector('#panel .actor-backdrop img')
+                  })""")
+                  await page.wait_for_selector("#modal.on #panel .actor-backdrop img",state="visible",timeout=5000)
+                  final=await page.evaluate("""()=>{const img=document.querySelector('#panel .actor-backdrop img');return {
+                    modal:document.querySelector('#modal').classList.contains('on'),
+                    complete:img.complete,
+                    naturalWidth:img.naturalWidth,
+                    bg:getComputedStyle(document.querySelector('#panel .actor-backdrop')).backgroundImage
+                  }}""")
+                  elapsed=round((time.perf_counter()-t)*1000)
+                  print(json.dumps({"immediate":immediate,"final":final,"elapsedMs":elapsed},ensure_ascii=False))
+                  assert not immediate["modal"], "character screen opened before standing art finished"
+                  assert not immediate["actor"], "actor DOM appeared before standing art finished"
+                  assert final["modal"] and final["complete"] and final["naturalWidth"]>0
+                  await page.screenshot(path="cold-character-final.png",full_page=True)
+                  await browser.close()
+          asyncio.run(main())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cold-character-preload
+          path: cold-character-final.png
