@@ -83,6 +83,7 @@ Do not stop after only updating documentation when implementation is requested o
 - Battle stage: ROUND / terrain / turn order / settings at top, large enemies in the center, acting portrait at lower left, ally 3x3 cards near the bottom, and four commands in one horizontal row beneath the cards.
 - AUTO and speed form a vertical pair to the right of the ally cards.
 - Skill/item choices use a compact two-column tray. Target and battle descriptions sit between enemies and ally cards.
+- Ally hex cards use a wider central formation; command plates use a distinct trapezoid shape. Choice and target explanations have visible cancel actions.
 - Ally cards are a 3x3 grid, not a six-card horizontal strip.
 - Current acting ally receives a large character illustration.
 - Enemy characters should remain visually large; do not reduce the battle to tiny board tokens.
