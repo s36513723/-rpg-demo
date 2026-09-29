@@ -1,4 +1,5 @@
 /* Sortie and presets use the same sharp location artwork and restrained gold trim as the hub. */
+#app,#app *,#modal,#modal *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 #modal.hub-overlay-modal.hub-map-modal{top:54px!important;background:linear-gradient(180deg,rgba(4,12,10,.72),rgba(4,12,10,.34) 30%,transparent 70%)!important}
 #modal.hub-map-modal #panel{border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
 #modal.hub-map-modal #panel>.panel-head{min-height:45px;border:0;background:rgba(5,12,10,.84)}
