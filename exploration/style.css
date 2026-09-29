@@ -1098,3 +1098,10 @@
 .facility-world-mode-service .facility-world-overlay{position:absolute;left:6px;top:105px;bottom:52px;width:min(50%,280px);height:auto;max-height:none;box-sizing:border-box;overflow-y:auto}
 #modal.hub-overlay-modal{bottom:calc(max(28px,env(safe-area-inset-bottom)) + 98px)!important;padding:0!important}
 #modal.hub-overlay-modal #panel{height:100%!important;max-height:100%!important}
+
+/* Four compact exploration controls share the hub's translucent plate style. */
+.expedition .field-actions{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.expedition .field-shortcut{min-width:0;min-height:50px;padding:5px 2px;border:1px solid rgba(190,171,120,.48);border-radius:9px;background:rgba(12,25,19,.66);box-shadow:0 3px 12px rgba(0,0,0,.25);color:#e8dfc7;font-family:inherit;font-size:clamp(9px,2.65vw,11px);font-weight:600;line-height:1.15;white-space:nowrap;text-align:center;cursor:pointer}
+.expedition .field-shortcut:active,.expedition .field-shortcut:focus-visible{border-color:#e2c889;background:rgba(39,53,39,.78);outline:2px solid rgba(226,200,137,.35);outline-offset:1px}
+
+.expedition .map-node.locked{opacity:.58}

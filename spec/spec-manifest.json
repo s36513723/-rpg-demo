@@ -238,7 +238,7 @@
       "presentation": "place_first_not_function_node",
       "universal_place_types_count": 10,
       "universal_place_types": [
-        "入口・境界",
+        "廃屋",
         "狭路・通路",
         "広間・開けた場所",
         "分岐路",
@@ -340,7 +340,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "exploration_defeat_loot_exp_confirmed_2026-09-30",
+  "last_sync_status": "exploration_four_field_panels_2026-09-30",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
@@ -584,5 +584,22 @@
     "workbook_sync": "Library 正本 version 26。03_能力成長Mastery C30:D30、05_拠点探索仕様 C34、12_仮値バランス調整 D12・D19",
     "implementation": "exploration/explore.js, exploration/hub.js, exploration/index.html, tests/hub-regression.js",
     "validation": "構文検査成功。Chromiumブラウザ回帰755/755成功。敗北後の戦利品・EXP・HP/SP・保存再読込を確認。"
+  },
+  "exploration_four_field_panels_2026_09_30": {
+    "status": "確定",
+    "workbook_sync": "Library 正本 version 28、05_拠点探索仕様 C40・07_UI仕様 A48:D49",
+    "replacement": [
+      "道具",
+      "探索スキル",
+      "スキルセット",
+      "戦利品"
+    ],
+    "removed": [
+      "地図下の進行中の場所へ",
+      "地図下の封印回路ショートカット"
+    ],
+    "implementation": "exploration/explore.js, visuals.js, style.css, presentation.js, boot.js, index.html",
+    "verification": "実装後に確認",
+    "place_icon_hint": "廃屋へ置換。ノードは内容の大まかな分類を予兆アイコンで表示し、敵の細分類は入場または探索情報で判明。"
   }
 }
