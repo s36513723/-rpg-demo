@@ -93,6 +93,43 @@ async () => {
   ];
   for(const open of views){open();same()}
  });
+ await test('market internal screens preserve one fixed background and NPC frame',()=>{
+  reset();gold=99999;loot.結晶=Math.max(5,loot.結晶||0);loot.皮=Math.max(10,loot.皮||0);
+  market();
+  const snap=()=>{
+   const app=document.querySelector('#app'),screen=document.querySelector('#screen'),npc=document.querySelector('.facility-world-npc'),overlay=document.querySelector('.facility-world-overlay'),party=document.querySelector('#party'),nav=document.querySelector('.hub-global-nav');
+   assert(app.classList.contains('market-world'));assert(!document.querySelector('#modal').classList.contains('on'));assert(npc&&overlay&&party&&nav);assert(getComputedStyle(app).backgroundImage.includes('hub-market-bg'));
+   const s=screen.getBoundingClientRect(),n=npc.getBoundingClientRect(),o=overlay.getBoundingClientRect();
+   assert(document.querySelectorAll('#party .m').length===6&&nav.querySelectorAll('button').length===3);assert(o.bottom<=s.bottom+1&&o.height<=s.height*.55);
+   return {screen:[s.x,s.y,s.width,s.height],npc:[n.x,n.y,n.width,n.height]};
+  };
+  const baseFrame=snap(),same=()=>{const now=snap();for(let i=0;i<4;i++)assert(Math.abs(now.screen[i]-baseFrame.screen[i])<=1,'market screen moved');for(let i=0;i<4;i++)assert(Math.abs(now.npc[i]-baseFrame.npc[i])<=1,'market NPC moved')};
+  const firstArmor=Object.keys(ARMOR_VARIANTS)[0],firstRecipe=0,firstWeapon='王国剣';
+  const views=[
+   ()=>gearShopMenu(),()=>weaponShop(),()=>gearDetail(firstWeapon),()=>armorShop(),()=>armorDetail(firstArmor),()=>toolShop(),()=>toolQuantity('回復薬'),
+   ()=>craftMenu(),()=>recipeMenu(),()=>recipeDetail(firstRecipe),()=>upgradeMenu(),()=>traitMenu(),()=>traitChoice(inventory.weapons[0]),
+   ()=>sellMenu(),()=>materialTrade(),()=>materialQuantity(Object.keys(hc().materialPrices)[0]),
+   ()=>confirmAction('素材を全て売却','確認します。','sellMaterial',[Object.keys(hc().materialPrices)[0],1]),
+   ()=>note('所持金不足')
+  ];
+  for(const open of views){open();same()}
+ });
+ await test('inn internal screens preserve one fixed background and NPC frame',()=>{
+  reset();H.history=[{id:'inn-audit',dungeon:'古代迷宮',result:'帰還',floor:1,battles:1,rescues:0,loot:[],started:0,ended:60000}];
+  inn();
+  const snap=()=>{
+   const app=document.querySelector('#app'),screen=document.querySelector('#screen'),npc=document.querySelector('.facility-world-npc'),overlay=document.querySelector('.facility-world-overlay'),party=document.querySelector('#party'),nav=document.querySelector('.hub-global-nav');
+   assert(app.classList.contains('inn-world'));assert(!document.querySelector('#modal').classList.contains('on'));assert(npc&&overlay&&party&&nav);assert(getComputedStyle(app).backgroundImage.includes('hub-inn-bg'));
+   const s=screen.getBoundingClientRect(),n=npc.getBoundingClientRect(),o=overlay.getBoundingClientRect();
+   assert(document.querySelectorAll('#party .m').length===6&&nav.querySelectorAll('button').length===3);assert(o.bottom<=s.bottom+1&&o.height<=s.height*.55);
+   return {screen:[s.x,s.y,s.width,s.height],npc:[n.x,n.y,n.width,n.height]};
+  };
+  const baseFrame=snap(),same=()=>{const now=snap();for(let i=0;i<4;i++)assert(Math.abs(now.screen[i]-baseFrame.screen[i])<=1,'inn screen moved');for(let i=0;i<4;i++)assert(Math.abs(now.npc[i]-baseFrame.npc[i])<=1,'inn NPC moved')};
+  const views=[
+   ()=>returnTalk(),()=>conversation(),()=>memberTalk(0),()=>npcMenu(),()=>npcTalk('受付'),()=>pairMenu(),()=>readPair(0),()=>talkArchive('companion',0),()=>rumors(),()=>note('案内があります'),()=>checkpointResult('会話を記録しました','記録しました。','conversation')
+  ];
+  for(const open of views){open();same()}
+ });
  await test('field merchant uses a dedicated portrait',()=>{reset();startDungeon();const f=H.run.floors[0],n=f.nodes.find(n=>n.type==='merchant');f.open=[n.id];routeNode(n.id);assert(panel().querySelector('.scene-merchant img').getAttribute('src').includes('npc_merchant'))});
  await test('back navigation still works with NPC-centered facilities',()=>{reset();market();toolShop();toolQuantity('回復薬');uiBack();assert(panel().textContent.includes('道具屋'));uiBack();assert(panel().querySelector('.facility-host,.facility-talk'));assert(panel().querySelector('.modal-x').textContent==='拠点へ')});
  reset();return out;
