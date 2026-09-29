@@ -203,7 +203,7 @@ const showUI=html=>{
  panel.classList.toggle('actor-panel',!!heroMarkup);
  const fixed=document.createElement('div');fixed.className='actor-fixed';
  if(actorRoute&&!overview)for(const child of [...temp.children])if(child.matches('p.small:not(.screen-hint):not(.ui-help),.section-meta,.cost-meter,.ui-tabs,.search-input,.attribute-heading,.allocation-bar,.allocation-grid')||r.name==='growMastery'&&child.matches('button')&&child.textContent.includes('成長 +5')){fixed.append(child)}
- panel.classList.toggle('status-skills',!!temp.querySelector('.skills-workspace'));panel.classList.toggle('status-mastery',!!temp.querySelector('.mastery-workspace'));panel.classList.toggle('status-attributes',r.name==='actorAttributes');panel.classList.toggle('status-equipment',!!controlsMarkup);
+ panel.classList.toggle('status-skills',!!temp.querySelector('.skills-workspace'));panel.classList.toggle('status-mastery',!!temp.querySelector('.mastery-workspace'));panel.classList.toggle('status-attributes',r.name==='actorAttributes');panel.classList.toggle('status-equipment',!!controlsMarkup||!!temp.querySelector('.character-equipment-shell'));
  const fixedMarkup=fixed.children.length?fixed.outerHTML:'';
  const backdrop=actorRoute?'<div class="actor-backdrop" aria-hidden="true"><img src="'+standArt(actorId)+'" alt="" decoding="sync" fetchpriority="high"></div>':'';
 
