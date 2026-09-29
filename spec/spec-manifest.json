@@ -171,6 +171,14 @@
         "npc": "images/hub-market-npc-cutout.webp"
       },
       "legacy_placeholders": "not used for the three main facility screens"
+    },
+    "battle_ui_feedback": {
+      "status": "確定",
+      "ally_card": "HP/SPゲージを六角カードの中央の幅広部分に置く",
+      "hit": "味方被弾時はカード点滅とダメージ数値",
+      "gauges": "敵味方のHPゲージは増減をアニメーション",
+      "commands": "横並び4コマンドの図形アイコンを明示",
+      "enemy_target": "敵本体の選択発光を廃止し、名前上の小さな紫逆三角カーソル"
     }
   },
   "workstreams": {
