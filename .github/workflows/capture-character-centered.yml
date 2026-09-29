@@ -1,4 +1,5 @@
 name: Capture character-centered workspace
+# visual polish recapture
 on:
   push:
     branches: [main]
