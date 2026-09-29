@@ -437,6 +437,11 @@
 .field-encounter-mark .ui-icon{width:16px;height:16px}
 .field-encounter-merchant .field-encounter-character{right:-2%;width:66%}
 .field-encounter-guide .field-encounter-character{right:-2%;width:60%}
+/* Field contacts share the location backdrop and keep the full portrait visible. */
+#modal.hub-map-modal .field-encounter{border-color:rgba(216,193,139,.35);border-radius:6px;background:rgba(16,19,21,.50);box-shadow:none}
+#modal.hub-map-modal .field-encounter-bg{opacity:.35}
+#modal.hub-map-modal .field-encounter-character{right:0;bottom:0;width:57%;height:100%;object-fit:contain;object-position:right bottom}
+#modal.hub-map-modal .field-encounter-shade{background:linear-gradient(90deg,rgba(5,11,9,.78),rgba(5,11,9,.40) 62%,rgba(5,11,9,.06))}
 @media(max-width:350px){.field-encounter{height:158px}.field-encounter-character{right:-8%;width:68%}.field-encounter-copy{left:9px;top:9px;bottom:9px;width:54%}.field-encounter-copy b{font-size:16px}.field-encounter-copy small{font-size:9px;-webkit-line-clamp:2}}
 @media(max-height:640px){.field-encounter{height:142px;margin-bottom:8px}.field-encounter-character{height:126%;bottom:-15%}.field-encounter-copy b{font-size:16px}.field-encounter-copy small{font-size:9px;-webkit-line-clamp:2}}
 @media(min-width:600px){.field-encounter{height:250px}.field-encounter-character{right:2%;width:54%;height:120%}.field-encounter-copy{left:18px;top:16px;bottom:16px;width:50%}.field-encounter-copy b{font-size:24px}.field-encounter-copy small{font-size:12px}}

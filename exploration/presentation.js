@@ -163,14 +163,14 @@ const showUI=html=>{
   return;
  }
  actorRenderToken++;
- const app=document.getElementById('app'),worldOpen=app.classList.contains('facility-world'),townContext=app.classList.contains('town-world'),currentKind=app.dataset.facility||'',routeKind=facilityRouteGroup(r.name),transientKind=worldOpen&&['confirmAction','checkpointResult','note'].includes(r.name)?currentKind:'',facilityKind=routeKind||transientKind,sameWorld=key(U.route)===key(r),mapRoute=/^(partyMenu|readiness|dungeon|deployment|presetMenu|askSavePreset|squadMenu|rowSwapMenu)$/.test(r.name),hubOverlay=!activeRun();
+ const app=document.getElementById('app'),worldOpen=app.classList.contains('facility-world'),townContext=app.classList.contains('town-world'),expeditionContext=activeRun(),currentKind=app.dataset.facility||'',routeKind=facilityRouteGroup(r.name),transientKind=worldOpen&&['confirmAction','checkpointResult','note'].includes(r.name)?currentKind:'',facilityKind=routeKind||transientKind,sameWorld=key(U.route)===key(r),mapRoute=expeditionContext||/^(partyMenu|readiness|dungeon|deployment|presetMenu|askSavePreset|squadMenu|rowSwapMenu)$/.test(r.name),hubOverlay=true;
  if(facilityKind&&!activeRun()){
   if(!worldOpen){U.stack=[];U.opener=U.launcher||document.activeElement;U.launcher=null}
   else if(U.route&&!sameWorld&&!U.back)U.stack.push(recordRoute(U.route,0));
   if(U.stack.length>24)U.stack.shift();U.route={name:r.name,args:r.args.slice()};
   renderFacilityWorld(facilityKind,html,r);return;
  }
- const keepPlace=hubOverlay&&(worldOpen||townContext);
+ const keepPlace=worldOpen||townContext||expeditionContext;
  const guildShell=false;modal.classList.remove('guild-screen-modal');panel.classList.remove('guild-screen-panel');
  if(keepPlace){const placeStyle=getComputedStyle(app);modal.style.setProperty('--hub-place-bg',placeStyle.backgroundImage);modal.style.setProperty('--hub-place-pos',placeStyle.backgroundPosition||'center center')}else{modal.style.removeProperty('--hub-place-bg');modal.style.removeProperty('--hub-place-pos')}
  modal.classList.toggle('hub-overlay-modal',hubOverlay);
