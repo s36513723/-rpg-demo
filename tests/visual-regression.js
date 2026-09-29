@@ -130,7 +130,7 @@ async () => {
   ];
   for(const open of views){open();same()}
  });
- await test('field merchant uses a dedicated portrait',()=>{reset();startDungeon();const f=H.run.floors[0],n=f.nodes.find(n=>n.type==='merchant');f.open=[n.id];routeNode(n.id);assert(panel().querySelector('.scene-merchant img').getAttribute('src').includes('npc_merchant'))});
+ await test('field merchant uses a dedicated portrait',()=>{reset();startDungeon();const f=H.run.floors[0],n=f.nodes.find(n=>n.type==='merchant');H.run.pending=n.id;H.run.phase='choice';merchantNode();const img=panel().querySelector('.scene-merchant img');assert(img&&img.getAttribute('src').includes('npc_merchant'))});
  await test('back navigation still works with fixed facilities',()=>{reset();market();toolShop();toolQuantity('回復薬');const back=document.querySelector('.hub-global-nav [data-nav="back"]');back.click();assert(document.querySelector('#screen').textContent.includes('道具屋'));back.click();assert(document.querySelector('#screen').textContent.includes('市場'));assert(document.querySelector('#app').classList.contains('market-world'))});
  reset();return out;
 }
