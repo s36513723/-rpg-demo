@@ -1,0 +1,2730 @@
+{
+  "catalog": {
+    "total": 315,
+    "modes": {
+      "Active": 241,
+      "Passive": 65,
+      "Field": 9
+    },
+    "activeWithoutEffectData": [
+      {
+        "id": "SK0003",
+        "name": "聖護"
+      },
+      {
+        "id": "SK0007",
+        "name": "庇護結界"
+      },
+      {
+        "id": "SK0012",
+        "name": "抜刀"
+      },
+      {
+        "id": "SK0013",
+        "name": "見切り"
+      },
+      {
+        "id": "SK0015",
+        "name": "居合"
+      },
+      {
+        "id": "SK0019",
+        "name": "一閃"
+      },
+      {
+        "id": "SK0022",
+        "name": "受流し"
+      },
+      {
+        "id": "SK0026",
+        "name": "守剣"
+      },
+      {
+        "id": "SK0027",
+        "name": "導剣"
+      },
+      {
+        "id": "SK0029",
+        "name": "剣閃"
+      },
+      {
+        "id": "SK0035",
+        "name": "呪縛"
+      },
+      {
+        "id": "SK0036",
+        "name": "吸命"
+      },
+      {
+        "id": "SK0042",
+        "name": "鼓舞舞"
+      },
+      {
+        "id": "SK0043",
+        "name": "戦奏"
+      },
+      {
+        "id": "SK0045",
+        "name": "鎮静歌"
+      },
+      {
+        "id": "SK0046",
+        "name": "誘導舞"
+      },
+      {
+        "id": "SK0047",
+        "name": "循環奏"
+      },
+      {
+        "id": "SK0048",
+        "name": "先陣の号令"
+      },
+      {
+        "id": "SK0049",
+        "name": "大合奏"
+      },
+      {
+        "id": "SK0059",
+        "name": "穿天"
+      },
+      {
+        "id": "SK0066",
+        "name": "煙玉"
+      },
+      {
+        "id": "SK0069",
+        "name": "一斉投擲"
+      },
+      {
+        "id": "SK0085",
+        "name": "捨身斬"
+      },
+      {
+        "id": "SK0087",
+        "name": "処刑斧"
+      },
+      {
+        "id": "SK0103",
+        "name": "詠唱集中"
+      },
+      {
+        "id": "SK0104",
+        "name": "短縮詠唱"
+      },
+      {
+        "id": "SK0106",
+        "name": "長杖結界"
+      },
+      {
+        "id": "SK0115",
+        "name": "連武"
+      },
+      {
+        "id": "SK0119",
+        "name": "百裂"
+      },
+      {
+        "id": "SK0121",
+        "name": "翠風"
+      },
+      {
+        "id": "SK0125",
+        "name": "蔦絡み"
+      },
+      {
+        "id": "SK0128",
+        "name": "大樹守"
+      },
+      {
+        "id": "SK0129",
+        "name": "森羅万象"
+      },
+      {
+        "id": "SK0139",
+        "name": "天崩"
+      },
+      {
+        "id": "SK0146",
+        "name": "陣槍"
+      },
+      {
+        "id": "SK0148",
+        "name": "穿列"
+      },
+      {
+        "id": "SK0149",
+        "name": "神速穿ち"
+      },
+      {
+        "id": "SK0151",
+        "name": "魔工障壁"
+      },
+      {
+        "id": "SK0154",
+        "name": "拘束機"
+      },
+      {
+        "id": "SK0161",
+        "name": "潮汐"
+      },
+      {
+        "id": "SK0162",
+        "name": "航祈"
+      },
+      {
+        "id": "SK0173",
+        "name": "砂塵"
+      },
+      {
+        "id": "SK0177",
+        "name": "黄金律"
+      },
+      {
+        "id": "SK0178",
+        "name": "砂海"
+      },
+      {
+        "id": "SK0183",
+        "name": "体捌き"
+      },
+      {
+        "id": "SK0185",
+        "name": "踏み込み"
+      },
+      {
+        "id": "SK0186",
+        "name": "緊急離脱"
+      },
+      {
+        "id": "SK0188",
+        "name": "無装の構え"
+      },
+      {
+        "id": "SK0192",
+        "name": "危機感知"
+      },
+      {
+        "id": "SK0196",
+        "name": "予知"
+      },
+      {
+        "id": "SK0197",
+        "name": "念動交換"
+      },
+      {
+        "id": "SK0198",
+        "name": "重圧"
+      },
+      {
+        "id": "SK0201",
+        "name": "防御"
+      },
+      {
+        "id": "SK0203",
+        "name": "庇う"
+      },
+      {
+        "id": "SK0204",
+        "name": "挑発"
+      },
+      {
+        "id": "SK0205",
+        "name": "受け止め"
+      },
+      {
+        "id": "SK0206",
+        "name": "大盾防壁"
+      },
+      {
+        "id": "SK0209",
+        "name": "絶対防衛"
+      },
+      {
+        "id": "SK0217",
+        "name": "影渡り"
+      },
+      {
+        "id": "SK0222",
+        "name": "結界符"
+      },
+      {
+        "id": "SK0229",
+        "name": "五行大符"
+      },
+      {
+        "id": "SK0230",
+        "name": "大結界"
+      },
+      {
+        "id": "SK0232",
+        "name": "受流"
+      },
+      {
+        "id": "SK0233",
+        "name": "機動"
+      },
+      {
+        "id": "SK0237",
+        "name": "離脱"
+      },
+      {
+        "id": "SK0238",
+        "name": "側面急襲"
+      },
+      {
+        "id": "SK0240",
+        "name": "幻歩"
+      },
+      {
+        "id": "SK0244",
+        "name": "鉄壁"
+      },
+      {
+        "id": "SK0248",
+        "name": "城壁"
+      },
+      {
+        "id": "SK0251",
+        "name": "要塞"
+      },
+      {
+        "id": "SK0258",
+        "name": "照準安定"
+      },
+      {
+        "id": "SK0268",
+        "name": "死線"
+      },
+      {
+        "id": "SK0270",
+        "name": "葬列"
+      },
+      {
+        "id": "SK0273",
+        "name": "岩地"
+      },
+      {
+        "id": "SK0276",
+        "name": "鉱脈"
+      },
+      {
+        "id": "SK0277",
+        "name": "石壁"
+      },
+      {
+        "id": "SK0278",
+        "name": "凍結域"
+      },
+      {
+        "id": "SK0279",
+        "name": "地脈"
+      },
+      {
+        "id": "SK0280",
+        "name": "晶化"
+      },
+      {
+        "id": "SK0286",
+        "name": "縛鎖"
+      },
+      {
+        "id": "SK0295",
+        "name": "術式障壁"
+      },
+      {
+        "id": "SK0298",
+        "name": "術式転位"
+      },
+      {
+        "id": "SK0306",
+        "name": "法衣"
+      },
+      {
+        "id": "SK0312",
+        "name": "霊衣展開"
+      }
+    ]
+  },
+  "active": [
+    {
+      "id": "SK0001",
+      "name": "癒しの祈り",
+      "key": "癒しの祈り",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0002",
+      "name": "浄化",
+      "key": "浄化",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0003",
+      "name": "聖護",
+      "key": "聖護",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0004",
+      "name": "審判光",
+      "key": "審判光",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0005",
+      "name": "大いなる癒し",
+      "key": "大いなる癒し",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0006",
+      "name": "解呪",
+      "key": "解呪",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0007",
+      "name": "庇護結界",
+      "key": "庇護結界",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0008",
+      "name": "破邪",
+      "key": "破邪",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0009",
+      "name": "蘇生祈願",
+      "key": "蘇生祈願",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0011",
+      "name": "袈裟斬り",
+      "key": "袈裟斬り",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0012",
+      "name": "抜刀",
+      "key": "抜刀",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0013",
+      "name": "見切り",
+      "key": "見切り",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0014",
+      "name": "残心",
+      "key": "残心",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0015",
+      "name": "居合",
+      "key": "居合",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0016",
+      "name": "霞斬り",
+      "key": "霞斬り",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0017",
+      "name": "大太刀薙ぎ",
+      "key": "大太刀薙ぎ",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0019",
+      "name": "一閃",
+      "key": "一閃",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0021",
+      "name": "斬撃",
+      "key": "斬撃",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0022",
+      "name": "受流し",
+      "key": "受流し",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0023",
+      "name": "横薙ぎ",
+      "key": "横薙ぎ",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0024",
+      "name": "穿甲突き",
+      "key": "穿甲突き",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0025",
+      "name": "反撃剣",
+      "key": "反撃剣",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0026",
+      "name": "守剣",
+      "key": "守剣",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0027",
+      "name": "導剣",
+      "key": "導剣",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0028",
+      "name": "連環剣",
+      "key": "連環剣",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0029",
+      "name": "剣閃",
+      "key": "剣閃",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0031",
+      "name": "衰弱呪",
+      "key": "衰弱呪",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0032",
+      "name": "盲呪",
+      "key": "盲呪",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0033",
+      "name": "血刃",
+      "key": "血刃",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0034",
+      "name": "暗黒弾",
+      "key": "暗黒弾",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0035",
+      "name": "呪縛",
+      "key": "呪縛",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0036",
+      "name": "吸命",
+      "key": "吸命",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0037",
+      "name": "死霊召喚",
+      "key": "死霊召喚",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0038",
+      "name": "誘惑",
+      "key": "誘惑",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0039",
+      "name": "奈落",
+      "key": "奈落",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0040",
+      "name": "死の宣告",
+      "key": "死の宣告",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0041",
+      "name": "勇壮歌",
+      "key": "勇壮歌",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0042",
+      "name": "鼓舞舞",
+      "key": "鼓舞舞",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0043",
+      "name": "戦奏",
+      "key": "戦奏",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0044",
+      "name": "攻勢の号令",
+      "key": "攻勢の号令",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0045",
+      "name": "鎮静歌",
+      "key": "鎮静歌",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0046",
+      "name": "誘導舞",
+      "key": "誘導舞",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0047",
+      "name": "循環奏",
+      "key": "循環奏",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0048",
+      "name": "先陣の号令",
+      "key": "先陣の号令",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0049",
+      "name": "大合奏",
+      "key": "大合奏",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0051",
+      "name": "速射",
+      "key": "速射（弓）",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0052",
+      "name": "狙撃",
+      "key": "狙撃",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0053",
+      "name": "封腕矢",
+      "key": "封腕矢",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0054",
+      "name": "封脚矢",
+      "key": "封脚矢",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0055",
+      "name": "曲射",
+      "key": "曲射",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0056",
+      "name": "盲目矢",
+      "key": "盲目矢",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0058",
+      "name": "一斉射",
+      "key": "一斉射",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0059",
+      "name": "穿天",
+      "key": "穿天",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0061",
+      "name": "飛刃",
+      "key": "飛刃",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0062",
+      "name": "飛針",
+      "key": "飛針",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0063",
+      "name": "毒針",
+      "key": "毒針",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0064",
+      "name": "閃光弾",
+      "key": "閃光弾",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0065",
+      "name": "爆弾",
+      "key": "爆弾",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0066",
+      "name": "煙玉",
+      "key": "煙玉",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0067",
+      "name": "回刃",
+      "key": "回刃",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0068",
+      "name": "仕掛爆弾",
+      "key": "仕掛爆弾",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0069",
+      "name": "一斉投擲",
+      "key": "一斉投擲",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0081",
+      "name": "断ち割り",
+      "key": "断ち割り",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0082",
+      "name": "鎧砕き",
+      "key": "鎧砕き",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0083",
+      "name": "恐撃",
+      "key": "恐撃",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0084",
+      "name": "手斧投げ",
+      "key": "手斧投げ",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0085",
+      "name": "捨身斬",
+      "key": "捨身斬",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0086",
+      "name": "大斧薙ぎ",
+      "key": "大斧薙ぎ",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0087",
+      "name": "処刑斧",
+      "key": "処刑斧",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0089",
+      "name": "断頭",
+      "key": "断頭",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0091",
+      "name": "星夜",
+      "key": "星夜",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0092",
+      "name": "重力",
+      "key": "重力",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0093",
+      "name": "時空",
+      "key": "時空",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0094",
+      "name": "夢幻",
+      "key": "夢幻",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0095",
+      "name": "加速",
+      "key": "加速",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0096",
+      "name": "重圧",
+      "key": "重圧（星辰）",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0097",
+      "name": "夢歩",
+      "key": "夢歩",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0098",
+      "name": "転位",
+      "key": "転位",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0099",
+      "name": "星落",
+      "key": "星落",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0101",
+      "name": "杖打",
+      "key": "杖打",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0103",
+      "name": "詠唱集中",
+      "key": "詠唱集中",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0104",
+      "name": "短縮詠唱",
+      "key": "短縮詠唱",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0106",
+      "name": "長杖結界",
+      "key": "長杖結界",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0107",
+      "name": "魔導撃",
+      "key": "魔導撃",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0109",
+      "name": "大詠唱",
+      "key": "大詠唱",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0111",
+      "name": "連拳",
+      "key": "連拳",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0112",
+      "name": "震脚",
+      "key": "震脚",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0113",
+      "name": "迎撃拳",
+      "key": "迎撃拳",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0114",
+      "name": "投げ",
+      "key": "投げ",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0115",
+      "name": "連武",
+      "key": "連武",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0116",
+      "name": "崩拳",
+      "key": "崩拳",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0117",
+      "name": "回し蹴り",
+      "key": "回し蹴り",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0118",
+      "name": "受身返し",
+      "key": "受身返し",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0119",
+      "name": "百裂",
+      "key": "百裂",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0121",
+      "name": "翠風",
+      "key": "翠風",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0122",
+      "name": "樹花",
+      "key": "樹花",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0123",
+      "name": "生命",
+      "key": "生命",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0124",
+      "name": "霊獣",
+      "key": "霊獣",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0125",
+      "name": "蔦絡み",
+      "key": "蔦絡み",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0126",
+      "name": "花癒",
+      "key": "花癒",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0127",
+      "name": "獣駆",
+      "key": "獣駆",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0128",
+      "name": "大樹守",
+      "key": "大樹守",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0129",
+      "name": "森羅万象",
+      "key": "森羅万象",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0131",
+      "name": "重打",
+      "key": "重打",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0132",
+      "name": "震撃",
+      "key": "震撃",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0133",
+      "name": "破甲震",
+      "key": "破甲震",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0134",
+      "name": "鎮圧打",
+      "key": "鎮圧打",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0135",
+      "name": "大槌砕き",
+      "key": "大槌砕き",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0136",
+      "name": "守護打",
+      "key": "守護打",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0137",
+      "name": "粉砕",
+      "key": "粉砕",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0138",
+      "name": "地響き",
+      "key": "地響き",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0139",
+      "name": "天崩",
+      "key": "天崩",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0141",
+      "name": "貫き",
+      "key": "貫き",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0142",
+      "name": "足留め",
+      "key": "足留め",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0143",
+      "name": "迎撃槍",
+      "key": "迎撃槍",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0144",
+      "name": "払い槍",
+      "key": "払い槍",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0145",
+      "name": "貫通槍",
+      "key": "貫通槍",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0146",
+      "name": "陣槍",
+      "key": "陣槍",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0147",
+      "name": "長槍突進",
+      "key": "長槍突進",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0148",
+      "name": "穿列",
+      "key": "穿列",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0149",
+      "name": "神速穿ち",
+      "key": "神速穿ち",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0151",
+      "name": "魔工障壁",
+      "key": "魔工障壁",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0152",
+      "name": "照準器",
+      "key": "照準器",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0153",
+      "name": "衝撃杭",
+      "key": "衝撃杭",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0154",
+      "name": "拘束機",
+      "key": "拘束機",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0155",
+      "name": "自動砲台",
+      "key": "自動砲台",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0156",
+      "name": "牽引装置",
+      "key": "牽引装置",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0157",
+      "name": "観測ドローン",
+      "key": "観測ドローン",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0158",
+      "name": "炸裂機雷",
+      "key": "炸裂機雷",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0159",
+      "name": "迎撃装置",
+      "key": "迎撃装置",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0161",
+      "name": "潮汐",
+      "key": "潮汐",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0162",
+      "name": "航祈",
+      "key": "航祈",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0163",
+      "name": "荒天",
+      "key": "荒天",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0164",
+      "name": "海淵",
+      "key": "海淵",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0165",
+      "name": "引潮",
+      "key": "引潮",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0166",
+      "name": "高潮",
+      "key": "高潮",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0167",
+      "name": "暴風雨",
+      "key": "暴風雨",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0168",
+      "name": "深淵圧",
+      "key": "深淵圧",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0169",
+      "name": "大海嘯",
+      "key": "大海嘯",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0171",
+      "name": "灼熱",
+      "key": "灼熱",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0172",
+      "name": "神陽",
+      "key": "神陽",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0173",
+      "name": "砂塵",
+      "key": "砂塵",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0174",
+      "name": "恵沢",
+      "key": "恵沢",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0175",
+      "name": "陽炎",
+      "key": "陽炎",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0176",
+      "name": "乾熱",
+      "key": "乾熱",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0177",
+      "name": "黄金律",
+      "key": "黄金律",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0178",
+      "name": "砂海",
+      "key": "砂海",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0179",
+      "name": "日輪",
+      "key": "日輪",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0183",
+      "name": "体捌き",
+      "key": "体捌き",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0185",
+      "name": "踏み込み",
+      "key": "踏み込み",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0186",
+      "name": "緊急離脱",
+      "key": "緊急離脱",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0188",
+      "name": "無装の構え",
+      "key": "無装の構え",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0191",
+      "name": "念動衝",
+      "key": "念動衝",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0192",
+      "name": "危機感知",
+      "key": "危機感知",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0193",
+      "name": "念動引寄",
+      "key": "念動引寄",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0194",
+      "name": "精神波",
+      "key": "精神波",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0195",
+      "name": "魅了眼",
+      "key": "魅了眼",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0196",
+      "name": "予知",
+      "key": "予知",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0197",
+      "name": "念動交換",
+      "key": "念動交換",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0198",
+      "name": "重圧",
+      "key": "重圧（異能）",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0199",
+      "name": "現象暴走",
+      "key": "現象暴走",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0201",
+      "name": "防御",
+      "key": "防御",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0202",
+      "name": "盾撃",
+      "key": "盾撃",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0203",
+      "name": "庇う",
+      "key": "庇う",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0204",
+      "name": "挑発",
+      "key": "挑発",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0205",
+      "name": "受け止め",
+      "key": "受け止め",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0206",
+      "name": "大盾防壁",
+      "key": "大盾防壁",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0207",
+      "name": "反撃盾",
+      "key": "反撃盾",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0209",
+      "name": "絶対防衛",
+      "key": "絶対防衛",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0211",
+      "name": "速刺",
+      "key": "速刺",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0212",
+      "name": "毒刃",
+      "key": "毒刃",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0213",
+      "name": "盲目刃",
+      "key": "盲目刃",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0214",
+      "name": "離脱斬り",
+      "key": "離脱斬り",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0215",
+      "name": "苦悶突き",
+      "key": "苦悶突き",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0216",
+      "name": "逆手受け",
+      "key": "逆手受け",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0217",
+      "name": "影渡り",
+      "key": "影渡り",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0219",
+      "name": "暗殺",
+      "key": "暗殺",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0221",
+      "name": "火符",
+      "key": "火符",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0222",
+      "name": "結界符",
+      "key": "結界符",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0223",
+      "name": "頭封じの符",
+      "key": "頭封じの符",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0224",
+      "name": "式神・攻",
+      "key": "式神・攻",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0225",
+      "name": "腕封じの符",
+      "key": "腕封じの符",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0226",
+      "name": "脚封じの符",
+      "key": "脚封じの符",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0227",
+      "name": "巫祭・祓",
+      "key": "巫祭・祓",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0228",
+      "name": "式神・護",
+      "key": "式神・護",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0229",
+      "name": "五行大符",
+      "key": "五行大符",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0230",
+      "name": "大結界",
+      "key": "大結界",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0232",
+      "name": "受流",
+      "key": "受流",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0233",
+      "name": "機動",
+      "key": "機動",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0237",
+      "name": "離脱",
+      "key": "離脱",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0238",
+      "name": "側面急襲",
+      "key": "側面急襲",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0240",
+      "name": "幻歩",
+      "key": "幻歩",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0244",
+      "name": "鉄壁",
+      "key": "鉄壁",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0248",
+      "name": "城壁",
+      "key": "城壁",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0251",
+      "name": "要塞",
+      "key": "要塞",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0253",
+      "name": "速射",
+      "key": "速射（銃）",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0254",
+      "name": "精密射撃",
+      "key": "精密射撃",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0255",
+      "name": "制圧射撃",
+      "key": "制圧射撃",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0256",
+      "name": "散弾",
+      "key": "散弾",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0257",
+      "name": "貫通弾",
+      "key": "貫通弾",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0258",
+      "name": "照準安定",
+      "key": "照準安定",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0259",
+      "name": "牽制射撃",
+      "key": "牽制射撃",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0260",
+      "name": "徹甲弾",
+      "key": "徹甲弾",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0261",
+      "name": "零距離射撃",
+      "key": "零距離射撃",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0263",
+      "name": "刈撃",
+      "key": "刈撃",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0264",
+      "name": "鉤引き",
+      "key": "鉤引き",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0265",
+      "name": "魂刈り",
+      "key": "魂刈り",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0266",
+      "name": "血刈",
+      "key": "血刈",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0267",
+      "name": "魔刈",
+      "key": "魔刈",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0268",
+      "name": "死線",
+      "key": "死線",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0269",
+      "name": "冥鎌",
+      "key": "冥鎌",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0270",
+      "name": "葬列",
+      "key": "葬列",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0271",
+      "name": "魂断",
+      "key": "魂断",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0273",
+      "name": "岩地",
+      "key": "岩地",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0274",
+      "name": "氷嶺",
+      "key": "氷嶺",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0275",
+      "name": "地火",
+      "key": "地火",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0276",
+      "name": "鉱脈",
+      "key": "鉱脈",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0277",
+      "name": "石壁",
+      "key": "石壁",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0278",
+      "name": "凍結域",
+      "key": "凍結域",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0279",
+      "name": "地脈",
+      "key": "地脈",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0280",
+      "name": "晶化",
+      "key": "晶化",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0281",
+      "name": "山嶺崩し",
+      "key": "山嶺崩し",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0283",
+      "name": "払い鞭",
+      "key": "払い鞭",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0284",
+      "name": "絡め取り",
+      "key": "絡め取り",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0285",
+      "name": "牽引",
+      "key": "牽引",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0286",
+      "name": "縛鎖",
+      "key": "縛鎖",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0287",
+      "name": "薙撃",
+      "key": "薙撃",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0288",
+      "name": "捕縛反撃",
+      "key": "捕縛反撃",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0289",
+      "name": "引き倒し",
+      "key": "引き倒し",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0291",
+      "name": "大捕縛",
+      "key": "大捕縛",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0293",
+      "name": "火球",
+      "key": "火球",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0294",
+      "name": "風刃",
+      "key": "風刃",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0295",
+      "name": "術式障壁",
+      "key": "術式障壁",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0296",
+      "name": "岩槍",
+      "key": "岩槍",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0297",
+      "name": "火炎陣",
+      "key": "火炎陣",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0298",
+      "name": "術式転位",
+      "key": "術式転位",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0299",
+      "name": "錬金爆弾",
+      "key": "錬金爆弾",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0300",
+      "name": "召喚",
+      "key": "召喚",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0301",
+      "name": "大元素術",
+      "key": "大元素術",
+      "executed": true,
+      "changed": true
+    },
+    {
+      "id": "SK0306",
+      "name": "法衣",
+      "key": "法衣",
+      "executed": true,
+      "changed": false
+    },
+    {
+      "id": "SK0312",
+      "name": "霊衣展開",
+      "key": "霊衣展開",
+      "executed": true,
+      "changed": false
+    }
+  ],
+  "battles": [
+    {
+      "trial": 1,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 2,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 91,
+      "survivors": 4
+    },
+    {
+      "trial": 3,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 4,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 5,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 97,
+      "survivors": 2
+    },
+    {
+      "trial": 6,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 4
+    },
+    {
+      "trial": 7,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 8,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 9,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 10,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 11,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 91,
+      "survivors": 5
+    },
+    {
+      "trial": 12,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 97,
+      "survivors": 3
+    },
+    {
+      "trial": 13,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 103,
+      "survivors": 3
+    },
+    {
+      "trial": 14,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 97,
+      "survivors": 2
+    },
+    {
+      "trial": 15,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 16,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 97,
+      "survivors": 3
+    },
+    {
+      "trial": 17,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 18,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 19,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 91,
+      "survivors": 5
+    },
+    {
+      "trial": 20,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 21,
+      "rounds": 6,
+      "result": "win",
+      "error": null,
+      "spSpent": 97,
+      "survivors": 2
+    },
+    {
+      "trial": 22,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 91,
+      "survivors": 5
+    },
+    {
+      "trial": 23,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 24,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 4
+    },
+    {
+      "trial": 25,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 26,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 27,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 91,
+      "survivors": 5
+    },
+    {
+      "trial": 28,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 29,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 30,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 4
+    },
+    {
+      "trial": 31,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 32,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 97,
+      "survivors": 3
+    },
+    {
+      "trial": 33,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 34,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 97,
+      "survivors": 3
+    },
+    {
+      "trial": 35,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 36,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 37,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 38,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 39,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 91,
+      "survivors": 5
+    },
+    {
+      "trial": 40,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 41,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 42,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 43,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 103,
+      "survivors": 3
+    },
+    {
+      "trial": 44,
+      "rounds": 6,
+      "result": "win",
+      "error": null,
+      "spSpent": 103,
+      "survivors": 3
+    },
+    {
+      "trial": 45,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 46,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 91,
+      "survivors": 5
+    },
+    {
+      "trial": 47,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 48,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 97,
+      "survivors": 5
+    },
+    {
+      "trial": 49,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 4
+    },
+    {
+      "trial": 50,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 5
+    },
+    {
+      "trial": 51,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 97,
+      "survivors": 2
+    },
+    {
+      "trial": 52,
+      "rounds": 4,
+      "result": "win",
+      "error": null,
+      "spSpent": 80,
+      "survivors": 4
+    },
+    {
+      "trial": 53,
+      "rounds": 5,
+      "result": "win",
+      "error": null,
+      "spSpent": 97,
+      "survivors": 3
+    }
+  ],
+  "escapeTrials": [
+    {
+      "trial": 1,
+      "success": true
+    },
+    {
+      "trial": 2,
+      "success": false
+    },
+    {
+      "trial": 3,
+      "success": true
+    },
+    {
+      "trial": 4,
+      "success": true
+    },
+    {
+      "trial": 5,
+      "success": false
+    },
+    {
+      "trial": 6,
+      "success": true
+    },
+    {
+      "trial": 7,
+      "success": true
+    },
+    {
+      "trial": 8,
+      "success": false
+    },
+    {
+      "trial": 9,
+      "success": true
+    },
+    {
+      "trial": 10,
+      "success": false
+    },
+    {
+      "trial": 11,
+      "success": true
+    },
+    {
+      "trial": 12,
+      "success": true
+    },
+    {
+      "trial": 13,
+      "success": false
+    },
+    {
+      "trial": 14,
+      "success": true
+    },
+    {
+      "trial": 15,
+      "success": false
+    },
+    {
+      "trial": 16,
+      "success": false
+    },
+    {
+      "trial": 17,
+      "success": true
+    },
+    {
+      "trial": 18,
+      "success": false
+    },
+    {
+      "trial": 19,
+      "success": true
+    },
+    {
+      "trial": 20,
+      "success": true
+    },
+    {
+      "trial": 21,
+      "success": false
+    },
+    {
+      "trial": 22,
+      "success": true
+    },
+    {
+      "trial": 23,
+      "success": false
+    },
+    {
+      "trial": 24,
+      "success": true
+    },
+    {
+      "trial": 25,
+      "success": true
+    },
+    {
+      "trial": 26,
+      "success": false
+    },
+    {
+      "trial": 27,
+      "success": true
+    },
+    {
+      "trial": 28,
+      "success": true
+    },
+    {
+      "trial": 29,
+      "success": false
+    },
+    {
+      "trial": 30,
+      "success": true
+    },
+    {
+      "trial": 31,
+      "success": false
+    },
+    {
+      "trial": 32,
+      "success": true
+    },
+    {
+      "trial": 33,
+      "success": true
+    },
+    {
+      "trial": 34,
+      "success": false
+    },
+    {
+      "trial": 35,
+      "success": true
+    },
+    {
+      "trial": 36,
+      "success": false
+    },
+    {
+      "trial": 37,
+      "success": false
+    },
+    {
+      "trial": 38,
+      "success": true
+    },
+    {
+      "trial": 39,
+      "success": false
+    },
+    {
+      "trial": 40,
+      "success": true
+    },
+    {
+      "trial": 41,
+      "success": true
+    },
+    {
+      "trial": 42,
+      "success": false
+    },
+    {
+      "trial": 43,
+      "success": true
+    },
+    {
+      "trial": 44,
+      "success": false
+    },
+    {
+      "trial": 45,
+      "success": true
+    },
+    {
+      "trial": 46,
+      "success": true
+    },
+    {
+      "trial": 47,
+      "success": false
+    },
+    {
+      "trial": 48,
+      "success": true
+    },
+    {
+      "trial": 49,
+      "success": true
+    },
+    {
+      "trial": 50,
+      "success": false
+    },
+    {
+      "trial": 51,
+      "success": true
+    },
+    {
+      "trial": 52,
+      "success": false
+    },
+    {
+      "trial": 53,
+      "success": true
+    }
+  ],
+  "engine": "index.html",
+  "compensation": {
+    "offhand": {
+      "dualPower": 74.85,
+      "shieldPower": 71,
+      "working": true
+    },
+    "castInitiative": {
+      "base": 5,
+      "focused": 15,
+      "working": true
+    },
+    "castDurationMechanic": "one round for every action with cast; speed bonus changes initiative only"
+  },
+  "consoleErrors": [],
+  "battleV44": {
+    "catalogCount": 296,
+    "combatants": 6,
+    "selectableSkillNames": [
+      "破砕撃",
+      "震撃",
+      "毒刃",
+      "急所突き",
+      "火炎剣",
+      "貫穿",
+      "脚封じ射ち",
+      "狙撃",
+      "火球",
+      "大火炎",
+      "頭封じの符",
+      "治癒祈祷"
+    ],
+    "activeSkillsOnParty": 12
+  },
+  "floorUiSmoke": [
+    {
+      "floor": 1,
+      "theme": "森林",
+      "exit": true,
+      "map": true
+    },
+    {
+      "floor": 2,
+      "theme": "洞窟",
+      "exit": true,
+      "map": true
+    },
+    {
+      "floor": 3,
+      "theme": "廃墟都市",
+      "map": true
+    }
+  ]
+}

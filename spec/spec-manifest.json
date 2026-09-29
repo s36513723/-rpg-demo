@@ -392,5 +392,13 @@
     "implementation": "exploration/ui.js, exploration/hub.js, exploration/presentation.js, exploration/sortie-layout.css, exploration/hub-roster-panel.css, tests/hub-regression.js, tests/ui-regression.js, tests/browser.py, exploration/index.html, exploration/boot.js, exploration/visuals.js, exploration/mastery-layout.js",
     "revision": "盾の副手制限と店頭の修練判定、依頼・スキルの初期表示、ギルドの重複カード撤去、陣形の視認性、会話文、強化素材、保管庫の数量選択・確認、ステータスの横幅を改善。",
     "verification": "Native Chromium HTTP: 746/746 PASS。320/375/390/430/768pxの拠点、施設、編成、陣形、ステータス、技能、設定などを確認。"
+  },
+  "combat_audit_2026_09_30": {
+    "status": "要レビュー・一部未実装",
+    "implementation": "tests/battle-audit.js, tests/battle-audit.py, exploration/explore.js, tests/hub-regression.js",
+    "report": "spec/battle-audit-2026-09-30.md",
+    "results": "battle-audit-results.json",
+    "validation": "主エンジンの53戦は決着53/53、独立逃走53試行は31成功。旧敗北時の素材・希少装備半減を修正し、通常ブラウザ回帰746/746成功。battle-v44はまだ旧296カタログ・固定12技で、315個別実戦と初期化アイテム、3層連続攻略は未達。",
+    "workbook_sync": "敗北時の戦利品保持は既存のユーザー確定指示に従う。正本Excelへの監査結果の同期は未実施。"
   }
 }
