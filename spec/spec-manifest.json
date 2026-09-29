@@ -122,7 +122,11 @@
     "auto_policies": {
       "status": "確定",
       "default": "ガンガン使う",
-      "options": ["ガンガン使う", "スキルを使うな", "命を大事に"]
+      "options": [
+        "ガンガン使う",
+        "スキルを使うな",
+        "命を大事に"
+      ]
     },
     "respec_item": {
       "status": "確定・入手数は初期実装値",
@@ -412,11 +416,11 @@
     "workbook_sync": "敗北時の戦利品保持は既存のユーザー確定指示に従う。正本Excelへの監査結果の同期は未実施。"
   },
   "skill_effect_design_84_2026_09_29": {
-    "status": "初期実装値・要レビュー・設計のみ",
-    "workbook_sync": "Library正本 version 20・08_SkillDB AL:AP に84件の対象・条件・処理・状態を追加。",
+    "status": "初期実装値・要レビュー・設計検証済み（ランタイム未接続）",
+    "workbook_sync": "Library正本 version 21・08_SkillDB AL:AR に84件の対象・条件・処理・反応トリガー・整合メモを同期。",
     "data": "skill-effect-design-84.js",
     "design": "spec/skill-effect-design-84.md",
-    "verification": "tests/skill-effect-design.js 84/84。既存315行・他14シートの値は変更なし。",
-    "runtime": "未接続。旧296技の移行および84技の実戦効果検証は別途必要。"
+    "verification": "tests/skill-effect-design.js 84/84、tests/browser.py 752/752、tests/battle-audit.py 53/53戦・console error 0。正本の他14シートとSkill DB既存37列の値に差分なし。spec/skill-effect-verification-2026-09-30.md。",
+    "runtime": "未接続。主エンジン監査で84件の実行効果フィールドなし、battle-v44は旧296技。84技の実戦効果検証は未実施。"
   }
 }
