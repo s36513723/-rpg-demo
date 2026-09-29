@@ -8,6 +8,19 @@ let browser;
 async function main(){await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));browser=await chromium.launch({headless:true,executablePath:process.env.RPG_CHROMIUM||chromium.executablePath(),args:['--no-sandbox']});const page=await browser.newPage({viewport:{width:390,height:844}});const errors=[];page.on('pageerror',e=>errors.push(String(e)));
 const base='http://127.0.0.1:'+server.address().port;
 await page.goto(base+'/exploration/index.html');await page.waitForFunction(()=>window.H&&window.HUB_CONTENT&&window.RPG_RULES,{timeout:30000});
+await page.evaluate(()=>settings());
+assert.equal(await page.locator('[data-hub="cycleAutoMode"]').count(),1,'AUTO setting is visible');
+assert.equal(await page.locator('[data-hub="selectSaveSlot"]').count(),2,'Both save slots are visible');
+for(const mode of ['スキルを使うな','命を大事に','ガンガン使う']){
+ await page.locator('[data-hub="cycleAutoMode"]').click();
+ assert.equal(await page.evaluate(()=>H.settings.auto),mode);
+}
+await page.locator('[data-hub="selectSaveSlot"][data-args="[2]"]').click();
+assert.equal(await page.evaluate(()=>HUB_SLOT),2);
+await page.reload();await page.waitForFunction(()=>window.H&&window.HUB_SLOT===2,{timeout:30000});
+await page.evaluate(()=>settings());
+await page.locator('[data-hub="selectSaveSlot"][data-args="[1]"]').click();
+assert.equal(await page.evaluate(()=>HUB_SLOT),1);
 const navigation=await page.evaluate(()=>{const start=collectSave();H.run=makeRun('古代迷宮',['森林','洞窟','廃墟都市']);H.run.pending=null;drawDungeon();const stock={...loot};const earned=HUB_CONTENT.regions['古代迷宮'].material;loot[earned]=(loot[earned]||0)+2;awardExperience(120,'検証');returnTown('任意帰還');return {ended:H.run===null,loot:(H.unappraised.materials[earned]||0),experience:H.experience,view:document.querySelector('#screen')?.textContent?.slice(0,80),saved:!!RPG_STORE.getItem('rpg.exploration.save1')}});
 assert(navigation.ended&&navigation.loot===2&&navigation.experience>=120&&navigation.saved,JSON.stringify(navigation));
 const batches=scenarios(),count=Number(process.env.RPG_ARSENAL_BATCHES||batches.length);let tested=0;
