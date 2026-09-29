@@ -310,6 +310,6 @@
     "status": "確定",
     "implementation": "exploration/style.css, exploration/status-layout.css, exploration/presentation.js, exploration/fitting.js, exploration/state.js",
     "workbook_sync": "pending: canonical workbook not present in current checkout; repository mirror updated",
-    "revision": "共通キャラカードを全拠点画面に常時表示。編成の仲間タブを統合。装備枠を縮小・上寄せし、下部に文字だけのステータスを配置"
+    "revision": "共通カードの表示崩れを修正、装備画面を共通高さへ統一、装備左右を反転、顔前のSWAPパネルを撤去し候補画面へ移動、EXP/HP/SPをステータスへ追加"
   }
 }
