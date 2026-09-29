@@ -228,8 +228,8 @@ const ACTOR_CROPS={
  ran:M.crops['back-ran'],arc:M.crops['portrait-arc'],mys:M.crops['back-mys']
 };
 const ACTOR_PORTRAITS={
- war:'images/battle-warrior.svg',rog:'images/battle-paladin.svg',run:'images/battle-rogue.svg',
- ran:'images/battle-archer.svg',arc:'images/battle-alchemist.svg',mys:'images/battle-mystic.svg'
+ war:'images/hub-standing-warrior.webp',rog:'images/hub-standing-paladin.webp',run:'images/hub-standing-rogue.webp',
+ ran:'images/hub-standing-archer.webp',arc:'images/hub-standing-alchemist.webp',mys:'images/hub-standing-mystic.webp'
 };
 function enemyCrop(u){return u.id==='g3'?[542, 159, 210, 135]:CROPS[u.id==='mage'?'mage':['arch','arch2'].includes(u.id)?'archer':'guard']}
 const ENEMY_ARCHETYPE_ART={
@@ -383,7 +383,7 @@ function renderCards(){
  for(const u of [...party].sort((a,b)=>a.slot-b.slot))paint(u,$('partyStrip'));
  highlightTargets();
 }
-function highlightTargets(){const u=current(),a=u?actionFor(u):null,ts=editable()&&commandOpen&&a?ensureTarget(u,a):[],valid=new Set(ts.map(t=>t.id)),chosen=u?getDraft(u).targetId:null;nodes.forEach((el,id)=>{el.classList.toggle('target-valid',valid.has(id));el.classList.toggle('target-selected',valid.has(id)&&id===chosen);el.classList.toggle('target-unavailable',editable()&&commandOpen&&!valid.has(id)&&((a?.target==='ally'&&el.classList.contains('ally-unit'))||(a?.target!=='ally'&&el.classList.contains('enemy-unit'))));el.setAttribute('aria-pressed',String(valid.has(id)&&id===chosen))});const eg=$('enemyGrid'),ag=$('allyGrid'),enemyCells=[...(eg?.querySelectorAll('.stage-cell')||[])],allyCells=[...(ag?.querySelectorAll('.stage-cell')||[])];for(const g of [eg,ag])g?.classList.remove('targeting-board');for(const c of [...enemyCells,...allyCells]){c.classList.remove('target-zone','target-selected-zone','target-muted');c.removeAttribute('data-target-id');c.onclick=null}if(!targetMode||!u||!a)return;const grid=a.target==='ally'?ag:eg,cells=a.target==='ally'?allyCells:enemyCells;grid?.classList.add('targeting-board');for(const c of cells)c.classList.add('target-muted');for(const t of ts){let ri,ci;if(t.enemy){ri=t.row==='front'?2:t.row==='back'?0:1;ci=col(t)-1}else{ri=({front:0,mid:1,rear:2}[t.rank]??0);ci=col(t)-1}const c=cells[ri*3+ci];if(!c)continue;c.classList.remove('target-muted');c.classList.add('target-zone');if(t.id===chosen)c.classList.add('target-selected-zone');c.dataset.targetId=t.id;c.onclick=()=>cardTap(t.id)}}
+function highlightTargets(){const u=current(),a=u?actionFor(u):null,ts=editable()&&commandOpen&&a?ensureTarget(u,a):[],valid=new Set(ts.map(t=>t.id)),chosen=targetMode?.previewId??(!targetMode&&u?getDraft(u).targetId:null);nodes.forEach((el,id)=>{el.classList.toggle('target-valid',valid.has(id));el.classList.toggle('target-selected',valid.has(id)&&id===chosen);el.classList.toggle('target-confirm',!!targetMode&&valid.has(id)&&id===targetMode.previewId);el.classList.toggle('target-unavailable',editable()&&commandOpen&&!valid.has(id)&&((a?.target==='ally'&&el.classList.contains('ally-unit'))||(a?.target!=='ally'&&el.classList.contains('enemy-unit'))));el.setAttribute('aria-pressed',String(valid.has(id)&&id===chosen))});const eg=$('enemyGrid'),ag=$('allyGrid'),enemyCells=[...(eg?.querySelectorAll('.stage-cell')||[])],allyCells=[...(ag?.querySelectorAll('.stage-cell')||[])];for(const g of [eg,ag])g?.classList.remove('targeting-board');for(const c of [...enemyCells,...allyCells]){c.classList.remove('target-zone','target-selected-zone','target-muted');c.removeAttribute('data-target-id');c.onclick=null}if(!targetMode||!u||!a)return;const grid=a.target==='ally'?ag:eg,cells=a.target==='ally'?allyCells:enemyCells;grid?.classList.add('targeting-board');for(const c of cells)c.classList.add('target-muted');for(const t of ts){let ri,ci;if(t.enemy){ri=t.row==='front'?2:t.row==='back'?0:1;ci=col(t)-1}else{ri=({front:0,mid:1,rear:2}[t.rank]??0);ci=col(t)-1}const c=cells[ri*3+ci];if(!c)continue;c.classList.remove('target-muted');c.classList.add('target-zone');if(t.id===chosen)c.classList.add('target-selected-zone');c.dataset.targetId=t.id;c.onclick=()=>cardTap(t.id)}}
 function renderOrder(){
  const all=[...party,...enemies];
  let shown;
@@ -482,6 +482,7 @@ function render(){
  $('attack').disabled=!!reason;
  $('attack').title=reason||u.weapon.name+'で通常攻撃';
  $('attack').querySelector('use').setAttribute('href','#i-'+skillIcon(n));
+ $('attack').dataset.icon=skillIcon(n);
  $('swap').disabled=u.status.legBind>0;
  $('switch').title=u.weapon.name+' → '+W[u.weapons[u.wi?0:1]].name;
  $('targetHint').innerHTML=targetMode?esc(a.name)+' →':t?esc(a.kind==='attack'?u.weapon.name:a.name)+' → '+esc(t.name)+(a.heal?'':affinity(t,a.attr)>1?' <strong>✧</strong>':''):'―';
@@ -489,7 +490,7 @@ function render(){
 }
 function cancelTarget(){if(targetMode){const u=party.find(u=>u.id===targetMode.actorId);if(u)drafts.set(u.id,{...targetMode.previous});targetMode=null;render()}}
 function cardTap(id){if(!editable())return;const t=[...party,...enemies].find(u=>u.id===id);if(!t?.alive)return;const u=current(),a=actionFor(u);
- if(targetMode){if(!targets(u,a).some(x=>x.id===id)){notify('このスキルの対象にはできません');return}getDraft(u).targetId=id;targetMode=null;closeSheet();queue();return}
+ if(targetMode){if(!targets(u,a).some(x=>x.id===id)){notify('この行動の対象にはできません');return}if(targetMode.previewId!==id){getDraft(u).targetId=id;targetMode.previewId=id;render();return}targetMode=null;closeSheet();queue();return}
  if(t.enemy){if(!commandOpen)return;if(!targets(u,a).some(x=>x.id===id)){notify('この行動は届きません。遠距離スキルや換装を選択。');return}getDraft(u).targetId=id;if(u.queued&&['attack','skill'].includes(u.queued.type)&&u.queued.action?.target!=='ally')u.queued.targetId=id;render();return}toggleActor(id)}
 function fastestPendingIndex(){
  const pending=party.map((u,i)=>({u,i})).filter(x=>x.u.alive&&!x.u.queued);
@@ -512,7 +513,7 @@ function toggleActor(id){
 function selectActor(id){const i=party.findIndex(u=>u.id===id&&u.alive);if(i<0||!editable())return;cancelTarget();idx=i;commandOpen=true;render()}
 function advance(){targetMode=null;const next=fastestPendingIndex();if(next>=0){idx=next;phase='command';commandOpen=true;render();return}phase='ready';commandOpen=false;render();setTimeout(()=>{if(editable()&&live(party).length&&live(party).every(u=>u.queued))resolve()},0)}
 function queue(){if(!editable())return;const u=current(),a=actionFor(u),reason=unavailable(u,a);if(reason){notify(reason);return}ensureTarget(u,a);u.defending=false;u.queued={type:a.kind==='attack'?'attack':'skill',action:a,targetId:getDraft(u).targetId};advance()}
-function attack(){if(!editable())return;cancelTarget();getDraft(current()).key='attack';ensureTarget(current(),normal(current()));queue()}
+function attack(){if(!editable())return;cancelTarget();const u=current(),previous={...getDraft(u)};getDraft(u).key='attack';const a=normal(u),reason=unavailable(u,a);if(reason){notify(reason);return}ensureTarget(u,a);targetMode={actorId:u.id,key:'attack',previous,previewId:null};render()}
 function simpleCommand(type){if(!editable())return;cancelTarget();const u=current();if(type==='escape'&&u.status.legBind>0){notify('脚封じで行動できません');return}u.defending=type==='defend';u.queued={type};advance()}
 function queueMove(rank,gridCol){
  if(!editable())return;
@@ -528,7 +529,7 @@ const sheet=$('choiceSheet');
 function closeSheet(){if(sheet.open)sheet.close()}
 function effectText(a){const out=[];if(a.heal)out.push('HP回復');else out.push('威力 ×'+a.mult);for(const[k,n]of STATUS)if(a[k])out.push(n+' 基礎'+a[k]+'%');if(a.critBonus)out.push('会心率＋'+a.critBonus);return out.join(' / ')}
 function syncActionDescription(){const box=$('actionDescription');if(!box)return;const u=current(),a=targetMode&&u?actionFor(u,targetMode.key):null;box.hidden=!a;if(!a)return;$('actionTitle').textContent=a.name;$('actionEffect').textContent=scopeName(a)+' · '+rangeName(a.range)+' · '+effectText(a)}
-function chooseSkill(key){if(!editable())return;const u=current(),a=actionFor(u,key),reason=unavailable(u,a);if(reason){notify(reason);return}const previous=targetMode?.actorId===u.id?targetMode.previous:{...getDraft(u)};getDraft(u).key=key;ensureTarget(u,a);targetMode={actorId:u.id,key,previous};closeSheet();render()}
+function chooseSkill(key){if(!editable())return;const u=current(),a=actionFor(u,key),reason=unavailable(u,a);if(reason){notify(reason);return}const previous=targetMode?.actorId===u.id?targetMode.previous:{...getDraft(u)};getDraft(u).key=key;ensureTarget(u,a);targetMode={actorId:u.id,key,previous,previewId:null};closeSheet();render()}
 function openSheet(mode='skills'){sheet.dataset.mode=mode;
  if(!editable()&&!['more','terrain','history'].includes(mode))return;
  if(editable())cancelTarget();
