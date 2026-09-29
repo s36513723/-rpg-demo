@@ -310,6 +310,6 @@
     "status": "確定",
     "implementation": "exploration/presentation.js, exploration/fitting.js, exploration/state.js, exploration/style.css, exploration/status-layout.css, exploration/hub-roster-panel.css",
     "workbook_sync": "pending: canonical workbook not present in current checkout; repository mirror updated",
-    "revision": "装備画面の外枠を廃止。12枠を同じ51px正方形・左右位置・間隔・線色・透明度に統一。拠点背景の暗幕と暗いグラデーションを装備画面から外す。STATUS詳細を追加。共通カードのHP/SP文字と数値を各ゲージ内に重ねる。拠点UIのbackdrop blurを廃止"
+    "revision": "装備画面の外枠を廃止。12枠を同じ51px正方形・左右位置・間隔・線色・透明度に統一。拠点背景の暗幕を外す。キャラ詳細の共通ABILITY/SKILL/MASTERYタブ列を廃止。共通カードの透過枠を控えめにし、HP/SPの細線ゲージと数値を同じ行に配置。立ち絵6枚は透過済みの現行WebPを継続使用。拠点UIのbackdrop blurを廃止"
   }
 }
