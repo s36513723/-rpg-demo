@@ -187,7 +187,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "battle_enemy_defeat_visual_synced_2026-09-29",
+  "last_sync_status": "hub_hp_sp_gauges_match_battle_2026-09-29",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
@@ -343,5 +343,12 @@
     "implementation": "battle-plan-v36.js / battle-plan-v36.css / battle-v44.html",
     "workbook_sync": "Library正本 version 8・07_UI仕様 A37:D37",
     "validation": "GitHub Pages反映と対象選択を確認中"
+  },
+  "hub_hp_sp_gauge_2026_09_29": {
+    "status": "確定・実装済み",
+    "workbook_sync": "Library 正本 version 9 の 07_UI仕様 C30 と同期。",
+    "implementation": "exploration/hub-roster-panel.css, exploration/index.html",
+    "revision": "拠点・探索共通カードのHP/SPゲージを戦闘デモの味方カードと同じ高さ4pxと青緑／金色のグラデーションに統一。文字と数値の重ね表示を維持。MPは廃止済み。",
+    "verification": "拠点と探索の計算済みスタイルを確認。"
   }
 }

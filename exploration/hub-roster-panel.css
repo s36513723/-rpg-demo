@@ -186,3 +186,13 @@
 #app.in-expedition>.hub-global-nav{display:grid!important;position:relative;z-index:3;margin:0 -12px;padding:0 12px}
 @media(max-width:350px){#app.in-expedition>header,#app.in-expedition>.hub-global-nav{margin-left:-8px;margin-right:-8px;padding-left:8px;padding-right:8px}#app.in-expedition .map-node{min-width:45px;padding:3px}}
 @media(max-height:720px){#app.in-expedition{grid-template-rows:46px minmax(0,1fr) 48px 44px!important}#app.in-expedition .map-node{min-height:45px}#app.in-expedition .map-node i{font-size:17px}}
+
+/* Shared HP/SP card meters follow the active battle demo (battle-v44). */
+#app:not(.in-expedition) #party .m .hub-roster-track,
+#app.in-expedition #party .m .hub-roster-track{height:4px!important;min-height:4px!important;top:auto!important;bottom:2px!important;border-radius:4px!important;background:rgba(235,229,237,.13)!important}
+#app:not(.in-expedition) #party .m .hub-roster-track>span,
+#app.in-expedition #party .m .hub-roster-track>span{height:100%!important;border-radius:inherit!important;opacity:1!important}
+#app:not(.in-expedition) #party .m .hub-roster-track.hp>span,
+#app.in-expedition #party .m .hub-roster-track.hp>span{background:linear-gradient(90deg,#69c8bd,#a5ddd4)!important}
+#app:not(.in-expedition) #party .m .hub-roster-track.sp>span,
+#app.in-expedition #party .m .hub-roster-track.sp>span{background:linear-gradient(90deg,#cfa64e,#edcf78)!important}

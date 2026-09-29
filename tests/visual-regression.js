@@ -158,5 +158,6 @@ async () => {
  });
  await test('field merchant uses a dedicated portrait',()=>{assert(V.fieldMerchantImage&&V.fieldMerchantImage.includes('hub-merchant-npc'))});
  await test('back navigation still works with fixed facilities',()=>{reset();market();toolShop();toolQuantity('回復薬');const back=document.querySelector('.hub-global-nav [data-nav="back"]');back.click();assert(document.querySelector('#screen').textContent.includes('道具屋'));back.click();assert(document.querySelector('#screen').textContent.includes('市場'));assert(document.querySelector('#app').classList.contains('market-world'))});
+ await test('hub and expedition gauges match battle HP/SP colors and thickness',()=>{reset();const app=document.querySelector('#app');const check=()=>{for(const kind of ['hp','sp']){const track=document.querySelector('#party .m .hub-roster-track.'+kind),fill=track?.firstElementChild;assert(track&&fill);assert(getComputedStyle(track).height==='4px');const gradient=getComputedStyle(fill).backgroundImage;assert(gradient.includes(kind==='hp'?'rgb(105, 200, 189)':'rgb(207, 166, 78)'));assert(gradient.includes(kind==='hp'?'rgb(165, 221, 212)':'rgb(237, 207, 120)'))}};check();app.classList.add('in-expedition');try{check()}finally{app.classList.remove('in-expedition')}});
  reset();return out;
 }
