@@ -46,37 +46,70 @@ const facilityScene=(kind,title,body)=>{const v=facilityVisuals[kind];return '<s
 const personCard=(img,name,meta,action,args=[])=>'<button class="person-select-card"'+data(action,args)+'><img src="'+img+'" alt=""><span><b>'+hesc(name)+'</b><small>'+hesc(meta)+'</small></span><span class="member-arrow">›</span></button>';
 const peopleGrid=items=>'<div class="people-select-grid">'+items.join('')+'</div>';
 const memberGrid=()=>peopleGrid(names.map((n,i)=>personCard(battleCardArt(i),n,rows[i]+' · '+battleStyle(i),'character',[i])));
-const routeGroup=n=>/guild|quest|reportChapter|appraise|rareAppraise|storage|deposit|withdraw|infoMenu|dungeonIntel|regionRecord|regionRecords|enemyBook|enemyRecord|clueRecord|recordList/.test(n)?'guild':/market|gearShopMenu|toolShop|toolQuantity|weaponShop|armorShop|gearDetail|craft|recipe|upgrade|trait|sell|materialTrade|materialQuantity/.test(n)?'market':/inn|roomMenu|innRest|items|itemCategory|records|history|peopleBook|personRecord|talkArchive|conversation|memberTalk|npcMenu|npcTalk|pairMenu|readPair|partyMenu|readiness|preset|character|char|mastery|equip|skills|dungeon|deployment/.test(n)?'inn':'';
-const guildLine=(name,args=[])=>{
- if(name==='guild')return 'おかえりなさい。今日はどのご用件ですか？';
- if(name==='guildDesk')return '依頼と報告ですね。進んでいるものから確認しましょう。';
- if(name==='questMenu')return args[0]==='ready'?'達成済みの依頼があります。報告を受け付けますね。':'掲示板の依頼です。気になるものを選んでください。';
- if(name==='questSelect'){const q=findQuest(args[0]);return q?'「'+q.n+'」ですね。内容と報酬を確認してください。':'依頼の内容を確認しますね。'}
- if(name==='reportChapter')return '探索の報告ですね。記録をこちらへお願いします。';
- if(name==='infoMenu')return '探索資料をお出しします。調べたい項目を選んでください。';
- if(name==='dungeonIntel'||name==='regionRecords'||name==='regionRecord')return '現地から集まった記録をまとめています。必要なところを確認してください。';
- if(name==='enemyBook'||name==='enemyRecord')return '敵の記録ですね。過去の報告と照合してあります。';
- if(name==='clueRecord'||name==='recordList')return '調査記録はこちらです。新しい情報も追記してあります。';
- if(name==='appraiseMenu'||name==='rareAppraise')return '査定ですね。持ち帰った品を順番に見ていきましょう。';
- if(name==='storageMenu'||name==='depositMenu'||name==='withdraw')return '保管品を確認します。必要なものだけ手元に戻せますよ。';
- if(name==='guildMembers')return '登録メンバーの情報ですね。確認したい方を選んでください。';
- if(/^guildSale/.test(name))return '装備の整理ですね。売却内容を一緒に確認します。';
+const facilityRouteGroup=n=>{
+ if(/^(guild|guildDesk|questMenu|questSelect|reportChapter|appraiseMenu|rareAppraise|storageMenu|depositMenu|infoMenu|dungeonIntel|regionRecords|regionRecord|enemyBook|enemyRecord|clueRecord|recordList|guildMembers|guildSellMenu|guildSaleQuantity|guildSaleConfirm)$/.test(n))return 'guild';
+ if(/^(market|gearShopMenu|toolShop|toolQuantity|weaponShop|gearDetail|armorShop|armorDetail|armorEquipMenu|craftMenu|recipeMenu|recipeDetail|upgradeMenu|traitMenu|traitChoice|sellMenu|materialTrade|materialQuantity)$/.test(n))return 'market';
+ if(/^(inn|returnTalk|conversation|memberTalk|npcMenu|npcTalk|pairMenu|readPair|talkArchive|rumors|rumorDetail)$/.test(n))return 'inn';
+ return '';
+};
+const facilityProfiles={
+ guild:{home:'guild',label:'冒険者ギルド',kicker:'GUILD',npcId:'受付',npcName:'エダ',role:'ギルド受付',npc:'../images/hub-guild-npc.webp',world:'guild-world'},
+ market:{home:'market',label:'市場',kicker:'MARKET',npcId:'鍛冶師',npcName:'バルン',role:'市場の鍛冶師',npc:'../images/hub-market-npc.webp',world:'market-world'},
+ inn:{home:'inn',label:'宿・酒場',kicker:'INN',npcId:'宿主',npcName:'マルタ',role:'宿・酒場の主人',npc:'../images/hub-inn-npc.webp',world:'inn-world'}
+};
+const facilityLine=(kind,name,args=[])=>{
+ if(kind==='guild'){
+  if(name==='guild')return 'おかえりなさい。今日はどのご用件ですか？';
+  if(name==='guildDesk')return '依頼と報告ですね。進んでいるものから確認しましょう。';
+  if(name==='questMenu')return args[0]==='ready'?'達成済みの依頼があります。報告を受け付けますね。':'掲示板の依頼です。気になるものを選んでください。';
+  if(name==='questSelect'){const q=findQuest(args[0]);return q?'「'+q.n+'」ですね。内容と報酬を確認してください。':'依頼の内容を確認しますね。'}
+  if(name==='reportChapter')return '探索の報告ですね。記録をこちらへお願いします。';
+  if(name==='infoMenu')return '探索資料をお出しします。調べたい項目を選んでください。';
+  if(name==='dungeonIntel'||name==='regionRecords'||name==='regionRecord')return '現地から集まった記録をまとめています。必要なところを確認してください。';
+  if(name==='enemyBook'||name==='enemyRecord')return '敵の記録ですね。過去の報告と照合してあります。';
+  if(name==='clueRecord'||name==='recordList')return '調査記録はこちらです。新しい情報も追記してあります。';
+  if(name==='appraiseMenu'||name==='rareAppraise')return '査定ですね。持ち帰った品を順番に見ていきましょう。';
+  if(name==='storageMenu'||name==='depositMenu')return '保管品を確認します。必要なものだけ手元に戻せますよ。';
+  if(name==='guildMembers')return '登録メンバーの情報ですね。確認したい方を選んでください。';
+  if(/^guildSale/.test(name))return '装備の整理ですね。売却内容を一緒に確認します。';
+ }
+ if(kind==='market'){
+  if(name==='market')return 'いらっしゃい。必要なものから見ていきな。';
+  if(name==='gearShopMenu'||name==='weaponShop'||name==='gearDetail')return '武器は数字だけじゃなく、重さと使い手まで見て選ぶんだ。';
+  if(name==='armorShop'||name==='armorDetail'||name==='armorEquipMenu')return '防具は守りと重さの釣り合いを見て選ぶといい。';
+  if(name==='toolShop'||name==='toolQuantity')return '道具は使う場面を決めてから、必要な数だけ持っていきな。';
+  if(name==='craftMenu'||name==='recipeMenu'||name==='recipeDetail')return '素材が揃ってるなら加工できる。仕上がりを確認してくれ。';
+  if(name==='upgradeMenu')return '強化する武器を選びな。結晶と代金が必要だ。';
+  if(name==='traitMenu'||name==='traitChoice')return '特性加工は上書きになる。今の特性も確認しておきな。';
+  if(name==='sellMenu'||name==='materialTrade'||name==='materialQuantity')return '売るなら値段を確認してからだ。必要な分は残しておけよ。';
+ }
+ if(kind==='inn'){
+  if(name==='inn')return 'おかえり。体は休ませておくから、旅の話を聞かせてね。';
+  if(name==='returnTalk')return 'お疲れさま。まずは今回の旅をゆっくり振り返ろうか。';
+  if(name==='conversation'||name==='memberTalk')return '仲間と話すなら、ここなら落ち着いて話せるよ。';
+  if(name==='npcMenu'||name==='npcTalk')return '今夜もいろんな人が来てるよ。気になる人に声をかけてみな。';
+  if(name==='pairMenu'||name==='readPair')return '仲間同士の話も、旅の大事な記録になるものだよ。';
+  if(name==='talkArchive')return '前に交わした話を読み返すんだね。';
+  if(name==='rumors'||name==='rumorDetail')return '噂話も、集めてみると道しるべになることがあるよ。';
+ }
  if(name==='confirmAction')return '内容を確認してから手続きを進めてください。';
  if(name==='checkpointResult')return '手続きが完了しました。結果を確認してください。';
  if(name==='note')return 'ご案内があります。内容を確認してください。';
- return 'ご用件を確認しますね。';
+ const p=facilityProfiles[kind],npc=hc().npcs.find(n=>n.id===p?.npcId);
+ return npc?.text?.[0]||'ご用件を確認しますね。';
 };
-const renderGuildWorld=(html,r)=>{
+const renderFacilityWorld=(kind,html,r)=>{
+ const p=facilityProfiles[kind];if(!p)return;
  const app=document.getElementById('app'),screen=document.getElementById('screen'),modal=document.getElementById('modal'),panel=document.getElementById('panel');
- app.classList.add('town-world','facility-world','guild-world');app.classList.remove('in-expedition');
+ app.classList.add('town-world','facility-world',p.world);for(const k of Object.values(facilityProfiles))if(k.world!==p.world)app.classList.remove(k.world);app.classList.remove('in-expedition');app.dataset.facility=kind;
  modal.classList.remove('on','guild-screen-modal');panel.classList.remove('guild-screen-panel');app.inert=false;
- document.querySelector('h1').textContent='王都レクシア';document.querySelector('header .small').textContent='冒険者ギルド';document.getElementById('money').textContent=moneyText(gold);
+ document.querySelector('h1').textContent='王都レクシア';document.querySelector('header .small').textContent=p.label;document.getElementById('money').textContent=moneyText(gold);
  const temp=document.createElement('div');temp.innerHTML=html;
- const title=temp.querySelector('h2')?.textContent||'冒険者ギルド';temp.querySelector('h2')?.remove();
- temp.querySelectorAll('button').forEach(b=>{const t=b.textContent.trim();if(b.dataset.hub==='closeM'||/^(戻る|一覧へ|一覧|ギルドへ|拠点へ)$/.test(t))b.remove()});
+ const title=temp.querySelector('h2')?.textContent||p.label;temp.querySelector('h2')?.remove();
+ temp.querySelectorAll('button').forEach(b=>{const t=b.textContent.trim();if(b.dataset.hub==='closeM'||/^(戻る|一覧へ|一覧|ギルドへ|市場へ|宿・酒場へ|拠点へ)$/.test(t))b.remove()});
  temp.querySelectorAll('.actions').forEach(a=>{if(!a.children.length)a.remove()});
- const home=r.name==='guild';
- screen.innerHTML='<section class="town-scene facility-world-scene guild-world-scene '+(home?'facility-world-mode-home':'facility-world-mode-service')+'">'+(home?'':'<div class="facility-world-title"><span class="chapter-kicker">GUILD</span><b>'+hesc(title)+'</b></div>')+'<img class="facility-world-npc" src="../images/hub-guild-npc.webp" alt="ギルド受付 エダ"><div class="facility-world-identity"><b>エダ</b><small>ギルド受付</small><button type="button" data-hub="uiGuildTalk">TALK</button></div><div class="facility-world-controls"><div class="facility-world-dialogue"><b>エダ</b><span>'+hesc(guildLine(r.name,r.args||[]))+'</span></div><section class="facility-world-overlay '+(home?'facility-world-home':'facility-world-service')+'">'+temp.innerHTML+'</section></div></section>';
+ const home=r.name===p.home;
+ screen.innerHTML='<section class="town-scene facility-world-scene '+p.world+'-scene '+(home?'facility-world-mode-home':'facility-world-mode-service')+'">'+(home?'':'<div class="facility-world-title"><span class="chapter-kicker">'+p.kicker+'</span><b>'+hesc(title)+'</b></div>')+'<img class="facility-world-npc" src="'+p.npc+'" alt="'+hesc(p.role+' '+p.npcName)+'"><div class="facility-world-identity"><b>'+hesc(p.npcName)+'</b><small>'+hesc(p.role)+'</small><button type="button" data-hub="uiFacilityTalk">TALK</button></div><div class="facility-world-controls"><div class="facility-world-dialogue"><b>'+hesc(p.npcName)+'</b><span>'+hesc(facilityLine(kind,r.name,r.args||[]))+'</span></div><section class="facility-world-overlay '+(home?'facility-world-home facility-world-home-'+kind:'facility-world-service')+'">'+temp.innerHTML+'</section></div></section>';
  if(window.HUB_VISUAL?.decorate)window.HUB_VISUAL.decorate(screen,r);
  if(window.HUB_VISUAL?.chrome)window.HUB_VISUAL.chrome();
  renderRoster();renderSaveStatus();navState(r.name);
