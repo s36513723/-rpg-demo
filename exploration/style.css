@@ -1001,6 +1001,16 @@
 .facility-world-service .ui-tabs button{min-height:34px;padding:5px 4px;font-size:8px}
 .facility-world-service .message,
 .facility-world-service .small{font-size:8px;line-height:1.45}
+.inn-rumor-inline{
+ margin-top:6px;
+ padding-top:5px;
+ border-top:1px solid rgba(190,173,132,.24);
+}
+.inn-rumor-inline .row{
+ margin:0;
+ min-height:38px;
+ background:rgba(24,37,29,.48);
+}
 #app.market-world .facility-world-npc{height:82%;max-width:66%;right:-1%}
 #app.inn-world .facility-world-npc{height:82%;max-width:64%;right:0}
 #app.facility-world #party{
