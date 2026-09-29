@@ -1095,6 +1095,6 @@
 .facility-world-mode-home .facility-world-overlay{order:1}
 .facility-world-mode-service .facility-world-controls{inset:0;display:block}
 .facility-world-mode-service .facility-world-dialogue{position:absolute;left:6px;right:6px;bottom:2px;min-height:42px}
-.facility-world-mode-service .facility-world-overlay{position:absolute;left:6px;top:105px;width:min(50%,280px);height:min(380px,50%,calc(100% - 170px));max-height:none;box-sizing:border-box;overflow-y:auto}
+.facility-world-mode-service .facility-world-overlay{position:absolute;left:6px;top:105px;bottom:52px;width:min(50%,280px);height:auto;max-height:none;box-sizing:border-box;overflow-y:auto}
 #modal.hub-overlay-modal{bottom:calc(max(28px,env(safe-area-inset-bottom)) + 98px)!important;padding:0!important}
 #modal.hub-overlay-modal #panel{height:100%!important;max-height:100%!important}

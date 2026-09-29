@@ -179,7 +179,9 @@
       "gauges": "敵味方のHPゲージは増減をアニメーション",
       "commands": "横並び4コマンドの図形アイコンを明示",
       "enemy_target": "敵本体の選択発光を廃止し、名前上の小さな紫逆三角カーソル"
-    }
+    },
+    "battle_party_size_max": 6,
+    "deployment": "1-6 registered members selected from the guild roster; remaining members wait at the guild"
   },
   "workstreams": {
     "battle_demo": "戦闘デモワーク",
@@ -323,6 +325,6 @@
     "status": "確定",
     "implementation": "exploration/presentation.js, exploration/fitting.js, exploration/state.js, exploration/style.css, exploration/status-layout.css, exploration/hub-roster-panel.css",
     "workbook_sync": "pending: canonical workbook not present in current checkout; repository mirror updated",
-    "revision": "装備画面の外枠を廃止。12枠を同じ51px正方形・左右位置・間隔・線色・透明度に統一。拠点背景の暗幕を外す。キャラ詳細の共通ABILITY/SKILL/MASTERYタブ列を廃止。共通カードの透過枠を控えめにし、HP/SPの細線ゲージと数値を同じ行に配置。保管済み最終切り抜き素材からキャラ6人と施設NPC3人を再接続。拠点UIのbackdrop blurを廃止。共通カードの書体・金縁・細線ゲージを統一。全キャラ立ち絵を約1.5cm下げ、能力系の外枠・緑の全面背景を削除。ステータスに基本4能力と物攻・魔攻・物防・魔防を復帰。パラディンの残存背景片を除いた透過版へ変更。BACK履歴を画面階層ごとに修正し、同一画面の選択変更では履歴を増やさない。6人のキャラカードは共通の細い帯にまとめ、選択中を金色の下線で示す。立ち絵下端を背景に自然に溶かす。。キャラカードのHP/SP文字・数値をゲージ上へ重ね、立ち絵を足先まで見える寸法に修正。ギルド・市場・宿屋のメッセージを最下部に固定し、サービス窓を左側の名前の下に一定寸法で配置。"
+    "revision": "装備画面の外枠を廃止。12枠を同じ51px正方形・左右位置・間隔・線色・透明度に統一。拠点背景の暗幕を外す。キャラ詳細の共通ABILITY/SKILL/MASTERYタブ列を廃止。共通カードの透過枠を控えめにし、HP/SPの細線ゲージと数値を同じ行に配置。保管済み最終切り抜き素材からキャラ6人と施設NPC3人を再接続。拠点UIのbackdrop blurを廃止。共通カードの書体・金縁・細線ゲージを統一。全キャラ立ち絵を約1.5cm下げ、能力系の外枠・緑の全面背景を削除。ステータスに基本4能力と物攻・魔攻・物防・魔防を復帰。パラディンの残存背景片を除いた透過版へ変更。BACK履歴を画面階層ごとに修正し、同一画面の選択変更では履歴を増やさない。6人のキャラカードは共通の細い帯にまとめ、選択中を金色の下線で示す。立ち絵下端を背景に自然に溶かす。。キャラカードのHP/SP文字・数値をゲージ上へ重ね、立ち絵を足先まで見える寸法に修正。ギルド・市場・宿屋のメッセージを最下部に固定し、サービス窓を左側の名前の下に一定寸法で配置。。出撃準備をダンジョン・陣形・編成の順にし、陣形の全面画像からキャラ詳細へ遷移。登録済み6人から最大6人を出撃とギルド待機で移動し、編成プリセットと戦闘連携まで引き継ぐ。施設コマンド窓は名前の下からメッセージ欄手前まで固定寸法。"
   }
 }

@@ -1,0 +1,46 @@
+/* Sortie and presets use the same sharp location artwork and restrained gold trim as the hub. */
+#modal.hub-overlay-modal.hub-map-modal{background:transparent!important}
+#modal.hub-map-modal #panel{border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+#modal.hub-map-modal #panel>.panel-head{min-height:45px;border:0;background:linear-gradient(180deg,rgba(5,12,10,.70),rgba(5,12,10,.08))}
+#modal.hub-map-modal #panel>.panel-head h2{font:600 16px/1.3 'Yu Mincho',Georgia,serif;color:#f5e6c3;text-shadow:0 1px 3px #000}
+#modal.hub-map-modal #panel>.panel-body{background:transparent!important;padding:7px 10px 12px!important}
+#modal.hub-map-modal #panel>.panel-footer{background:transparent;border:0}
+#modal.hub-map-modal #panel .row,#modal.hub-map-modal #panel .destination-brief,#modal.hub-map-modal #panel .sortie-preset{border:1px solid rgba(216,193,139,.40);border-radius:7px;background:rgba(11,22,19,.70);box-shadow:none;color:#f3e8d2}
+#modal.hub-map-modal #panel .row .small{color:#d2d8cd}
+#modal.hub-map-modal #panel .primary-action{border:1px solid rgba(237,203,132,.70);background:rgba(93,83,52,.83);color:#fff2cf}
+.sortie-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin:0 0 9px}
+.sortie-tabs button{min-height:37px;padding:5px;border:1px solid rgba(212,189,137,.40);border-radius:7px;background:rgba(11,22,19,.62);font:600 11px/1.2 'Yu Mincho',Georgia,serif;color:#e8d9b8}
+.sortie-tabs button[aria-pressed=true]{border-color:#e7c983;background:rgba(100,89,55,.78);color:#fff4d5;box-shadow:inset 0 -2px 0 #e7c983}
+.sortie-instruction{margin:3px 1px 8px;font-size:10px;line-height:1.5;color:#f2e7ce;text-shadow:0 1px 3px #000}
+#panel .sortie-page{display:block!important;overflow-y:auto!important}
+#panel .sortie-formation{display:grid;gap:6px}
+#panel .sortie-formation .formation-row{grid-template-columns:25px minmax(0,1fr);gap:5px}
+#panel .sortie-formation .formation-row-label{border-right:1px solid rgba(220,195,141,.48);color:#f1ddaf}
+#panel .sortie-formation .formation-slots{gap:5px}
+#panel .sortie-formation .formation-member{border:1px solid rgba(217,195,143,.52);border-radius:7px;background:rgba(8,19,16,.55)}
+#panel .sortie-formation .formation-member.selected{border-color:#f1d187;box-shadow:0 0 0 1px #f1d187}
+#panel .sortie-formation .formation-pick{display:block;position:relative;width:100%;height:clamp(72px,13dvh,110px);min-height:0;padding:0;overflow:hidden;text-align:left}
+#panel .sortie-formation .formation-pick img{position:absolute;inset:0;width:100%;height:100%;border-radius:0;object-fit:cover;object-position:center 13%;opacity:1}
+#panel .sortie-formation .formation-pick b{position:absolute;z-index:1;right:0;bottom:0;left:0;margin:0;padding:11px 4px 4px;background:linear-gradient(transparent,rgba(3,11,9,.87));color:#fff2d6;text-align:center;font-size:10px;text-shadow:0 1px 2px #000}
+#panel .sortie-formation .formation-config{min-height:27px;border-top:1px solid rgba(217,195,143,.35);background:rgba(9,20,17,.80);color:#f1dcaa;font-size:9px}
+#panel .sortie-formation .formation-empty{height:calc(clamp(72px,13dvh,110px) + 27px);min-height:0;border:1px dashed rgba(217,195,143,.40);background:rgba(9,20,17,.42);color:#e4d4a9}
+.sortie-deploy-count{text-align:right;margin:9px 2px 3px;color:#f1dcaa;font-size:10px}
+.sortie-composition{display:grid;gap:12px}
+.sortie-composition section h3{display:flex;justify-content:space-between;align-items:center;margin:0 0 5px;padding:0 2px 4px;border-bottom:1px solid rgba(223,201,153,.45);color:#f3e3bd;font:600 13px/1.3 'Yu Mincho',Georgia,serif}
+.sortie-composition section h3 small{font:10px/1.3 sans-serif;color:#e2d4b1}
+.sortie-member-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.sortie-member{min-width:0;border:1px solid rgba(215,192,143,.48);border-radius:7px;overflow:hidden;background:rgba(8,19,16,.65)}
+.sortie-member-face{position:relative;display:block;width:100%;height:clamp(75px,13dvh,110px);padding:0;border:0;background:transparent}
+.sortie-member-face img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 13%}
+.sortie-member-face b{position:absolute;bottom:0;left:0;right:0;padding:12px 3px 3px;background:linear-gradient(transparent,rgba(3,11,9,.88));font:600 10px/1.2 'Yu Mincho',Georgia,serif;color:#fff2d6}
+.sortie-member-action{width:100%;min-height:28px;border:0;border-top:1px solid rgba(215,192,143,.36);background:rgba(12,26,21,.80);color:#f1dcaa;font-size:9px}
+.sortie-empty{margin:0;padding:12px;border:1px solid rgba(215,192,143,.28);border-radius:7px;background:rgba(8,19,16,.55);color:#ece0c7;font-size:10px}
+.sortie-preset-link{width:100%;min-height:39px;border:1px solid rgba(215,192,143,.45);border-radius:7px;background:rgba(12,26,21,.72);color:#f1dcaa;text-align:left;padding:7px 10px;font-size:11px}
+.sortie-presets{display:grid;gap:7px}
+.sortie-preset{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:9px}
+.sortie-preset>div:first-child{min-width:0}
+.sortie-preset small{display:block;color:#d6bd86;font-size:8px;letter-spacing:.08em}
+.sortie-preset b{display:block;margin-top:3px;color:#f5e7cc;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sortie-preset-actions{display:flex;gap:4px}
+.sortie-preset-actions button{min-height:32px;padding:5px 8px;border:1px solid rgba(216,193,139,.43);border-radius:5px;background:rgba(30,42,29,.76);color:#f2dfb9;font-size:10px;white-space:nowrap}
+.sortie-preset-actions button:disabled{opacity:.35}

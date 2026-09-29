@@ -106,7 +106,7 @@ function clueRecord(name){const regionEntry=Object.entries(hc().regions).find(([
 function recordList(title,list){show('<h2>'+hesc(title)+'</h2>'+((list||[]).map(x=>HT(x)).join('')||HT('まだ記録がありません'))+back())}
 
 /* Guild services: quotes are confirmed once and revalidated at sale time. */
-function guildMembers(){if(!requireTown())return;show('<h2>メンバー管理</h2>'+HT('登録メンバー '+names.length+'人','仲間を選ぶと能力・装備・スキルを確認、変更できます。')+HB('陣形・出撃準備','配置を調整し、準備状況を確認','partyMenu',['formation'])+HB('編成プリセット','装備・スキル・陣形を3組保存、呼び出し','presetMenu')+names.map((n,i)=>HB(n,battleStyle(i)+' / '+rows[i],'character',[i])).join('')+back())}
+function guildMembers(){if(!requireTown())return;show('<h2>メンバー管理</h2>'+HT('登録メンバー '+names.length+'人','出撃は最大６人。ギルド待機との入れ替えや各人の装備を確認できます。')+HB('出撃編成','出撃メンバーとギルド待機を入れ替える','partyMenu',['composition'])+HB('編成プリセット','装備・スキル・陣形を3組保存、呼び出し','presetMenu')+names.map((n,i)=>HB(n,battleStyle(i)+' / '+(H.formation.includes(i)?rows[i]:'ギルド待機'),'character',[i])).join('')+back())}
 let guildSalePending=null,guildSaleSequence=0;
 function guildSaleQuote(kind,key){
  if(kind==='materials'&&Object.hasOwn(hc().materialPrices,key))return {name:hc().labels[key]||key,count:loot[key]||0,price:hc().materialPrices[key]};
