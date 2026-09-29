@@ -70,7 +70,7 @@ function actorAttributes(i,tab='basic'){
  show('<h2>'+hesc(names[i])+' / 能力値</h2>'+pointbar+editor+content);
 }
 
-const GROWTH_EXP_STEP=100;
+function growthCount(exp){let count=0,remaining=Math.max(0,exp);while(remaining>=100+20*count){remaining-=100+20*count;count++}return {count,remaining,required:100+20*count}}
 function initializeCharacterProgress(){
  H.experience=Math.max(0,Math.floor(Number(H.experience)||0));
  if(!H.pendingGrowth)H.pendingGrowth={stat:0,mastery:0};
@@ -83,13 +83,14 @@ function awardExperience(amount,source='冒険',key=''){
  if(key){const milestone='xp:'+key;if(H.milestones[milestone])return {exp:0,growth:0};H.milestones[milestone]=true}
  const old=H.experience||0,next=old+amount;
  H.experience=next;
- const growth=Math.floor(next/GROWTH_EXP_STEP)-Math.floor(old/GROWTH_EXP_STEP);
- if(growth){H.pendingGrowth.stat+=growth;H.pendingGrowth.mastery+=growth}
- const reward=growth?' / 成長到達：全員 Stat Pt +'+growth+' / Mastery Pt +'+growth+'（宿で受取）':'';
+ const oldCount=growthCount(old).count,newCount=growthCount(next).count,growth=newCount-oldCount;
+ const stat=growth+Math.floor(newCount/5)-Math.floor(oldCount/5),mastery=growth*2;
+ if(growth){H.pendingGrowth.stat+=stat;H.pendingGrowth.mastery+=mastery}
+ const reward=growth?' / 成長到達：登録6人それぞれ Stat Pt +'+stat+' / Mastery Pt +'+mastery+'（宿で受取）':'';
  logRun(source+' EXP +'+amount+reward);
  return {exp:amount,growth};
 }
 function awardExplorationExperience(r,n){
  awardExperience(20,'初踏破',r.dungeon+':'+r.floor+':'+n.id);
 }
-function characterExperience(){const exp=H.experience||0,part=exp%GROWTH_EXP_STEP,left=part?GROWTH_EXP_STEP-part:GROWTH_EXP_STEP;return '<div class="character-experience"><div><b>EXP '+part+' / '+GROWTH_EXP_STEP+'</b><small>戦闘・探索・依頼で獲得 · 次の成長まで '+left+'</small></div><div class="experience-track" role="progressbar" aria-label="経験値" aria-valuemin="0" aria-valuemax="'+GROWTH_EXP_STEP+'" aria-valuenow="'+part+'"><i style="width:'+(part/GROWTH_EXP_STEP*100)+'%"></i></div></div>'}
+function characterExperience(){const {remaining,required}=growthCount(H.experience||0),left=required-remaining;return '<div class="character-experience"><div><b>EXP '+remaining+' / '+required+'</b><small>戦闘・探索・依頼で登録6人が獲得 · 次の成長まで '+left+'</small></div><div class="experience-track" role="progressbar" aria-label="経験値" aria-valuemin="0" aria-valuemax="'+required+'" aria-valuenow="'+remaining+'"><i style="width:'+(remaining/required*100)+'%"></i></div></div>'}

@@ -378,5 +378,14 @@
     "implementation": "exploration/presentation.js, exploration/sortie-layout.css, exploration/index.html, tests/browser.py",
     "revision": "編成6人を3×2固定グリッドへ統合。陣形の3行を画面内へ均等配置し、別操作の44pxボタンを画像の隅へ重ねる。両タブの内部スクロールを廃止。",
     "verification": "スマホ幅を含むブラウザ回帰テストでコンテンツ高と操作対象を確認。"
+  },
+  "latest_confirmed_exploration_return": {
+    "workbook_version": 17,
+    "voluntary_return": "探索マップから任意帰還",
+    "return_item_required": false,
+    "loot_on_return": "全保持、鑑定まで使用不可",
+    "loot_on_defeat": "全保持、探索終了してMAPから新規開始",
+    "exp_on_return_or_defeat": "保持",
+    "implementation_status": "帰還・敗北遷移と探索報酬の未鑑定保管を実装。実機操作・全スキル個別効果・詳細バランスは未検証。"
   }
 }
