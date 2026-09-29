@@ -131,3 +131,9 @@ Commands sit immediately above ally cards. Character appeal has priority over ti
 ## キャラ画面の4パネル（2026-09-29 確定）
 - キャラ画面の下側に装備枠と同じ半透明表現の4パネルを配置。左下にSTATUS（EXP・HP・SP）とABILITYを縦に、右下にSKILLとMASTERYを縦に並べる。
 - 拠点カードは表示処理を一つに統合し、名前・HP・SPを表示する。旧画像カードの描画に戻さない。
+
+## 拠点UIの透過と情報表示（2026-09-29 確定）
+- 装備画面の外側のウィンドウ枠を表示しない。
+- STATUS / ABILITY / SKILL / MASTERYの4パネルは装備枠と同じ51px正方形とし、アイコン＋短いラベルで表示する。STATUSを開くとEXP・HP・SPの詳細を見られる。
+- 共通キャラカードは各HP・SPゲージの上に現在値 / 最大値を右寄せで表示する。
+- 拠点の全UIで透過パネルの背後をぼかさず、背景を鮮明に保つ。
