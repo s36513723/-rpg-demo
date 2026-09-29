@@ -1020,3 +1020,10 @@ html,body{height:100%;overflow:hidden}
 #game .party-strip .ally-unit:after{background:rgba(25,40,72,.47)!important}
 #game .party-strip .ally-unit.active:before{background:#ebb8ff!important}
 #game .party-strip .ally-unit.active:after{background:rgba(63,37,91,.62)!important}
+#game .party-strip .ally-unit:before{background:rgba(220,233,255,.48)!important}
+#game .party-strip .ally-unit:after{background:rgba(25,40,72,.21)!important}
+#game .party-strip .ally-unit.active:before{background:rgba(236,174,255,.78)!important}
+#game .party-strip .ally-unit.active:after{background:rgba(66,29,99,.48)!important}
+#game .plan-move-cell:before{background:rgba(230,238,255,.46)!important}
+#game .plan-move-cell:after{background:rgba(32,49,82,.20)!important}
+#game #commandPanel .command-buttons>.command:before{transform:rotate(45deg) scale(.94)!important;background:rgba(29,48,91,.23)!important;box-shadow:0 0 9px rgba(174,207,255,.65)!important}
