@@ -1053,7 +1053,6 @@ html,body{height:100%;overflow:hidden}
 #game #auto,#game #pace{right:auto!important;bottom:31%!important;width:clamp(48px,12vw,68px)!important;height:clamp(29px,4.2dvh,38px)!important;min-height:29px!important;border-radius:7px!important}
 #game #auto{left:54%!important}
 #game #pace{left:68%!important}
-
 /* The selected hexagon keeps the stage visible through its center. */
 #game .party-strip .ally-unit.active:before{background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='50,1 99,25 99,75 50,99 1,75 1,25' fill='none' stroke='%23c450ee' stroke-width='2.5'/%3E%3C/svg%3E")!important;clip-path:none!important;box-shadow:none!important}
 #game .party-strip .ally-unit.active:after{background:rgba(25,40,72,.11)!important;inset:0!important}
@@ -1079,7 +1078,6 @@ html,body{height:100%;overflow:hidden}
 .enemy-unit[data-rank="mid"]{--sprite-height:165%;--sprite-scale-x:1.25;--sprite-scale-y:1.18}
 .enemy-unit[data-rank="front"]{--sprite-height:188%;--sprite-scale-x:1.51;--sprite-scale-y:1.36}
 .enemy-unit[data-unit-id="g3"],.enemy-unit[data-unit-id="g4"]{--sprite-height:165%;--sprite-scale-x:1.26;--sprite-scale-y:1.20}
-
 #game .party-strip .resource[data-resource="mp"]{display:none!important}
 
 /* v44 spatial HUD: three quiet information layers on perspective plates. */
@@ -1102,20 +1100,17 @@ html,body{height:100%;overflow:hidden}
 #game #commandPanel .command-buttons>.command.is-active,#game #commandPanel .command-buttons>.command:active{transform:translateX(-3px) scale(1.07)!important;filter:drop-shadow(0 0 6px rgba(211,147,255,.6))!important}
 #game #commandPanel .command-buttons>.command.is-active:before,#game #commandPanel .command-buttons>.command:active:before{background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='1,50 14,2 86,2 99,50 86,98 14,98' fill='%235b367f' fill-opacity='.36' stroke='%23e5b4ff' stroke-width='3'/%3E%3C/svg%3E")!important;filter:drop-shadow(0 0 8px rgba(203,118,255,.85))!important}
 .enemy-unit[data-rank="front"] .target-pointer{border-color:rgba(235,193,143,.54)!important;box-shadow:0 0 11px rgba(235,211,187,.20),0 0 3px rgba(255,255,255,.28) inset!important}
-
 /* Fine outlines keep the translucent 3×3 formation legible over water. */
 #game .party-strip .ally-unit:not(.active):before{background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='1,50 12,1 88,1 99,50 88,99 12,99' fill='%23e6f1ff' fill-opacity='.17' stroke='%23e6f4ff' stroke-opacity='.67' stroke-width='1.5'/%3E%3C/svg%3E")!important;clip-path:none!important}
 #game .plan-move-cell:before{background:center/100% 100% no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='1,50 12,1 88,1 99,50 88,99 12,99' fill='%23e6f1ff' fill-opacity='.035' stroke='%23e6f4ff' stroke-opacity='.34' stroke-width='1.3'/%3E%3C/svg%3E")!important;clip-path:none!important}
 #game .party-strip .resource-value span{font-size:8px!important}
 #game .party-strip .resource-value b{font-size:clamp(11px,2.8vw,12px)!important}
 #game #commandPanel .command-buttons>.command b{font-size:clamp(10px,2.1vw,12px)!important}
-
 /* One header row for status and name; labels and bars occupy the next two. */
 #game .party-strip .ally-unit{grid-template-rows:19px 13px 6px!important}
 #game .party-strip .card-status{position:absolute!important;left:7%!important;right:auto!important;top:calc(50% - 19px)!important;grid-row:auto!important;height:19px!important;max-height:19px!important;align-items:center!important;justify-content:flex-start!important;z-index:3!important}
 #game .party-strip .card-name{grid-row:1!important;align-self:center!important}
 #game .party-strip .resource-list{grid-row:2/4!important;height:21px!important}
-
 /* Resource text shares the same thin line as its gauge. */
 #game .party-strip .resource-list{height:17px!important;align-self:center!important}
 #game .party-strip .resource{position:relative!important;display:block!important;height:17px!important}
@@ -1125,5 +1120,18 @@ html,body{height:100%;overflow:hidden}
 /* Keep the two secondary controls together over the center of the formation. */
 #game #auto{left:44%!important;right:auto!important}
 #game #pace{left:57%!important;right:auto!important}
-
 #game .enemy-grid{left:4%!important;right:-4%!important}
+
+/* Center the three formations on one axis while keeping the left HUD clear. */
+#game .enemy-grid{left:0!important;right:0!important}
+#game .party-hud{left:14%!important;right:14%!important}
+#game .party-strip .ally-unit{height:clamp(47px,5.6dvh,55px)!important;grid-template-rows:19px 17px!important;align-content:center!important}
+#game .party-strip .resource-list{grid-row:2!important}
+#game>.actor-art{height:38%!important}
+#game #commandPanel{bottom:3.8%!important}
+.order-ribbon{left:50%!important}
+.round-meta{max-width:25%!important;gap:2px!important;white-space:nowrap}
+.round-label b{font-size:clamp(25px,6.5vw,34px)!important}
+.terrain-toggle{gap:2px!important;font-size:clamp(9px,2.3vw,12px)!important}
+.terrain-toggle .icon{width:clamp(14px,3.3vw,19px)!important;height:clamp(14px,3.3vw,19px)!important}
+@media(max-width:410px){.round-meta{max-width:25%!important}.order-ribbon{left:50%!important;width:47%!important}.order-ribbon .order-face,.order-ribbon .order-face.ally,.order-ribbon .order-face.foe{width:clamp(27px,7.4vw,31px)!important;height:clamp(27px,7.4vw,31px)!important;flex-basis:clamp(27px,7.4vw,31px)!important}.order-ribbon .order-face.is-next{width:clamp(32px,8.4vw,35px)!important;height:clamp(32px,8.4vw,35px)!important;flex-basis:clamp(32px,8.4vw,35px)!important}}
