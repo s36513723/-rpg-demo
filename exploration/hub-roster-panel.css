@@ -124,3 +124,11 @@
 #modal.hub-location-modal #panel.actor-workspace .panel-body>.row.static .small{color:#f3ead9!important}
 #modal.hub-location-modal #panel.status-attributes .allocation-stat button,
 #modal.hub-location-modal #panel.status-attributes .allocation-bar button{background:rgba(16,19,21,.68)!important;color:#f3ead9!important}
+#modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .actor-fixed .cost-meter,
+#modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .search-input,
+#modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .bottom-tabs .ui-tabs button,
+#modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .mastery-skill-heading,
+#modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .mastery-branches,
+#modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .mastery-training{background:rgba(16,19,21,.72)!important;color:#f3ead9!important}
+#modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .bottom-tabs .ui-tabs button[aria-pressed="true"],
+#modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .skill-masteries button[aria-pressed="true"]{background:rgba(218,190,126,.9)!important;color:#241c12!important}
