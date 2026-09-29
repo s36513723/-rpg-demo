@@ -1014,3 +1014,11 @@
 @media(max-width:350px){
  .character-equipment-core{bottom:4px!important;left:35%!important;right:35%!important}
 }
+
+
+/* UI41: the text-only member switch fully replaces the image roster on character screens. */
+#app.actor-overlay-open #party{visibility:hidden}
+#modal.hub-location-modal #panel.actor-workspace>.panel-head{
+ backdrop-filter:none!important;
+ -webkit-backdrop-filter:none!important;
+}
