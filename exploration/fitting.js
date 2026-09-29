@@ -17,6 +17,7 @@ function fittingHero(i,a,b,k=0){
 }
 
 function fittingValues(i,items){return fittingWith(i,items,()=>characterValues(i))}
+const characterActionIcon=kind=>{const paths={status:'M12 21 3 12C-3 3 9-1 12 6c3-7 15-3 9 6l-9 9Z',attributes:'M12 2 3 12l9 10 9-10-9-10ZM3 12h18M12 2l-4 10 4 10 4-10-4-10Z',skills:'M12 2v20M2 12h20M5 5l14 14M19 5 5 19',growth:'M12 2 2 8l10 6 10-6-10-6ZM2 8v9l10 6 10-6V8M12 14v9'};return '<svg class="character-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+paths[kind]+'"/></svg>'};
 function fittingScreen(i,k=null,preview){
  if(H.run?.battle)return pendingBattleMenu();
  const home=k==null;
@@ -43,7 +44,8 @@ function fittingScreen(i,k=null,preview){
  const slotButton=n=>{const item=s.items[n].split('：')[1],changed=s.items[n]!==s.base[n];return '<button class="character-equip-slot slot-'+n+'" data-hub="equipChoice" data-args="'+hesc(JSON.stringify([i,n]))+'" aria-label="'+hesc(fittingSlots[n]+'：'+item+(changed?'、変更あり':''))+'" title="'+hesc(item)+'" aria-pressed="'+(!home&&n===k)+'"><small>'+hesc(fittingSlots[n])+'</small><b aria-hidden="true">'+fittingIcon(n,item)+(changed?'<em>•</em>':'')+'</b></button>'};
  const derived=rules().derived(stats[i]),v=vitals[i];
  const weight='<div class="character-equip-weight"><small>装備重量</small><b>'+Math.round(b.weight*100)/100+' / '+Math.round(b.limit*100)/100+'</b></div>';
- const status='<div class="character-action-deck" aria-label="キャラクター機能"><div class="character-action-column left"><div class="character-action-panel character-status-panel"><strong>STATUS</strong><span>EXP '+(H.experience||0)%GROWTH_EXP_STEP+'/'+GROWTH_EXP_STEP+'</span><span>HP '+v.hp+'/'+derived.hp+'</span><span>SP '+v.sp+'/'+derived.sp+'</span></div><button type="button" class="character-action-panel" data-hub="uiActor" data-args="'+hesc(JSON.stringify([i,'attributes']))+'"><strong>ABILITY</strong><span>PHY · SKL · ARC · MND</span></button></div><div class="character-action-column right"><button type="button" class="character-action-panel" data-hub="uiActor" data-args="'+hesc(JSON.stringify([i,'skills']))+'"><strong>SKILL</strong><span>技・術を設定</span></button><button type="button" class="character-action-panel" data-hub="uiActor" data-args="'+hesc(JSON.stringify([i,'growth']))+'"><strong>MASTERY</strong><span>習得・修練</span></button></div></div>';
+ const action=(mode,label,icon)=>'<button type="button" class="character-action-panel" data-hub="uiActor" data-args="'+hesc(JSON.stringify([i,mode]))+'" aria-label="'+label+'">'+characterActionIcon(icon)+'<small>'+label+'</small></button>';
+ const status='<div class="character-action-deck" aria-label="キャラクター機能"><div class="character-action-column left">'+action('status','ステータス','status')+action('attributes','能力値','attributes')+'</div><div class="character-action-column right">'+action('skills','スキル','skills')+action('growth','修練','growth')+'</div></div>';
  const shell='<section class="character-equipment-shell'+(home?'':' picker-open')+'" aria-label="装備">'+
   '<div class="character-equipment-side left">'+slotButton(0)+slotButton(2)+slotButton(9)+weight+'</div>'+
   '<div class="character-equipment-side right">'+slotButton(1)+slotButton(3)+slotButton(4)+slotButton(8)+'</div>'+status+
