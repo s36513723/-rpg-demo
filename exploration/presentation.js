@@ -215,7 +215,7 @@ const closeUI=()=>{
    }else{U.stack=[];window.town()}
   }else navState('town')
  }
- const target=U.opener;U.opener=null;const fallback=target?.dataset?.hub?[...document.querySelectorAll('#app [data-hub]')].find(e=>e.dataset.hub===target.dataset.hub&&e.dataset.args===target.dataset.args):null;(target?.isConnected?target:fallback||document.querySelector('#app nav .current'))?.focus({preventScroll:true});
+ const target=U.opener;U.opener=null;const fallback=target?.dataset?.hub?[...document.querySelectorAll('#app [data-hub]')].find(e=>e.dataset.hub===target.dataset.hub&&e.dataset.args===target.dataset.args):null,focusableTarget=target?.isConnected&&target.matches?.('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])')?target:null;(focusableTarget||fallback||document.querySelector('#app nav .current')||document.querySelector('#app nav button:not(:disabled)'))?.focus({preventScroll:true});
 };
 const toast=text=>{const e=document.getElementById('uiToast');if(!e)return;e.textContent=text;e.hidden=false;clearTimeout(U.toast);U.toast=setTimeout(()=>e.hidden=true,2400)};
 const uiActions={
