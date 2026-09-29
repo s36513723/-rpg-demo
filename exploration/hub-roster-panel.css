@@ -69,3 +69,12 @@
 #panel.actor-workspace.status-equipment .character-equip-slot[aria-pressed="true"]{border-color:#f0d590!important;background:rgba(63,77,44,.58)!important}
 #app:not(.in-expedition) #party .m .hub-roster-metric small,
 #app:not(.in-expedition) #party .m .hub-roster-metric b{font-size:7px!important}
+
+/* Cards sit quietly over the location art; gauges remain thin under the text. */
+#app:not(.in-expedition) #party .m{background:rgba(9,23,17,.27)!important;border-color:rgba(224,207,164,.25)!important;border-radius:4px!important;box-shadow:inset 0 1px 0 rgba(245,226,174,.08)!important}
+#app:not(.in-expedition) #party .m .hub-roster-meter{height:10px!important;min-height:10px!important}
+#app:not(.in-expedition) #party .m .hub-roster-track{inset:auto 0 0!important;height:2px!important;min-height:2px!important;background:rgba(2,8,5,.78)!important}
+#app:not(.in-expedition) #party .m .hub-roster-track>span{opacity:1!important}
+#app:not(.in-expedition) #party .m .hub-roster-metric{height:10px!important;line-height:9px!important;text-shadow:0 1px 3px #000!important}
+#app:not(.in-expedition) #party .m .hub-roster-metric small,
+#app:not(.in-expedition) #party .m .hub-roster-metric b{line-height:9px!important}
