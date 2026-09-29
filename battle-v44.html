@@ -50,7 +50,7 @@
 </div>
 </div>
 </section>
-<div class="battle-message" hidden="" id="battleMessage"><p aria-live="polite" id="battleMessageText" role="status"></p><div class="playback-tools"><button aria-label="次のメッセージ" id="nextMessage"><svg class="icon"><use href="#i-fast"></use></svg></button></div></div>
+<div class="battle-message" hidden="" id="battleMessage"><p aria-live="polite" id="battleMessageText" role="status"></p></div>
 <div class="order-ribbon"><span aria-hidden="true" class="order-sign">NEXT</span><nav aria-label="行動順の予測" class="order" id="turnOrder"></nav></div><section aria-label="味方6人" class="allies party-hud" id="allies">
 <div aria-label="味方6人のステータス" class="party-strip" id="partyStrip" role="group"></div>
 </section>
@@ -86,7 +86,7 @@
   </div>
   <p class="formation-caption">上が敵、下が味方。中央でFRONT同士が向かい合います。移動は <b>SHIFT</b> から。</p>
 </dialog>
-<script defer="" src="battle-plan-v36.js?v=44-seamless-42"></script><script>
+<script defer="" src="battle-plan-v36.js?v=44-seamless-43"></script><script>
 (async()=>{
   try{
     const parts=await Promise.all(Array.from({length:7},(_,i)=>fetch('battle-bg-v44-'+i+'.txt?v=45').then(r=>{if(!r.ok)throw new Error('bg '+i);return r.text()})));
