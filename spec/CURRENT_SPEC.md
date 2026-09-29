@@ -91,12 +91,12 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - HP/SP on hub cards use slim always-visible line gauges.
 
 ## Battle UI
-- The fixed portrait stage keeps its official background visible from top to bottom. ROUND, terrain, turn order and settings occupy the top edge; enemies use three ranks with the front rank visibly larger.
-- The acting ally portrait sits at lower left with its upper contour visible and its name clear of the ally formation.
-- Six ally cards occupy a centered 3x3 formation with three faint empty cells. The formation is 1.3 times its previous width. Four commands sit in one horizontal row below it, using receding trapezoid plates distinct from the ally hexes.
-- AUTO aligns with the upper ally card row; speed sits beneath it with a consistent gap, both to the right of the cards.
-- Skills and items appear as two columns of single-line choices, with no extra character/title line. A cancel button sits to their right. After skill selection, the target explanation has its own cancel button on the right; valid targets and the selected target receive distinct effects.
-- Skill explanations and battle playback text sit between enemies and ally cards. These are UI decisions; demo balance values remain provisional.
+1. ROUND / AUTO / speed / settings
+2. turn order
+3. main enemy + current acting ally presentation
+4. commands
+5. ally 3x3 cards
+Commands sit immediately above ally cards. Character appeal has priority over tiny board-token presentation.
 
 ## Status discipline
 - Implementation or passing tests do not imply approval.
@@ -154,3 +154,8 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - キャラの能力値・スキル・修練などの詳細画面には共通のABILITY / SKILL / MASTERYタブ列を出さない。装備画面の4つのアイコンから各画面へ進み、詳細内で必要な項目切替は残す。
 - 共通キャラカードは薄い透過背景と控えめな枠にし、HP/SPゲージを2pxの細線にする。数値は同じ行に表示する。
 - 保管済み最終切り抜き素材のキャラ6人（戦闘用立ち絵の透過版）と施設NPC3人を拠点画面に使用する。旧WebPに残る白い抜け残りは再使用しない。
+
+## 共通ナビとキャラカードの接続（2026-09-29 確定）
+- BACKは現在の画面から直前の階層に戻る。同じ画面内でのキャラ・装備枠・項目・絞り込みの切替は階層を増やさない。拠点施設の入口から入った画面も施設内の直前の画面へ戻す。
+- 共通キャラカードは6人を一つの細い帯として表示し、個別の角丸枠を廃止する。名前とHP/SPの数値・細線ゲージは維持し、選択中は控えめな金色の下線で示す。
+- 下げた立ち絵の下端はカード直前で背景になじませ、水平な切断に見えないようにする。背景画像自体はぼかさない。

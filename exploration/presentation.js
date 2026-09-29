@@ -38,8 +38,9 @@ const actorMembers=(i,mode)=>'<div class="actor-member-cards" role="group" aria-
 const actorBasics=i=>'<section class="status-basics">'+characterExperience()+resources(i)+'<div class="basic-abilities">'+attrs.map((n,j)=>'<span><small>'+n+' · '+['肉体','技能','異能','精神'][j]+'</small><b>'+stats[i][j]+'</b></span>').join('')+'</div>'+masteryBadges(i)+'</section>';
 const statusPortrait=i=>'<section class="actor-hero status-cover"><div class="status-caption"><b>'+hesc(names[i])+'</b><span>'+hesc(battleStyle(i))+' · '+rows[i]+'</span></div></section>';
 
-const actorKey=new Set(['character','charOverview','statusView','actorAttributes','charAbility','equip','skills','mastery','charMastery','equipChoice']);
-const key=r=>r?(['equip','equipChoice'].includes(r.name)?'fitting:'+r.args[0]:actorKey.has(r.name)?'actor:'+r.args[0]:r.name==='equipChoice'?'equipChoice:'+r.args[0]+':'+r.args[1]:['questMenu','toolShop','itemCategory','items'].includes(r.name)?r.name:JSON.stringify(r)):'none';
+// A route is one navigation level. Changing the selected member, item or filter
+// within that screen does not add a level to BACK history.
+const key=r=>r?({character:'equip',charOverview:'equip',equip:'equip',charAbility:'mastery',charMastery:'mastery',mastery:'mastery',masteryType:'mastery',growMastery:'mastery',masterySkills:'mastery',items:'items',itemCategory:'items'}[r.name]||r.name):'none';
 const recordRoute=(r,scroll)=>({route:r?{name:r.name,args:r.args.slice()}:null,scroll});
 const isOpen=()=>document.getElementById('modal').classList.contains('on');
 const focusables=()=>[...document.querySelectorAll('#panel button:not(:disabled),#panel input,#panel summary,#panel a[href],#panel [tabindex="0"],#app .hub-global-nav button:not(:disabled)')].filter(e=>!e.closest('[hidden]')&&e.getClientRects().length);
@@ -226,7 +227,7 @@ const showUI=html=>{
   if(back?.dataset.hub==='uiBack')back.remove();
   if(nav&&!nav.children.length)nav.remove();
  }
- selectionOverlay();panel.setAttribute('aria-labelledby','panelTitle');panel.setAttribute('aria-modal',hubOverlay?'false':'true');document.getElementById('modal').classList.add('on');if(hubOverlay)setHubContentInert(true);else document.getElementById('app').inert=true;panel.scrollTop=0;const body=panel.querySelector('.panel-body');if(same)body.scrollTop=scroll;navState(r.name);const nextFocus=same&&focusAction?[...panel.querySelectorAll('[data-hub]')].find(e=>e.dataset.hub===focusAction&&e.dataset.args===focusArgs&&!e.disabled):null;(nextFocus||panel.querySelector('#panelTitle')).focus({preventScroll:true});
+ selectionOverlay();panel.setAttribute('aria-labelledby','panelTitle');panel.setAttribute('aria-modal',hubOverlay?'false':'true');document.getElementById('modal').classList.add('on');if(hubOverlay)setHubContentInert(true);else document.getElementById('app').inert=true;panel.scrollTop=0;const body=panel.querySelector('.panel-body');if(same)body.scrollTop=scroll;document.querySelectorAll('#party .m').forEach((card,i)=>{const selected=actorRoute&&i===actorId;card.classList.toggle('selected',selected);if(selected)card.setAttribute('aria-current','true');else card.removeAttribute('aria-current')});navState(r.name);const nextFocus=same&&focusAction?[...panel.querySelectorAll('[data-hub]')].find(e=>e.dataset.hub===focusAction&&e.dataset.args===focusArgs&&!e.disabled):null;(nextFocus||panel.querySelector('#panelTitle')).focus({preventScroll:true});
 };
 const closeUI=()=>{
  U.detail=null;masteryDiscard();fittingDiscard();attributeDiscard();
@@ -279,7 +280,7 @@ const views={
  town(){if(activeRun()){closeM();return drawDungeon()}
  const app=document.getElementById('app');app.classList.add('town-world');app.classList.remove('actor-overlay-open');app.classList.remove('in-expedition','facility-world','guild-world','market-world','inn-world');delete app.dataset.facility;
  document.getElementById('modal').classList.remove('on','hub-overlay-modal','hub-location-modal','hub-map-modal');setHubContentInert(false);app.inert=false;U.route=null;U.stack=[];
- document.querySelector('h1').textContent='王都レクシア';document.querySelector('header .small').textContent=H.story.ending?'調査のつづき':'冒険者区';
+ document.querySelectorAll('#party .m').forEach(card=>{card.classList.remove('selected');card.removeAttribute('aria-current')});document.querySelector('h1').textContent='王都レクシア';document.querySelector('header .small').textContent=H.story.ending?'調査のつづき':'冒険者区';
  const b=badgeCounts(),next=H.story.intro?storyObjective():'地下から響く鐘';
  const notices=(b.chapters?HB('探索結果 '+b.chapters+'件','','guild'):'')+(b.reports?HB('依頼報告 '+b.reports+'件','','questMenu',['ready']):'')+(b.appraisal?HB('査定 '+b.appraisal+'点','','appraiseMenu'):'');
  document.getElementById('screen').innerHTML='<section class="town-scene town-home"><button class="town-objective-button"'+data('storyMenu')+'><span class="chapter-kicker">NEXT</span><b>'+hesc(next)+'</b><span class="town-objective-arrow">›</span></button>'+(objective()?'<div class="tracked-objective">'+objective()+'</div>':'')+(notices?'<div class="attention-strip">'+notices+'</div>':'')+'<div class="town-command-grid">'+place('♨','宿屋','休息・会話','inn')+place('⚜','ギルド','依頼・資料','guild')+place('⚒','市場','購入・加工','market')+'</div></section>';

@@ -134,3 +134,17 @@
 #modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .skill-masteries button[aria-pressed="true"]{background:rgba(218,190,126,.9)!important;color:#241c12!important}
 #modal.hub-location-modal #panel.status-mastery>.actor-fixed,
 #modal.hub-location-modal #panel.status-attributes>.actor-fixed{background:rgba(16,19,21,.58)!important;border-bottom:1px solid rgba(219,199,142,.25)!important;text-shadow:0 1px 3px #000}
+
+/* The six members share one quiet dock, like the other hub controls. */
+#app:not(.in-expedition) #party{gap:0!important;padding:2px 5px!important;border-top:1px solid rgba(215,195,149,.30)!important;border-bottom:1px solid rgba(215,195,149,.18)!important;background:rgba(9,18,16,.52)!important}
+#app:not(.in-expedition) #party .m{height:44px!important;min-height:44px!important;gap:0!important;padding:2px 5px!important;border:0!important;border-right:1px solid rgba(215,195,149,.19)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:#f3e7d1!important}
+#app:not(.in-expedition) #party .m:last-child{border-right:0!important}
+#app:not(.in-expedition) #party .m.selected{background:linear-gradient(180deg,rgba(211,182,119,.18),rgba(211,182,119,.025))!important;box-shadow:inset 0 -2px 0 rgba(231,202,135,.85)!important}
+#app:not(.in-expedition) #party .m:focus-visible{outline:2px solid #e7ca8b!important;outline-offset:-2px!important}
+#app:not(.in-expedition) #party .m .hub-roster-name{font:600 10px/14px ui-serif,"Yu Mincho",serif!important;text-align:left!important;margin-bottom:1px!important;text-shadow:0 1px 2px #000!important}
+#app:not(.in-expedition) #party .m .hub-roster-meter{height:12px!important;min-height:12px!important}
+#app:not(.in-expedition) #party .m .hub-roster-metric{height:10px!important;padding:0!important;text-shadow:0 1px 2px #000!important}
+#app:not(.in-expedition) #party .m .hub-roster-metric small,#app:not(.in-expedition) #party .m .hub-roster-metric b{font:600 7px/10px sans-serif!important;color:#efe9da!important}
+#app:not(.in-expedition) #party .m .hub-roster-track{height:2px!important;min-height:2px!important;background:rgba(0,0,0,.55)!important}
+/* Dissolve the lowered figure into the sharp location image above the dock. */
+#modal.hub-location-modal #panel.actor-workspace>.actor-backdrop img{-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 82%,transparent 99%)!important;mask-image:linear-gradient(to bottom,#000 0%,#000 82%,transparent 99%)!important}
