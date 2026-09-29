@@ -201,9 +201,12 @@ const ET=[
 {id:'g3',name:'月影の獣',style:'槍兵',row:'mid',gridCol:2,slot:3,hp:125,PHY:34,SKL:30,ARC:10,MND:16,physDef:52,magDef:32,weak:{斬:1.3,火:1.2},resist:{突:.5},weapon:{name:'長槍',attr:'突',range:'mid',power:18,hit:3,speed:0,weight:'normal'},ai:'guard'},
 {id:'arch',name:'翼竜A',style:'弓兵',row:'back',gridCol:1,slot:4,hp:100,PHY:20,SKL:48,ARC:10,MND:15,physDef:35,magDef:35,weak:{斬:1.5},resist:{},weapon:{name:'弓',attr:'突',range:'far',power:15,hit:7,speed:2,weight:'normal'},ai:'archer'},
 {id:'mage',name:'星詠み',style:'魔術師',row:'mid',gridCol:3,slot:5,hp:90,PHY:10,SKL:24,ARC:48,MND:24,physDef:24,magDef:58,weak:{斬:1.4,突:1.2},resist:{火:.5},spell:skill('火炎術','spell','MP',12,1.25,'火','far','ARC',{power:16,hit:5,speed:-2}),ai:'mage'},
-{id:'arch2',name:'翼竜B',style:'弓兵',row:'back',gridCol:2,slot:6,hp:95,PHY:18,SKL:44,ARC:10,MND:16,physDef:32,magDef:36,weak:{斬:1.5,壊:1.2},resist:{},weapon:{name:'弓',attr:'突',range:'far',power:14,hit:6,speed:3,weight:'normal'},ai:'archer'}
+{id:'arch2',name:'翼竜B',style:'弓兵',row:'back',gridCol:2,slot:6,hp:95,PHY:18,SKL:44,ARC:10,MND:16,physDef:32,magDef:36,weak:{斬:1.5,壊:1.2},resist:{},weapon:{name:'弓',attr:'突',range:'far',power:14,hit:6,speed:3,weight:'normal'},ai:'archer'},
+{id:'arch3',name:'翼竜C',style:'弓兵',row:'back',gridCol:3,slot:7,hp:95,PHY:18,SKL:44,ARC:10,MND:16,physDef:32,magDef:36,weak:{斬:1.5,壊:1.2},resist:{},weapon:{name:'弓',attr:'突',range:'far',power:14,hit:6,speed:3,weight:'normal'},ai:'archer'},
+{id:'g4',name:'白銀騎士B',style:'重装兵',row:'mid',gridCol:1,slot:8,hp:155,PHY:42,SKL:20,ARC:10,MND:18,physDef:70,magDef:36,weak:{壊:2,火:1.2},resist:{斬:.5},weapon:{name:'大盾槍',attr:'突',range:'mid',power:20,hit:0,speed:-4,weight:'heavy'},ai:'guard'},
+{id:'g5',name:'聖域の番兵B',style:'重装兵',row:'front',gridCol:2,slot:9,hp:145,PHY:40,SKL:22,ARC:10,MND:18,physDef:66,magDef:36,weak:{壊:2},resist:{斬:.5},weapon:{name:'戦槌',attr:'壊',range:'near',power:21,hit:-3,speed:-5,weight:'heavy'},ai:'guard'}
 ];
-const PORTRAITS={war:'gald',rog:'lize',run:'ern',ran:'sena',arc:'mirea',mys:'yuna',g1:'enemy_guard',g2:'enemy_guard',g3:'enemy_guard',arch:'enemy_archer',arch2:'enemy_archer',mage:'enemy_mage'};
+const PORTRAITS={war:'gald',rog:'lize',run:'ern',ran:'sena',arc:'mirea',mys:'yuna',g1:'enemy_guard',g2:'enemy_guard',g3:'enemy_guard',g4:'enemy_guard',g5:'enemy_guard',arch:'enemy_archer',arch2:'enemy_archer',arch3:'enemy_archer',mage:'enemy_mage'};
 const TERRAINS=[{name:'狭所',desc:'重量武器 命中−10・速度−5',wHit:w=>w?.weight==='heavy'?-10:0,wSpeed:w=>w?.weight==='heavy'?-5:0,ranged:1},{name:'高台',desc:'後列の遠距離武器 威力＋10%',wHit:()=>0,wSpeed:()=>0,ranged:1.1},{name:'茂み',desc:'遠距離武器 命中−10（術は除く）',wHit:w=>w?.range==='far'?-10:0,wSpeed:()=>0,ranged:1},{name:'開所',desc:'遠距離武器 威力＋10%',wHit:()=>0,wSpeed:()=>0,ranged:1.1}];
 const STATUS=[['poison','猛毒','毒'],['stun','気絶','気絶'],['headBind','頭封じ','頭封'],['legBind','脚封じ','脚封']];
 const RANKS=['front','mid','rear'],RANK_LABEL={front:'FRONT',mid:'MID',rear:'REAR'};
@@ -244,6 +247,9 @@ const ENEMY_CINEMATIC={
  g3:ENEMY_ARCHETYPE_ART.beast,
  arch:ENEMY_ARCHETYPE_ART.flying,
  arch2:ENEMY_ARCHETYPE_ART.flying,
+ arch3:ENEMY_ARCHETYPE_ART.flying,
+ g4:ENEMY_ARCHETYPE_ART.heavy,
+ g5:ENEMY_ARCHETYPE_ART.heavy,
  mage:ENEMY_ARCHETYPE_ART.mage
 };
 const ORDER_PORTRAITS={
@@ -258,6 +264,9 @@ const ORDER_PORTRAITS={
  g3:ENEMY_ARCHETYPE_ART.beast,
  arch:ENEMY_ARCHETYPE_ART.flying,
  arch2:ENEMY_ARCHETYPE_ART.flying,
+ arch3:ENEMY_ARCHETYPE_ART.flying,
+ g4:ENEMY_ARCHETYPE_ART.heavy,
+ g5:ENEMY_ARCHETYPE_ART.heavy,
  mage:ENEMY_ARCHETYPE_ART.mage
 };
 const ORDER_FRAMES={
@@ -638,8 +647,8 @@ if(window.__RPG_TEST__)window.__test={get units(){return{party,enemies}},fresh,r
  const openPlanBook=e=>{e?.preventDefault();e?.stopImmediatePropagation();clearMoveMode();const sheet=$('choiceSheet'),list=$('sheetList');$('sheetKicker').textContent='';$('sheetTitle').textContent='BOOK';$('sheetHint').textContent='';list.replaceChildren();const help=document.createElement('button');help.type='button';help.className='menu-action';help.innerHTML='<span>操作の説明<small>戦闘操作・移動・対象選択</small></span>';help.addEventListener('click',()=>{list.innerHTML='<div class="plan-help"><b>基本操作</b><p>味方カードをタップして操作キャラを選択。同じカードをもう一度タップすると移動選択になり、空きマスで移動、別の味方カードで位置交換します。</p><p>ATTACK＝攻撃 / SKILL＝技 / ITEM＝道具・換装 / DEFEND＝防御。</p></div>'});const formation=document.createElement('button');formation.type='button';formation.className='menu-action';formation.innerHTML='<span>陣形<small>敵味方の3×3配置を確認・変更</small></span>';formation.addEventListener('click',()=>{sheet.close();$('formationButton').click()});const log=document.createElement('button');log.type='button';log.className='menu-action';log.innerHTML='<span>戦闘履歴<small>これまでの行動を確認</small></span>';log.addEventListener('click',()=>{sheet.close();$('history').open=true});const settings=document.createElement('button');settings.type='button';settings.className='menu-action';settings.innerHTML='<span>設定<small>戦闘表示・速度</small></span>';settings.addEventListener('click',()=>{list.replaceChildren();const speedButton=document.createElement('button');speedButton.type='button';speedButton.className='menu-action';speedButton.innerHTML='<span>戦闘速度<small>右下の速度と同じ設定</small></span>';speedButton.addEventListener('click',()=>{$('pace').click()});const display=document.createElement('button');display.type='button';display.className='menu-action';display.innerHTML='<span>コマンド表記<small>English</small></span>';display.disabled=true;list.append(speedButton,display)});list.append(help,formation,log,settings);if(!sheet.open)sheet.showModal()};$('historyButton')?.addEventListener('click',openPlanBook,true);$('more')?.addEventListener('click',openPlanBook,true);
 
  const formationSheet=$('formationSheet'),allyFormationBoard=$('allyFormationBoard'),enemyFormationBoard=$('enemyFormationBoard');
- const DISPLAY_NAME={war:'ガルド',rog:'リゼ',run:'エルン',ran:'セナ',arc:'ミレア',mys:'ユナ',g1:'白銀騎士',g2:'聖域の番兵',g3:'月影の獣',arch:'翼竜A',arch2:'翼竜B',mage:'星詠み'};
- const ICON_SRC={war:'images/gald.svg',rog:'images/lize.svg',run:'images/ern.svg',ran:'images/sena.svg',arc:'images/mirea.svg',mys:'images/yuna.svg',g1:'images/enemy_guard.svg',g2:'images/enemy_guard.svg',g3:'images/enemy_guard.svg',arch:'images/enemy_archer.svg',arch2:'images/enemy_archer.svg',mage:'images/enemy_mage.svg'};
+ const DISPLAY_NAME={war:'ガルド',rog:'リゼ',run:'エルン',ran:'セナ',arc:'ミレア',mys:'ユナ',g1:'白銀騎士',g2:'聖域の番兵',g3:'月影の獣',g4:'白銀騎士B',g5:'聖域の番兵B',arch:'翼竜A',arch2:'翼竜B',arch3:'翼竜C',mage:'星詠み'};
+ const ICON_SRC={war:'images/gald.svg',rog:'images/lize.svg',run:'images/ern.svg',ran:'images/sena.svg',arc:'images/mirea.svg',mys:'images/yuna.svg',g1:'images/enemy_guard.svg',g2:'images/enemy_guard.svg',g3:'images/enemy_guard.svg',g4:'images/enemy_guard.svg',g5:'images/enemy_guard.svg',arch:'images/enemy_archer.svg',arch2:'images/enemy_archer.svg',arch3:'images/enemy_archer.svg',mage:'images/enemy_mage.svg'};
  function drawFormationBoard(board,cells,enemy=false){
   board.replaceChildren();
   for(const cell of cells){
@@ -654,7 +663,7 @@ if(window.__RPG_TEST__)window.__test={get units(){return{party,enemies}},fresh,r
  function refreshFormationBoard(){
   const q=window.RPGDemo.snapshot(),ally=[],foe=[];
   for(const rank of ['front','mid','rear'])for(let c=1;c<=3;c++){const u=q.party.find(x=>x.rank===rank&&x.col===c);ally.push({unit:u||null,current:!!u&&u.id===q.active})}
-  for(const rank of ['rear','mid','front'])for(let c=1;c<=3;c++){const u=rank==='mid'?null:q.enemies.find(x=>((x.row==='back'?'rear':'front')===rank)&&(((x.slot-1)%3)+1)===c);foe.push({unit:u||null,current:false})}
+  for(const rank of ['rear','mid','front'])for(let c=1;c<=3;c++){const u=q.enemies.find(x=>((x.row==='back'?'rear':x.row)===rank)&&Number(document.querySelector('.enemy-unit[data-unit-id="'+x.id+'"]')?.dataset.col)===c);foe.push({unit:u||null,current:false})}
   drawFormationBoard(allyFormationBoard,ally,false);drawFormationBoard(enemyFormationBoard,foe,true);
  }
  window.updateFormationBoard=refreshFormationBoard;
