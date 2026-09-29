@@ -668,6 +668,18 @@
  font-size:6px;
  color:#e1e6dc;
 }
+.character-equipment-swap{
+ min-height:22px;
+ margin-top:2px;
+ padding:2px 7px;
+ border:1px solid rgba(202,179,117,.45);
+ border-radius:999px;
+ background:rgba(18,32,23,.62);
+ color:#ddca96;
+ font-size:6px;
+ letter-spacing:.08em;
+ pointer-events:auto;
+}
 .character-equipment-side{
  position:absolute;
  top:45px;
