@@ -3,6 +3,11 @@ var RPG_STORE=(function(){
   // The direct hub demo starts with an isolated, temporary save. An ongoing
   // expedition in the normal demo must never be replaced by preview actions.
   var hubPreview=new URLSearchParams(location.search).get('demo')==='hub';
+  var explorationDemo=new URLSearchParams(location.search).get('demo')==='exploration';
+  var demoPrefix='rpg.exploration.demo:';
+  if(explorationDemo&&new URLSearchParams(location.search).get('fresh')==='1'){
+    try{['rpg.exploration.save1','rpg.exploreBattle'].forEach(function(k){localStorage.removeItem(demoPrefix+k)})}catch(e){}
+  }
   var previewStore=hubPreview?new Map():null;
   function named(){
     try{
@@ -12,11 +17,13 @@ var RPG_STORE=(function(){
     }catch(e){return {}}
   }
   function saveNamed(v){try{window.name=PREFIX+JSON.stringify(v)}catch(e){}}
-  function localGet(k){try{return window.localStorage.getItem(k)}catch(e){return null}}
-  function localSet(k,v){try{window.localStorage.setItem(k,v)}catch(e){}}
-  function localRemove(k){try{window.localStorage.removeItem(k)}catch(e){}}
+  function storageKey(k){return explorationDemo?demoPrefix+k:k}
+  function localGet(k){try{return window.localStorage.getItem(storageKey(k))}catch(e){return null}}
+  function localSet(k,v){try{window.localStorage.setItem(storageKey(k),v)}catch(e){}}
+  function localRemove(k){try{window.localStorage.removeItem(storageKey(k))}catch(e){}}
   return {
     isHubPreview:hubPreview,
+    isExplorationDemo:explorationDemo,
     getItem:function(k){
       if(hubPreview)return previewStore.has(k)?previewStore.get(k):null;
       if(location.protocol==='file:'){
@@ -64,6 +71,7 @@ var RPG_NAV=(function(){
       var v=RPG_STORE.getItem(k);
       if(v!==null)d[k]=v;
     });
+    if(RPG_STORE.isExplorationDemo)path+=(path.includes('?')?'&':'?')+'demo=exploration';
     return path+(Object.keys(d).length?'#rpg='+encodeURIComponent(JSON.stringify(d)):'');
   }
   importHash();

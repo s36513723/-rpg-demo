@@ -26,6 +26,8 @@ main{width:100%;max-width:720px;margin:0 auto;padding:10px 12px max(14px,env(saf
 <script>
 var RPG_STORE=(function(){
   var PREFIX='RPG_DEMO_STATE_V1:';
+  var explorationDemo=new URLSearchParams(location.search).get('demo')==='exploration';
+  function storageKey(k){return explorationDemo?'rpg.exploration.demo:'+k:k}
   function named(){
     try{
       if(!window.name||window.name.indexOf(PREFIX)!==0)return {};
@@ -34,10 +36,11 @@ var RPG_STORE=(function(){
     }catch(e){return {}}
   }
   function saveNamed(v){try{window.name=PREFIX+JSON.stringify(v)}catch(e){}}
-  function localGet(k){try{return window.localStorage.getItem(k)}catch(e){return null}}
-  function localSet(k,v){try{window.localStorage.setItem(k,v)}catch(e){}}
-  function localRemove(k){try{window.localStorage.removeItem(k)}catch(e){}}
+  function localGet(k){try{return window.localStorage.getItem(storageKey(k))}catch(e){return null}}
+  function localSet(k,v){try{window.localStorage.setItem(storageKey(k),v)}catch(e){}}
+  function localRemove(k){try{window.localStorage.removeItem(storageKey(k))}catch(e){}}
   return {
+    isExplorationDemo:explorationDemo,
     getItem:function(k){
       if(location.protocol==='file:'){
         var n=named();
@@ -74,6 +77,7 @@ var RPG_NAV=(function(){
       var v=RPG_STORE.getItem(k);
       if(v!==null)d[k]=v;
     });
+    if(RPG_STORE.isExplorationDemo)path+=(path.includes('?')?'&':'?')+'demo=exploration';
     return path+(Object.keys(d).length?'#rpg='+encodeURIComponent(JSON.stringify(d)):'');
   }
   importHash();
