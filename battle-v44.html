@@ -89,6 +89,34 @@
 </dialog>
 <script src="exploration/bridge.js?v=10"></script><script src="rpg-rules.js?v=12"></script><script defer src="battle-plan-v36.js?v=44-exploration-1"></script><script>
 (async()=>{
+  const themeAssets=Object.freeze({
+    '森林':'theme-forest-official.webp',
+    '洞窟':'theme-cave-official.webp',
+    '廃墟都市':'theme-ruins-official.webp',
+    '山岳':'theme-mountain-official.webp',
+    '沼地':'theme-swamp-official.webp',
+    '砂漠遺跡':'theme-desert-official.webp',
+    '海上・船':'theme-sea-official.webp',
+    '地下神殿':'theme-temple-official.webp'
+  });
+  try{
+    if(new URLSearchParams(location.search).get('from')==='exploration'){
+      const ctx=JSON.parse(RPG_STORE.getItem('rpg.exploreBattle')||'null');
+      const asset=ctx?.battleId&&themeAssets[ctx.theme];
+      if(asset){
+        const path='images/'+asset;
+        await new Promise((resolve,reject)=>{
+          const image=new Image();
+          image.onload=resolve;
+          image.onerror=reject;
+          image.src=path;
+        });
+        document.documentElement.style.setProperty('--battle-background-image','url("'+path+'")');
+        document.documentElement.classList.add('battle-bg-ready');
+        return;
+      }
+    }
+  }catch(e){console.warn('exploration background unavailable; using battle demo background',e)}
   try{
     const parts=await Promise.all(Array.from({length:7},(_,i)=>fetch('battle-bg-v44-'+i+'.txt?v=45').then(r=>{if(!r.ok)throw new Error('bg '+i);return r.text()})));
     document.documentElement.style.setProperty('--battle-background-image','url("data:image/webp;base64,'+parts.join('').trim()+'")');
