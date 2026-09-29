@@ -1125,3 +1125,5 @@ html,body{height:100%;overflow:hidden}
 /* Keep the two secondary controls together over the center of the formation. */
 #game #auto{left:44%!important;right:auto!important}
 #game #pace{left:57%!important;right:auto!important}
+
+#game .enemy-grid{left:4%!important;right:-4%!important}
