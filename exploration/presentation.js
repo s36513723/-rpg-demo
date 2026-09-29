@@ -296,6 +296,7 @@ const views={
   if(H.run?.battle)return pendingBattleMenu();
   if(tab==='destination')tab='dungeon';if(tab==='members')tab='composition';
   if(!['dungeon','formation','composition'].includes(tab))tab='dungeon';
+  if(activeRun())tab='formation';
   U.sortie=tab;ensureFormation();
   const deployed=H.formation.filter(i=>i!==null),waiting=names.map((_,i)=>i).filter(i=>!deployed.includes(i)),ws=warnings(),labels=['前','中','後'];
   const navigation='<div class="sortie-tabs" role="group" aria-label="出撃準備の切替">'+[['composition','編成'],['formation','陣形'],['dungeon','ダンジョン']].map(([v,n])=>'<button type="button"'+data('partyMenu',[v])+' aria-pressed="'+(v===tab)+'">'+n+'</button>').join('')+'</div>';
@@ -311,7 +312,7 @@ const views={
    const id=unlocked.includes(H.selected)?H.selected:unlocked[unlocked.length-1],r=hc().regions[id];
    body='<div class="destination-brief"><b>'+hesc(id)+'</b><small>'+hesc(r.mechanism)+'\n全3層</small></div>'+HB('行き先を変更','','dungeon')+HB('準備確認',ws.length?ws.length+'件の要確認':'問題なし','readiness')+'<div class="sortie-deploy-count">出撃 '+deployed.length+' / 6人</div><div class="sticky-action sortie-start"><button class="primary-action" data-hub="startDungeon">出撃 →</button></div>';
   }
-  show('<h2>出撃準備</h2>'+navigation+body);
+  show(activeRun()?'<h2>戦闘前確認</h2>'+body+HB('戦闘地点へ戻る','装備・スキル・列を確認して戦闘を選ぶ','battlePrep'):'<h2>出撃準備</h2>'+navigation+body);
  },
  character(i){if(H.run?.battle)return pendingBattleMenu();if(!Number.isInteger(i)||i<0||i>=6)return;return fittingScreen(i,null)},
  charOverview(i){return character(i)},
