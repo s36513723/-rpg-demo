@@ -91,12 +91,12 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - HP/SP on hub cards use slim always-visible line gauges.
 
 ## Battle UI
-1. ROUND / AUTO / speed / settings
-2. turn order
-3. main enemy + current acting ally presentation
-4. commands
-5. ally 3x3 cards
-Commands sit immediately above ally cards. Character appeal has priority over tiny board-token presentation.
+- The fixed portrait stage keeps its official background visible from top to bottom. ROUND, terrain, turn order and settings occupy the top edge; enemies use three ranks with the front rank visibly larger.
+- The acting ally portrait sits at lower left with its upper contour visible and its name clear of the ally formation.
+- Six ally cards occupy a centered 3x3 formation with three faint empty cells. The formation is 1.3 times its previous width. Four commands sit in one horizontal row below it, using receding trapezoid plates distinct from the ally hexes.
+- AUTO aligns with the upper ally card row; speed sits beneath it with a consistent gap, both to the right of the cards.
+- Skills and items appear as two columns of single-line choices, with no extra character/title line. A cancel button sits to their right. After skill selection, the target explanation has its own cancel button on the right; valid targets and the selected target receive distinct effects.
+- Skill explanations and battle playback text sit between enemies and ally cards. These are UI decisions; demo balance values remain provisional.
 
 ## Status discipline
 - Implementation or passing tests do not imply approval.
