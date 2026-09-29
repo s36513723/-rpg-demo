@@ -41,6 +41,58 @@ async () => {
  await test('map node icons are consistent with their semantic type',()=>{reset();startDungeon();drawDungeon();for(const e of document.querySelectorAll('.map-node'))assert(e.querySelector('.ui-icon'));const node=document.querySelector('[data-hub="routeNode"]');assert(node.getAttribute('aria-label'))});
  await test('map nodes have themed mini artwork',()=>{reset();startDungeon();drawDungeon();const nodes=[...document.querySelectorAll('.map-node')];assert(nodes.length>=9);assert(nodes.every(e=>e.querySelector('.node-thumb')))});
  await test('enemy book and detail remain reachable in the fixed guild world',()=>{reset();journal.enemies=['古代弓兵','辺境の巨獣','術式魔導師','迷宮守護機'];journal.enemyData={};enemyBook();let s=document.querySelector('#screen');assert(s.querySelectorAll('[data-hub="enemyRecord"]').length===4);enemyRecord('迷宮守護機');s=document.querySelector('#screen');assert(s.textContent.includes('迷宮守護機'))});
+ await test('all guild internal screens preserve the same background and receptionist frame',()=>{
+  reset();
+  const region='古代迷宮',q=hc().quests[0];
+  H.story.pending=[region];H.story.completed=H.story.completed.filter(x=>x!==region);
+  H.quests[q.id]={state:1,progress:Math.min(1,q.target)};H.tracked=q.id;
+  journal.enemies=['古代弓兵','辺境の巨獣','術式魔導師','迷宮守護機'];journal.enemyData={};
+  loot.皮=Math.max(8,loot.皮||0);
+  guild();
+  const snap=()=>{
+   const app=document.querySelector('#app'),screen=document.querySelector('#screen'),npc=document.querySelector('.facility-world-npc'),overlay=document.querySelector('.facility-world-overlay'),party=document.querySelector('#party'),nav=document.querySelector('.hub-global-nav');
+   assert(app.classList.contains('guild-world'));assert(!document.querySelector('#modal').classList.contains('on'));assert(npc&&overlay&&party&&nav);
+   const s=screen.getBoundingClientRect(),n=npc.getBoundingClientRect(),o=overlay.getBoundingClientRect();
+   assert(getComputedStyle(app).backgroundImage.includes('hub-guild-bg'));
+   assert(document.querySelectorAll('#party .m').length===6&&nav.querySelectorAll('button').length===3);
+   assert(o.bottom<=s.bottom+1&&o.height<=s.height*.5);
+   return {screen:[s.x,s.y,s.width,s.height],npc:[n.x,n.y,n.width,n.height]};
+  };
+  const baseFrame=snap(),same=()=>{
+   const now=snap();
+   for(let i=0;i<4;i++)assert(Math.abs(now.screen[i]-baseFrame.screen[i])<=1,'guild screen moved');
+   for(let i=0;i<4;i++)assert(Math.abs(now.npc[i]-baseFrame.npc[i])<=1,'guild NPC moved');
+  };
+  const views=[
+   ()=>guildDesk(),
+   ()=>questMenu('open'),
+   ()=>questMenu('active'),
+   ()=>questMenu('done'),
+   ()=>questMenu('all'),
+   ()=>questSelect(q.id),
+   ()=>reportChapter(region),
+   ()=>infoMenu(),
+   ()=>dungeonIntel(region),
+   ()=>regionRecords(),
+   ()=>regionRecord(region),
+   ()=>enemyBook(),
+   ()=>enemyRecord('迷宮守護機'),
+   ()=>clueRecord('封印の銘板'),
+   ()=>recordList('重要記録',['記録A','記録B']),
+   ()=>appraiseMenu(),
+   ()=>storageMenu(),
+   ()=>depositMenu(),
+   ()=>guildMembers(),
+   ()=>guildSellMenu(),
+   ()=>guildSellMenu('materials'),
+   ()=>guildSaleQuantity('materials','皮'),
+   ()=>guildSaleConfirm('materials','皮',1),
+   ()=>confirmAction('依頼を取り下げる','進捗をリセットします。','abandonQuest',[q.id]),
+   ()=>checkpointResult('依頼報告','報酬を受け取りました。','questMenu',['active']),
+   ()=>note('報告できる依頼はありません')
+  ];
+  for(const open of views){open();same()}
+ });
  await test('field merchant uses a dedicated portrait',()=>{reset();startDungeon();const f=H.run.floors[0],n=f.nodes.find(n=>n.type==='merchant');f.open=[n.id];routeNode(n.id);assert(panel().querySelector('.scene-merchant img').getAttribute('src').includes('npc_merchant'))});
  await test('back navigation still works with NPC-centered facilities',()=>{reset();market();toolShop();toolQuantity('回復薬');uiBack();assert(panel().textContent.includes('道具屋'));uiBack();assert(panel().querySelector('.facility-host,.facility-talk'));assert(panel().querySelector('.modal-x').textContent==='拠点へ')});
  reset();return out;
