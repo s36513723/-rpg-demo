@@ -337,5 +337,11 @@
     "evidence": "出撃準備と宿屋などを390px/320pxの実画面画像で比較。6人全員の透過アルファ、編成・陣形のカード、44px操作、宿屋から開く背景分離、編成の待機/復帰、キャラ詳細へ移動してBACKで戻る動線を確認。GitHub Actions RPG validation 744/744 PASS (run 36567605821)。",
     "scope_limits": "正本の11_整合性未解決と12_仮値バランス調整には未確定・未制作内容が残る。全コンテンツ完成の意味ではなく、デモの確定UIと既存ランタイムの検証。",
     "sortie_three_panels_revision": "編成・陣形・ダンジョンのタブとカードから固有の緑色の塗りを廃止し、拠点共通の細い金縁・中立色の透過面・選択中の金色下線に統一。正本 workbook version 6 の 05_拠点探索仕様 C6 と 07_UI仕様 A35:D35 に同期。"
+  },
+  "battle_enemy_outline_2026_09_29": {
+    "status": "実装・実画面確認中",
+    "implementation": "battle-plan-v36.js / battle-plan-v36.css / battle-v44.html",
+    "workbook_sync": "Library正本 version 8・07_UI仕様 A37:D37",
+    "validation": "GitHub Pages反映と対象選択を確認中"
   }
 }
