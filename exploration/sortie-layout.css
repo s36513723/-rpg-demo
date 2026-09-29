@@ -11,9 +11,9 @@
 #modal.hub-map-modal #panel .primary-action{border:1px solid rgba(237,203,132,.70);background:rgba(62,56,42,.64);color:#fff2cf}
 .facility-world-service>button.row{min-height:44px}
 .sortie-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;width:100%;margin:0}
-.sortie-tabs button{min-height:44px;padding:5px;border:0;border-right:1px solid rgba(215,195,149,.24);border-bottom:2px solid transparent;border-radius:0;background:transparent;font:600 11px/1.2 'Yu Mincho',Georgia,serif;color:#e8d9b8;text-shadow:0 1px 3px #000}
-.sortie-tabs button:last-child{border-right:0}
-.sortie-tabs button[aria-pressed=true]{border-bottom-color:#e7c983;background:transparent;color:#fff4d5;box-shadow:none}
+#modal.hub-map-modal #panel .panel-footer .sortie-tabs button{min-height:44px;padding:5px;border:0;border-right:1px solid rgba(215,195,149,.24);border-bottom:2px solid transparent;border-radius:0;background:transparent;font:600 11px/1.2 'Yu Mincho',Georgia,serif;color:#e8d9b8;text-shadow:0 1px 3px #000}
+#modal.hub-map-modal #panel .panel-footer .sortie-tabs button:last-child{border-right:0}
+#modal.hub-map-modal #panel .panel-footer .sortie-tabs button[aria-pressed=true]{border-bottom-color:#e7c983;background:transparent;color:#fff4d5;box-shadow:none}
 #app.facility-world #screen .ui-tabs button{min-height:44px}
 #app.facility-world .facility-world-service .ui-tabs{max-width:100%;min-width:0}
 #app.facility-world .facility-world-service .ui-tabs button{flex:1 1 0;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis}
