@@ -459,5 +459,13 @@
     "skill_catalog": "skill-catalog-315.js",
     "skill_catalog_status": "構造確定",
     "legacy_save_policy": "unmatched old learned skills -> legacySkills + Mastery Pt refund"
+  },
+  "battle_ui_targeting_2026_09_29": {
+    "status": "確定",
+    "portrait": "拠点と同じ透過済み立ち絵、被弾者へ切替",
+    "enemy_overlay": "敵名・HP非表示、通常白・候補赤・一度選択黄色発光、二度目で確定",
+    "multi_target": "対象ごと順次演出・処理",
+    "command_icons": "iPhoneでも表示",
+    "invalid_target_notice": "戦闘UIと同じ浮遊プレート"
   }
 }
