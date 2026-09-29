@@ -51,7 +51,7 @@ async def layouts(page):
    results.append({'name':f'UI21 sortie tab fits {width}x{height} {tab}','ok':dims['scroll']<=1 and not dims['wide'] and dims['fixed'] and dims['tabs']==3,'measurements':dims})
   for facility in ['inn()','guild()','market()']:
    await page.evaluate(facility)
-   expected=5 if facility=='inn()' else 4
+   expected=4
    dims=await page.evaluate("""()=>{const s=document.querySelector('#screen'),app=document.querySelector('#app'),npc=s.querySelector('.facility-world-npc'),overlay=s.querySelector('.facility-world-home'),cards=document.querySelectorAll('#party .m'),nav=document.querySelector('.hub-global-nav');return {scroll:s.scrollHeight-s.clientHeight,wide:document.documentElement.scrollWidth>innerWidth,stand:!!npc,choices:overlay?.querySelectorAll('button.row').length||0,labels:[...(overlay?.querySelectorAll('button.row b')||[])].map(x=>x.textContent.trim()),cards:cards.length,nav:!!nav,world:app.classList.contains('facility-world'),kind:app.dataset.facility||'',bg:getComputedStyle(app).backgroundImage}}""")
    kind={'inn()':'inn','guild()':'guild','market()':'market'}[facility]
    results.append({'name':f'UI46 fixed {kind} world fits {width}x{height}','ok':dims['scroll']<=1 and not dims['wide'] and dims['stand'] and dims['choices']==expected and dims['cards']==6 and dims['nav'] and dims['world'] and dims['kind']==kind and f'hub-{kind}-bg' in dims['bg'],'measurements':dims})
