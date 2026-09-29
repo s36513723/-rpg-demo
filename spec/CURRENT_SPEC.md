@@ -13,14 +13,14 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - Positional distance: ally front -> enemy front = 1; maximum back -> back = 5.
 - Range: near 1, mid 1-2, far 1-3, long 1-4, global 1-5.
 - Normal attack: nearest enemy in the same forward lane that is in range. No automatic adjacent-lane snap.
-- Normal movement: one orthogonal empty cell, costs one turn; no diagonal normal move.
+- Normal movement: any cell in the same vertical lane costs one turn; selecting an occupied ally cell swaps the two. Horizontal normal movement and swapping are unavailable.
 - Manual weapon-set swap costs 0 turns; no automatic swapping.
 
 ## SP
 - SP is the common resource for weapon skills, techniques and spells; it is not magic power.
 - Maximum SP is not directly derived from PHY/SKL/ARC/MND.
 - No automatic round regeneration. SP persists between battles.
-- Normal attack / Guard SP recovery values are balance-controlled.
+- Normal attack, Guard and time do not recover SP. Only rest, items and effects that explicitly specify recovery do.
 - Inn rest fully restores HP/SP/status; returning alone does not auto-heal.
 
 ## Mastery / skills
@@ -63,7 +63,7 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 ## Growth / dungeon
 - No conventional displayed level with automatic stat growth.
 - EXP creates pending growth; inn rest settles pending Stat Pt / Mastery Pt.
-- Exact EXP curve and reward quantities are balance-controlled.
+- Initial EXP threshold is 100 and increases by 20 after each growth; all six registered members earn equal EXP. Each growth gives 1 Stat Pt plus 1 every fifth growth and 2 Mastery Pt (provisional quantities).
 - A run is basically 3 layers. Environments: 森林 / 洞窟 / 廃墟都市 / 山岳 / 沼地 / 砂漠遺跡 / 海上・船 / 地下神殿.
 - Nodes include normal battle / strong enemy / event / camp / merchant / exploration / smith-workshop / boss.
 - No equipment durability/repair.
@@ -214,3 +214,9 @@ Commands sit immediately above ally cards. Character appeal has priority over ti
 
 ## 編成・陣形の一画面表示（2026-09-29 確定）
 - 編成と陣形はスマホ縦画面で内部スクロールを発生させない。編成は登録6人を出撃／ギルド待機に関係なく3×2枠に置き、立ち絵タップでキャラ画面、隅の44px操作で出撃／待機を切り替える。陣形は3行を利用可能な高さに均等配置し、立ち絵タップと44pxの配置変更操作を分ける。下部3タブと共通キャラカードを維持する。
+
+## 探索の帰還と敗北（2026-09-29 更新・確定）
+- 探索マップから任意に帰還できる。帰還アイテムは不要。探索中に得た戦利品と獲得済みEXPを持ち帰る。
+- 戦闘敗北でも探索中に得た戦利品とEXPを持ち帰る。現在の探索は終了し、次回はMAPから新しい探索を開始する。
+- 戦利品は帰還後の鑑定まで使用・装備・加工・売却できない。
+- AUTOは設定で「ガンガン使う」（初期）／「スキルを使うな」／「命を大事に」を選ぶ。セーブは独立した2枠で各枠自動保存。

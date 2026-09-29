@@ -335,14 +335,32 @@ const CANCEL=Symbol('cancelled battle');
 function check(token){if(token!==session)throw CANCEL}
 function derived(P,S,A,M){const T=P+S+A+M,p=Math.max(0,P-10),s=Math.max(0,S-10),x=Math.max(0,A+M-20);return{hp:Math.floor(100+.5*(T-100)+2*p+Math.max(0,p-20)),sp:Math.floor(20+.1*(T-100)+.4*p+s),mp:Math.floor(x<=50?2*x:100+.5*(x-50))}}
 function initUnit(source,enemy=false){const o=JSON.parse(JSON.stringify(source)),d=derived(o.PHY,o.SKL,o.ARC,o.MND),ar=ARM[o.armor];return{...o,enemy,maxHp:enemy?o.hp:d.hp,hp:enemy?o.hp:d.hp,maxSp:d.sp,sp:d.sp,maxMp:d.mp,mp:d.mp,physDef:enemy?o.physDef:o.PHY+ar.p,magDef:enemy?o.magDef:o.ARC+o.MND+ar.m,wi:0,weapon:enemy?o.weapon:W[o.weapons[0]],alive:true,defending:false,status:{},queued:null}}
+function equippedWeapon(ctx,i,slot){
+ const name=ctx.equipment?.[i]?.[slot]?.split('：')[1]||'なし';
+ const spec=ctx.gearMeta?.[name]||ctx.gearMeta?.なし||['壊','近',0,'PHY',0];
+ const range={'近':'near','中':'mid','遠':'far','長':'far','全':'all'}[spec[1]]||'near';
+ const key='explore-'+i+'-'+slot;
+ W[key]={name,attr:spec[0]||'壊',range,power:Number(spec[2]||0),hit:0,speed:0,weight:'normal',normal:spec[3]||'PHY'};
+ return key;
+}
+function canonicalAction(name){
+ const d=window.RPG_RULES?.meta(name);if(!d||d.mode==='Passive')return null;
+ return skill(d.name,d.kind==='spell'?'spell':'skill','SP',d.cost||0,d.mult||0,d.attr||'無',d.range||'near',d.stat||'PHY',{
+  target:d.target==='ally'||d.target==='self'?'ally':'enemy',scope:d.scope||'single',
+  heal:!!d.heal,body:d.body||[],poison:d.poison||0,stun:d.stun||0,headBind:d.headBind||0,
+  legBind:d.legBind||0,hit:d.hit||0,description:d.description||''
+ });
+}
 function applyExploreContext(){
  const ctx=EXPCTX;if(!ctx)return;
  const ids=HT.map(u=>u.id),active=Array.isArray(ctx.activeMembers)?ctx.activeMembers:ids.map((_,i)=>i);
  party=party.filter(u=>active.includes(ids.indexOf(u.id)));
  for(const u of party){
   const i=ids.indexOf(u.id),a=ctx.stats?.[i],v=ctx.vitals?.[i];
-  if(Array.isArray(a)&&a.length>=4){[u.PHY,u.SKL,u.ARC,u.MND]=a.map(Number);const d=window.RPG_RULES?.derived(a)||derived(...a);u.maxHp=d.hp;u.maxSp=d.sp;u.maxMp=d.mp;u.physDef=u.PHY+ARM[u.armor].p;u.magDef=u.ARC+u.MND+ARM[u.armor].m}
-  if(v){u.hp=clamp(Number(v.hp)||0,0,u.maxHp);u.sp=clamp(Number(v.sp)||0,0,u.maxSp);u.mp=clamp(Number(v.mp)||0,0,u.maxMp);u.status={...u.status,...(v.status||{})};u.alive=u.hp>0}
+  if(Array.isArray(a)&&a.length>=4){[u.PHY,u.SKL,u.ARC,u.MND]=a.map(Number);const d=window.RPG_RULES?.derived(a)||derived(...a);u.maxHp=d.hp;u.maxSp=d.sp;u.maxMp=0;u.physDef=u.PHY+ARM[u.armor].p;u.magDef=u.ARC+u.MND+ARM[u.armor].m}
+  if(v){u.hp=clamp(Number(v.hp)||0,0,u.maxHp);u.sp=clamp(Number(v.sp)||0,0,u.maxSp);u.mp=0;u.status={...u.status,...(v.status||{})};u.alive=u.hp>0}
+  if(ctx.equipment?.[i]){u.weapons=[equippedWeapon(ctx,i,0),equippedWeapon(ctx,i,2)];u.weapon=W[u.weapons[0]];const off=ctx.equipment[i][1]?.split('：')[1];u.shield=/盾/.test(off||'');u.twoHandGrip=!off||off==='なし';u.dualWield=!!off&&off!=='なし'&&!u.shield}
+  if(ctx.skillSet?.[i])u.skills=ctx.skillSet[i].map(canonicalAction).filter(Boolean);
   const cell=ctx.formation?.indexOf(i)??-1;
   if(cell>=0){u.rank=['front','mid','rear'][Math.floor(cell/3)]||'front';u.gridCol=cell%3+1;u.row=u.rank==='front'?'front':'back';u.slot=cell+1}
  }
@@ -363,7 +381,7 @@ function applyExploreContext(){
  terrain=TERRAINS.find(t=>t.name===ctx.terrain)||{...TERRAINS[0],name:String(ctx.terrain||'開所'),desc:'探索地点の地形'};
 }
 function current(){return party[idx]}
-function normal(u){return{name:'通常攻撃',kind:'attack',range:u.weapon?.range||'near',attr:u.weapon?.attr||'壊',target:'enemy',scope:'single',mult:1,hit:0,speed:0}}
+function normal(u){return{name:'通常攻撃',kind:'attack',range:u.weapon?.range||'near',attr:u.weapon?.attr||'壊',target:'enemy',scope:'single',mult:1,hit:0,speed:0,laneOnly:true}}
 function getDraft(u){if(!drafts.has(u.id))drafts.set(u.id,{key:'attack',targetId:null});return drafts.get(u.id)}
 function actionFor(u,key=getDraft(u).key){return key==='attack'?normal(u):u.skills[Number(key)]||normal(u)}
 function canReach(a,t,r){
@@ -374,9 +392,9 @@ function canReach(a,t,r){
  if(r==='mid')return(ar<=1&&tr===fr)||(ar===0&&tr<=fr+1);
  return false;
 }
-function targets(u,a){return a.target==='ally'?live(party):live(enemies).filter(t=>canReach(u,t,a.range))}
+function targets(u,a){return a.target==='ally'?live(party):live(enemies).filter(t=>(!a.laneOnly||col(u)===col(t))&&canReach(u,t,a.range))}
 function enough(u,a){return !a.costType||u[a.costType.toLowerCase()]>=a.cost}
-function unavailable(u,a){if(a.kind==='spell'&&u.status.headBind>0)return'頭封じ';if(!enough(u,a))return a.costType+'不足';if(!targets(u,a).length)return'射程内に対象なし';return''}
+function unavailable(u,a){if((a.kind==='spell'||a.body?.includes('head'))&&u.status.headBind>0)return'頭封じ';if(a.body?.includes('arm')&&u.status.armBind>0)return'腕封じ';if(a.body?.includes('leg')&&u.status.legBind>0)return'脚封じ';if(!enough(u,a))return a.costType+'不足';if(!targets(u,a).length)return'射程内に対象なし';return''}
 function defaultTarget(u,a){const ts=targets(u,a),old=ts.find(t=>t.id===getDraft(u).targetId);if(old)return old;if(a.heal)return [...ts].sort((x,y)=>x.hp/x.maxHp-y.hp/y.maxHp)[0];return [...ts].sort((x,y)=>rankIndex(x)-rankIndex(y)||col(x)-col(y))[0]}
 function ensureTarget(u,a){const t=defaultTarget(u,a);getDraft(u).targetId=t?.id||null;return targets(u,a)}
 function editable(){return !busy&&!over}
@@ -550,6 +568,7 @@ function queueMove(rank,gridCol){
  if(!editable())return;
  const u=current();
  if(u.status.legBind>0){notify('脚封じで移動できません');return}
+ if(col(u)!==gridCol){notify('通常移動は同じ縦列だけです');return}
  if(u.rank===rank&&col(u)===gridCol){closeSheet();return}
  const other=live(party).find(x=>x.id!==u.id&&x.rank===rank&&col(x)===gridCol);
  u.defending=false;
@@ -584,6 +603,7 @@ function openSheet(mode='skills'){sheet.dataset.mode=mode;
     b.setAttribute('aria-label',RANK_LABEL[rank]+' '+c+(occ?' '+occ.name:' 空き'));
     b.innerHTML=occ?faceMarkup(occ)+'<span>'+esc(occ.name)+'</span>':'<span class="formation-plus">＋</span>';
     if(u.status.legBind>0)b.disabled=true;
+    b.disabled=c!==col(u);
     b.addEventListener('click',()=>queueMove(rank,c));cells.append(b);
    }
    line.append(cells);editor.append(line);
@@ -624,9 +644,9 @@ function setBattle(on){$('commandPanel').classList.toggle('resolving',on);$('com
 async function animateSwap(a,b,text,token){check(token);clearEffects();displayActorId=(b.alive&&!b.enemy?b.id:!a.enemy?a.id:null);activeTurnId=displayActorId;updatePortrait();const before=new Map([a,b].map(u=>[u.id,nodes.get(u.id).getBoundingClientRect()]));const row=a.row,slot=a.slot;a.row=b.row;a.slot=b.slot;b.row=row;b.slot=slot;render();$('battleMessage').className='battle-message sys';$('battleMessageText').textContent=text;log(text,'sys');const animations=[];for(const[u,i]of [[a,0],[b,1]]){const el=nodes.get(u.id),from=before.get(u.id),to=el.getBoundingClientRect(),dx=from.left-to.left,dy=from.top-to.top,w=i?3:-3;el.classList.add('moving');el.style.transformOrigin='top left';const sx=from.width/to.width,sy=from.height/to.height;const frames=[{transform:`translate(${dx}px,${dy}px) scale(${sx},${sy})`,offset:0},{transform:`translate(${dx*.72+w}px,${dy*.72}px) rotate(${i?.7:-.7}deg)`,offset:.28},{transform:`translate(${dx*.4-w}px,${dy*.4}px) rotate(${i?-.7:.7}deg)`,offset:.6},{transform:'translate(0,0) rotate(0deg)',offset:1}];if(typeof el.animate==='function'){const anim=el.animate(reduced?[{opacity:.7},{opacity:1}]:frames,{duration:reduced?100:1100*paceOptions[paceIndex].scale,easing:'linear',fill:'both'});activeAnimations.add(anim);animations.push(anim.finished.catch(()=>{}).then(()=>{anim.cancel();activeAnimations.delete(anim);el.classList.remove('moving');el.style.transformOrigin=''}))}else el.classList.remove('moving')}await Promise.all(animations);check(token);await waitRead(text,token,350)}
 async function switchWeapon(){if(!editable())return;cancelTarget();const token=session,u=current();displayActorId=u.id;activeTurnId=u.id;busy=true;closeSheet();setBattle(true);u.wi=u.wi?0:1;u.weapon=W[u.weapons[u.wi]];render();nodes.get(u.id)?.classList.add('battle-switch');$('playbackTitle').textContent='換装';$('battleMessageText').textContent=u.name+'は'+u.weapon.name+'へ換装！';try{await waitRead($('battleMessageText').textContent,token,850)}catch(e){if(e!==CANCEL)throw e}finally{if(token===session){busy=false;setBattle(false);render()}}}
 function affinity(t,attr){return t.weak?.[attr]??t.resist?.[attr]??1}
-function hit(a,t,act){if(t.status.legBind>0)return 100;return clamp(90+(a.SKL-t.SKL)*.5+(act.hit||0)+(act.kind==='spell'?0:(a.weapon?.hit||0)+terrain.wHit(a.weapon)),30,100)}
-function attackValue(a,act){if(act.kind==='attack')return(a.weapon?.power||0)+(a.weapon?.normal==='SKL'?a.SKL:a.PHY);if(act.stat==='ARC')return 14+a.ARC;if(act.stat==='MND')return 12+a.MND;if(act.stat==='SKL')return(a.weapon?.power||0)+a.SKL;if(act.stat==='MIX')return(a.weapon?.power||0)+.5*a.PHY+.5*a.ARC;return(a.weapon?.power||0)+a.PHY}
-function damage(a,t,act){const magic=act.kind==='spell'||['ARC','MND'].includes(act.stat),def=magic?t.magDef:t.physDef,crit=Math.random()*100<clamp(5+(a.SKL-t.SKL)/4+(act.critBonus||0),0,50),aff=affinity(t,act.attr);let terrainMult=1;if(act.kind==='attack'&&a.weapon?.range==='far'&&(terrain.name!=='高台'||a.row==='back'))terrainMult=terrain.ranged;const value=Math.floor(attackValue(a,act)*(act.mult??1)*100/(100+def)*aff*(crit?1.5:1)*terrainMult*(.95+Math.random()*.1)*(t.defending?.5:1));return{value:aff===0?0:Math.max(1,value),crit,weak:aff>1}}
+function hit(a,t,act){if(t.status.legBind>0)return 100;return clamp(90+(a.SKL-t.SKL)*.5+(act.hit||0)+(act.kind==='spell'?0:(a.weapon?.hit||0)+terrain.wHit(a.weapon)+(a.twoHandGrip?6:0)-(a.dualWield?5:0)),5,95)}
+function attackValue(a,act){if(act.kind==='attack')return((a.weapon?.power||0)+(a[a.weapon?.normal]??a.PHY))*(a.twoHandGrip?1.1:1);if(act.stat==='ARC')return 14+a.ARC;if(act.stat==='MND')return 12+a.MND;if(act.stat==='SKL')return(a.weapon?.power||0)+a.SKL;if(act.stat==='MIX')return(a.weapon?.power||0)+.5*a.PHY+.5*a.ARC;return(a.weapon?.power||0)+a.PHY}
+function damage(a,t,act){const magic=act.kind==='spell'||['ARC','MND'].includes(act.stat),def=magic?t.magDef:t.physDef,crit=Math.random()*100<clamp(5+(a.SKL-t.SKL)/4+(act.critBonus||0),0,50),aff=affinity(t,act.attr);let terrainMult=1;if(act.kind==='attack'&&a.weapon?.range==='far'&&(terrain.name!=='高台'||a.row==='back'))terrainMult=terrain.ranged;const value=Math.floor(attackValue(a,act)*(act.mult??1)*100/(100+def)*aff*(crit?1.5:1)*terrainMult*(.95+Math.random()*.1)*Math.max(.25,(t.defending?.7:1)*(t.shield?.6:1)));return{value:aff===0?0:Math.max(1,value),crit,weak:aff>1}}
 function speed(u,q){if(u.status.legBind>0)return-999;if(u.enemy)return u.SKL+(u.spell?.speed||0);const a=q?.action||normal(u);return u.SKL+(a.speed||0)+(a.kind==='spell'?0:(u.weapon?.speed||0)+terrain.wSpeed(u.weapon))}
 async function defeated(u,token){
  if(u.hp>0||!u.alive)return;
@@ -647,8 +667,8 @@ function affectedTargets(a,primary,candidates){
  if(scope==='random')return [primary,...candidates.filter(t=>t!==primary).sort(()=>Math.random()-.5)].slice(0,Math.min(candidates.length,a.count||2));
  return [primary];
 }
-async function execute(u,q,token){check(token);if(!u.alive)return;displayActorId=u.id;activeTurnId=u.id;render();if(u.status.stun>0){await say(u.name+'は気絶して動けない。',token,'sys');return}if(q.type==='escape'){if(u.status.legBind>0){await say(u.name+'は脚封じで逃走できない。',token,'sys');return}await say(u.name+'は逃走を試みた！',token,'',{actorId:u.id},false);const p=live(party),e=live(enemies),avg=x=>x.reduce((s,v)=>s+v.SKL,0)/x.length;if(Math.random()*100<clamp(55+(avg(p)-avg(e))*.7,20,90)){await finish('escape',token);return}await say('逃走できなかった。',token,'bad');return}
- const a=q.type==='attack'?normal(u):q.action;if(a.kind==='spell'&&u.status.headBind>0){await say(u.name+'は頭封じで術を使えない。',token,'sys');return}if(!enough(u,a)){await say(u.name+'は'+a.costType+'不足。',token,'sys');return}const ts=u.enemy?live(party).filter(t=>canReach(u,t,a.range)):targets(u,a),t=ts.find(t=>t.id===q.targetId)||ts[0];if(!t){await say(u.name+'の攻撃は届かない。',token,'sys');return}
+async function execute(u,q,token){check(token);if(!u.alive)return;displayActorId=u.id;activeTurnId=u.id;render();if(u.status.stun>0){await say(u.name+'は気絶して動けない。',token,'sys');return}if(q.type==='escape'){if(u.status.legBind>0||EXPCTX?.boss){await say(u.name+'は逃走できない。',token,'sys');return}await say(u.name+'は逃走を試みた！',token,'',{actorId:u.id},false);const p=live(party),e=live(enemies),avg=x=>x.reduce((s,v)=>s+v.SKL,0)/x.length;if(Math.random()*100<clamp(70+(avg(p)-avg(e))-(Number(EXPCTX?.threat||1)-1)*5,5,95)){await finish('escape',token);return}await say('逃走できなかった。',token,'bad');return}
+ const a=q.type==='attack'?normal(u):q.action;if(!a){await say(u.name+'は行動できない。',token,'sys');return}if((a.kind==='spell'||a.body?.includes('head'))&&u.status.headBind>0||a.body?.includes('arm')&&u.status.armBind>0||a.body?.includes('leg')&&u.status.legBind>0){await say(u.name+'は封じで技を使えない。',token,'sys');return}if(!enough(u,a)){await say(u.name+'は'+a.costType+'不足。',token,'sys');return}const ts=u.enemy?live(party).filter(t=>canReach(u,t,a.range)):targets(u,a),t=ts.find(t=>t.id===q.targetId)||ts[0];if(!t){await say(u.name+'の攻撃は届かない。',token,'sys');return}
  const intro=a.kind==='attack'?u.name+'の攻撃！':u.name+'は「'+a.name+'」を'+(a.kind==='spell'?'唱えた！':'使った！');
  $('playbackTitle').textContent=u.name;
  await say(intro,token,'',{actorId:u.id},false);
@@ -658,6 +678,7 @@ async function execute(u,q,token){check(token);if(!u.alive)return;displayActorId
   check(token);
   if(!victim.alive)continue;
   if(a.heal){const n=Math.min(victim.maxHp-victim.hp,Math.floor(12+u.MND*.8));victim.hp+=n;render();await say(victim.name+'のHPが '+n+' 回復。',token,'ok',{targetId:victim.id,heal:true,value:n});continue}
+  if(!(a.mult>0)){await applyStatuses(u,victim,a,token);await say(a.name+'の効果を発動。',token,'sys',{actorId:u.id});continue}
   if(Math.random()*100>hit(u,victim,a)){render();await say(victim.name+'は攻撃をかわした！',token,'sys');continue}
   const d=damage(u,victim,a);
   victim.hp=Math.max(0,victim.hp-d.value);
@@ -668,7 +689,7 @@ async function execute(u,q,token){check(token);if(!u.alive)return;displayActorId
   await defeated(victim,token);
  }
 }
-async function finish(type,token){if(over)return;over=true;phase='done';render();if(EXPCTX){EXPCTX.result=type;EXPCTX.vitals=HT.map((source,i)=>{const old=EXPCTX.vitals?.[i]||{},u=party.find(x=>x.id===source.id);return u?{...old,hp:Math.max(0,u.hp),sp:Math.max(0,u.sp),mp:Math.max(0,u.mp),status:{...(old.status||{}),...u.status}}:old});RPG_STORE.setItem('rpg.exploreBattle',JSON.stringify(EXPCTX));$('returnExplore').hidden=false}const text={win:'勝利',lose:'敗北',escape:'撤退成功'}[type];await say(text,token,type==='win'?'ok':type==='lose'?'bad':'sys');$('history').dataset.result=type}
+async function finish(type,token){if(over)return;over=true;phase='done';render();if(EXPCTX){EXPCTX.result=type;EXPCTX.vitals=HT.map((source,i)=>{const old=EXPCTX.vitals?.[i]||{},u=party.find(x=>x.id===source.id);return u?{...old,hp:Math.max(0,u.hp),sp:Math.max(0,u.sp),mp:Math.max(0,u.mp),status:{}}:old});RPG_STORE.setItem('rpg.exploreBattle',JSON.stringify(EXPCTX));$('returnExplore').hidden=false}const text={win:'勝利',lose:'敗北',escape:'撤退成功'}[type];await say(text,token,type==='win'?'ok':type==='lose'?'bad':'sys');$('history').dataset.result=type}
 async function checkEnd(token){if(over)return true;if(!live(enemies).length){await finish('win',token);return true}if(!live(party).length){await finish('lose',token);return true}return false}
 async function resolve(){if(!editable()||!live(party).every(u=>u.queued))return;cancelTarget();commandOpen=false;const token=session;displayActorId=null;activeTurnId=null;turnSequence=[];busy=true;phase='resolve';paused=false;skip=false;closeSheet();setBattle(true);render();try{
  for(const u of live(party)){
@@ -686,7 +707,15 @@ async function resolve(){if(!editable()||!live(party).every(u=>u.queued))return;
  for(const entry of order){check(token);if(!entry.u.alive)continue;let q=entry.q;if(entry.u.enemy){const a=entry.u.spell||normal(entry.u),ts=live(party).filter(t=>canReach(entry.u,t,a.range)),t=entry.u.ai==='archer'?[...ts].sort((a,b)=>a.hp-b.hp)[0]:ts[Math.floor(Math.random()*ts.length)];q={type:a.kind==='attack'?'attack':'skill',action:a,targetId:t?.id}}await execute(entry.u,q,token);if(await checkEnd(token))break}
  if(!over){for(const u of [...party,...enemies]){check(token);if(!u.alive)continue;if(u.status.poison>0){displayActorId=null;activeTurnId=null;const n=Math.max(1,Math.floor(u.maxHp*.04));u.hp=Math.max(0,u.hp-n);render();await say(u.name+'は猛毒で '+n+' ダメージ。',token,'bad',{targetId:u.id,value:n});await defeated(u,token)}for(const[k]of STATUS)if(u.status[k]>0)u.status[k]--}if(!await checkEnd(token)){for(const u of [...party,...enemies]){u.queued=null;u.defending=false}round++;idx=party.reduce((best,u,i)=>u.alive&&(best<0||speed(u,null)>speed(party[best],null))?i:best,-1);commandOpen=idx>=0;phase='command';log('―― Round '+round+' ――','sys')}}
  }catch(e){if(e!==CANCEL){console.error(e);notify('戦闘処理でエラーが発生しました。新しい戦闘で再開してください。');over=true;phase='done'}}finally{if(token===session){busy=false;paused=false;displayActorId=null;activeTurnId=null;turnSequence=[];setBattle(false);render()}}}
-function autoRound(){if(!editable())return;cancelTarget();for(const u of live(party)){if(u.queued)continue;const a=normal(u),t=targets(u,a)[0];if(t){u.queued={type:'attack',action:a,targetId:t.id};u.defending=false;continue}const s=u.skills.find(s=>s.target==='enemy'&&!unavailable(u,s));if(s){u.queued={type:'skill',action:s,targetId:targets(u,s)[0].id};u.defending=false}else{u.queued={type:'defend'};u.defending=true}}phase='ready';render();resolve()}
+function autoRound(){if(!editable())return;cancelTarget();const mode=EXPCTX?.autoMode||'ガンガン使う';for(const u of live(party)){if(u.queued)continue;let a=null,t=null;
+  if(mode==='命を大事に'){
+   const injured=live(party).sort((x,y)=>x.hp/x.maxHp-y.hp/y.maxHp)[0];
+   if(injured&&injured.hp/injured.maxHp<.5){a=u.skills.find(s=>s.heal&&enough(u,s));t=injured;if(!a&&u.hp/u.maxHp<.35){u.queued={type:'defend'};u.defending=true;continue}}
+  }
+  if(!a&&mode!=='スキルを使うな'){a=u.skills.find(s=>s.target==='enemy'&&s.mult>0&&!unavailable(u,s));t=a&&targets(u,a)[0]}
+  if(!a){const basic=normal(u);t=targets(u,basic)[0];a=t?basic:null}
+  u.queued=a&&t?{type:a.kind==='attack'?'attack':'skill',action:a,targetId:t.id}:{type:'defend'};u.defending=!a;
+ }phase='ready';render();resolve()}
 function fresh(randomTerrain=true){session++;displayActorId=null;activeTurnId=null;turnSequence=[];commandOpen=false;for(const anim of activeAnimations)anim.cancel();activeAnimations.clear();closeSheet();clearEffects();nodes.clear();for(const id of ['eb','ef','partyStrip'])$(id).replaceChildren();drafts.clear();replacementUsed.party.clear();replacementUsed.enemies.clear();party=HT.map(u=>initUnit(u));enemies=ET.map(u=>initUnit(u,true));terrain=TERRAINS[randomTerrain?Math.floor(Math.random()*TERRAINS.length):0];applyExploreContext();round=1;idx=party.reduce((best,u,i)=>u.alive&&(best<0||speed(u,null)>speed(party[best],null))?i:best,-1);phase='command';commandOpen=idx>=0;busy=false;over=false;paused=false;skip=false;targetMode=null;commandFocus='attack';logCount=0;clearTimeout(noticeTimer);$('pause').innerHTML=icon('pause');$('pause').setAttribute('aria-pressed','false');$('log').replaceChildren();$('history').open=false;delete $('history').dataset.result;$('notice').hidden=true;setBattle(false);log('戦闘開始 · '+terrain.name,'sys');render()}
 $('returnExplore')?.addEventListener('click',()=>{location.href=RPG_NAV.href('exploration/index.html?resume=1',['rpg.exploreBattle','rpg.exploration.save1'])});$('new').addEventListener('click',()=>fresh());$('actor').addEventListener('click',()=>openSheet('members'));$('skills').addEventListener('click',()=>openSheet());$('more').addEventListener('click',()=>openSheet('more'));$('closeSheet').addEventListener('click',closeSheet);sheet.addEventListener('click',e=>{const r=sheet.getBoundingClientRect();if(e.target===sheet&&(e.clientY<r.top||e.clientX<r.left||e.clientX>r.right))closeSheet()});$('attack').addEventListener('click',attack);$('swap').addEventListener('click',()=>openSheet('formation'));$('defend').addEventListener('click',()=>simpleCommand('defend'));$('switch').addEventListener('click',switchWeapon);$('resolve').addEventListener('click',resolve);$('auto').addEventListener('click',autoRound);$('cancelTarget').addEventListener('click',cancelTarget);$('pause').addEventListener('click',()=>{paused=!paused;$('pause').innerHTML=icon(paused?'play':'pause');$('pause').setAttribute('aria-label',paused?'再開':'一時停止');$('pause').setAttribute('aria-pressed',String(paused));for(const anim of activeAnimations)paused?anim.pause():anim.play();$('actorJob').textContent=''});$('pace').addEventListener('click',()=>{paceIndex=(paceIndex+1)%3;$('pace').textContent=['1×','1.4×','2.5×'][paceIndex];$('pace').title=paceOptions[paceIndex].name;try{localStorage.setItem('rpg.pace.v31',paceIndex)}catch(_){}});$('history').addEventListener('toggle',()=>{$('historyButton').setAttribute('aria-expanded',String($('history').open));if($('history').open)$('log').scrollTop=$('log').scrollHeight});$('historyButton').addEventListener('click',toggleHistory);$('terrainButton').addEventListener('click',()=>openSheet('terrain'));
 $('cancelActionDescription').addEventListener('click',cancelTarget);
@@ -697,7 +726,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!sheet.open&&editab
 if(typeof ResizeObserver==='function')new ResizeObserver(fitScene).observe($('enemyStage'));
 window.addEventListener('resize',fitScene);
 fresh(false);document.documentElement.dataset.ready='true';$('bootStatus')?.remove();$('engineStatus').classList.add('ready');$('engineStatus').title='JavaScript動作中 · UI v44';
-window.RPGDemo={version:'51',focusCommandUI:(id)=>focusCommand(id),selectActorUI:(id)=>selectActor(id),moveActorUI:(rank,c)=>queueMove(rank,c),snapshot:()=>({round,phase,busy,over,commandOpen,targetMode:targetMode?.key||null,active:current()?.id,party:party.map(u=>({id:u.id,hp:u.hp,sp:u.sp,mp:u.mp,row:u.row,rank:u.rank,col:col(u),slot:u.slot,queued:u.queued?.type||null,target:u.queued?.targetId,weapon:u.weapon.name})),enemies:enemies.map(u=>({id:u.id,hp:u.hp,row:u.row,slot:u.slot}))})};
+window.RPGDemo={version:'51',focusCommandUI:(id)=>focusCommand(id),selectActorUI:(id)=>selectActor(id),moveActorUI:(rank,c)=>queueMove(rank,c),snapshot:()=>({round,phase,busy,over,commandOpen,targetMode:targetMode?.key||null,active:current()?.id,party:party.map(u=>({id:u.id,hp:u.hp,sp:u.sp,mp:u.mp,row:u.row,rank:u.rank,col:col(u),slot:u.slot,queued:u.queued?.type||null,target:u.queued?.targetId,weapon:u.weapon.name,skills:u.skills.map(s=>s.name)})),enemies:enemies.map(u=>({id:u.id,hp:u.hp,row:u.row,slot:u.slot}))})};
 if(window.__RPG_TEST__)window.__test={get units(){return{party,enemies}},fresh,render,defeated,animateSwap,resolve,autoRound,selectActor,toggleActor,closeCommands,openSheet,simpleCommand,getDraft,chooseSkill,attack,canReach,cancelTarget,setPace:i=>{paceIndex=i},runDeath:async u=>{displayActorId=null;busy=true;setBattle(true);await defeated(u,session);busy=false;setBattle(false);render()}};
 })();
 

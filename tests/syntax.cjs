@@ -50,7 +50,7 @@ const growthSource=fs.readFileSync('exploration/character-stats.js','utf8');
 assert(growthSource.includes("normalStat:'SKL'"),'character preview must preserve SKL weapon scaling');
 assert(growthSource.includes("normalStat:'ARC'"),'character preview must preserve ARC weapon scaling');
 assert(growthSource.includes('function awardExperience('),'shared EXP award function');
-assert(growthSource.includes('H.pendingGrowth.stat+=growth;H.pendingGrowth.mastery+=growth'),'EXP threshold grants both growth point types');
+assert(growthSource.includes('H.pendingGrowth.stat+=stat;H.pendingGrowth.mastery+=mastery'),'EXP threshold grants both growth point types');
 const exploreSource=fs.readFileSync('exploration/explore.js','utf8'),hubSource=fs.readFileSync('exploration/hub.js','utf8');
 assert(exploreSource.includes("awardExperience(40,'強敵撃破'"),'elite EXP reward');
 assert(exploreSource.includes("awardExperience(80,'ボス撃破'"),'boss EXP reward');
