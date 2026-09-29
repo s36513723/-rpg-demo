@@ -131,12 +131,10 @@
       "rest_at_inn": "full HP/SP/status recovery and pending growth-point settlement"
     },
     "expedition_defeat": {
-      "status": "確定・戦利品EXP扱い未決定",
-      "next_action": "forced_return_to_base",
-      "exploration_progress": "lost",
-      "consumed_items": "not_restored",
-      "loot_retention": "undecided",
-      "experience_retention": "undecided"
+      "status": "確定",
+      "forced_return_to_base": true,
+      "lose_expedition_progress": true,
+      "consumed_items_restored": false
     },
     "hub_save_and_appraisal": {
       "status": "確定",
@@ -230,7 +228,7 @@
     "battle_party_size_max": 6,
     "deployment": "1-6 registered members selected from the guild roster; remaining members wait at the guild",
     "exploration": {
-      "status": "構造確定",
+      "status": "確定",
       "party_size": 6,
       "layers": 3,
       "boss_each_layer": true,
@@ -273,15 +271,41 @@
       "next_run_regenerates": true,
       "rest": {
         "representation": "in_world_place",
-        "per_layer": 1,
+        "guaranteed_per_layer": 1,
+        "additional_rest": "low_probability",
         "hp_recovery": "35%",
         "sp_recovery": "35%",
         "status_recovery": true,
         "revive_ko": false
       },
-      "provisional_map_size": {
+      "map_size": {
         "generated_places_per_layer": "10-12",
-        "traversed_places_per_route": "5-7"
+        "traversed_places_per_route": "5-7",
+        "status": "確定"
+      },
+      "route_visibility": {
+        "full_layer_connections_visible": true,
+        "place_contents": "partially_unknown",
+        "exploration_skills_reveal_more": true,
+        "status": "確定"
+      },
+      "boss_victory_recovery": {
+        "full_recovery": true,
+        "status": "確定"
+      },
+      "voluntary_return": {
+        "only_from_designated_places": true,
+        "return_item_required": false,
+        "status": "確定"
+      },
+      "tactical_point": {
+        "name": "Tactical Pt",
+        "abbreviation": "TP",
+        "purpose": "temporarily acquire an unlearned skill for the current expedition",
+        "normal_prerequisites_apply": true,
+        "reset_at_expedition_end": true,
+        "gain_and_cost_status": "未決定",
+        "status": "確定・数値未決定"
       }
     },
     "expedition_success": {
@@ -298,7 +322,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "exploration_run_structure_2026-09-30",
+  "last_sync_status": "exploration_tp_route_recovery_2026-09-30",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
