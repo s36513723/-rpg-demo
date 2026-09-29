@@ -44,10 +44,11 @@ function fittingScreen(i,k=null,preview){
  const derived=rules().derived(stats[i]),v=vitals[i];
  const core='<div class="character-equipment-core"><div><span>HP '+v.hp+'/'+derived.hp+'</span><span>SP '+v.sp+'/'+derived.sp+'</span></div><button type="button" class="character-equipment-swap" data-hub="fittingSwap" data-args="'+hesc(JSON.stringify([i]))+'">SWAP</button></div>';
  const weight='<div class="character-equip-weight"><small>装備重量</small><b>'+Math.round(b.weight*100)/100+' / '+Math.round(b.limit*100)/100+'</b></div>';
+ const status='<div class="character-equipment-stats" aria-label="現在のステータス">'+[['PHY',b.phy],['SKL',b.skl],['ARC',b.arc],['MND',b.mnd],['物攻',b.physical],['魔攻',b.magicArc],['物防',b.pdef],['魔防',b.mdef]].map(([name,value])=>'<span><small>'+name+'</small><b>'+Math.round(value*10)/10+'</b></span>').join('')+'</div>';
  const shell='<section class="character-equipment-shell'+(home?'':' picker-open')+'" aria-label="装備">'+
   '<div class="character-equipment-side left">'+slotButton(1)+slotButton(3)+slotButton(4)+slotButton(8)+'</div>'+
   core+
-  '<div class="character-equipment-side right">'+slotButton(0)+slotButton(2)+slotButton(9)+weight+'</div>'+
+  '<div class="character-equipment-side right">'+slotButton(0)+slotButton(2)+slotButton(9)+weight+'</div>'+status+
   '</section>';
  const candidateRows=fittingWith(i,s.items,()=>visible.map(n=>{const ok=canEquip(i,k,n),m=WM[n];let desc=k<4?n==='なし'?'武器を外します。':weaponDescription(n):k===4?n==='なし'?'防具を外します。':armorDescription(n):k===9?n==='なし'?'携行具を外します。':toolDescription(n):n==='なし'?'装飾品を外します。':'補助効果を持つ装飾品。';if(!ok){const j={PHY:0,SKL:1,ARC:2,MND:3}[m?.[3]];desc=k<4&&!weaponMasteryReady(i,n)?'必要：'+weaponMasteryFor(n)+'マスタリー Rank 5':m&&j!=null&&stats[i][j]<m[4]?m[3]+'があと'+(m[4]-stats[i][j])+'必要（現在 '+stats[i][j]+' / 必要 '+m[4]+'）':k===4?'必要：'+armorFamily(n)+'マスタリー Rank 5':(k===1||k===3)?'副手条件不足：両手武器との併用不可・二刀流はSKL 30必要':'装備条件不足'}return '<div class="candidate '+((n===(s.inspected||current)?'selected ':'')+(!ok?'unavailable':''))+'"><button type="button" class="row" data-hub="uiEquipPreview" data-args="'+hesc(JSON.stringify([i,k,n]))+'"><b><span class="equipment-kind-icon" aria-label="'+hesc(fittingKind(k,n))+'">'+fittingIcon(k,n)+'</span><span class="equipment-item-name">'+hesc(n)+'</span>'+(!ok?'　条件不足':'')+(n===s.base[k].split('：')[1]?'　装備中':n===current?'　選択中':'')+'</b><span class="small">'+hesc(desc)+'</span></button></div>'}).join(''));
  const comparisonMarkup=fittingHero(i,a,b,k).replace('class="fitting-summary"','class="character-equipment-summary"');
