@@ -153,6 +153,7 @@ const showUI=html=>{
  }
  const keepPlace=hubOverlay&&(worldOpen||townContext);
  const guildShell=false;modal.classList.remove('guild-screen-modal');panel.classList.remove('guild-screen-panel');
+ if(keepPlace){const placeStyle=getComputedStyle(app);modal.style.setProperty('--hub-place-bg',placeStyle.backgroundImage);modal.style.setProperty('--hub-place-pos',placeStyle.backgroundPosition||'center center')}else{modal.style.removeProperty('--hub-place-bg');modal.style.removeProperty('--hub-place-pos')}
  modal.classList.toggle('hub-overlay-modal',hubOverlay);
  modal.classList.toggle('hub-location-modal',hubOverlay&&!mapRoute&&keepPlace);
  modal.classList.toggle('hub-map-modal',hubOverlay&&mapRoute);
