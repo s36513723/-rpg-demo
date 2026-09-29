@@ -187,7 +187,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "battle_message_skip_button_removed_2026-09-29",
+  "last_sync_status": "hub_sortie_bottom_tabs_and_nonbattle_ui_audit_synced_2026-09-29",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
@@ -317,9 +317,9 @@
     },
     "battle_ui_v44": {
       "implementation": "battle-v44.html / battle-plan-v36.css / battle-plan-v36.js",
-      "browser": "GitHub Pages battle-v44.html?review=43 で戦闘メッセージ右に送りボタンがないことを確認。AUTO開始、一時停止・再開後もメッセージが下端に残り、横・縦スクロールなし。現行スクリプトのコンソールエラー0。",
-      "workbook_sync": "Library 正本 RPG制作_仕様正本_同期版_2026-09-29.xlsx 版5、07_UI仕様 C34 に送りボタン非表示を追記。",
-      "revision": "拠点の透過済み立ち絵を共用。敵の通常白／攻撃可能赤／1回目選択黄色カーソル、2回目で確定。敵名・HPは非表示。コマンドアイコンのSafari表示方法修正。被弾味方の立ち絵を表示し、範囲対象を順次処理。 拠点の最終透過済み6枚へ参照を同期し、コマンドのアイコン上・文字下を明確に分離。敵逆三角を大型化して輪郭と発光を強めた。 コマンドのアイコンとラベルをプレート中央へ寄せ、敵カーソルを細縁と内側の光を持つ多面体風に整えた。 初期ATTACKと対象候補、選択中コマンド、予約済み味方カードの表示を同期。味方タップで対象外警告を出さずに行動予約を解除して選び直せる。 戦闘メッセージを下端コマンド位置に移し、再生／一時停止をAUTO・倍速と同じ縦枠へ配置。 戦闘メッセージ右端の送りボタンとイベント登録を削除。",
+      "browser": "GitHub Pages battle-v44.html?review=41 で初期ATTACKの赤い対象候補、SKILL・ITEMの紫選択、攻撃中の味方タップ、行動予約済みカードの金色表示とタップによる再選択を確認。横・縦スクロールなし。最新版スクリプトのコンソールエラーなし。",
+      "workbook_sync": "Library 正本 RPG制作_仕様正本_同期版_2026-09-29.xlsx の版3に 07_UI仕様 A33:D33 を追記。リポジトリミラーも同期。",
+      "revision": "拠点の透過済み立ち絵を共用。敵の通常白／攻撃可能赤／1回目選択黄色カーソル、2回目で確定。敵名・HPは非表示。コマンドアイコンのSafari表示方法修正。被弾味方の立ち絵を表示し、範囲対象を順次処理。 拠点の最終透過済み6枚へ参照を同期し、コマンドのアイコン上・文字下を明確に分離。敵逆三角を大型化して輪郭と発光を強めた。 コマンドのアイコンとラベルをプレート中央へ寄せ、敵カーソルを細縁と内側の光を持つ多面体風に整えた。 初期ATTACKと対象候補、選択中コマンド、予約済み味方カードの表示を同期。味方タップで対象外警告を出さずに行動予約を解除して選び直せる。",
       "tests": "GitHub Actions RPG validation: success (4206c4a5 / eaa629d5)。公開版で ATTACK / SKILL / ITEM・攻撃スキル・敵2回タップ・味方再選択の操作検証: PASS。"
     }
   },
@@ -334,6 +334,7 @@
     "scope": "戦闘デモ以外の拠点・施設・出撃準備・キャラ画面・設定/記録",
     "implementation": "exploration/presentation.js, exploration/sortie-layout.css",
     "evidence": "出撃準備と宿屋などを390px/320pxの実画面画像で比較。6人全員の透過アルファ、編成・陣形のカード、44px操作、宿屋から開く背景分離、編成の待機/復帰、キャラ詳細へ移動してBACKで戻る動線を確認。GitHub Actions RPG validation 744/744 PASS (run 36567605821)。",
-    "scope_limits": "正本の11_整合性未解決と12_仮値バランス調整には未確定・未制作内容が残る。全コンテンツ完成の意味ではなく、デモの確定UIと既存ランタイムの検証。"
+    "scope_limits": "正本の11_整合性未解決と12_仮値バランス調整には未確定・未制作内容が残る。全コンテンツ完成の意味ではなく、デモの確定UIと既存ランタイムの検証。",
+    "sortie_three_panels_revision": "編成・陣形・ダンジョンのタブとカードから固有の緑色の塗りを廃止し、拠点共通の細い金縁・中立色の透過面・選択中の金色下線に統一。正本 workbook version 6 の 05_拠点探索仕様 C6 と 07_UI仕様 A35:D35 に同期。"
   }
 }
