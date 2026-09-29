@@ -274,6 +274,10 @@
  .town-background-copy{padding:8px 10px}.town-background-copy b{font-size:15px}.town-background-copy small{font-size:9px}
  .people-select-grid{gap:3px}.person-select-card{min-height:43px;padding:3px 7px}.person-select-card img{width:32px;height:34px;flex-basis:32px}.person-select-card b{font-size:9px}.person-select-card small{font-size:7px}.town-dungeon-command{min-height:46px;margin-bottom:4px;padding:5px 8px}.town-dungeon-symbol{width:27px;height:27px;flex-basis:27px}
  .sortie-page .formation-row{gap:4px}.sortie-page .formation-slots{gap:4px}.sortie-page .formation-pick{min-height:52px;grid-template-rows:27px auto}.sortie-page .formation-pick img{height:27px}.sortie-page .formation-config{min-height:21px}.sortie-page .formation-empty{min-height:75px}
+ .destination-brief{margin:3px 0 5px;padding:7px 9px}
+ .destination-brief b{font-size:14px}
+ .destination-brief small{margin-top:2px;font-size:8px;line-height:1.3}
+ .sortie-start{margin-top:4px}
 }
 
 
