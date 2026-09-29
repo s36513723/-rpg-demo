@@ -32,7 +32,7 @@ try{
 }catch(e){results.push({name:'Bottom cancel',ok:false,error:String(e)})}
 try{skills(0,'Active');const p=document.querySelector('#panel'),w=p.querySelector('.skills-workspace'),l=p.querySelector('.skill-masteries'),r=p.querySelector('.skill-selection'),f=p.querySelector('.panel-footer');results.push({name:'Skill mastery split fits '+innerWidth,ok:l.getBoundingClientRect().right<=r.getBoundingClientRect().left&&w.getBoundingClientRect().bottom<=f.getBoundingClientRect().top+1&&r.clientWidth>=180&&p.scrollWidth<=p.clientWidth+1&&r.querySelector('.skill-candidates').clientHeight>=65});}catch(e){results.push({name:'Skill mastery layout',ok:false,error:String(e)})}
 try{
- closeM();trainForEquipment(0,'槍');equipChoice(0,0,'長槍');
+ closeM();equipChoice(0,0,'戦槌');
  const p=document.querySelector('#panel'),body=p.querySelector('.panel-body'),shell=p.querySelector('.character-equipment-shell'),picker=p.querySelector('.character-equipment-picker'),summary=p.querySelector('.character-equipment-summary'),confirm=p.querySelector('.character-equipment-confirm [data-hub="fittingApply"]'),footer=p.querySelector('.panel-footer');
  const pr=p.getBoundingClientRect(),br=body.getBoundingClientRect(),sr=shell.getBoundingClientRect(),kr=picker.getBoundingClientRect(),fr=footer.getBoundingClientRect(),rows=[...summary.querySelectorAll('.equip-compare-grid>span')].map(e=>e.getBoundingClientRect());
  const slots=[...p.querySelectorAll('.character-equip-slot')],left=p.querySelector('.character-equipment-side.left').getBoundingClientRect(),right=p.querySelector('.character-equipment-side.right').getBoundingClientRect();
