@@ -11,7 +11,7 @@ for(const route of routes){
    const sr=screen.getBoundingClientRect(),or=overlay?.getBoundingClientRect(),nr=nav?.getBoundingClientRect();
    const navButtons=[...nav.querySelectorAll('button')].filter(b=>!b.hidden&&b.getClientRects().length),sizes=navButtons.map(b=>b.getBoundingClientRect());
    const ok=!!overlay&&!!nav&&sr.left>=0&&sr.right<=innerWidth+1&&sr.top>=0&&sr.bottom<=innerHeight+1&&screen.scrollWidth<=screen.clientWidth+1&&overlay.scrollWidth<=overlay.clientWidth+1&&or.bottom<=sr.bottom+1&&nr.bottom<=innerHeight+1&&sizes.every(x=>x.height>=40&&x.width>=30);
-   results.push({name:'Touch navigation '+route+' '+innerWidth+'x'+innerHeight,ok,measurements:{screen:sr.height,overlay:or?.height,overflow:screen.scrollWidth-screen.clientWidth,buttons:sizes.map(x=>[x.width,x.height])}});
+   results.push({name:'Touch navigation '+route+' '+innerWidth+'x'+innerHeight,ok,measurements:{screen:sr.height,overlay:or?.height,overlayBottom:or?.bottom,screenBottom:sr.bottom,navBottom:nr.bottom,viewport:innerHeight,overflow:screen.scrollWidth-screen.clientWidth,overlayOverflow:overlay.scrollWidth-overlay.clientWidth,buttons:sizes.map(x=>[x.width,x.height])}});
    continue;
   }
   const p=document.querySelector('#panel'),footer=p.querySelector('.panel-footer'),body=p.querySelector('.panel-body'),modal=document.querySelector('#modal'),nav=document.querySelector('.hub-global-nav');
