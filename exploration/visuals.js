@@ -218,7 +218,6 @@ const dialoguePage=(panel,route)=>{
  const {name,args}=route;let p=null,message=body.querySelector('.message');
  if(name==='memberTalk')p=person('ally',args[0]);
  if(name==='npcTalk')p=person('npc',args[0]);
- if(name==='returnTalk'&&message){const match=message.textContent.match(/^([^「]+)「([\s\S]*)」$/);if(match){p=person('ally',match[1]);message.textContent=match[2]}}
  if(name==='npcTalk'&&p&&message){
   const stage=document.createElement('div');stage.innerHTML=npcStage(p,message.textContent);const scene=stage.firstElementChild;message.replaceWith(scene);
   const deck=document.createElement('div');deck.className='npc-action-deck';
