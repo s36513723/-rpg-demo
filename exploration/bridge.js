@@ -6,9 +6,12 @@ var RPG_STORE=(function(){
   var explorationDemo=new URLSearchParams(location.search).get('demo')==='exploration';
   var demoPrefix='rpg.exploration.demo:';
   if(explorationDemo&&new URLSearchParams(location.search).get('fresh')==='1'){
-    try{['rpg.exploration.save1','rpg.exploreBattle'].forEach(function(k){localStorage.removeItem(demoPrefix+k)})}catch(e){}
+    try{['rpg.exploration.save1','rpg.exploration.save2','rpg.exploration.activeSlot','rpg.exploreBattle'].forEach(function(k){localStorage.removeItem(demoPrefix+k)})}catch(e){}
   }
-  var previewStore=hubPreview?new Map():null;
+  var previewPrefix='rpg.exploration.preview:';
+  function previewGet(k){try{return sessionStorage.getItem(previewPrefix+k)}catch(e){return null}}
+  function previewSet(k,v){try{sessionStorage.setItem(previewPrefix+k,v)}catch(e){}}
+  function previewRemove(k){try{sessionStorage.removeItem(previewPrefix+k)}catch(e){}}
   function named(){
     try{
       if(!window.name||window.name.indexOf(PREFIX)!==0)return {};
@@ -25,7 +28,7 @@ var RPG_STORE=(function(){
     isHubPreview:hubPreview,
     isExplorationDemo:explorationDemo,
     getItem:function(k){
-      if(hubPreview)return previewStore.has(k)?previewStore.get(k):null;
+      if(hubPreview)return previewGet(k);
       if(location.protocol==='file:'){
         var n=named();
         if(Object.prototype.hasOwnProperty.call(n,k))return n[k];
@@ -36,12 +39,12 @@ var RPG_STORE=(function(){
       return localGet(k);
     },
     setItem:function(k,v){
-      if(hubPreview){previewStore.set(k,String(v));return}
+      if(hubPreview){previewSet(k,String(v));return}
       v=String(v);localSet(k,v);
       if(location.protocol==='file:'){var n=named();n[k]=v;saveNamed(n)}
     },
     removeItem:function(k){
-      if(hubPreview){previewStore.delete(k);return}
+      if(hubPreview){previewRemove(k);return}
       localRemove(k);
       if(location.protocol==='file:'){var n=named();delete n[k];saveNamed(n)}
     }
@@ -53,9 +56,9 @@ var RPG_NAV=(function(){
     if(!m)return;
     try{
       var d=JSON.parse(decodeURIComponent(m[1]));
-      ['rpg.exploration.save1','rpg.exploreBattle'].forEach(function(k){
+      ['rpg.exploration.activeSlot','rpg.exploration.save1','rpg.exploration.save2','rpg.exploreBattle'].forEach(function(k){
         if(typeof d[k]!=='string')return;
-        if(k==='rpg.exploration.save1'){
+        if(k==='rpg.exploration.save1'||k==='rpg.exploration.save2'){
           var local=JSON.parse(RPG_STORE.getItem(k)||'null'),incoming=JSON.parse(d[k]);
           if(local&&local.hub&&incoming.hub&&local.hub.revision>incoming.hub.revision)return;
         }
@@ -65,7 +68,7 @@ var RPG_NAV=(function(){
     }catch(e){}
   }
   function href(path,keys){
-    if(RPG_STORE.isHubPreview)return path;
+    if(RPG_STORE.isHubPreview)return path+(path.includes('?')?'&':'?')+'demo=hub';
     var d={};
     (keys||['rpg.exploreBattle','rpg.exploration.save1']).forEach(function(k){
       var v=RPG_STORE.getItem(k);

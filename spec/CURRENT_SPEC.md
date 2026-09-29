@@ -15,6 +15,7 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - Normal attack: nearest enemy in the same forward lane that is in range. No automatic adjacent-lane snap.
 - Normal movement: one orthogonal empty cell, costs one turn; no diagonal normal move.
 - Manual weapon-set swap costs 0 turns; no automatic swapping.
+- AUTO has three selectable policies: ガンガン使う (default), スキルを使うな and 命を大事に. The selected hub setting is passed into exploration battles.
 
 ## SP
 - SP is the common resource for weapon skills, techniques and spells; it is not magic power.
@@ -64,6 +65,7 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - No conventional displayed level with automatic stat growth.
 - EXP creates pending growth; inn rest settles pending Stat Pt / Mastery Pt.
 - Exact EXP curve and reward quantities are balance-controlled.
+- A respec item can reset stat allocations, Mastery ranks and learned skills, including the chosen Source, and return their spent points. Initial placement: first clear of each chapter boss and one one-time high-difficulty quest; it is not sold normally.
 - A run is basically 3 layers. Environments: 森林 / 洞窟 / 廃墟都市 / 山岳 / 沼地 / 砂漠遺跡 / 海上・船 / 地下神殿.
 - Nodes include normal battle / strong enemy / event / camp / merchant / exploration / smith-workshop / boss.
 - No equipment durability/repair.
@@ -76,20 +78,19 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - Sortie preparation: formation / members / destination.
 - Guild: member management / quests & reports / exploration records / relic appraisal / storage.
 - Three formation presets save formation/equipment/skills with validity checks.
+- Two independent save slots each auto-save their own progress. Settings can switch slots, save manually, export/import JSON and restore the current slot's backup.
+- Materials, tools and equipment acquired during an expedition remain sealed until return and guild appraisal. Existing tools taken into the expedition remain usable. Defeat retains the sealed loot.
 - Market: equipment / items / processing / selling. Processing: regional crafting / +3 enhancement / trait processing.
 - Records: up to 40 expedition-history entries plus statistics / people / regions / enemy observations.
 - Rumors come through NPC conversation, not a separate daily menu.
 
 ## Hub visual identity
-- The six party-member cards must use clearly separated character identity colors; near-duplicate hues across members are avoided.
-- Current hub identity palette: Warrior crimson / Paladin sapphire / Rogue violet / Archer emerald / Alchemist amber / Mystic cyan.
-- Hub member cards use full-bleed, untinted character art over a member-specific background color. The character image itself must not be colorized.
-- HP and SP are permanent slim hairline gauges at the bottom of each hub member card.
+- The six shared member cards have no character pictures or colored backgrounds. They use the same dark translucent panel, thin gold border and typography as the surrounding controls.
+- HP and SP use persistent 4px gauges with overlaid labels and values, matching the battle demo colors and thickness.
 - Character overview artwork should not be hidden by an opaque top header; navigation may overlay the artwork.
 - Character overview uses the high-resolution standing-art derivative rather than enlarging the lightweight battle/status asset.
 - Inn / Guild / Market use their registered approved facility backgrounds and transparent NPC standing art. Legacy facility/NPC placeholder SVGs are not used for these three facility screens.
-- Hub member portraits remain untinted; character identity color belongs to the card background, not the portrait pixels.
-- HP/SP on hub cards use slim always-visible line gauges.
+- Character portraits elsewhere in the hub remain untinted and use transparent standing art.
 
 ## Battle UI
 1. ROUND / AUTO / speed / settings

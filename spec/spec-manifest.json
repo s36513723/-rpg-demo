@@ -112,6 +112,24 @@
       "next_action": "end expedition; begin a new one from MAP",
       "auto_heal": false
     },
+    "hub_save_and_appraisal": {
+      "status": "確定",
+      "save_slots": 2,
+      "slot_policy": "independent auto-save and backup per slot",
+      "expedition_loot": "acquired materials, tools and equipment require guild appraisal after return",
+      "carried_tools": "previously owned stock remains usable during exploration"
+    },
+    "auto_policies": {
+      "status": "確定",
+      "default": "ガンガン使う",
+      "options": ["ガンガン使う", "スキルを使うな", "命を大事に"]
+    },
+    "respec_item": {
+      "status": "確定・入手数は初期実装値",
+      "effect": "reset stat and Mastery allocations, learned skills and Source; refund spent points",
+      "initial_placement": "one token on first clear of each chapter boss and one on one-time q3-5 report",
+      "shop_sale": false
+    },
     "character_art": {
       "paladin": {
         "status": "確定",
@@ -146,19 +164,11 @@
     },
     "enemy_combat_model": "PHY/SKL/ARC/MND + skill scaling",
     "hub_visual_identity": {
-      "member_colors": "six clearly separated hues; avoid near-duplicate character colors",
-      "palette": {
-        "warrior": "crimson",
-        "paladin": "sapphire",
-        "rogue": "violet",
-        "archer": "emerald",
-        "alchemist": "amber",
-        "mystic": "cyan"
-      },
-      "roster_resources": "HP/SP always-visible slim hairline gauges",
+      "member_colors": "no member-specific tinted backgrounds on shared hub cards",
+      "roster_resources": "HP/SP always-visible 4px gauges with overlaid text and numbers",
       "character_overview_header": "transparent overlay over character art",
-      "portrait_tint": "none; identity color is card background only",
-      "member_card_art": "full-bleed untinted character image; identity color belongs to card background only",
+      "portrait_tint": "none on standing art",
+      "member_card_art": "none; shared dark translucent text panel with thin gold border",
       "character_overview_art": "high-resolution standing-art derivative",
       "facility_npc_alignment": "center",
       "facility_art": "approved Inn/Guild/Market background + NPC assets"
@@ -194,7 +204,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "expedition_defeat_full_loot_retention_2026-09-29",
+  "last_sync_status": "hub_confirmed_save_appraisal_auto_respec_2026-09-29",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
