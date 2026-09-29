@@ -187,7 +187,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "hub_sortie_bottom_tabs_and_nonbattle_ui_audit_synced_2026-09-29",
+  "last_sync_status": "battle_enemy_defeat_visual_synced_2026-09-29",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
@@ -318,9 +318,10 @@
     "battle_ui_v44": {
       "implementation": "battle-v44.html / battle-plan-v36.css / battle-plan-v36.js",
       "browser": "GitHub Pages battle-v44.html?review=41 で初期ATTACKの赤い対象候補、SKILL・ITEMの紫選択、攻撃中の味方タップ、行動予約済みカードの金色表示とタップによる再選択を確認。横・縦スクロールなし。最新版スクリプトのコンソールエラーなし。",
-      "workbook_sync": "Library 正本 RPG制作_仕様正本_同期版_2026-09-29.xlsx の版3に 07_UI仕様 A33:D33 を追記。リポジトリミラーも同期。",
+      "workbook_sync": "Library 正本 RPG制作_仕様正本_同期版_2026-09-29.xlsx 版7、07_UI仕様 A36:D36 に敵撃破演出を追記。",
       "revision": "拠点の透過済み立ち絵を共用。敵の通常白／攻撃可能赤／1回目選択黄色カーソル、2回目で確定。敵名・HPは非表示。コマンドアイコンのSafari表示方法修正。被弾味方の立ち絵を表示し、範囲対象を順次処理。 拠点の最終透過済み6枚へ参照を同期し、コマンドのアイコン上・文字下を明確に分離。敵逆三角を大型化して輪郭と発光を強めた。 コマンドのアイコンとラベルをプレート中央へ寄せ、敵カーソルを細縁と内側の光を持つ多面体風に整えた。 初期ATTACKと対象候補、選択中コマンド、予約済み味方カードの表示を同期。味方タップで対象外警告を出さずに行動予約を解除して選び直せる。",
-      "tests": "GitHub Actions RPG validation: success (4206c4a5 / eaa629d5)。公開版で ATTACK / SKILL / ITEM・攻撃スキル・敵2回タップ・味方再選択の操作検証: PASS。"
+      "tests": "GitHub Actions RPG validation: success (4206c4a5 / eaa629d5)。公開版で ATTACK / SKILL / ITEM・攻撃スキル・敵2回タップ・味方再選択の操作検証: PASS。",
+      "enemy_defeat": "GitHub Pages battle-v44.html?review=44。AUTOの実戦で白銀騎士HP0後、enemy-defeat-vanishの最終状態はopacity 0 / visibility hidden。行動順・対象候補・アクセシビリティ表示から除外。横縦スクロールなし、現行CSS/JSコンソールエラー0。"
     }
   },
   "hub_character_ui_2026_09_29": {
