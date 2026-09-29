@@ -90,7 +90,7 @@ async def main():
      out.extend(await page.evaluate((ROOT/'tests/touch-audit.js').read_text()))
     if not OFFLINE:
      await page.evaluate('conversation()')
-     loaded=await page.evaluate("""async()=>{const images=[...document.querySelectorAll('#party img,#panel img')];await Promise.all(images.map(i=>i.decode().catch(()=>{})));return images.length>=12&&images.every(i=>i.naturalWidth>0)}""")
+     loaded=await page.evaluate("""async()=>{const images=[...document.querySelectorAll('#party img,#panel img,#screen img')];await Promise.all(images.map(i=>i.decode().catch(()=>{})));return images.length>=12&&images.every(i=>i.naturalWidth>0)}""")
      out.append({'name':'UI17 existing portrait assets load on HTTP origin','ok':loaded})
      stands=await page.evaluate("""async()=>{const src=[...Object.values(HUB_VISUAL.npcStand||{})];const images=src.map(s=>{const i=new Image();i.src=s;return i});await Promise.all(images.map(i=>i.decode().catch(()=>{})));return src.length===6&&images.every(i=>i.naturalWidth>0&&i.naturalHeight>0)}""")
      out.append({'name':'UI17 six NPC standing assets load on HTTP origin','ok':stands})
