@@ -110,3 +110,9 @@ Commands sit immediately above ally cards. Character appeal has priority over ti
 - Old 296 saves are not fuzzily renamed: skills that still exist by current key survive; unmatched old learned skills are archived in `legacySkills` and refunded as Mastery Pt.
 - The two canonical `速射` rows use distinct runtime keys `速射（弓）` / `速射（銃）` while retaining display name `速射`.
 - Machine-readable normalization status: spec/skill-normalization-status.json.
+
+## 拠点・キャラクター UI（2026-09-29 確定）
+- ホームの6人カードはキャラ画像と装飾的なカード背景を使わず、名前と状態を簡潔に表示する。
+- キャラ画面の左右装備枠は透過した正方形とし、装備名の代わりに種類アイコンを表示する。装備名はアクセシビリティ名とタップ後の候補画面に残す。
+- ABILITY / SKILL / MASTERY は立ち絵の下側に小さく配置する。
+- キャラ画面の独立した6人切替ボタンを廃止し、常時表示する6枚のキャラカードで切り替える。
