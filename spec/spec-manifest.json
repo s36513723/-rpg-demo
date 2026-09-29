@@ -305,5 +305,10 @@
       "run_id": 36412828388,
       "validated_head_sha": "53d741b0c7a8edaef96e1a62bb55e7da95119bbe"
     }
+  },
+  "hub_character_ui_2026_09_29": {
+    "status": "確定",
+    "implementation": "exploration/style.css, exploration/status-layout.css, exploration/presentation.js, exploration/fitting.js",
+    "workbook_sync": "pending: canonical workbook not present in current checkout; repository mirror updated"
   }
 }
