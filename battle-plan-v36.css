@@ -1034,3 +1034,22 @@ html,body{height:100%;overflow:hidden}
 .enemy-unit[data-rank="mid"]{--sprite-scale-x:1.25;--sprite-scale-y:1.17}
 .enemy-unit[data-rank="front"]{--sprite-scale-x:1.39;--sprite-scale-y:1.24}
 .enemy-unit[data-unit-id="g3"]{--sprite-scale-x:1.31;--sprite-scale-y:1.19}
+
+/* v44 card and controls refinement. */
+#more:after{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important}
+#game .party-strip .ally-unit:before{background:rgba(220,233,255,.30)!important}
+#game .party-strip .ally-unit:after{background:rgba(25,40,72,.11)!important}
+#game .plan-move-cell:before{background:rgba(230,238,255,.30)!important}
+#game .plan-move-cell:after{background:rgba(32,49,82,.11)!important}
+#game .party-strip .ally-unit.active:before{background:rgba(189,76,242,.96)!important;box-shadow:0 0 12px rgba(186,62,235,.78)!important}
+#game .party-strip .ally-unit.active:after{inset:2px!important;background:rgba(61,29,91,.22)!important}
+#game .party-strip .ally-unit.active{filter:drop-shadow(0 0 7px rgba(183,62,237,.95))!important}
+#game .party-strip .resource-list{height:20px!important;align-self:end!important;gap:5px!important}
+#game .party-strip .resource{position:relative!important;display:block!important;height:17px!important;min-width:0!important}
+#game .party-strip .resource-value{position:absolute!important;inset:0!important;z-index:2!important;display:flex!important;justify-content:center!important;align-items:center!important;height:17px!important}
+#game .party-strip .resource-value span{display:none!important}
+#game .party-strip .resource-value b{font-size:clamp(9px,2.6vw,12px)!important;line-height:17px!important;color:#fff!important;text-shadow:0 1px 3px #162238,0 0 4px #162238!important}
+#game .party-strip .resource .bar{position:absolute!important;left:0!important;right:0!important;bottom:2px!important;width:100%!important;height:10px!important}
+#game #auto,#game #pace{right:auto!important;bottom:31%!important;width:clamp(48px,12vw,68px)!important;height:clamp(29px,4.2dvh,38px)!important;min-height:29px!important;border-radius:7px!important}
+#game #auto{left:54%!important}
+#game #pace{left:68%!important}
