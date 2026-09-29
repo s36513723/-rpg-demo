@@ -49,7 +49,7 @@ const memberGrid=()=>peopleGrid(names.map((n,i)=>personCard(battleCardArt(i),n,r
 const facilityRouteGroup=n=>{
  if(/^(guild|guildDesk|questMenu|questSelect|reportChapter|appraiseMenu|rareAppraise|storageMenu|depositMenu|infoMenu|dungeonIntel|regionRecords|regionRecord|enemyBook|enemyRecord|clueRecord|recordList|guildMembers|guildSellMenu|guildSaleQuantity|guildSaleConfirm)$/.test(n))return 'guild';
  if(/^(market|gearShopMenu|toolShop|toolQuantity|weaponShop|gearDetail|armorShop|armorDetail|armorEquipMenu|craftMenu|recipeMenu|recipeDetail|upgradeMenu|traitMenu|traitChoice|sellMenu|materialTrade|materialQuantity)$/.test(n))return 'market';
- if(/^(inn|returnTalk|conversation|memberTalk|npcMenu|npcTalk|pairMenu|readPair|talkArchive|rumors|rumorDetail)$/.test(n))return 'inn';
+ if(/^(inn|roomMenu|innRest|returnTalk|conversation|memberTalk|npcMenu|npcTalk|pairMenu|readPair|talkArchive|rumors|rumorDetail)$/.test(n))return 'inn';
  return '';
 };
 const facilityProfiles={
@@ -85,6 +85,7 @@ const facilityLine=(kind,name,args=[])=>{
  }
  if(kind==='inn'){
   if(name==='inn')return 'おかえり。体は休ませておくから、旅の話を聞かせてね。';
+  if(name==='roomMenu'||name==='innRest')return '部屋はいつでも使えるよ。休んでから次の準備をしようか。';
   if(name==='returnTalk')return 'お疲れさま。まずは今回の旅をゆっくり振り返ろうか。';
   if(name==='conversation'||name==='memberTalk')return '仲間と話すなら、ここなら落ち着いて話せるよ。';
   if(name==='npcMenu'||name==='npcTalk')return '今夜もいろんな人が来てるよ。気になる人に声をかけてみな。';
