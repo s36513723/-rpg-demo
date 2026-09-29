@@ -1217,3 +1217,34 @@ html,body{height:100%;overflow:hidden}
 #game #auto,#game #pace{left:auto!important;right:4%!important;bottom:auto!important;width:clamp(44px,10.5vw,57px)!important}
 #game #auto{top:68.5%!important}
 #game #pace{top:73%!important}
+
+/* Compact choice tray: one line per ability or item, two columns. */
+.choice-sheet[data-mode="skills"],.choice-sheet[data-mode="items"]{position:fixed!important;inset:auto 0 39dvh!important;margin:auto!important;width:min(calc(100% - 20px),520px)!important;max-height:26dvh!important;overflow:auto!important;padding:7px 9px 10px!important;border:1px solid rgba(220,239,255,.58)!important;border-radius:5px!important;background:linear-gradient(135deg,rgba(25,40,70,.76),rgba(40,46,77,.58))!important;box-shadow:0 3px 18px rgba(26,39,69,.29),inset 0 0 16px rgba(170,211,255,.08)!important;color:#f8f5ff!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.choice-sheet[data-mode="skills"]::backdrop,.choice-sheet[data-mode="items"]::backdrop{background:transparent!important;backdrop-filter:none!important}
+.choice-sheet[data-mode="skills"] .sheet-handle,.choice-sheet[data-mode="items"] .sheet-handle,.choice-sheet[data-mode="skills"] #closeSheet,.choice-sheet[data-mode="items"] #closeSheet,.choice-sheet[data-mode="skills"] .sheet-hint,.choice-sheet[data-mode="items"] .sheet-hint{display:none!important}
+.choice-sheet[data-mode="skills"] .sheet-head,.choice-sheet[data-mode="items"] .sheet-head{padding:0 4px 4px!important;border-color:rgba(221,239,255,.25)!important}
+.choice-sheet[data-mode="skills"] .sheet-head h2,.choice-sheet[data-mode="items"] .sheet-head h2{font-size:12px!important;color:#e7d9f8!important}
+.choice-sheet[data-mode="skills"] .sheet-head small{font-size:10px!important;color:#bed8f5!important}
+.choice-sheet[data-mode="skills"] .sheet-list,.choice-sheet[data-mode="items"] .sheet-list{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:5px!important;padding-top:6px!important}
+.choice-sheet[data-mode="skills"] .skill-item,.choice-sheet[data-mode="items"] .menu-action{min-width:0!important;height:38px!important;min-height:38px!important;margin:0!important;border:0!important;border-radius:0!important;background:none!important;padding:0!important;clip-path:polygon(0 50%,8% 0,92% 0,100% 50%,92% 100%,8% 100%)!important;box-shadow:inset 0 0 0 1px rgba(203,228,255,.58)!important}
+.choice-sheet[data-mode="skills"] .skill-choice,.choice-sheet[data-mode="items"] .menu-action{height:38px!important;min-height:38px!important;padding:0 10px!important;color:#f8f5ff!important;align-items:center!important;justify-content:center!important;gap:3px!important;text-align:center!important;background:rgba(40,57,91,.19)!important}
+.choice-sheet[data-mode="skills"] .skill-choice b,.choice-sheet[data-mode="items"] .menu-action{font:clamp(10px,2.6vw,13px)/1.1 var(--serif)!important;white-space:nowrap!important}
+.choice-sheet[data-mode="skills"] .skill-choice .skill-line{min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.choice-sheet[data-mode="skills"] .skill-choice .cost{font:9px/1.1 Georgia,serif!important;color:#e4cdec!important;flex-shrink:0!important}
+.choice-sheet[data-mode="skills"] .skill-choice:active,.choice-sheet[data-mode="items"] .menu-action:active{background:rgba(155,96,195,.45)!important}
+.choice-sheet[data-mode="skills"] .skill-choice[aria-disabled="true"]{opacity:.5!important}
+/* Descriptions stay in the open band between the enemy formation and party. */
+#game .action-description,#game>.battle-message{position:absolute!important;z-index:89!important;left:23%!important;right:23%!important;top:54.5%!important;bottom:auto!important;min-height:36px!important;max-height:7%!important;overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;margin:0!important;padding:5px 8px!important;border:1px solid rgba(204,228,255,.62)!important;border-radius:0!important;clip-path:polygon(0 50%,5% 0,95% 0,100% 50%,95% 100%,5% 100%)!important;background:linear-gradient(90deg,rgba(31,47,78,.48),rgba(32,39,70,.68),rgba(31,47,78,.48))!important;color:#fff!important;text-align:center!important;text-shadow:0 1px 4px #16223c!important;box-shadow:0 0 12px rgba(139,186,240,.24)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#game .action-description[hidden],#game>.battle-message[hidden]{display:none!important}
+#game .action-description{flex-wrap:wrap!important;font:10px/1.15 var(--serif)!important}
+#game .action-description b{font-size:12px!important;white-space:nowrap!important}
+#game .action-description span{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;max-width:100%!important}
+#game .action-description em{font-size:9px!important;color:#f4d6ff!important;font-style:normal!important;white-space:nowrap!important}
+#game>.battle-message{z-index:96!important;font:11px/1.25 var(--serif)!important}
+#game>.battle-message p{margin:0!important;min-width:0!important;flex:1!important}
+#game>.battle-message .playback-tools{display:flex!important;flex-shrink:0!important}
+#game>.battle-message .playback-tools button{min-width:27px!important;min-height:30px!important}
+/* Target range is visible during selection; the chosen unit receives a stronger aura. */
+#game:has(.targeting) .enemy-unit.target-valid .enemy-visual,#game:has(.targeting) .ally-unit.target-valid{filter:drop-shadow(0 0 6px rgba(143,231,255,.85))!important}
+#game:has(.targeting) .enemy-unit.target-selected .enemy-visual,#game:has(.targeting) .ally-unit.target-selected{filter:drop-shadow(0 0 11px rgba(255,197,116,.95))!important}
+#game:has(.targeting) .enemy-unit.target-selected .target-pointer{border-color:#ffe5aa!important;background:rgba(255,208,134,.22)!important;box-shadow:0 0 15px rgba(255,211,127,.85)!important}
