@@ -480,5 +480,10 @@
     "command_focus": "表示中のATTACK / SKILL / ITEM / DEFENDに紫の選択表現を同期",
     "ally_tap": "敵向け行動中の味方タップは警告なしで操作キャラを切替",
     "queued_ally": "金色輪郭と完了印。タップで予約解除して選び直す"
+  },
+  "battle_ui_message_playback_2026_09_29": {
+    "status": "確定",
+    "message": "戦闘処理中メッセージは最下部のコマンド位置に表示",
+    "controls": "AUTO・再生／一時停止・倍速を右側の細い半透明枠内に小間隔で縦並び。再生制御は処理中のみ表示"
   }
 }
