@@ -473,9 +473,23 @@
         "range": "far",
         "attr": "無",
         "setCost": 4,
-        "cast": 0,
+        "cast": 1,
         "masteries": [
           "星辰"
+        ]
+      },
+      {
+        "name": "大詠唱",
+        "cost": 25,
+        "mult": 1.9,
+        "simple_mult_per_sp": 0.076,
+        "scope": "single",
+        "range": "near",
+        "attr": "壊",
+        "setCost": 4,
+        "cast": 1,
+        "masteries": [
+          "杖"
         ]
       },
       {
@@ -493,6 +507,20 @@
         ]
       },
       {
+        "name": "大海嘯",
+        "cost": 25,
+        "mult": 1.9,
+        "simple_mult_per_sp": 0.076,
+        "scope": "single",
+        "range": "far",
+        "attr": "水",
+        "setCost": 4,
+        "cast": 1,
+        "masteries": [
+          "海神"
+        ]
+      },
+      {
         "name": "日輪",
         "cost": 25,
         "mult": 1.9,
@@ -501,7 +529,7 @@
         "range": "far",
         "attr": "火",
         "setCost": 4,
-        "cast": 0,
+        "cast": 1,
         "masteries": [
           "灼陽"
         ]
@@ -557,7 +585,7 @@
         "range": "far",
         "attr": "土",
         "setCost": 4,
-        "cast": 0,
+        "cast": 1,
         "masteries": [
           "霊峰"
         ]
@@ -574,6 +602,20 @@
         "cast": 0,
         "masteries": [
           "鞭"
+        ]
+      },
+      {
+        "name": "大元素術",
+        "cost": 25,
+        "mult": 1.9,
+        "simple_mult_per_sp": 0.076,
+        "scope": "single",
+        "range": "far",
+        "attr": "無",
+        "setCost": 4,
+        "cast": 1,
+        "masteries": [
+          "魔術"
         ]
       },
       {
@@ -812,48 +854,6 @@
         "cast": 0,
         "masteries": [
           "星辰"
-        ]
-      },
-      {
-        "name": "転位",
-        "cost": 16,
-        "mult": 1.45,
-        "simple_mult_per_sp": 0.0906,
-        "scope": "single",
-        "range": "far",
-        "attr": "無",
-        "setCost": 3,
-        "cast": 0,
-        "masteries": [
-          "星辰"
-        ]
-      },
-      {
-        "name": "魔導撃",
-        "cost": 16,
-        "mult": 1.45,
-        "simple_mult_per_sp": 0.0906,
-        "scope": "single",
-        "range": "near",
-        "attr": "壊",
-        "setCost": 3,
-        "cast": 0,
-        "masteries": [
-          "杖"
-        ]
-      },
-      {
-        "name": "回し蹴り",
-        "cost": 16,
-        "mult": 1.45,
-        "simple_mult_per_sp": 0.0906,
-        "scope": "row",
-        "range": "near",
-        "attr": "壊",
-        "setCost": 3,
-        "cast": 0,
-        "masteries": [
-          "格闘"
         ]
       }
     ]
