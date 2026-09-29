@@ -100,3 +100,18 @@
  #modal.hub-map-modal #panel.field-stock-panel button.row{min-width:0;margin:0;font-size:11px}
  #modal.hub-map-modal #panel.field-stock-panel button.row b{overflow-wrap:anywhere}
 }
+
+/* Short mobile node sheets keep details and their decision in the same view. */
+@media(max-width:599px){
+ #modal.hub-map-modal #panel.field-battle-panel>.panel-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 6px;align-content:start}
+ #modal.hub-map-modal #panel.field-battle-panel .scene-banner,#modal.hub-map-modal #panel.field-battle-panel .actions{grid-column:1/-1;margin:0}
+ #modal.hub-map-modal #panel.field-battle-panel .scene-banner{grid-template-columns:68px 1fr 20px;padding:5px 7px}
+ #modal.hub-map-modal #panel.field-battle-panel .scene-art{width:68px;height:52px}
+ #modal.hub-map-modal #panel.field-battle-panel .scene-copy small{display:none}
+ #modal.hub-map-modal #panel.field-battle-panel .row{min-width:0;min-height:44px;margin:0;padding:5px 7px;font-size:11px}
+ #modal.hub-map-modal #panel.field-battle-panel .row .small{font-size:9px;overflow-wrap:anywhere}
+ #modal.hub-map-modal #panel.field-battle-panel .actions .row{width:100%}
+ #modal.hub-map-modal #panel.field-search-panel>.panel-body{padding:4px 10px!important}
+ #modal.hub-map-modal #panel.field-search-panel .field-encounter{height:clamp(76px,13dvh,112px);margin:0 0 5px}
+ #modal.hub-map-modal #panel.field-search-panel .message{margin:4px 0 6px}
+}

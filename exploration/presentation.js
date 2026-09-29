@@ -196,6 +196,8 @@ const showUI=html=>{
  const basics=temp.querySelector('.status-basics'),basicsMarkup=basics?.outerHTML||'';basics?.remove();
  if(actorRoute&&!overview)temp.querySelector('.actor-hero')?.remove();
  panel.classList.toggle('field-node-panel',expeditionContext&&/^(battlePrep|explorationNode|eventChoice|camp|campMorale|merchantNode|dungeonForge|dungeonTraitMenu|dungeonTraitChoice|stairsMenu|mechanismMenu|secretNode|eliteReward)$/.test(r.name));panel.classList.toggle('field-stock-panel',expeditionContext&&/^(merchantNode|dungeonForge|dungeonTraitMenu)$/.test(r.name));
+ panel.classList.toggle('field-battle-panel',expeditionContext&&r.name==='battlePrep');
+ panel.classList.toggle('field-search-panel',expeditionContext&&r.name==='explorationNode');
  panel.classList.toggle('status-overview',overview);panel.classList.toggle('status-growth',r.name==='charAbility');panel.classList.toggle('actor-workspace',actorRoute);
  const hero=temp.querySelector('.actor-hero,.fitting-summary');const heroMarkup=hero?.outerHTML||'';hero?.remove();
  panel.classList.toggle('actor-panel',!!heroMarkup);
