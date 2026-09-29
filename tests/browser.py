@@ -51,20 +51,14 @@ async def layouts(page):
    results.append({'name':f'UI21 sortie tab fits {width}x{height} {tab}','ok':dims['scroll']<=1 and not dims['wide'] and dims['fixed'] and dims['tabs']==3,'measurements':dims})
   for facility in ['inn()','guild()','market()']:
    await page.evaluate(facility)
-   if facility=='guild()':
-    dims=await page.evaluate("""()=>{const s=document.querySelector('#screen'),npc=s.querySelector('.facility-world-npc'),overlay=s.querySelector('.facility-world-home'),cards=document.querySelectorAll('#party .m'),nav=document.querySelector('.hub-global-nav');return {scroll:s.scrollHeight-s.clientHeight,wide:document.documentElement.scrollWidth>innerWidth,stand:!!npc,choices:overlay?.querySelectorAll('button.row').length||0,cards:cards.length,nav:!!nav,world:document.querySelector('#app').classList.contains('guild-world')}}""")
-    results.append({'name':f'UI45 fixed guild world fits {width}x{height}','ok':dims['scroll']<=1 and not dims['wide'] and dims['stand'] and dims['choices']==4 and dims['cards']==6 and dims['nav'] and dims['world'],'measurements':dims})
-    before=await page.evaluate("""()=>{const n=document.querySelector('.facility-world-npc').getBoundingClientRect(),s=document.querySelector('#screen').getBoundingClientRect();return {npc:{x:n.x,y:n.y,width:n.width,height:n.height},screen:{x:s.x,y:s.y,width:s.width,height:s.height}}}""")
-    await page.evaluate("""()=>document.querySelector('[data-hub="uiGuildTalk"]').click()""")
-    after=await page.evaluate("""()=>{const n=document.querySelector('.facility-world-npc').getBoundingClientRect(),s=document.querySelector('#screen').getBoundingClientRect();return {npc:{x:n.x,y:n.y,width:n.width,height:n.height},screen:{x:s.x,y:s.y,width:s.width,height:s.height}}}""")
-    results.append({'name':f'UI45 guild NPC remains fixed {width}x{height}','ok':before==after,'measurements':{'before':before,'after':after}})
-   else:
-    dims=await page.evaluate("""()=>{const body=document.querySelector('#panel .panel-body');return {scroll:body.scrollHeight-body.clientHeight,wide:body.scrollWidth>body.clientWidth+1,stand:!!body.querySelector('.facility-stand'),choices:body.querySelectorAll('.facility-action-deck button.row').length}}""")
-    results.append({'name':f'UI19 facility fits {width}x{height} {facility}','ok':dims['scroll']<=1 and not dims['wide'] and dims['stand'] and dims['choices']==4,'measurements':dims})
-    before=await page.evaluate("""()=>({stage:document.querySelector('.facility-stage').getBoundingClientRect().height,panel:document.querySelector('#panel').getBoundingClientRect().height,src:document.querySelector('.facility-stand').getAttribute('src')})""")
-    await page.evaluate("""()=>document.querySelector('.facility-host,.facility-talk').click()""")
-    after=await page.evaluate("""()=>({stage:document.querySelector('.npc-stage').getBoundingClientRect().height,panel:document.querySelector('#panel').getBoundingClientRect().height,src:document.querySelector('.npc-stand').getAttribute('src')})""")
-    results.append({'name':f'UI25 NPC talk balance {width}x{height} {facility}','ok':abs(before['stage']-after['stage'])<=1 and abs(before['panel']-after['panel'])<=1 and before['src']==after['src'] and ('_stand.svg' in after['src'] or 'hub-' in after['src']),'measurements':{'before':before,'after':after}})
+   expected=5 if facility=='inn()' else 4
+   dims=await page.evaluate("""()=>{const s=document.querySelector('#screen'),app=document.querySelector('#app'),npc=s.querySelector('.facility-world-npc'),overlay=s.querySelector('.facility-world-home'),cards=document.querySelectorAll('#party .m'),nav=document.querySelector('.hub-global-nav');return {scroll:s.scrollHeight-s.clientHeight,wide:document.documentElement.scrollWidth>innerWidth,stand:!!npc,choices:overlay?.querySelectorAll('button.row').length||0,cards:cards.length,nav:!!nav,world:app.classList.contains('facility-world'),kind:app.dataset.facility||'',bg:getComputedStyle(app).backgroundImage}}""")
+   kind={'inn()':'inn','guild()':'guild','market()':'market'}[facility]
+   results.append({'name':f'UI46 fixed {kind} world fits {width}x{height}','ok':dims['scroll']<=1 and not dims['wide'] and dims['stand'] and dims['choices']==expected and dims['cards']==6 and dims['nav'] and dims['world'] and dims['kind']==kind and f'hub-{kind}-bg' in dims['bg'],'measurements':dims})
+   before=await page.evaluate("""()=>{const n=document.querySelector('.facility-world-npc').getBoundingClientRect(),s=document.querySelector('#screen').getBoundingClientRect();return {npc:{x:n.x,y:n.y,width:n.width,height:n.height},screen:{x:s.x,y:s.y,width:s.width,height:s.height}}}""")
+   await page.evaluate("""()=>document.querySelector('[data-hub="uiFacilityTalk"]').click()""")
+   after=await page.evaluate("""()=>{const n=document.querySelector('.facility-world-npc').getBoundingClientRect(),s=document.querySelector('#screen').getBoundingClientRect();return {npc:{x:n.x,y:n.y,width:n.width,height:n.height},screen:{x:s.x,y:s.y,width:s.width,height:s.height}}}""")
+   results.append({'name':f'UI46 {kind} NPC remains fixed {width}x{height}','ok':before==after,'measurements':{'before':before,'after':after}})
  await page.evaluate('base=>{installSave(base);closeM();town()}',baseline)
  await page.set_viewport_size({'width':390,'height':844})
  return results
