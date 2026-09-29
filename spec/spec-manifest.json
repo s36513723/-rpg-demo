@@ -365,11 +365,11 @@
     "validation": "GitHub Pagesで探索の戦闘地点→battle-v44.htmlを実操作。初回は敵3体・地形水辺、AUTOで勝利後「探索へ戻る」で次地点へ進む。次の戦闘は敵4体・地形開所に更新。単独起動は従来の9敵デモと帰還ボタン非表示を維持。アプリのコンソールエラー0。"
   },
   "exploration_battle_theme_background_2026_09_29": {
-    "status": "実装・公開画面検証中",
+    "status": "実装・公開画面検証済み",
     "implementation": "battle-v44.html",
     "workbook_sync": "Library正本 version 15・07_UI仕様 A40:D40",
     "assets": "images/theme-{forest,cave,ruins,mountain,swamp,desert,sea,temple}-official.webp",
-    "validation": "GitHub Pagesで探索起点・単独起動の背景を確認予定"
+    "validation": "GitHub Pages探索デモで第1層・森林→battle-v44のtheme-forest-official.webp、第2層・洞窟→theme-cave-official.webpへ実操作で切替を確認。敵3体／4体と地形表示も維持。単独起動は従来の白い幻想都市背景・敵9体を確認。アプリのコンソールエラー0。"
   },
   "sortie_no_scroll_2026_09_29": {
     "status": "確定・実装済み",
