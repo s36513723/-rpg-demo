@@ -357,5 +357,11 @@
     "implementation": "exploration/sortie-layout.css, exploration/index.html, tests/browser.py",
     "revision": "編成・陣形・ダンジョンタブを宿屋・ギルド・市場の3枠と同じサイズ、角丸、線、半透明面、書体、影、間隔へ統一。選択中の金色下線を保持。",
     "verification": "実画面の計算済みスタイルとブラウザ回帰テストで確認。"
+  },
+  "exploration_battle_v44_link_2026_09_29": {
+    "status": "実装・公開画面検証中",
+    "implementation": "exploration/explore.js, exploration/index.html, battle-v44.html, battle-plan-v36.js",
+    "workbook_sync": "Library正本 version 13・07_UI仕様 A38:D38",
+    "validation": "GitHub Pagesで探索→戦闘→探索の導線を確認中"
   }
 }
