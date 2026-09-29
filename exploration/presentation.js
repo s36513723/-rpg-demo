@@ -30,7 +30,8 @@ const actorKey=new Set(['character','charOverview','actorAttributes','charAbilit
 const key=r=>r?(['equip','equipChoice'].includes(r.name)?'fitting:'+r.args[0]:actorKey.has(r.name)?'actor:'+r.args[0]:r.name==='equipChoice'?'equipChoice:'+r.args[0]+':'+r.args[1]:['questMenu','toolShop','itemCategory','items'].includes(r.name)?r.name:JSON.stringify(r)):'none';
 const recordRoute=(r,scroll)=>({route:r?{name:r.name,args:r.args.slice()}:null,scroll});
 const isOpen=()=>document.getElementById('modal').classList.contains('on');
-const focusables=()=>[...document.querySelectorAll('#panel button:not(:disabled),#panel input,#panel summary,#panel a[href],#panel [tabindex="0"]')].filter(e=>!e.closest('[hidden]')&&e.getClientRects().length);
+const focusables=()=>[...document.querySelectorAll('#panel button:not(:disabled),#panel input,#panel summary,#panel a[href],#panel [tabindex="0"],#app .hub-global-nav button:not(:disabled)')].filter(e=>!e.closest('[hidden]')&&e.getClientRects().length);
+const setHubContentInert=on=>{const app=document.getElementById('app');app.inert=false;[...app.children].forEach(el=>{el.inert=!!on&&!el.matches('nav.hub-global-nav')});const nav=app.querySelector('.hub-global-nav');if(nav)nav.inert=false};
 const badgeCounts=()=>({reports:hc().quests.filter(q=>qstate(q).state===2).length,chapters:H.story.pending.filter(r=>!H.story.completed.includes(r)).length,appraisal:loot.古器+rareGear.length});
 const activeQuest=()=>{const q=findQuest(H.tracked);return q&&[1,2].includes(qstate(q).state)?q:null};
 const objective=()=>{const q=activeQuest();if(q){const s=qstate(q);return HB(q.n,s.state===2?'達成・ギルドへ報告':q.d+' · '+s.progress+'/'+q.target,'questSelect',[q.id])}return ''};
@@ -112,7 +113,7 @@ const renderFacilityWorld=(kind,html,r)=>{
  const p=facilityProfiles[kind];if(!p)return;
  const app=document.getElementById('app'),screen=document.getElementById('screen'),modal=document.getElementById('modal'),panel=document.getElementById('panel');
  app.classList.add('town-world','facility-world',p.world);for(const k of Object.values(facilityProfiles))if(k.world!==p.world)app.classList.remove(k.world);app.classList.remove('in-expedition');app.dataset.facility=kind;
- modal.classList.remove('on','guild-screen-modal');panel.classList.remove('guild-screen-panel');app.inert=false;
+ modal.classList.remove('on','guild-screen-modal','hub-overlay-modal','hub-location-modal','hub-map-modal');panel.classList.remove('guild-screen-panel');setHubContentInert(false);
  document.querySelector('h1').textContent='王都レクシア';document.querySelector('header .small').textContent=p.label;document.getElementById('money').textContent=moneyText(gold);
  const temp=document.createElement('div');temp.innerHTML=html;
  const title=temp.querySelector('h2')?.textContent||p.label;temp.querySelector('h2')?.remove();
@@ -143,20 +144,23 @@ const selectionOverlay=()=>{
 };
 const showUI=html=>{
  const priorFocus=document.activeElement,focusAction=priorFocus?.dataset?.hub,focusArgs=priorFocus?.dataset?.args;const panel=document.getElementById('panel'),modal=document.getElementById('modal'),open=isOpen(),scroll=panel.querySelector('.panel-body')?.scrollTop||0,r=U.render||{name:'note',args:['メニューを閉じて操作を続けてください。']};
- const app=document.getElementById('app'),worldOpen=app.classList.contains('facility-world'),currentKind=app.dataset.facility||'',routeKind=facilityRouteGroup(r.name),transientKind=worldOpen&&['confirmAction','checkpointResult','note'].includes(r.name)?currentKind:'',facilityKind=routeKind||transientKind,sameWorld=key(U.route)===key(r);
+ const app=document.getElementById('app'),worldOpen=app.classList.contains('facility-world'),townContext=app.classList.contains('town-world'),currentKind=app.dataset.facility||'',routeKind=facilityRouteGroup(r.name),transientKind=worldOpen&&['confirmAction','checkpointResult','note'].includes(r.name)?currentKind:'',facilityKind=routeKind||transientKind,sameWorld=key(U.route)===key(r),mapRoute=/^(partyMenu|readiness|dungeon|deployment|presetMenu|squadMenu|rowSwapMenu)$/.test(r.name),hubOverlay=!activeRun();
  if(facilityKind&&!activeRun()){
   if(!worldOpen){U.stack=[];U.opener=U.launcher||document.activeElement;U.launcher=null}
   else if(U.route&&!sameWorld&&!U.back)U.stack.push(recordRoute(U.route,0));
   if(U.stack.length>24)U.stack.shift();U.route={name:r.name,args:r.args.slice()};
   renderFacilityWorld(facilityKind,html,r);return;
  }
- if(worldOpen){app.classList.remove('facility-world','guild-world','market-world','inn-world');delete app.dataset.facility}
+ const keepPlace=hubOverlay&&(worldOpen||townContext);
  const guildShell=false;modal.classList.remove('guild-screen-modal');panel.classList.remove('guild-screen-panel');
+ modal.classList.toggle('hub-overlay-modal',hubOverlay);
+ modal.classList.toggle('hub-location-modal',hubOverlay&&!mapRoute&&keepPlace);
+ modal.classList.toggle('hub-map-modal',hubOverlay&&mapRoute);
  if(!['equip','equipChoice'].includes(r.name))fittingDiscard();
  if(r.name!=='actorAttributes')attributeDiscard();
  if(U.detail&&(Number(r.args[0])!==U.detail.i||(U.detail.kind==='skill'?r.name!=='skills':!['equip','equipChoice'].includes(r.name)||Number(r.args[1]||0)!==U.detail.k)))U.detail=null;
  if(!['mastery','masteryType','growMastery','masterySkills','charMastery','charAbility'].includes(r.name))masteryDiscard();
- const same=key(U.route)===key(r);if(!open){U.stack=[];U.opener=U.launcher||document.activeElement;U.launcher=null}else if(U.route&&!same&&!U.back)U.stack.push(recordRoute(U.route,scroll));if(U.stack.length>24)U.stack.shift();U.route={name:r.name,args:r.args.slice()};
+ const same=key(U.route)===key(r);if(!open){if(worldOpen&&U.route&&!same&&!U.back)U.stack.push(recordRoute(U.route,0));else if(!U.back)U.stack=[];U.opener=U.launcher||document.activeElement;U.launcher=null}else if(U.route&&!same&&!U.back)U.stack.push(recordRoute(U.route,scroll));if(U.stack.length>24)U.stack.shift();U.route={name:r.name,args:r.args.slice()};
  const temp=document.createElement('div');temp.innerHTML=html;const title=temp.querySelector('h2'),heading=title?.textContent||'メニュー';if(title)title.remove();
  // Navigation remains at the bottom; commit actions belong to the content they change.
  const confirmation=[...temp.querySelectorAll('.actions')].find(a=>[...a.querySelectorAll('button')].some(b=>/^(やめる|取り消す|取消|キャンセル)$/.test(b.textContent.trim())));
@@ -195,9 +199,24 @@ const showUI=html=>{
  if(controlsMarkup){const operation=document.createElement('div');operation.className='equipment-bottom-operation';const slots=document.createElement('div');slots.className='equipment-bottom-slots';slots.setAttribute('aria-label','装備枠');panel.querySelectorAll('.fitting-controls [data-hub="equipChoice"]').forEach(el=>{const b=el.cloneNode(true),k=Number(JSON.parse(b.dataset.args)[1]);b.textContent=({0:'主',1:'副',2:'予主',3:'予副',4:'防具',8:'装飾',9:'携行'})[k];slots.append(b)});operation.append(slots,panel.querySelector('.fitting-confirm'));footer.prepend(operation)}
  if(actorRoute){const nav=panel.querySelector('.panel-navigation'),exit=nav.querySelector('.modal-x');exit.classList.add('actor-exit');panel.querySelector('.actor-tabs .ui-tabs').append(exit);nav.remove()}
  if(cancelRoute&&panel.querySelector('.panel-back')){const back=panel.querySelector('.panel-back');back.hidden=false;back.dataset.hub=cancelRoute.action;back.dataset.args=cancelRoute.args}
- selectionOverlay();panel.setAttribute('aria-labelledby','panelTitle');document.getElementById('modal').classList.add('on');document.getElementById('app').inert=true;panel.scrollTop=0;const body=panel.querySelector('.panel-body');if(same)body.scrollTop=scroll;navState(r.name);const nextFocus=same&&focusAction?[...panel.querySelectorAll('[data-hub]')].find(e=>e.dataset.hub===focusAction&&e.dataset.args===focusArgs&&!e.disabled):null;(nextFocus||panel.querySelector('#panelTitle')).focus({preventScroll:true});
+ selectionOverlay();panel.setAttribute('aria-labelledby','panelTitle');panel.setAttribute('aria-modal',hubOverlay?'false':'true');document.getElementById('modal').classList.add('on');if(hubOverlay)setHubContentInert(true);else document.getElementById('app').inert=true;panel.scrollTop=0;const body=panel.querySelector('.panel-body');if(same)body.scrollTop=scroll;navState(r.name);const nextFocus=same&&focusAction?[...panel.querySelectorAll('[data-hub]')].find(e=>e.dataset.hub===focusAction&&e.dataset.args===focusArgs&&!e.disabled):null;(nextFocus||panel.querySelector('#panelTitle')).focus({preventScroll:true});
 };
-const closeUI=()=>{U.detail=null;masteryDiscard();fittingDiscard();attributeDiscard();const modal=document.getElementById('modal');modal.classList.remove('on','guild-screen-modal');document.getElementById('panel').classList.remove('guild-screen-panel');document.getElementById('app').inert=false;U.route=null;U.stack=[];U.formationSelected=null;if(hubBooted){renderRoster();if(!activeRun())window.town();else navState('town')}const target=U.opener;U.opener=null;const fallback=target?.dataset?.hub?[...document.querySelectorAll('#app [data-hub]')].find(e=>e.dataset.hub===target.dataset.hub&&e.dataset.args===target.dataset.args):null;(target?.isConnected?target:fallback||document.querySelector('#app nav .current'))?.focus({preventScroll:true})};
+const closeUI=()=>{
+ U.detail=null;masteryDiscard();fittingDiscard();attributeDiscard();
+ const modal=document.getElementById('modal'),panel=document.getElementById('panel'),app=document.getElementById('app'),locationKind=app.dataset.facility||'';
+ modal.classList.remove('on','guild-screen-modal','hub-overlay-modal','hub-location-modal','hub-map-modal');panel.classList.remove('guild-screen-panel');setHubContentInert(false);app.inert=false;
+ const facilityFrame=locationKind?[...U.stack].reverse().find(f=>f.route&&facilityRouteGroup(f.route.name)===locationKind):null;
+ U.route=null;U.formationSelected=null;
+ if(hubBooted){
+  if(!activeRun()){
+   if(locationKind){
+    const route=facilityFrame?.route||{name:facilityProfiles[locationKind]?.home,args:[]};U.stack=[];U.back=true;
+    try{const fn=window[route.name];if(typeof fn==='function')fn(...(route.args||[]));else window.town()}finally{U.back=false}
+   }else{U.stack=[];window.town()}
+  }else navState('town')
+ }
+ const target=U.opener;U.opener=null;const fallback=target?.dataset?.hub?[...document.querySelectorAll('#app [data-hub]')].find(e=>e.dataset.hub===target.dataset.hub&&e.dataset.args===target.dataset.args):null;(target?.isConnected?target:fallback||document.querySelector('#app nav .current'))?.focus({preventScroll:true});
+};
 const toast=text=>{const e=document.getElementById('uiToast');if(!e)return;e.textContent=text;e.hidden=false;clearTimeout(U.toast);U.toast=setTimeout(()=>e.hidden=true,2400)};
 const uiActions={
  uiHubBack(){if(isOpen())return uiActions.uiBack();if(document.getElementById('app').classList.contains('facility-world')){const frame=U.stack.pop();if(!frame)return town();U.back=true;try{const fn=window[frame.route.name];if(typeof fn==='function')fn(...frame.route.args);else town()}finally{U.back=false}}},
@@ -231,7 +250,7 @@ const views={
  back(){return ''},show:showUI,closeM:closeUI,
  town(){if(activeRun()){closeM();return drawDungeon()}
  const app=document.getElementById('app');app.classList.add('town-world');app.classList.remove('in-expedition','facility-world','guild-world','market-world','inn-world');delete app.dataset.facility;
- document.getElementById('modal').classList.remove('on');app.inert=false;U.route=null;U.stack=[];
+ document.getElementById('modal').classList.remove('on','hub-overlay-modal','hub-location-modal','hub-map-modal');setHubContentInert(false);app.inert=false;U.route=null;U.stack=[];
  document.querySelector('h1').textContent='王都レクシア';document.querySelector('header .small').textContent=H.story.ending?'調査のつづき':'冒険者区';
  const b=badgeCounts(),next=H.story.intro?storyObjective():'地下から響く鐘';
  const notices=(b.chapters?HB('探索結果 '+b.chapters+'件','','guild'):'')+(b.reports?HB('依頼報告 '+b.reports+'件','','questMenu',['ready']):'')+(b.appraisal?HB('査定 '+b.appraisal+'点','','appraiseMenu'):'');
@@ -265,7 +284,7 @@ const views={
  deployment(id){if(activeRun())return expeditionMenu();if(!hc().regions[id]||!unlocked.includes(id))return note('この地域は未開放です');dungeonId=id;H.selected=id;persist();partyMenu('destination')},
  settings(){show('<h2>設定</h2>'+section('表示・操作',HB('文字サイズ',H.settings.text,'cycleText')+HB('表示密度',H.settings.density||'標準','toggleCompact')+HB('重要操作の確認',H.settings.confirm?'ON':'OFF','toggleConfirm'))+section('セーブ',HT(hubSaveError?'保存に失敗しています':'自動保存',hubSaveError||'操作ごとに保存')+HB('今すぐ保存','','manualSave')+HB('書き出す','JSONファイル','exportSave')+HB('読み込む','確認後に置き換え','chooseImport'))+'<details class="ui-help danger-zone"><summary>データ管理</summary>'+HB('バックアップ復元','','askRestore',[],!RPG_STORE.getItem(HUB_BACKUP))+HB('最初から始める','進行を初期化','resetSave')+'</details>')},
  manualSave(){toast(saveGame()?'保存しました':'保存できません。書き出しを利用してください。');renderSaveStatus()},
- drawDungeon(){const app=document.getElementById('app');app.classList.remove('town-world','facility-world','guild-world','market-world','inn-world');delete app.dataset.facility;app.classList.add('in-expedition');old.drawDungeon();navState('map');const root=document.querySelector('.expedition');if(!root)return;const q=activeQuest();if(q){const e=document.createElement('button');e.className='field-quest';e.setAttribute('data-hub','questSelect');e.dataset.args=JSON.stringify([q.id]);e.textContent='★ '+q.n+' '+qstate(q).progress+'/'+q.target;root.querySelector('.field-head').after(e)}const head=root.querySelector('.field-head');if(head){const help=document.createElement('button');help.className='icon-button';help.setAttribute('data-hub','uiMapLegend');help.setAttribute('aria-label','地図の見方');help.textContent='?';head.append(help)}const generic=root.querySelector('.field-actions .row.static .small');if(generic)generic.remove()}
+ drawDungeon(){const app=document.getElementById('app');document.getElementById('modal').classList.remove('hub-overlay-modal','hub-location-modal','hub-map-modal');setHubContentInert(false);app.classList.remove('town-world','facility-world','guild-world','market-world','inn-world');delete app.dataset.facility;app.classList.add('in-expedition');old.drawDungeon();navState('map');const root=document.querySelector('.expedition');if(!root)return;const q=activeQuest();if(q){const e=document.createElement('button');e.className='field-quest';e.setAttribute('data-hub','questSelect');e.dataset.args=JSON.stringify([q.id]);e.textContent='★ '+q.n+' '+qstate(q).progress+'/'+q.target;root.querySelector('.field-head').after(e)}const head=root.querySelector('.field-head');if(head){const help=document.createElement('button');help.className='icon-button';help.setAttribute('data-hub','uiMapLegend');help.setAttribute('aria-label','地図の見方');help.textContent='?';head.append(help)}const generic=root.querySelector('.field-actions .row.static .small');if(generic)generic.remove()}
 };
 Object.assign(window,views);
 window.HUB_UI_ACTIONS=Object.keys(uiActions);
@@ -274,6 +293,6 @@ const routes=['actorAttributes','guildMembers','guildSellMenu','guildSaleQuantit
 for(const name of routes){const render=window[name];if(typeof render!=='function')continue;window[name]=(...args)=>{const previous=U.render;U.render={name,args};try{return render(...args)}finally{U.render=previous}}}
 // Modal focus, keyboard escape and touch navigation work independently of game state.
 document.addEventListener('keydown',e=>{if(e.key!=='Tab'||!isOpen())return;const list=focusables(),first=list[0],last=list[list.length-1];if(!first)return;e.stopPropagation();if(e.shiftKey&&(document.activeElement===first||!list.includes(document.activeElement))){last.focus();e.preventDefault()}else if(!e.shiftKey&&(document.activeElement===last||!list.includes(document.activeElement))){first.focus();e.preventDefault()}});
-document.addEventListener('click',e=>{if(U.detail&&!e.target.closest('.selection-overlay,[data-hub=uiEquipPreview],[data-hub=uiSkillInspect]')){U.detail=null;selectionOverlay();document.querySelectorAll('.skill-toggle.inspected').forEach(el=>el.classList.remove('inspected'))}const globalNav=e.target.closest('#app nav [data-nav]');if(globalNav&&globalNav.dataset.nav!=='back'){U.stack=[];U.route=null}const el=e.target.closest('[data-hub],button[onclick]');if(!el)return;if(el.closest('#app'))U.launcher=el;if(el.closest('#panel')&&!el.disabled){U.opener=U.opener?.isConnected?U.opener:document.querySelector('#app nav .current')}},true);
+document.addEventListener('click',e=>{if(U.detail&&!e.target.closest('.selection-overlay,[data-hub=uiEquipPreview],[data-hub=uiSkillInspect]')){U.detail=null;selectionOverlay();document.querySelectorAll('.skill-toggle.inspected').forEach(el=>el.classList.remove('inspected'))}const globalNav=e.target.closest('#app nav [data-nav]');if(globalNav&&globalNav.dataset.nav==='home'){U.stack=[];U.route=null}const el=e.target.closest('[data-hub],button[onclick]');if(!el)return;if(el.closest('#app'))U.launcher=el;if(el.closest('#panel')&&!el.disabled){U.opener=U.opener?.isConnected?U.opener:document.querySelector('#app nav .current')}},true);
 window.HUB_UI={version:21,state:U,warnings,resources};
 })();
