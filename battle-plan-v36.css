@@ -1137,7 +1137,7 @@ html,body{height:100%;overflow:hidden}
 @media(max-width:410px){.round-meta{max-width:25%!important}.order-ribbon{left:50%!important;width:47%!important}.order-ribbon .order-face,.order-ribbon .order-face.ally,.order-ribbon .order-face.foe{width:clamp(27px,7.4vw,31px)!important;height:clamp(27px,7.4vw,31px)!important;flex-basis:clamp(27px,7.4vw,31px)!important}.order-ribbon .order-face.is-next{width:clamp(32px,8.4vw,35px)!important;height:clamp(32px,8.4vw,35px)!important;flex-basis:clamp(32px,8.4vw,35px)!important}}
 
 /* Center the visible sprites inside their wider tactical cells. */
-#game .enemy-unit{justify-content:center!important}
+#game .enemy-unit{grid-template-columns:62%!important;justify-content:center!important}
 /* Let the acting portrait emerge from the battlefield without a cut top edge. */
 #game>.actor-art .actor-portrait-image{mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.75) 9%,#000 16%)!important;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.75) 9%,#000 16%)!important}
 /* Keep both auxiliary controls centered as one group at every viewport width. */
