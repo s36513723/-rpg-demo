@@ -339,10 +339,10 @@
     "sortie_three_panels_revision": "編成・陣形・ダンジョンのタブとカードから固有の緑色の塗りを廃止し、拠点共通の細い金縁・中立色の透過面・選択中の金色下線に統一。正本 workbook version 6 の 05_拠点探索仕様 C6 と 07_UI仕様 A35:D35 に同期。"
   },
   "battle_enemy_outline_2026_09_29": {
-    "status": "実装・実画面確認中",
+    "status": "実装・公開画面検証済み",
     "implementation": "battle-plan-v36.js / battle-plan-v36.css / battle-v44.html",
     "workbook_sync": "Library正本 version 8・07_UI仕様 A37:D37",
-    "validation": "GitHub Pages反映と対象選択を確認中"
+    "validation": "GitHub Pages battle-v44.html?review=45b で敵9体、足元リング要素0、攻撃スキルの対象候補9体と仮選択で敵本体filter/outline/box-shadowなし、逆三角カーソル維持を確認。RPG validation #784および#785成功。"
   },
   "hub_hp_sp_gauge_2026_09_29": {
     "status": "確定・実装済み",
