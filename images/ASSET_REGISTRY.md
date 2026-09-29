@@ -103,6 +103,15 @@
 | 宿屋 NPC | ✓ | images/hub-inn-npc.webp | 保存済み・拠点UI接続済み |
 | 市場 NPC | ✓ | images/hub-market-npc.webp | 保存済み・拠点UI接続済み |
 
+## 探索・会話NPC
+
+| NPC | 正式 | GitHub画像本体 | 状況 |
+|---|---:|---|---|
+| 学者・イリス | ✓ | images/hub-scholar-npc.webp | 保存済み・拠点会話／古代迷宮の特別遭遇に接続済み |
+| 伝令・ノア | ✓ | images/hub-messenger-npc.webp | 保存済み・拠点会話／辺境遺跡の特別遭遇に接続済み |
+| 守人・サヒル | ✓ | images/hub-keeper-npc.webp | 保存済み・拠点会話／沈黙の砂都の特別遭遇に接続済み |
+| 旅商人 | ✓ | images/hub-merchant-npc.webp | 保存済み・探索中の旅商人ノードに接続済み |
+
 ## 拠点背景
 
 | 施設 | 正式 | GitHub画像本体 | 状況 |
@@ -120,6 +129,7 @@
 - 戦闘画面UI素材: 9 / 9
 - 探索・地域背景: 8 / 8
 - 戦闘背景: 1
+- 探索・会話NPC: 4 / 4
 - 拠点NPC: 3
 - 拠点背景: 3
 

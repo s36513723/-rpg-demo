@@ -391,3 +391,22 @@
 @media(min-width:600px){
  .facility-stand{left:50%!important;right:auto!important;max-width:70%!important}
 }
+
+
+/* UI41: official exploration NPCs as special field encounters. */
+.field-encounter{position:relative;height:clamp(172px,28dvh,232px);margin:2px 0 12px;overflow:hidden;border:1px solid #8b774f78;border-radius:13px;background:#111a16;isolation:isolate;box-shadow:inset 0 0 32px #0005}
+.field-encounter-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0;filter:saturate(.88) brightness(.67)}
+.field-encounter-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(5,11,9,.88) 0%,rgba(5,11,9,.64) 42%,rgba(5,11,9,.13) 70%,rgba(5,11,9,.30) 100%),linear-gradient(180deg,rgba(5,10,8,.08),rgba(5,10,8,.48))}
+.field-encounter-character{position:absolute;z-index:2;right:-4%;bottom:-12%;width:62%;height:122%;object-fit:contain;object-position:right bottom;filter:drop-shadow(0 10px 18px rgba(0,0,0,.62));pointer-events:none}
+.field-encounter-copy{position:absolute;z-index:3;left:12px;top:12px;bottom:12px;width:52%;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;text-shadow:0 2px 8px #000}
+.field-encounter-copy .scene-kicker{margin-bottom:auto;color:#e5c982;font-size:9px}
+.field-encounter-copy b{font:600 19px/1.25 'Yu Mincho',Georgia,serif;color:#f5e8c8;letter-spacing:.04em}
+.field-encounter-copy em{font-style:normal;font-size:9px;color:#d7c18f;margin-top:3px}
+.field-encounter-copy small{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-top:7px;font-size:10px;line-height:1.6;color:#d4d9d1}
+.field-encounter-mark{position:absolute;z-index:4;right:9px;top:9px;width:28px;height:28px;display:grid;place-items:center;border:1px solid #e1c98766;border-radius:50%;background:#09110d99;color:#ead59a}
+.field-encounter-mark .ui-icon{width:16px;height:16px}
+.field-encounter-merchant .field-encounter-character{right:-2%;width:66%}
+.field-encounter-guide .field-encounter-character{right:-2%;width:60%}
+@media(max-width:350px){.field-encounter{height:158px}.field-encounter-character{right:-8%;width:68%}.field-encounter-copy{left:9px;top:9px;bottom:9px;width:54%}.field-encounter-copy b{font-size:16px}.field-encounter-copy small{font-size:9px;-webkit-line-clamp:2}}
+@media(max-height:640px){.field-encounter{height:142px;margin-bottom:8px}.field-encounter-character{height:126%;bottom:-15%}.field-encounter-copy b{font-size:16px}.field-encounter-copy small{font-size:9px;-webkit-line-clamp:2}}
+@media(min-width:600px){.field-encounter{height:250px}.field-encounter-character{right:2%;width:54%;height:120%}.field-encounter-copy{left:18px;top:16px;bottom:16px;width:50%}.field-encounter-copy b{font-size:24px}.field-encounter-copy small{font-size:12px}}

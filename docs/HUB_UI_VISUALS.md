@@ -20,3 +20,10 @@ No battle script or battle UI file is modified.
 - The town-people list is a 2-column × 3-row portrait grid so all six NPCs fit without vertical scrolling on supported mobile sizes.
 - Inn / Guild / Market top menus use the same compact two-column rhythm; no features were added, only their entrances were reorganized visually.
 - Browser regression checks 320×568, 375×667, 390×844, 430×932 and 768×1024 for non-scrolling NPC dialogue/list layouts.
+
+## UI41 — Official exploration NPC artwork
+
+- 学者・イリス / 伝令・ノア / 守人・サヒル / 旅商人 now use the approved WebP standing art instead of the legacy SVG placeholders.
+- Special field encounters layer the transparent NPC standing art over the current official exploration-theme background.
+- 古代迷宮 investigation events and mechanisms can surface イリス; 辺境遺跡 route/rescue events and mechanisms can surface ノア; 沈黙の砂都 record/seal events and mechanisms can surface サヒル; merchant nodes always surface the traveling merchant.
+- Normal town NPC conversation screens also reuse the same official standing art, so the character identity stays consistent between town and exploration.
