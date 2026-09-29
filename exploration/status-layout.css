@@ -941,3 +941,7 @@
  #panel .attribute-grid{gap:2px;padding:2px 0}
  #panel .resistance-grid .attribute-cell{padding-top:4px;padding-bottom:4px}
 }
+
+@media(max-width:350px) and (max-height:640px){
+ #panel.status-attributes .attributes-overview .resistance-heading{margin:1px 0}
+}
