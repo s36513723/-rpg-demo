@@ -606,9 +606,36 @@ async function defeated(u,token){
  if(reserve)await animateSwap(u,reserve,reserve.name+'が前列へ交代。',token);
 }
 async function applyStatuses(a,t,act,token){if(t.hp<=0)return;for(const[k,n]of STATUS){if(!act[k])continue;let st=k==='stun'?a.PHY:a.SKL;if(act.stat==='ARC')st=a.ARC;if(act.stat==='MND')st=a.MND;if(Math.random()*100<clamp(act[k]+.75*(st-t.MND),5,95)){t.status[k]=k==='poison'?3:k==='stun'?1:2;render();await say(t.name+'に'+n+'！',token,'sys')}}}
+function affectedTargets(a,primary,candidates){
+ const scope=a.scope||'single';
+ if(scope==='all')return candidates;
+ if(scope==='row')return candidates.filter(t=>(t.enemy?t.row:t.rank)===(primary.enemy?primary.row:primary.rank));
+ if(scope==='pierce')return candidates.filter(t=>col(t)===col(primary));
+ if(scope==='adjacent')return candidates.filter(t=>(t.enemy?t.row:t.rank)===(primary.enemy?primary.row:primary.rank)&&Math.abs(col(t)-col(primary))<=1);
+ if(scope==='random')return [primary,...candidates.filter(t=>t!==primary).sort(()=>Math.random()-.5)].slice(0,Math.min(candidates.length,a.count||2));
+ return [primary];
+}
 async function execute(u,q,token){check(token);if(!u.alive)return;displayActorId=u.id;activeTurnId=u.id;render();if(u.status.stun>0){await say(u.name+'は気絶して動けない。',token,'sys');return}if(q.type==='escape'){if(u.status.legBind>0){await say(u.name+'は脚封じで逃走できない。',token,'sys');return}await say(u.name+'は逃走を試みた！',token,'',{actorId:u.id},false);const p=live(party),e=live(enemies),avg=x=>x.reduce((s,v)=>s+v.SKL,0)/x.length;if(Math.random()*100<clamp(55+(avg(p)-avg(e))*.7,20,90)){await finish('escape',token);return}await say('逃走できなかった。',token,'bad');return}
  const a=q.type==='attack'?normal(u):q.action;if(a.kind==='spell'&&u.status.headBind>0){await say(u.name+'は頭封じで術を使えない。',token,'sys');return}if(!enough(u,a)){await say(u.name+'は'+a.costType+'不足。',token,'sys');return}const ts=u.enemy?live(party).filter(t=>canReach(u,t,a.range)):targets(u,a),t=ts.find(t=>t.id===q.targetId)||ts[0];if(!t){await say(u.name+'の攻撃は届かない。',token,'sys');return}
- const intro=a.kind==='attack'?u.name+'の攻撃！':u.name+'は「'+a.name+'」を'+(a.kind==='spell'?'唱えた！':'使った！');$('playbackTitle').textContent=u.name;await say(intro,token,'',{actorId:u.id},false);if(a.costType)u[a.costType.toLowerCase()]-=a.cost;if(a.heal){const n=Math.min(t.maxHp-t.hp,Math.floor(12+u.MND*.8));t.hp+=n;render();await say(t.name+'のHPが '+n+' 回復。',token,'ok',{targetId:t.id,heal:true,value:n});return}if(Math.random()*100>hit(u,t,a)){render();await say(t.name+'は攻撃をかわした！',token,'sys');return}const d=damage(u,t,a);t.hp=Math.max(0,t.hp-d.value);render();await say(t.name+'に '+d.value+' ダメージ！'+(d.weak?'\n弱点を突いた！':'')+(d.crit?'\n会心の一撃！':''),token,u.enemy?'bad':d.weak?'ok':'',{targetId:t.id,value:d.value,label:d.crit?'CRITICAL':d.weak?'WEAK':''});await applyStatuses(u,t,a,token);await defeated(t,token)}
+ const intro=a.kind==='attack'?u.name+'の攻撃！':u.name+'は「'+a.name+'」を'+(a.kind==='spell'?'唱えた！':'使った！');
+ $('playbackTitle').textContent=u.name;
+ await say(intro,token,'',{actorId:u.id},false);
+ if(a.costType)u[a.costType.toLowerCase()]-=a.cost;
+ // Resolve every affected unit separately so damage, portrait and feedback stay in sync.
+ for(const victim of affectedTargets(a,t,ts)){
+  check(token);
+  if(!victim.alive)continue;
+  if(a.heal){const n=Math.min(victim.maxHp-victim.hp,Math.floor(12+u.MND*.8));victim.hp+=n;render();await say(victim.name+'のHPが '+n+' 回復。',token,'ok',{targetId:victim.id,heal:true,value:n});continue}
+  if(Math.random()*100>hit(u,victim,a)){render();await say(victim.name+'は攻撃をかわした！',token,'sys');continue}
+  const d=damage(u,victim,a);
+  victim.hp=Math.max(0,victim.hp-d.value);
+  if(!victim.enemy){displayActorId=victim.id;updatePortrait()}
+  render();
+  await say(victim.name+'に '+d.value+' ダメージ！'+(d.weak?'\n弱点を突いた！':'')+(d.crit?'\n会心の一撃！':''),token,u.enemy?'bad':d.weak?'ok':'',{targetId:victim.id,value:d.value,label:d.crit?'CRITICAL':d.weak?'WEAK':''});
+  await applyStatuses(u,victim,a,token);
+  await defeated(victim,token);
+ }
+}
 async function finish(type,token){over=true;phase='done';render();const text={win:'勝利',lose:'敗北',escape:'撤退成功'}[type];await say(text,token,type==='win'?'ok':type==='lose'?'bad':'sys');$('history').dataset.result=type}
 async function checkEnd(token){if(over)return true;if(!live(enemies).length){await finish('win',token);return true}if(!live(party).length){await finish('lose',token);return true}return false}
 async function resolve(){if(!editable()||!live(party).every(u=>u.queued))return;cancelTarget();commandOpen=false;const token=session;displayActorId=null;activeTurnId=null;turnSequence=[];busy=true;phase='resolve';paused=false;skip=false;closeSheet();setBattle(true);render();try{
