@@ -356,7 +356,7 @@ function createCard(u){
  el.type='button';el.className='unit '+(u.enemy?'enemy-unit':'ally-unit');
  el.dataset.unitId=u.id;el.dataset.style=u.style;el.dataset.col=col(u);el.style.gridColumn=u.enemy?'auto':String(party.findIndex(x=>x.id===u.id)+1);
  if(u.enemy){
-  el.innerHTML='<span class="enemy-name">'+esc(u.name)+'</span><span class="enemy-hp" data-resource="hp"><span class="bar"><i></i></span><b></b></span><span class="enemy-visual">'+enemyArtMarkup(u)+'<span class="target-pointer" aria-hidden="true"></span></span><span class="card-status"></span>';
+  el.innerHTML='<span class="enemy-name">'+esc(u.name)+'</span><span class="enemy-hp" data-resource="hp"><span class="bar"><i></i></span><b></b></span><span class="enemy-visual">'+enemyArtMarkup(u)+'</span><span class="card-status"></span>';
  }else{
   el.innerHTML='<span class="ally-face-wrap">'+faceMarkup(u,'ally-face')+'<span class="rank-badge">'+RANK_LABEL[u.rank][0]+'</span></span><span class="card-name"><span class="slot-mark" aria-hidden="true">'+u.slot+'</span>'+esc(u.name)+'</span><span class="card-status"></span><span class="queued-mark" hidden>✓</span><span class="resource-list">'+['hp','sp','mp'].map(k=>'<span class="resource" data-resource="'+k+'"><span class="resource-value"><span>'+k.toUpperCase()+'</span><b></b></span><span class="bar '+(k==='hp'?'':k)+'"><i></i></span></span>').join('')+'</span>';
  }
