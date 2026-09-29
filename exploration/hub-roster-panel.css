@@ -112,3 +112,15 @@
 #panel.actor-workspace .status-value-grid>div{display:flex;align-items:center;justify-content:space-between;gap:4px;min-height:33px;padding:4px 8px;border:1px solid rgba(219,199,142,.35);border-radius:6px;background:rgba(16,19,21,.52);font-variant-numeric:tabular-nums}
 #panel.actor-workspace .status-value-grid small{font-size:10px;color:#e2dfd3}
 #panel.actor-workspace .status-value-grid b{font-size:13px;color:#f6e3b7}
+
+/* Local reading surfaces, without returning a green full-screen sheet. */
+#modal.hub-location-modal #panel.actor-workspace .status-basics .character-experience,
+#modal.hub-location-modal #panel.actor-workspace .status-basics .resource-grid>div,
+#modal.hub-location-modal #panel.actor-workspace .panel-body>.row.static{background:rgba(16,19,21,.58)!important;border:1px solid rgba(219,199,142,.35)!important;border-radius:6px!important;color:#f3ead9!important;text-shadow:0 1px 3px #000}
+#modal.hub-location-modal #panel.actor-workspace .status-basics .character-experience{padding:5px 7px;margin:3px 7px 5px}
+#modal.hub-location-modal #panel.actor-workspace .status-basics .resource-grid{gap:5px;margin:0 7px 5px}
+#modal.hub-location-modal #panel.actor-workspace .status-basics .resource-grid>div{padding:5px 7px}
+#modal.hub-location-modal #panel.actor-workspace .panel-body>.row.static{margin:4px 7px;min-height:43px;padding:5px 8px}
+#modal.hub-location-modal #panel.actor-workspace .panel-body>.row.static .small{color:#f3ead9!important}
+#modal.hub-location-modal #panel.status-attributes .allocation-stat button,
+#modal.hub-location-modal #panel.status-attributes .allocation-bar button{background:rgba(16,19,21,.68)!important;color:#f3ead9!important}
