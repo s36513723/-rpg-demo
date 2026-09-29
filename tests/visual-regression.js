@@ -32,6 +32,31 @@ async () => {
  await test('all weapon shop rows and equipment preview candidates have icons',()=>{reset();weaponShop();assert([...panel().querySelectorAll('[data-hub="gearDetail"]')].every(e=>e.querySelector('.ui-icon')));for(const kind of ['格闘','剣','槌','斧','槍'])ranksFor(0)[kind]=Math.max(5,ranksFor(0)[kind]||0);equipChoice(0,0);const candidates=[...panel().querySelectorAll('[data-hub="uiEquipPreview"]')];assert(candidates.length>3&&candidates.every(e=>e.querySelector('.equipment-kind-icon')))});
  await test('facility choice decks stay compact over scenery',()=>{reset();for(const fn of [market,inn,guild]){fn();const rows=[...document.querySelectorAll('#screen .facility-world-home button.row')];assert(rows.length>=4);assert(rows.every(e=>e.getBoundingClientRect().height<80),fn.name);town()}});
  await test('facility decorative icons do not duplicate accessible text',()=>{reset();market();const s=document.querySelector('#screen');assert([...s.querySelectorAll('.ui-icon')].every(e=>e.getAttribute('aria-hidden')==='true'&&e.getAttribute('focusable')==='false'));assert(s.querySelector('.facility-world-npc'));});
+ await test('character screens inherit the artwork of the place they were opened from',()=>{
+  reset();
+  const cases=[
+   [()=>town(),'hub-capital-bg'],
+   [()=>guild(),'hub-guild-bg'],
+   [()=>inn(),'hub-inn-bg'],
+   [()=>market(),'hub-market-bg']
+  ];
+  for(const [openPlace,asset] of cases){
+   openPlace();
+   character(0);
+   let backdrop=panel().querySelector('.actor-backdrop');
+   assert(backdrop&&getComputedStyle(backdrop).backgroundImage.includes(asset),asset+' missing from overview');
+   equip(0);
+   backdrop=panel().querySelector('.actor-backdrop');
+   assert(backdrop&&getComputedStyle(backdrop).backgroundImage.includes(asset),asset+' missing from equipment');
+   skills(0);
+   backdrop=panel().querySelector('.actor-backdrop');
+   assert(backdrop&&getComputedStyle(backdrop).backgroundImage.includes(asset),asset+' missing from skills');
+   charAbility(0);
+   backdrop=panel().querySelector('.actor-backdrop');
+   assert(backdrop&&getComputedStyle(backdrop).backgroundImage.includes(asset),asset+' missing from growth');
+   document.querySelector('.hub-global-nav [data-nav="home"]').click();
+  }
+ });
  await test('five character tabs and skill actions retain visual icons',()=>{reset();character(0);assert(panel().querySelectorAll('.ui-tabs [data-hub=uiActor] .ui-icon').length===5);skills(0);assert(panel().querySelectorAll('.skill-kind').length===panel().querySelectorAll('.skill-toggle').length);assert([...panel().querySelectorAll('button[data-hub]')].every(e=>HUB_ACTION_NAMES.includes(e.dataset.hub)))});
  await test('overview has one prominent portrait and equipment prioritizes comparison',()=>{reset();character(0);const hero=panel().querySelector('.status-cover');assert(hero&&panel().querySelector('.actor-backdrop img'));assert(hero.getBoundingClientRect().height>=innerHeight*.45);assert(!panel().querySelector('#panelTitle .header-face'));equip(0);assert(!panel().querySelector('.actor-hero'));assert(panel().querySelector('.fitting-summary'))});
  await test('equipment preview comparison is compact and clearly separated from candidates',()=>{reset();equipChoice(0,0,'長槍');const box=panel().querySelector('.equip-compare');assert(box);assert(box.querySelectorAll('.equip-compare-grid>span').length===12);assert(box.getBoundingClientRect().width<=panel().querySelector('.panel-body').getBoundingClientRect().width+1);assert(panel().querySelector('.equipment-bottom-operation .fitting-confirm [data-hub="fittingApply"]'))});
