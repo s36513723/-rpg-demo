@@ -187,7 +187,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "hub_hp_sp_gauges_match_battle_2026-09-29",
+  "last_sync_status": "hub_sortie_tabs_match_town_cards_2026-09-29",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
@@ -350,5 +350,12 @@
     "implementation": "exploration/hub-roster-panel.css, exploration/index.html",
     "revision": "拠点・探索共通カードのHP/SPゲージを戦闘デモの味方カードと同じ高さ4pxと青緑／金色のグラデーションに統一。文字と数値の重ね表示を維持。MPは廃止済み。",
     "verification": "拠点と探索の計算済みスタイルを確認。"
+  },
+  "sortie_tabs_town_card_2026_09_29": {
+    "status": "確定・実装済み",
+    "workbook_sync": "Library 正本 version 11 の 07_UI仕様 C35 と同期。",
+    "implementation": "exploration/sortie-layout.css, exploration/index.html, tests/browser.py",
+    "revision": "編成・陣形・ダンジョンタブを宿屋・ギルド・市場の3枠と同じサイズ、角丸、線、半透明面、書体、影、間隔へ統一。選択中の金色下線を保持。",
+    "verification": "実画面の計算済みスタイルとブラウザ回帰テストで確認。"
   }
 }
