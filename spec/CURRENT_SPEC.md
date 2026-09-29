@@ -174,3 +174,8 @@ Commands sit immediately above ally cards. Character appeal has priority over ti
 - 陣形は3×3のマス内にキャラ画像を全面表示し、画像をタップするとそのキャラの詳細へ進む。配置変更は別の操作で選択する。
 - 出撃枠は最大6人。編成タブで登録メンバーを出撃とギルド待機の間で移動し、陣形・保存・戦闘へ選択を引き継ぐ。現在のデモには登録済み6人がいる。
 - 施設のコマンド窓は内容量に左右されず、左のNPC名の下から最下部のメッセージ欄の手前までを占める。長い内容だけ内部スクロールする。
+
+## 戦闘立ち絵・コマンド・敵カーソルの視認性（2026-09-29 確定）
+- 戦闘の大型立ち絵は拠点と同じ最終透過素材（warrior/rogue/archer/alchemist/mystic は `hub-standing-*-clean.webp`、paladin は `hub-standing-paladin-transparent.webp`）を参照する。
+- ATTACK / SKILL / ITEM / DEFEND はアイコンを上、文字を下に置き、重ならない。
+- 敵の逆三角カーソルは明るい背景・敵本体の上でも見える寸法と輪郭にする。通常白、候補赤、一度選択した対象は黄色発光という既存の状態区分を維持する。
