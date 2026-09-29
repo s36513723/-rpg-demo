@@ -187,7 +187,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "hub_sortie_tabs_match_town_cards_2026-09-29",
+  "last_sync_status": "hub_sortie_composition_formation_no_scroll_2026-09-29",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
@@ -370,5 +370,12 @@
     "workbook_sync": "Library正本 version 15・07_UI仕様 A40:D40",
     "assets": "images/theme-{forest,cave,ruins,mountain,swamp,desert,sea,temple}-official.webp",
     "validation": "GitHub Pagesで探索起点・単独起動の背景を確認予定"
+  },
+  "sortie_no_scroll_2026_09_29": {
+    "status": "確定・実装済み",
+    "workbook_sync": "Library 正本 version 14 の 07_UI仕様 A39:D39 と同期。",
+    "implementation": "exploration/presentation.js, exploration/sortie-layout.css, exploration/index.html, tests/browser.py",
+    "revision": "編成6人を3×2固定グリッドへ統合。陣形の3行を画面内へ均等配置し、別操作の44pxボタンを画像の隅へ重ねる。両タブの内部スクロールを廃止。",
+    "verification": "スマホ幅を含むブラウザ回帰テストでコンテンツ高と操作対象を確認。"
   }
 }
