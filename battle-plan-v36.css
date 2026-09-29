@@ -1258,7 +1258,7 @@ html,body{height:100%;overflow:hidden}
 #game>.battle-message .playback-tools button{width:27px!important;height:30px!important;padding:0!important;border:1px solid rgba(218,237,255,.55)!important;border-radius:2px!important;background:rgba(61,80,112,.26)!important;color:#fff!important;box-shadow:none!important}
 #game>.battle-message .playback-tools .icon{width:13px!important;height:13px!important;color:#fff!important}
 /* Lower the tactical plates and the command row together, leaving the portrait caption clear. */
-#game .party-hud{bottom:9%!important}
+#game .party-hud{bottom:calc(max(.8%,env(safe-area-inset-bottom)) + clamp(54px,8dvh,72px) + 5px)!important}
 #game #commandPanel{bottom:max(.8%,env(safe-area-inset-bottom))!important}
 #game #auto{top:71.5%!important}
 #game #pace{top:76%!important}
