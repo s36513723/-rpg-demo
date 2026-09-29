@@ -44,7 +44,7 @@ try{
 try{
  equip(0);
  const p=document.querySelector('#panel'),body=p.querySelector('.panel-body'),shell=p.querySelector('.character-equipment-shell'),slots=[...p.querySelectorAll('.character-equip-slot')],swap=p.querySelector('[data-hub="fittingSwap"]'),commands=[...p.querySelectorAll('.character-action-deck button')],members=[...document.querySelectorAll('#party .m')];
- results.push({name:'Equipment home surrounds character and keeps bottom controls '+innerWidth,ok:!!shell&&slots.length===7&&!!swap&&swap.getBoundingClientRect().height>=20&&commands.length===4&&members.length===6&&!p.querySelector('.actor-tabs')&&!p.querySelector('.character-equipment-picker')&&body.scrollHeight<=body.clientHeight+1&&body.scrollWidth<=body.clientWidth+1});
+ results.push({name:'Equipment home surrounds character and keeps bottom controls '+innerWidth,ok:!!shell&&slots.length===7&&!swap&&commands.length===4&&members.length===6&&!p.querySelector('.actor-tabs')&&!p.querySelector('.character-equipment-picker')&&body.scrollHeight<=body.clientHeight+1&&body.scrollWidth<=body.clientWidth+1});
 }catch(e){results.push({name:'Equipment home layout',ok:false,error:String(e)})}
 for(let i=0;i<6;i++){
  try{

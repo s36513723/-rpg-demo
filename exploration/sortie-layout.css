@@ -13,6 +13,7 @@
 .sortie-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;width:100%;margin:0}
 .sortie-tabs button{min-height:44px;padding:5px;border:1px solid rgba(212,189,137,.40);border-radius:7px;background:rgba(11,22,19,.90);font:600 11px/1.2 'Yu Mincho',Georgia,serif;color:#e8d9b8}
 .sortie-tabs button[aria-pressed=true]{border-color:#e7c983;background:rgba(100,89,55,.78);color:#fff4d5;box-shadow:inset 0 -2px 0 #e7c983}
+#app.facility-world #screen .ui-tabs button{min-height:44px}
 .sortie-instruction{margin:3px 1px 8px;font-size:10px;line-height:1.5;color:#f2e7ce;text-shadow:0 1px 3px #000}
 #panel .sortie-page{display:block!important;overflow-y:auto!important}
 #panel .sortie-formation{display:grid;gap:6px}
