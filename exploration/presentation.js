@@ -7,6 +7,17 @@ const originals=['town','drawDungeon','closeM','skills','equip','character','par
 for(const n of originals)old[n]=window[n];
 const portraits=['gald','lize','ern','sena','mirea','yuna'];
 const standArts=['hub-standing-warrior.webp','hub-standing-paladin.webp','hub-standing-rogue.webp','hub-standing-archer.webp','hub-standing-alchemist.webp','hub-standing-mystic.webp'];
+const standArtCache=standArts.map(src=>{
+ const img=new Image();img.decoding='async';img.fetchPriority='high';img.src='../images/'+src;
+ const state={img,ready:false,promise:null};
+ const loaded=()=>new Promise(resolve=>{if(img.complete)return resolve();img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true})});
+ state.promise=(typeof img.decode==='function'?img.decode().catch(loaded):loaded()).catch(()=>{}).then(()=>{state.ready=true});
+ return state;
+});
+let actorRenderToken=0;
+const ensureStandArt=i=>standArtCache[i]?.promise||Promise.resolve();
+const standArtReady=i=>!!standArtCache[i]?.ready;
+const actorRouteName=n=>/^(character|charOverview|actorAttributes|charAbility|charMastery|equip|equipChoice|skills|mastery|masteryType|growMastery|masterySkills|resistView)$/.test(n);
 // Battle-card artwork is intentionally separate from full-body status artwork.
 // Paladin has its finalized turn icon in-repo; the other five use official full-body art cropped
 // by the card CSS until their finalized battle icons are registered as individual assets.
@@ -144,6 +155,13 @@ const selectionOverlay=()=>{
 };
 const showUI=html=>{
  const priorFocus=document.activeElement,focusAction=priorFocus?.dataset?.hub,focusArgs=priorFocus?.dataset?.args;const panel=document.getElementById('panel'),modal=document.getElementById('modal'),open=isOpen(),scroll=panel.querySelector('.panel-body')?.scrollTop||0,r=U.render||{name:'note',args:['メニューを閉じて操作を続けてください。']};
+ const waitingActor=actorRouteName(r.name)?Number(r.args?.[0]):-1;
+ if(!activeRun()&&Number.isInteger(waitingActor)&&waitingActor>=0&&waitingActor<standArts.length&&!standArtReady(waitingActor)){
+  const token=++actorRenderToken,route={name:r.name,args:[...(r.args||[])]};
+  ensureStandArt(waitingActor).then(()=>{if(token!==actorRenderToken)return;const fn=window[route.name];if(typeof fn==='function')fn(...route.args)});
+  return;
+ }
+ actorRenderToken++;
  const app=document.getElementById('app'),worldOpen=app.classList.contains('facility-world'),townContext=app.classList.contains('town-world'),currentKind=app.dataset.facility||'',routeKind=facilityRouteGroup(r.name),transientKind=worldOpen&&['confirmAction','checkpointResult','note'].includes(r.name)?currentKind:'',facilityKind=routeKind||transientKind,sameWorld=key(U.route)===key(r),mapRoute=/^(partyMenu|readiness|dungeon|deployment|presetMenu|squadMenu|rowSwapMenu)$/.test(r.name),hubOverlay=!activeRun();
  if(facilityKind&&!activeRun()){
   if(!worldOpen){U.stack=[];U.opener=U.launcher||document.activeElement;U.launcher=null}
@@ -172,7 +190,7 @@ const showUI=html=>{
  const confirm=temp.querySelector('.fitting-confirm'),confirmMarkup=confirm?.outerHTML||'';confirm?.remove();
  const filters=temp.querySelector('.fitting-filters'),filtersMarkup=filters?.outerHTML||'';filters?.remove();
  const controls=temp.querySelector('.fitting-controls');if(controls){const left=document.createElement('div'),right=document.createElement('div');left.className='equipment-top-weapons';right.className='equipment-top-other';const swap=controls.querySelector('[data-hub="fittingSwap"]');if(swap)right.append(swap);controls.querySelectorAll('[data-hub="equipChoice"]').forEach(b=>(Number(JSON.parse(b.dataset.args)[1])<4?left:right).append(b));controls.replaceChildren(left,right)}const controlsMarkup=controls?.outerHTML||'';controls?.remove();
- const actorRoute=/^(character|charOverview|actorAttributes|charAbility|charMastery|equip|equipChoice|skills|mastery|masteryType|growMastery|masterySkills|resistView)$/.test(r.name),actorId=Number(r.args[0]),overview=['character','charOverview'].includes(r.name);
+ const actorRoute=actorRouteName(r.name),actorId=Number(r.args[0]),overview=['character','charOverview'].includes(r.name);
  const tabBlock=temp.querySelector('.actor-tabs'),tabMarkup=tabBlock?.outerHTML||(actorRoute?actorTabs(actorId,/equip/i.test(r.name)?'equip':r.name==='skills'?'skills':r.name==='actorAttributes'?'attributes':overview?'overview':'growth'):'');tabBlock?.remove();
  const basics=temp.querySelector('.status-basics'),basicsMarkup=basics?.outerHTML||'';basics?.remove();
  if(actorRoute&&!overview)temp.querySelector('.actor-hero')?.remove();
