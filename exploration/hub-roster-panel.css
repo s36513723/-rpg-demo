@@ -158,3 +158,31 @@
 
 /* Keep the complete lowered portrait, including toes, above the member dock. */
 #modal.hub-location-modal #panel.actor-workspace>.actor-backdrop img{height:calc(100% - 72px)!important;object-fit:contain!important;object-position:center top!important;-webkit-mask-image:none!important;mask-image:none!important}
+
+/* Expedition shares the hub's frame, navigation and restrained six-member strip. */
+#app.in-expedition{grid-template-rows:52px minmax(0,1fr) 48px 44px!important;gap:6px;background:linear-gradient(180deg,rgba(4,10,8,.44),rgba(4,10,8,.26) 54%,rgba(4,10,8,.7)),var(--expedition-bg) center/cover no-repeat #0b1511}
+#app.in-expedition>header{position:relative;z-index:2;margin:0 -12px;padding:3px 13px 7px;border-bottom:0;background:linear-gradient(180deg,rgba(5,10,8,.62),rgba(5,10,8,.20) 68%,transparent)}
+#app.in-expedition #screen{overflow:hidden;border:0;border-radius:0;background:transparent}
+#app.in-expedition .expedition{min-height:0;padding:4px 2px 2px;background:transparent}
+#app.in-expedition .expedition::before{display:none}
+#app.in-expedition .expedition::after{background:linear-gradient(180deg,rgba(5,12,8,.20),transparent 30%,rgba(5,12,8,.48) 76%,rgba(5,12,8,.72));}
+#app.in-expedition .expedition>.map{min-height:0;margin:7px 3px;border:1px solid rgba(218,199,149,.33);border-radius:9px;background:rgba(5,13,10,.17)}
+#app.in-expedition .map-node{min-width:50px;min-height:53px;border-radius:8px;background:rgba(10,25,19,.75);border-color:rgba(217,193,139,.48)}
+#app.in-expedition .map-node.available{border-color:#e5cb8e;background:rgba(47,61,38,.84)}
+#app.in-expedition .field-actions .row{background:rgba(8,23,16,.70);border-color:rgba(217,193,139,.40);border-radius:8px}
+#app.in-expedition .field-head .mini{background:rgba(8,23,16,.66);border-color:rgba(217,193,139,.52)}
+#app.in-expedition #party{position:relative;z-index:3;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0!important;align-self:center;height:48px!important;min-height:0!important;padding:2px 5px!important;border-top:1px solid rgba(215,195,149,.30)!important;border-bottom:1px solid rgba(215,195,149,.18)!important;background:rgba(9,18,16,.52)!important}
+#app.in-expedition #party .m{display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:center!important;gap:1px!important;height:44px!important;min-height:44px!important;padding:2px 5px!important;border:0!important;border-right:1px solid rgba(215,195,149,.19)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:hidden!important}
+#app.in-expedition #party .m:last-child{border-right:0!important}
+#app.in-expedition #party .m>img,#app.in-expedition #party .m>b,#app.in-expedition #party .m>.roster-bars,#app.in-expedition #party .m>.roster-meta{display:none!important}
+#app.in-expedition #party .hub-roster-name{display:block!important;position:static!important;font:600 10px/14px ui-serif,"Yu Mincho",serif!important;color:#f3e7d1!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
+#app.in-expedition #party .hub-roster-meter{position:relative!important;display:block!important;height:11px!important;min-height:11px!important;margin:0!important}
+#app.in-expedition #party .hub-roster-track{position:absolute!important;top:2px!important;left:0!important;width:100%!important;height:8px!important;background:rgba(2,10,9,.74)!important;border-radius:2px!important}
+#app.in-expedition #party .hub-roster-track>span{display:block!important;height:100%!important;opacity:.72!important;border-radius:2px!important}
+#app.in-expedition #party .hub-roster-track.hp>span{background:#ea8892!important}
+#app.in-expedition #party .hub-roster-track.sp>span{background:#70cfc6!important}
+#app.in-expedition #party .hub-roster-metric{position:absolute!important;z-index:1!important;inset:0!important;display:flex!important;align-items:center!important;justify-content:space-between!important;height:11px!important;padding:0 2px!important;text-shadow:0 1px 2px #000,0 0 2px #000!important}
+#app.in-expedition #party .hub-roster-metric small,#app.in-expedition #party .hub-roster-metric b{position:static!important;display:block!important;color:#fff7e5!important;font:600 7px/10px sans-serif!important;margin:0!important}
+#app.in-expedition>.hub-global-nav{display:grid!important;position:relative;z-index:3;margin:0 -12px;padding:0 12px}
+@media(max-width:350px){#app.in-expedition>header,#app.in-expedition>.hub-global-nav{margin-left:-8px;margin-right:-8px;padding-left:8px;padding-right:8px}#app.in-expedition .map-node{min-width:45px;padding:3px}}
+@media(max-height:720px){#app.in-expedition{grid-template-rows:46px minmax(0,1fr) 48px 44px!important}#app.in-expedition .map-node{min-height:45px}#app.in-expedition .map-node i{font-size:17px}}
