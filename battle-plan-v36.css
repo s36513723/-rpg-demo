@@ -1015,3 +1015,8 @@ html,body{height:100%;overflow:hidden}
 #game #commandPanel .plan-hidden-equip{display:none!important}
 #environment{background-size:auto 112%!important}
 #game .party-strip .ally-unit{ text-shadow:0 1px 3px rgba(11,24,50,.95)!important }
+#game .party-strip .ally-unit{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:100%!important}
+#game .party-strip .ally-unit:before{background:rgba(224,236,255,.75)!important}
+#game .party-strip .ally-unit:after{background:rgba(25,40,72,.47)!important}
+#game .party-strip .ally-unit.active:before{background:#ebb8ff!important}
+#game .party-strip .ally-unit.active:after{background:rgba(63,37,91,.62)!important}
