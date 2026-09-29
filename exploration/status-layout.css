@@ -14,6 +14,34 @@
 /* The portrait belongs to the whole character screen; only item lists scroll. */
 #panel.actor-workspace{position:relative;isolation:isolate;background:#132219}
 #panel.actor-workspace>.actor-backdrop{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;background:radial-gradient(ellipse at 50% 25%,#667652,#132219 85%)}
+
+/* In town, character screens inherit the artwork of the place they were opened from. */
+#modal.hub-location-modal #panel.actor-workspace{
+ background:rgba(6,14,10,.34);
+}
+#modal.hub-location-modal #panel.actor-workspace>.actor-backdrop{
+ background-image:
+  linear-gradient(180deg,rgba(4,9,7,.18) 0%,rgba(4,9,7,.14) 42%,rgba(4,9,7,.56) 100%),
+  var(--hub-place-bg);
+ background-size:100% 100%,100vw 100dvh;
+ background-position:center,var(--hub-place-pos,center center);
+ background-repeat:no-repeat;
+}
+#modal.hub-location-modal #panel.actor-workspace>.actor-backdrop img{
+ filter:drop-shadow(0 10px 18px rgba(0,0,0,.34));
+}
+#modal.hub-location-modal #panel.status-overview>.actor-backdrop img{opacity:.96}
+#modal.hub-location-modal #panel.actor-workspace>.panel-head,
+#modal.hub-location-modal #panel.actor-workspace>.panel-footer{background:rgba(7,17,12,.70)}
+#modal.hub-location-modal #panel.actor-workspace>.panel-body{background:rgba(7,17,12,.56)}
+#modal.hub-location-modal #panel.status-overview>.panel-body{background:transparent}
+#modal.hub-location-modal #panel.status-overview>.status-basics{background:rgba(7,17,12,.72)}
+#modal.hub-location-modal #panel.actor-workspace>.actor-fixed,
+#modal.hub-location-modal #panel.actor-workspace>.fitting-controls,
+#modal.hub-location-modal #panel.actor-workspace>.fitting-summary{background:rgba(7,17,12,.72)}
+#modal.hub-location-modal #panel.actor-workspace button.row,
+#modal.hub-location-modal #panel.actor-workspace .stats-grid>div,
+#modal.hub-location-modal #panel.actor-workspace .attribute-cell{background:rgba(15,35,25,.72)}
 .actor-backdrop img{width:100%;height:100%;object-fit:cover;object-position:center top;opacity:.63}
 #panel.status-overview>.actor-backdrop img{opacity:1;object-fit:contain}
 #panel.actor-workspace>.panel-head,#panel.actor-workspace>.panel-footer{background:#102219d9;backdrop-filter:blur(4px)}
