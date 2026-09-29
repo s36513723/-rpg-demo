@@ -132,3 +132,5 @@
 #modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .mastery-training{background:rgba(16,19,21,.72)!important;color:#f3ead9!important}
 #modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .bottom-tabs .ui-tabs button[aria-pressed="true"],
 #modal.hub-location-modal #panel.actor-workspace:not(.status-equipment) .skill-masteries button[aria-pressed="true"]{background:rgba(218,190,126,.9)!important;color:#241c12!important}
+#modal.hub-location-modal #panel.status-mastery>.actor-fixed,
+#modal.hub-location-modal #panel.status-attributes>.actor-fixed{background:rgba(16,19,21,.58)!important;border-bottom:1px solid rgba(219,199,142,.25)!important;text-shadow:0 1px 3px #000}
