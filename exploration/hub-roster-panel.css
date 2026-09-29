@@ -20,3 +20,17 @@
 #panel.actor-workspace.status-equipment .character-status-panel span{font-size:7px}
 #panel.actor-workspace.status-equipment .character-equipment-stats{display:none!important}
 @media(max-height:640px){#panel.actor-workspace.status-equipment .character-action-panel{min-height:43px;padding:3px}#panel.actor-workspace.status-equipment .character-status-panel{min-height:54px}}
+
+/* No frosted glass: transparent surfaces leave the location artwork sharp. */
+#app,#app *,#modal,#modal *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#panel.actor-workspace.status-equipment{border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important}
+#panel.actor-workspace.status-equipment .character-action-column{width:51px!important;max-width:51px!important;flex:0 0 51px!important}
+#panel.actor-workspace.status-equipment .character-action-panel{width:51px!important;height:51px!important;min-height:51px!important;aspect-ratio:1;padding:3px!important;gap:2px!important;border-radius:9px!important;box-shadow:none!important;background:rgba(9,25,18,.32)!important}
+#panel.actor-workspace.status-equipment .character-action-icon{display:block;width:21px;height:21px;color:#f1dfb4;flex:none}
+#panel.actor-workspace.status-equipment .character-action-panel small{display:block;font-size:7px;line-height:1.1;color:#f3e7ca;white-space:nowrap}
+#app:not(.in-expedition) #party .m{gap:1px!important}
+#app:not(.in-expedition) #party .m .hub-roster-meter{display:flex!important;flex-direction:column!important;gap:1px!important;height:13px!important;min-height:13px!important;align-items:stretch!important}
+#app:not(.in-expedition) #party .m .hub-roster-metric{display:flex!important;align-items:center!important;justify-content:space-between!important;width:100%!important;height:8px!important;line-height:8px!important}
+#app:not(.in-expedition) #party .m .hub-roster-metric small{flex:none!important;width:auto!important;font:600 6px/8px sans-serif!important}
+#app:not(.in-expedition) #party .m .hub-roster-metric b{position:static!important;display:block!important;margin:0!important;color:#f6e9ce!important;font:600 6px/8px sans-serif!important;white-space:nowrap!important}
+#app:not(.in-expedition) #party .m .hub-roster-track{flex:none!important;height:3px!important;width:100%!important}
