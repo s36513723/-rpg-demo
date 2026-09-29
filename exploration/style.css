@@ -803,6 +803,8 @@
  background-repeat:no-repeat;
 }
 #app.guild-world{background-image:url("../images/hub-guild-bg.webp")}
+#app.market-world{background-image:url("../images/hub-market-bg.webp")}
+#app.inn-world{background-image:url("../images/hub-inn-bg.webp")}
 #app.facility-world>header{
  position:relative;
  z-index:3;
@@ -958,6 +960,18 @@
 .facility-world-home>.row .small,
 .facility-world-home>.actions>.row .small{font-size:6px;line-height:1.25}
 .facility-world-home>.actions{display:contents}
+.facility-world-home-inn{
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ grid-template-rows:repeat(2,minmax(0,1fr));
+ min-height:104px;
+}
+.facility-world-home-inn>.row,
+.facility-world-home-inn>.actions>.row{padding:4px 5px}
+.facility-world-home-inn>.row b,
+.facility-world-home-inn>.actions>.row b{font-size:8px}
+.facility-world-home-inn>.row .small,
+.facility-world-home-inn>.actions>.row .small{font-size:5.5px}
+
 .facility-world-service{
  max-height:clamp(128px,32dvh,260px);
  overflow-y:auto;
@@ -974,6 +988,8 @@
 .facility-world-service .ui-tabs button{min-height:34px;padding:5px 4px;font-size:8px}
 .facility-world-service .message,
 .facility-world-service .small{font-size:8px;line-height:1.45}
+#app.market-world .facility-world-npc{height:82%;max-width:66%;right:-1%}
+#app.inn-world .facility-world-npc{height:82%;max-width:64%;right:0}
 #app.facility-world #party{
  position:relative;
  z-index:3;
@@ -990,6 +1006,8 @@
 #app.facility-world #party .m img{opacity:.95}
 #app.facility-world>.hub-global-nav{position:relative;z-index:3;margin:0 -12px;padding:0 12px}
 @media(max-width:350px){
+ .facility-world-home-inn{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));min-height:124px}
+
  #app.facility-world>header{margin-left:-8px;margin-right:-8px;padding-left:9px;padding-right:9px}
  #app.facility-world>.hub-global-nav{margin-left:-8px;margin-right:-8px;padding-left:8px;padding-right:8px}
  .facility-world-npc{height:80%;max-width:66%;right:-2%}
