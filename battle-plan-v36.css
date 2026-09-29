@@ -918,6 +918,96 @@ html,body{height:100%;overflow:hidden}
 #game:after{background:linear-gradient(to bottom,transparent 0%,rgba(31,30,43,.13) 12%,rgba(28,28,42,.32) 32%,rgba(24,25,38,.60) 62%,rgba(18,20,32,.82) 100%)!important}
 #game>.actor-art{width:36%!important}
 #game>.actor-art .actor-portrait-image{transform:scale(1.19)!important}
-
 .party-hud{z-index:65!important}
 #more{color:#f8f3ff!important;background:rgba(57,54,72,.48)!important}
+
+/* v44 seamless formation composition. Official sprites and background remain intact. */
+#game{overflow:hidden!important}
+#game:after{display:none!important}
+#environment{inset:0!important;background:var(--battle-background-image) 50% 0/cover no-repeat #dfe4ef!important}
+#environment .sky-art,#environment .marble-ground,#environment .atmosphere{display:none!important}
+.hud{left:3%;right:3%;top:max(5px,env(safe-area-inset-top))!important;height:7.5%!important;border-bottom:0!important}
+.round-meta{max-width:31%;gap:4px}
+.round-label b{font-size:clamp(27px,7.5vw,40px)!important}
+.terrain-toggle{font-size:clamp(10px,2.6vw,14px)!important;padding:0!important;color:#f9f1fb!important;text-shadow:0 1px 5px #29314d!important}
+.terrain-toggle .icon{width:clamp(15px,4vw,22px);height:clamp(15px,4vw,22px)}
+.terrain-toggle:after{display:none!important;content:none!important}
+.order-ribbon{top:max(8px,env(safe-area-inset-top))!important;left:56%!important;width:48%!important}
+#more{width:clamp(34px,9vw,48px)!important;height:clamp(34px,9vw,48px)!important;background:rgba(36,39,67,.12)!important;color:#fff!important;border:1px solid rgba(255,255,255,.75)!important}
+#more .icon{width:52%!important;height:52%!important}
+
+/* Nine distinct enemy cells; depth grows toward the player. */
+#game .enemy-stage{top:8%!important;bottom:38%!important;overflow:visible!important}
+.enemy-unit{--sprite-height:148%;--sprite-offset-y:32px;--sprite-scale-x:1.06;--sprite-scale-y:1.06}
+.enemy-unit[data-rank="back"]{--sprite-height:163%;--sprite-offset-y:27px;--sprite-scale-x:1.12;--sprite-scale-y:1.08}
+.enemy-unit[data-rank="mid"]{--sprite-height:160%;--sprite-offset-y:35px;--sprite-scale-x:1.18;--sprite-scale-y:1.14}
+.enemy-unit[data-rank="front"]{--sprite-height:175%;--sprite-offset-y:40px;--sprite-scale-x:1.25;--sprite-scale-y:1.16}
+.enemy-unit[data-unit-id="g3"]{--sprite-height:170%;--sprite-offset-y:39px;--sprite-scale-x:1.22;--sprite-scale-y:1.13}
+.enemy-unit[data-unit-id="mage"]{--sprite-height:145%;--sprite-offset-y:31px;--sprite-scale-x:1.04;--sprite-scale-y:1.02}
+.enemy-unit[data-unit-id="g4"]{--sprite-height:150%;--sprite-offset-y:29px;--sprite-scale-x:1.05;--sprite-scale-y:1.05}
+.enemy-name{font-size:clamp(10px,2.65vw,14px)!important;color:#fff4f3!important;text-shadow:0 1px 5px #283044,0 0 8px #26304b!important}
+.enemy-hp{max-width:70px!important;width:55%!important}
+.enemy-unit.target-valid .enemy-visual{filter:drop-shadow(0 0 5px rgba(175,220,255,.62))!important}
+.enemy-unit.target-selected .enemy-visual{filter:drop-shadow(0 0 9px rgba(255,213,141,.9))!important}
+.enemy-unit.target-selected .target-pointer{height:13px!important;border-color:rgba(255,214,136,.95)!important;box-shadow:0 0 10px rgba(255,206,137,.7)!important}
+
+/* The illustration sits between the battlefield and the cards. */
+#game>.actor-art{z-index:55!important;width:39%!important;height:42%!important;bottom:0!important;mask-image:linear-gradient(to right,#000 0 94%,transparent 100%)!important;-webkit-mask-image:linear-gradient(to right,#000 0 94%,transparent 100%)!important}
+#game>.actor-art .actor-portrait-image{transform:scale(1.14)!important;object-position:50% 17%!important}
+#game>.actor-art .actor-art-name{left:7%!important;bottom:5%!important;font-size:clamp(17px,4.6vw,24px)!important;border:0!important;padding:2px 10px!important;background:none!important}
+#game>.actor-art .actor-art-name:after{display:block;font:italic 11px/1.2 Georgia,serif;letter-spacing:.04em;color:rgba(255,247,246,.86)}
+#actorArt[data-actor-id="war"] .actor-art-name:after{content:"Gald"}
+#actorArt[data-actor-id="rog"] .actor-art-name:after{content:"Lize"}
+#actorArt[data-actor-id="run"] .actor-art-name:after{content:"Ern"}
+#actorArt[data-actor-id="ran"] .actor-art-name:after{content:"Sena"}
+#actorArt[data-actor-id="arc"] .actor-art-name:after{content:"Mirea"}
+#actorArt[data-actor-id="mys"] .actor-art-name:after{content:"Yuna"}
+
+/* One airy 3×3 formation; empty cells retain their outline. */
+#game .party-hud{z-index:65!important;left:25%!important;right:14%!important;bottom:2%!important;height:28%!important;overflow:visible!important;background:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#game .party-strip{overflow:visible!important;gap:3px!important;background:none!important}
+#game .party-strip::before,#game .party-strip::after{display:none!important}
+#game .party-strip .ally-unit{display:grid!important;grid-template-rows:15px 20px 26px!important;align-content:center!important;justify-items:stretch!important;position:relative!important;padding:3px 7px!important;overflow:visible!important;color:#fff!important;background:none!important;transform:none;transition:transform .22s ease,filter .22s ease!important}
+#game .party-strip .ally-unit:before{content:""!important;position:absolute!important;inset:0!important;width:auto!important;height:auto!important;background:rgba(226,236,255,.46)!important;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)!important;box-shadow:none!important;opacity:1!important}
+#game .party-strip .ally-unit:after{content:""!important;position:absolute!important;inset:1px!important;background:rgba(26,37,67,.20)!important;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)!important;opacity:1!important}
+#game .party-strip .ally-unit>*{position:relative!important;z-index:2!important}
+#game .party-strip .ally-unit.active{transform:scale(1.11)!important;z-index:9!important;filter:drop-shadow(0 0 8px #ce7aff)!important}
+#game .party-strip .ally-unit.active:before{background:#e6a5ff!important}
+#game .party-strip .ally-unit.active:after{background:rgba(65,29,95,.48)!important}
+.card-status{grid-row:1!important;position:relative!important;inset:auto!important;display:flex!important;justify-content:center!important;height:15px!important;max-height:15px!important;font-size:10px!important}
+.card-name{grid-row:2!important;text-align:center!important;height:20px!important;font-size:clamp(10px,2.7vw,14px)!important;line-height:20px!important}
+.resource-list{grid-row:3!important;margin:0!important;height:26px!important;gap:4px!important}
+.resource{grid-template-rows:12px 6px!important;gap:3px!important}
+.resource-value span{font-size:7px!important;color:#ecf4f8!important}
+.resource-value b{font-size:clamp(9px,2.4vw,12px)!important}
+.resource .bar{height:6px!important}
+.plan-move-layer{z-index:12!important}
+
+/* Four commands in a fixed right dock, with independent auto and speed controls. */
+#game #commandPanel{z-index:70!important;left:auto!important;right:1%!important;top:61%!important;bottom:auto!important;width:12.5%!important;height:29%!important;min-height:0!important;overflow:visible!important}
+#game #commandPanel .command-content,#game #commandPanel #commandInput,#game #commandPanel .command-buttons{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;background:none!important;box-shadow:none!important}
+#game #commandPanel .command-buttons{display:grid!important;grid-template-columns:1fr!important;grid-template-rows:repeat(4,1fr)!important;gap:3px!important}
+#game #commandPanel .command-buttons>.command{display:flex!important;flex-direction:column!important;justify-content:center!important;gap:2px!important;min-height:0!important;color:#fff8ff!important;text-shadow:0 1px 5px #222b51!important}
+#game #commandPanel .command-buttons>.command:before{content:""!important;position:absolute!important;left:14%!important;top:5%!important;width:70%!important;aspect-ratio:1!important;transform:rotate(45deg) scale(.70)!important;border:1px solid rgba(206,228,255,.78)!important;border-radius:5px!important;background:rgba(25,42,84,.12)!important;box-shadow:0 0 7px rgba(137,180,248,.28)!important;pointer-events:none!important}
+#game #commandPanel .command-buttons>.command .icon{display:block!important;width:clamp(15px,4vw,25px)!important;height:clamp(15px,4vw,25px)!important;position:relative!important;z-index:2!important}
+#game #commandPanel .command-buttons>.command b{font-size:clamp(8px,2.1vw,12px)!important;position:relative!important;z-index:2!important}
+#game #commandPanel .command-buttons>.command:after{display:none!important}
+#game #commandPanel .command-buttons>.command.is-active:before,#game #commandPanel .command-buttons>.command:active:before{border-color:#e8b4ff!important;background:rgba(117,67,165,.30)!important;box-shadow:0 0 10px #b96bfa,0 0 2px #fff inset!important}
+#game #auto,#game #pace{z-index:72!important;left:auto!important;right:1%!important;width:12.5%!important;height:4.2%!important;min-height:0!important;border-radius:6px!important;font-size:clamp(9px,2.4vw,12px)!important;color:#fff!important;background:rgba(33,48,87,.18)!important;border:1px solid rgba(198,223,255,.7)!important;box-shadow:0 0 8px rgba(134,178,242,.24)!important}
+#game #auto{bottom:5.7%!important}
+#game #pace{bottom:1%!important}
+#game #commandPanel .battle-message{position:fixed!important;z-index:95!important;left:26%!important;right:15%!important;top:auto!important;bottom:31%!important;height:auto!important;min-height:45px!important}
+@media(max-width:380px){
+ #game .party-hud{left:24%!important;right:15%!important;height:28%!important}
+ #game .party-strip .ally-unit{padding:2px 4px!important;grid-template-rows:12px 17px 23px!important}
+ .card-status{height:12px!important}.card-name{height:17px!important;line-height:17px!important;font-size:10px!important}
+ .resource-list{height:23px!important;gap:3px!important}
+ #game #commandPanel{width:13.5%!important;right:.5%!important}
+ #game #auto,#game #pace{width:13.5%!important;right:.5%!important}
+}
+#game .plan-move-layer{z-index:0!important;inset:0!important;gap:3px!important}
+#game .plan-move-cell{position:relative!important;pointer-events:none!important}
+#game .plan-move-cell:before{content:"";position:absolute;inset:0;background:rgba(230,238,255,.27);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+#game .plan-move-cell:after{content:"";position:absolute;inset:1px;background:rgba(32,49,82,.12);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+#game .move-mode .plan-move-layer{z-index:12!important}
+#game .move-mode .plan-move-cell{pointer-events:auto!important}
