@@ -79,3 +79,21 @@
 #modal.hub-map-modal #panel .sortie-composition .sortie-member-action{position:absolute;z-index:3;right:0;bottom:0;width:44px;height:44px;min-height:44px;padding:0;border:1px solid rgba(215,192,143,.45);border-radius:6px 0 5px 0;background:rgba(16,19,21,.76);font-size:10px}
 #modal.hub-map-modal #panel .sortie-composition .sortie-member.waiting{border-color:rgba(223,201,153,.72)}
 #modal.hub-map-modal #panel .sortie-composition .sortie-preset-link{height:44px;min-height:44px;margin:0}
+
+/* Expedition character art uses the current floor scenery behind the standing figure. */
+#modal.hub-map-modal #panel.actor-workspace>.actor-backdrop{background:transparent!important}
+#modal.hub-map-modal #panel.actor-workspace.status-equipment>.actor-backdrop{background:transparent!important}
+
+/* A node's decision and its actions should fit in the available field pane. */
+#modal.hub-map-modal #panel.field-node-panel>.panel-body{padding:5px 10px 8px!important}
+#modal.hub-map-modal #panel.field-node-panel .scene-banner{margin-bottom:7px}
+#modal.hub-map-modal #panel.field-node-panel .field-encounter{height:clamp(112px,18dvh,170px);margin-bottom:7px}
+#modal.hub-map-modal #panel.field-node-panel .row{min-height:44px;margin:3px 0;padding:6px 9px}
+#modal.hub-map-modal #panel.field-node-panel .row .small{line-height:1.3}
+#modal.hub-map-modal #panel.field-node-panel .message{margin:5px 0 8px;line-height:1.45}
+@media(max-width:599px){
+ #modal.hub-map-modal #panel.field-stock-panel>.panel-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 6px;align-content:start}
+ #modal.hub-map-modal #panel.field-stock-panel .field-encounter,#modal.hub-map-modal #panel.field-stock-panel .row.static,#modal.hub-map-modal #panel.field-stock-panel .message,#modal.hub-map-modal #panel.field-stock-panel .actions{grid-column:1/-1}
+ #modal.hub-map-modal #panel.field-stock-panel button.row{min-width:0;margin:0;font-size:11px}
+ #modal.hub-map-modal #panel.field-stock-panel button.row b{overflow-wrap:anywhere}
+}
