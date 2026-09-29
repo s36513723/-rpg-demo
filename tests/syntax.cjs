@@ -53,7 +53,7 @@ assert(growthSource.includes('function awardExperience('),'shared EXP award func
 assert(growthSource.includes('H.pendingGrowth.stat+=growth;H.pendingGrowth.mastery+=growth'),'EXP threshold grants both growth point types');
 const exploreSource=fs.readFileSync('exploration/explore.js','utf8'),hubSource=fs.readFileSync('exploration/hub.js','utf8');
 assert(exploreSource.includes("awardExperience(40,'強敵撃破'"),'elite EXP reward');
-assert(exploreSource.includes("awardExperience(80,'ボス撃破'"),'boss EXP reward');
+assert(exploreSource.includes("awardExperience(80,'層ボス撃破'"),'boss EXP reward');
 assert(hubSource.includes("awardExperience(60,'依頼達成'"),'quest EXP reward');
 assert(hubSource.includes("awardExperience(100,'章報告'"),'story EXP reward');
 assert(!/grant\(\{[^\n}]*stat:/.test(exploreSource),'exploration no longer grants Stat Pt directly');

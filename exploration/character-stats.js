@@ -80,16 +80,21 @@ function initializeCharacterProgress(){
 }
 function awardExperience(amount,source='冒険',key=''){
  amount=Math.max(0,Math.floor(Number(amount)||0));if(!amount)return {exp:0,growth:0};
- if(key){const milestone='xp:'+key;if(H.milestones[milestone])return {exp:0,growth:0};H.milestones[milestone]=true}
- const old=H.experience||0,next=old+amount;
- H.experience=next;
+ const r=H.run;
+ if(key){const milestone='xp:'+key;if(H.milestones[milestone]||r?.pendingExpKeys?.includes(milestone))return {exp:0,growth:0};if(r)(r.pendingExpKeys||(r.pendingExpKeys=[])).push(milestone);else H.milestones[milestone]=true}
+ if(r){r.pendingExp=(r.pendingExp||0)+amount;logRun(source+' EXP +'+amount+'（帰還時に精算）');return {exp:amount,growth:0}}
+ const old=H.experience||0,next=old+amount;H.experience=next;
  const growth=Math.floor(next/GROWTH_EXP_STEP)-Math.floor(old/GROWTH_EXP_STEP);
  if(growth){H.pendingGrowth.stat+=growth;H.pendingGrowth.mastery+=growth}
- const reward=growth?' / 成長到達：全員 Stat Pt +'+growth+' / Mastery Pt +'+growth+'（宿で受取）':'';
- logRun(source+' EXP +'+amount+reward);
- return {exp:amount,growth};
+ logRun(source+' EXP +'+amount+(growth?' / 全員 Stat・Mastery Pt +'+growth+'（宿で受取）':''));
+ return {exp:amount,growth}
 }
-function awardExplorationExperience(r,n){
- awardExperience(20,'初踏破',r.dungeon+':'+r.floor+':'+n.id);
+function settleRunExperience(r){
+ const amount=r.pendingExp||0,old=H.experience||0;H.experience=old+amount;
+ const growth=Math.floor(H.experience/GROWTH_EXP_STEP)-Math.floor(old/GROWTH_EXP_STEP);
+ if(growth){H.pendingGrowth.stat+=growth;H.pendingGrowth.mastery+=growth}
+ for(const key of r.pendingExpKeys||[])H.milestones[key]=true;
+ return amount
 }
+function awardExplorationExperience(r,n){awardExperience(20,'場所を踏査')}
 function characterExperience(){const exp=H.experience||0,part=exp%GROWTH_EXP_STEP,left=part?GROWTH_EXP_STEP-part:GROWTH_EXP_STEP;return '<div class="character-experience"><div><b>EXP '+part+' / '+GROWTH_EXP_STEP+'</b><small>戦闘・探索・依頼で獲得 · 次の成長まで '+left+'</small></div><div class="experience-track" role="progressbar" aria-label="経験値" aria-valuemin="0" aria-valuemax="'+GROWTH_EXP_STEP+'" aria-valuenow="'+part+'"><i style="width:'+(part/GROWTH_EXP_STEP*100)+'%"></i></div></div>'}

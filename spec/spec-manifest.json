@@ -340,7 +340,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "exploration_tp_gain_initial_values_2026-09-30",
+  "last_sync_status": "exploration_place_boss_return_tp_runtime_2026-09-29",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
@@ -349,7 +349,9 @@
     "dual_wield_offhand_power_fraction": 0.35,
     "dual_wield_cost": 4,
     "two_hand_physical_defense_reduction": 0.1,
-    "two_hand_defense_reduction_rounds": 2
+    "two_hand_defense_reduction_rounds": 2,
+    "temporary_skill_tp_cost": 1,
+    "temporary_skill_tp_cost_status": "初期実装値・正本で未決定"
   },
   "implementation_inventory": {
     "skills": 315,
@@ -554,5 +556,23 @@
     "design": "spec/skill-effect-design-84.md",
     "verification": "tests/skill-effect-design.js 84/84、tests/browser.py 752/752、tests/battle-audit.py 53/53戦・console error 0。正本の他14シートとSkill DB既存37列の値に差分なし。spec/skill-effect-verification-2026-09-30.md。",
     "runtime": "未接続。主エンジン監査で84件の実行効果フィールドなし、battle-v44は旧296技。84技の実戦効果検証は未実施。"
+  },
+  "exploration_runtime_sync_2026_09_29": {
+    "workbook_source": "Library 正本 2026-09-29 16:40 UTC 版（同一内容 version 25）",
+    "implementation": "exploration/explore.js, character-stats.js, state.js, base.js, ui.js, presentation.js, boot.js, index.html",
+    "features": [
+      "各層10〜11地点のテーマ別地名と接続図",
+      "各層末のボス、勝利後全回復",
+      "帰還可能な休息地点だけでの自主帰還",
+      "探索中TPと一時スキル、帰還時のEXP精算"
+    ],
+    "initial_values": [
+      "一時スキル1件に1 TP",
+      "場所踏査20 EXP、層ボス80 EXPなど既存バランス値"
+    ],
+    "unresolved": [
+      "敗北時の戦利品・EXPの最終扱いは正本で未決定。EXPは履歴の未確定値として記録し恒久成長へ加算しない"
+    ],
+    "validation": "Chromium 390x844で地図・メニューを確認。構文テスト成功、ローカルブラウザ回帰755/755成功。"
   }
 }
