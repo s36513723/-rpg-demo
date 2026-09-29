@@ -1,4 +1,5 @@
 name: Capture persistent hub nav
+# recapture after duplicate-nav cleanup
 on:
   push:
     branches: [main]
