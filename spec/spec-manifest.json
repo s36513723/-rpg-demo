@@ -587,7 +587,7 @@
   },
   "exploration_four_field_panels_2026_09_30": {
     "status": "確定",
-    "workbook_sync": "Library 正本 version 28、05_拠点探索仕様 C40・07_UI仕様 A48:D49",
+    "workbook_sync": "Library 正本 version 29、05_拠点探索仕様 C40・07_UI仕様 A48:D50",
     "replacement": [
       "道具",
       "探索スキル",
@@ -599,7 +599,8 @@
       "地図下の封印回路ショートカット"
     ],
     "implementation": "exploration/explore.js, visuals.js, style.css, presentation.js, boot.js, index.html",
-    "verification": "実装後に確認",
-    "place_icon_hint": "廃屋へ置換。ノードは内容の大まかな分類を予兆アイコンで表示し、敵の細分類は入場または探索情報で判明。"
+    "verification": "構文検査成功。Chromiumブラウザ回帰759/759成功。セット中技能表示、地点使用、一地点一回を確認。",
+    "place_icon_hint": "廃屋へ置換。ノードは内容の大まかな分類を予兆アイコンで表示し、敵の細分類は入場または探索情報で判明。",
+    "skill_panel": "誰かがセットして使用可能な探索技能と担当者のみ表示。アクティブは地点で使用、パッシブは戦闘中に自動発動。仕掛け調査は調査地点。"
   }
 }
