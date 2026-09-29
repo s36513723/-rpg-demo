@@ -274,7 +274,7 @@ const chrome=()=>{
  document.querySelectorAll('#app>nav button').forEach(e=>{const icon=e.querySelector('.ico');if(icon)icon.innerHTML=glyph(actions[e.dataset.hub]||'compass')});
  const gear=document.querySelector('.header-tools [data-hub="settings"]');if(gear)gear.innerHTML=glyph('settings');
 };
-window.HUB_VISUAL={version:25,glyph,decorate,chrome,person,portrait,itemIcon,masteryIcon,regionIcon,actionIcon,npcStand};
+window.HUB_VISUAL={version:26,glyph,decorate,chrome,person,portrait,itemIcon,masteryIcon,regionIcon,actionIcon,npcStand,fieldMerchantImage:merchantImage};
 // Adapt the existing presentation layer without duplicating its navigation or game actions.
 const showBase=window.show,townBase=window.town,mapBase=window.drawDungeon,closeBase=window.closeM;
 window.show=html=>{showBase(html);const route=HUB_UI.state.route||{name:'note',args:[]};if(document.getElementById('app').classList.contains('facility-world')){chrome();return}const panel=document.getElementById('panel');decorate(panel,route);const exit=panel.querySelector('.modal-x');if(exit){exit.setAttribute('aria-label',activeRun()?'地図へ戻る':'拠点へ戻る');exit.innerHTML=glyph(activeRun()?'map':'home')+'<span>'+(activeRun()?'地図へ':'拠点へ')+'</span>'}const back=panel.querySelector('.panel-back');if(back)back.innerHTML=glyph('back')+'<span>戻る</span>';chrome()};
