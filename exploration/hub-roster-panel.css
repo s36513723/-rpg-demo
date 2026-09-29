@@ -34,3 +34,38 @@
 #app:not(.in-expedition) #party .m .hub-roster-metric small{flex:none!important;width:auto!important;font:600 6px/8px sans-serif!important}
 #app:not(.in-expedition) #party .m .hub-roster-metric b{position:static!important;display:block!important;margin:0!important;color:#f6e9ce!important;font:600 6px/8px sans-serif!important;white-space:nowrap!important}
 #app:not(.in-expedition) #party .m .hub-roster-track{flex:none!important;height:3px!important;width:100%!important}
+
+/* Equipment and character actions share one 51px control language. */
+#panel.actor-workspace.status-equipment .character-equipment-shell{--equip-control:51px;--equip-edge:7px;--equip-gap:5px}
+#panel.actor-workspace.status-equipment .character-equipment-side{top:18px!important;bottom:auto!important;width:var(--equip-control)!important;gap:var(--equip-gap)!important;align-items:stretch!important;justify-content:flex-start!important}
+#panel.actor-workspace.status-equipment .character-equipment-side.left{left:var(--equip-edge)!important}
+#panel.actor-workspace.status-equipment .character-equipment-side.right{right:var(--equip-edge)!important}
+#panel.actor-workspace.status-equipment .character-equip-slot,
+#panel.actor-workspace.status-equipment .character-equip-weight,
+#panel.actor-workspace.status-equipment .character-action-panel{box-sizing:border-box!important;width:var(--equip-control)!important;height:var(--equip-control)!important;min-height:var(--equip-control)!important;aspect-ratio:1!important;padding:3px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px!important;text-align:center!important;border:1px solid rgba(219,199,142,.52)!important;border-radius:9px!important;background:rgba(9,25,18,.32)!important;box-shadow:none!important;color:#f5e8c8!important}
+#panel.actor-workspace.status-equipment .character-equip-slot small,
+#panel.actor-workspace.status-equipment .character-equip-weight small,
+#panel.actor-workspace.status-equipment .character-action-panel small{font:600 7px/1.1 sans-serif!important;color:#e8dfc8!important;white-space:nowrap!important}
+#panel.actor-workspace.status-equipment .character-equip-slot b{margin:0!important;font-size:19px!important;line-height:1!important}
+#panel.actor-workspace.status-equipment .character-equip-weight b{margin:0!important;font:600 9px/1.1 sans-serif!important;white-space:nowrap!important}
+#panel.actor-workspace.status-equipment .character-action-deck{left:var(--equip-edge)!important;right:var(--equip-edge)!important;bottom:8px!important;inset:auto var(--equip-edge) 8px!important;padding:0!important;align-items:flex-end!important;justify-content:space-between!important}
+#panel.actor-workspace.status-equipment .character-action-column{width:var(--equip-control)!important;max-width:var(--equip-control)!important;flex:0 0 var(--equip-control)!important;gap:var(--equip-gap)!important}
+#panel.actor-workspace.status-equipment .character-action-icon{width:19px;height:19px}
+
+/* The town art stays at its original brightness behind equipment. */
+#modal.hub-overlay-modal.hub-location-modal:has(#panel.actor-workspace.status-equipment){background:transparent!important}
+#modal.hub-location-modal #panel.actor-workspace.status-equipment{background:transparent!important}
+#modal.hub-location-modal #panel.actor-workspace.status-equipment>.actor-backdrop{background-image:var(--hub-place-bg)!important;background-size:100vw 100dvh!important;background-position:var(--hub-place-pos,center center)!important;background-repeat:no-repeat!important}
+#panel.actor-workspace.status-equipment>.panel-head{background:transparent!important}
+
+/* Labels and values sit inside their gauges, keeping all six cards compact. */
+#app:not(.in-expedition) #party .m{gap:1px!important}
+#app:not(.in-expedition) #party .m .hub-roster-meter{position:relative!important;display:block!important;height:11px!important;min-height:11px!important;margin:0!important}
+#app:not(.in-expedition) #party .m .hub-roster-track{position:absolute!important;inset:0!important;width:100%!important;height:11px!important;border-radius:3px!important;background:rgba(4,15,11,.82)!important}
+#app:not(.in-expedition) #party .m .hub-roster-track>span{border-radius:3px!important;opacity:.86!important}
+#app:not(.in-expedition) #party .m .hub-roster-metric{position:absolute!important;z-index:1!important;inset:0!important;height:11px!important;padding:0 2px!important;line-height:11px!important;pointer-events:none!important;text-shadow:0 1px 2px #000,0 0 3px #000!important}
+#app:not(.in-expedition) #party .m .hub-roster-metric small,
+#app:not(.in-expedition) #party .m .hub-roster-metric b{font:700 6px/11px sans-serif!important;color:#fff9e9!important}
+#panel.actor-workspace.status-equipment .character-equip-slot[aria-pressed="true"]{border-color:#f0d590!important;background:rgba(63,77,44,.58)!important}
+#app:not(.in-expedition) #party .m .hub-roster-metric small,
+#app:not(.in-expedition) #party .m .hub-roster-metric b{font-size:7px!important}
