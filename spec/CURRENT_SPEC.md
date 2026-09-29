@@ -91,12 +91,13 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - HP/SP on hub cards use slim always-visible line gauges.
 
 ## Battle UI
-1. ROUND / AUTO / speed / settings
-2. turn order
-3. main enemy + current acting ally presentation
-4. commands
-5. ally 3x3 cards
-Commands sit immediately above ally cards. Character appeal has priority over tiny board-token presentation.
+- The fixed portrait battle stage keeps the official background visible from top to bottom.
+- ROUND, terrain, turn order and settings occupy the top edge. Nine enemy cells form three ranks, with the front rank visibly larger.
+- The acting ally illustration sits at lower left. Its name remains clear of the party formation.
+- Six ally status plates occupy a centered 3x3 formation with three faint empty cells. Four commands sit in one horizontal row beneath those plates; AUTO and speed stack vertically to their right.
+- Skill and item choices appear in two columns with one line per choice, without a visible close/back control. Choosing a skill enters target selection; valid targets and the selected target receive distinct effects.
+- The selected skill's explanation and battle playback text sit in the open band between the enemies and ally cards. The choice tray and message use the battle stage's translucent plate styling.
+- These are confirmed UI placement and presentation decisions. They do not promote the demo's provisional character, skill or balance data to confirmed game rules.
 
 ## Status discipline
 - Implementation or passing tests do not imply approval.
