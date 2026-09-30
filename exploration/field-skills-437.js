@@ -1,2 +1,3 @@
-/* canonical Field Skill registry */
-(function(root){'use strict';root.RPG_FIELD_SKILLS_437={version:1,catalogVersion:437,count:25,rows:[]};})(globalThis);
+/* Canonical exploration Field Skill registry derived from 08_SkillDB / 16_FieldSkill. */
+(function(root){'use strict';
+const rows=[];
