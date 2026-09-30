@@ -90,7 +90,40 @@ function fieldExplorationSkills(){if(!activeRun())return dungeon();const skills=
 function fieldSkillApplies(s,n){const d=s.def;if(!n||!d||d.mode==='Passive')return false;if(d.scene==='戦闘'&&!['battle','elite','boss'].includes(n.type))return false;if(d.fieldTags.includes('汎用')||d.fieldTags.includes('素材依存'))return true;return d.fieldTags.some(t=>(n.fieldTags||[]).includes(t))}
 function fieldSkillEdge(s,n){const f=H.run.floors[H.run.floor-1];return (f.fieldEdges||[]).find(e=>!e.unlocked&&e.from===n.id&&(e.skill===s.name||e.skill===s.sourceName||s.def.fieldTags.includes(e.tag)))}
 function fieldNodeSkills(){const n=currentNode();if(!n||n.done||H.run.battle)return resumeNode();const skills=setExplorationSkills().filter(s=>fieldSkillApplies(s,n)),used=H.run.fieldSkillUses||{};show('<h2>この地点で使う探索スキル</h2>'+HT('場所Fieldタグ',fieldTagsText(n))+(skills.length?skills.map(s=>{const key=H.run.floor+':'+n.id+':'+s.def.id,tier=fieldTier(s),edge=fieldSkillEdge(s,n);return HB(s.name,s.user+' / 段階 '+tier+' / '+(edge?'特殊経路あり':'対応 '+s.def.fieldTags.join('・'))+' / '+s.def.description,'activateFieldSkill',[s.name],!!used[key]||vitals[s.i].sp<(s.def.spCost||0))}).join(''):HT('この地点で使えるField Skillはありません','対応Fieldタグかスキルセットを確認してください。'))+back())}
-function activateFieldSkill(name){const n=currentNode(),r=H.run;if(!n||n.done||r.battle||!setExplorationSkills().some(s=>s.name===name&&(s.mode==='Field'||s.mode==='Active')))return;const key=r.floor+':'+n.id+':'+name;r.fieldSkillUses||={};if(r.fieldSkillUses[key])return;r.fieldSkillUses[key]=true;let result='周囲の様子を確かめた。';if(['索敵','強敵察知','弱点鑑識'].includes(name)){result='気配：'+nodeName(n)+' / 危険度 '+(n.threat||1)+'。'+(['battle','elite','boss'].includes(n.type)?'戦闘地点で敵編成を確認できます。':'ここでは戦闘の気配は薄い。')}else if(['解錠','罠外し'].includes(name)){result='仕掛けの構造が分かった。調査地点では「周囲の仕掛けを調べる」から作動できます。'}else if(name==='潜伏'){r.stealth=(r.stealth||0)+1;result='隠密で通過できる機会を1回確保した。'}else if(name==='奇襲回避'){r.buff='先制';result='次の戦闘に先制の恩恵を得た。'}else if(name==='素材鑑定'){result='この地域で見つかる素材：'+(hc().labels[region().material]||region().material)+'。'}else if(name==='隠し道発見'){const secret=r.floors[r.floor-1].nodes.find(x=>x.hidden&&x.type==='secret');if(secret){secret.hidden=false;const f=r.floors[r.floor-1];if(!f.open.includes(secret.id))f.open.push(secret.id);result='隠し地点への道を発見した。'}else result='この層の隠し道はすでに判明している。'}logRun(name+'を使用');persist();drawDungeon();checkpointResult(name,result,'resumeNode')}
+function bestFieldSkillById(id){return setExplorationSkills().filter(s=>s.def.id===id).sort((a,b)=>fieldTier(b)-fieldTier(a))[0]||null}
+function availableMaterial(n){return Math.max(0,(loot[n]||0)-(H.unappraised?.materials?.[n]||0)-(H.run?.finds?.materials?.[n]||0))}
+function consumeFieldSP(s){const cost=s.def.spCost||0;if(!cost)return true;if(vitals[s.i].sp<cost){note(names[s.i]+'のSPが足りません。必要SP '+cost);return false}vitals[s.i].sp-=cost;return true}
+function fieldGatherReward(id,tier){
+ if(id==='SK0334')return tier===1?{鉱石:1}:tier===2?{鉱石:1,結晶:1}:{鉱石:1,結晶:1,希少鉱:1};
+ if(id==='SK0339')return tier===1?{魚:1}:tier===2?{魚:2}:{魚:2,希少魚:1};
+ if(id==='SK0350')return tier===1?{植物素材:1}:tier===2?{植物素材:2}:{植物素材:2,希少植物素材:1};
+ if(id==='SK0355')return tier===1?{獣素材:1}:tier===2?{獣素材:2}:{獣素材:2,希少獣素材:1};
+ if(id==='SK0414')return tier===1?{機巧部品:1}:tier===2?{機巧部品:2}:{機巧部品:2,希少機巧部品:1};
+ return null
+}
+function activateFieldSkill(name){
+ const n=currentNode(),r=H.run,s=setExplorationSkills().find(x=>x.name===name&&fieldSkillApplies(x,n));if(!n||n.done||r.battle||!s)return;
+ const d=s.def,key=r.floor+':'+n.id+':'+d.id;r.fieldSkillUses||={};if(r.fieldSkillUses[key])return;
+ const tier=fieldTier(s),f=r.floors[r.floor-1],edge=fieldSkillEdge(s,n),gather=fieldGatherReward(d.id,tier);let result='',got=[];
+ if(['SK0389','SK0390','SK0408'].includes(d.id)&&!Object.keys(loot).some(x=>availableMaterial(x)>0))return note('簡易加工に使える鑑定済み素材がありません。');
+ if(!consumeFieldSP(s))return;
+ if(gather){got=grant({materials:gather});result='採取段階 '+tier+'。'+got.join(' / ')}
+ else if(edge){edge.unlocked=true;if(!n.links.includes(edge.to))n.links.push(edge.to);result='条件付き特殊経路を開通した。新しい場所は増やさず、既存の「'+(f.nodes.find(x=>x.id===edge.to)?.place||'地点')+'」へ接続した。'}
+ else if(d.id==='SK0415'){r.fieldBuffs.weaponTune=Math.max(r.fieldBuffs.weaponTune||0,tier);result='現地整備を完了。次の戦闘だけ武器性能を段階 '+tier+' で強化する。'}
+ else if(d.id==='SK0408'){const mat=Object.keys(loot).find(x=>availableMaterial(x)>0);loot[mat]--;r.crafted.研磨具=(r.crafted.研磨具||0)+1;result=mat+'を使い、探索中に使える研磨具を1個作成した。'}
+ else if(d.id==='SK0389'){const mat=Object.keys(loot).find(x=>availableMaterial(x)>0);loot[mat]--;r.crafted.応急調合品=(r.crafted.応急調合品||0)+1;result='鑑定済み素材を1個使い、探索中に使える応急調合品を1個作成した。'}
+ else if(d.id==='SK0390'){const mat=Object.keys(loot).find(x=>availableMaterial(x)>0);loot[mat]--;r.crafted.加工用調合品=(r.crafted.加工用調合品||0)+1;result='鑑定済み素材を1個使い、探索中に使える加工用調合品を1個作成した。'}
+ else if(d.id==='SK0071'){if(!(n.extras||[]).includes('treasure'))result='この場所には解錠対象の宝箱は見つからない。';else{n.treasureRevealed=true;n.treasureOpened=true;got=grant({materials:{[region().material]:tier>=3?2:1,結晶:tier>=2?1:0}});result='宝箱を安全に解錠した。'+got.join(' / ')}}
+ else if(d.id==='SK0075'){if(!(n.extras||[]).includes('trap'))result='解除対象の罠は見つからない。';else{n.trapDisabled=true;result='罠を解除した。対応段階 '+tier+'。'}}
+ else if(d.id==='SK0072'){r.stealth=(r.stealth||0)+1;result='通常敵を避けるための潜伏機会を1回確保した。'}
+ else if(d.id==='SK0073'){n.scouted=Math.max(n.scouted||0,tier);result='索敵段階 '+tier+'。敵・危険・周辺ルート情報を更新した。'}
+ else if(d.id==='SK0079'){n.treasureRevealed=true;result=(n.extras||[]).includes('treasure')?'宝の気配を発見。段階 '+tier+' まで手掛かりを得た。':'この場所に隠し宝箱の反応はない。'}
+ else if(d.id==='SK0074'){n.materialIntel=Math.max(n.materialIntel||0,tier);result='素材情報を段階 '+tier+' まで見極めた。正式鑑定は帰還後に行う。'}
+ else if(d.id==='SK0078'){n.weaknessIntel=Math.max(n.weaknessIntel||0,tier);result='敵情報を段階 '+tier+' まで鑑識した。戦闘準備画面に反映する。'}
+ else if(d.id==='SK0428'){r.fieldBuffs.escapeBonus=Math.max(r.fieldBuffs.escapeBonus||0,10+tier*5);result='次の戦闘の逃走判定を補助する経路を確認した。'}
+ else result='周囲の専門情報を段階 '+tier+' まで確認した。';
+ r.fieldSkillUses[key]=true;logRun(s.name+'を使用');persist();drawDungeon();checkpointResult(s.name,result,'resumeNode')
+}
 function fieldSkillSet(){if(!activeRun())return dungeon();show('<h2>スキルセット</h2>'+HT('探索中の設定','習得済みと一時習得スキルをセットできます。')+names.map((name,i)=>HB(name,'Cost '+skillCost(i)+' / '+skillCap(i)+' · セット中 '+skillSet[i].length+'件','skills',[i])).join('')+HB('Tactical Ptで一時習得',(H.run.tp||0)+' TP','tacticalMenu')+back())}
 function fieldLoot(){if(!activeRun())return dungeon();const f=H.run.finds||{},named=(items,labels)=>Object.entries(items||{}).filter(([,q])=>q>0).map(([n,q])=>(labels?.[n]||n)+' ×'+q).join(' / ')||'まだありません';show('<h2>今回の戦利品</h2>'+HT('素材',named(f.materials,hc().labels))+HT('道具',named(f.tools))+HT('武器',(f.weapons||[]).join(' / ')||'まだありません')+HT('防具',(f.armors||[]).join(' / ')||'まだありません')+HT('収支',moneyText(gold-H.run.baseline.gold)+' · EXP '+(H.run.pendingExp||0))+HT('鑑定','探索で得た品は帰還後、ギルドで鑑定すると使用できます。')+back())}
 function applyExposure(n){const r=H.run;addUnique(journal.terrains,n.terrain);addUnique(journal.terrains,r.themes[r.floor-1]);addUnique(H.discoveries[r.dungeon].terrains,n.terrain);if(['camp','merchant'].includes(n.type)){r.hazard=Math.max(0,r.hazard-1);return}if(r.dungeon==='深淵の樹海'){r.hazard=Math.min(4,r.hazard+(/毒沼|泥濘/.test(n.terrain)?2:1));if(r.hazard>=3&&!explorationPower('appraise')){fieldDamage(.04,'瘴気');logRun('瘴気が濃い。浄化香・泉・野営で取り除ける。')}}if(r.dungeon==='沈黙の砂都'){r.hazard=/岩陰|屋内|地下|遺跡内部|洞窟/.test(n.terrain)?Math.max(0,r.hazard-1):Math.min(4,r.hazard+1);if(r.hazard>=3){vitals.forEach((v,i)=>{if(v.hp>0)v.sp=Math.max(0,v.sp-Math.ceil(rules().derived(stats[i]).sp*.08))});logRun('熱気でSPを消耗。清水か日陰で回避できる。')}}}
