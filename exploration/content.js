@@ -20,7 +20,7 @@ var HUB_CONTENT = (() => {
   '浄化香':{price:160,desc:'瘴気や有害な空気を弱める探索道具。深淵の樹海で役立つ。',field:'region'},
   '清水':{price:100,desc:'熱気と乾燥をしのぐ探索用品。沈黙の砂都での行動を助ける。',field:'region'}
  };
- const materialPrices={'皮':90,'結晶':280,'封文片':160,'風晶石':180,'霊樹液':180,'日輪金砂':220};
+ const materialPrices={'皮':90,'結晶':280,'封文片':160,'風晶石':180,'霊樹液':180,'日輪金砂':220,'鉱石':120,'希少鉱':360};
  const labels={'皮':'森獣の皮','結晶':'魔力結晶','古器':'未鑑定の古器'};
  // Events have a safe choice, a risky choice and a conditional, guaranteed choice.
  const eventRows = [
