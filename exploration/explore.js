@@ -1,4 +1,4 @@
-/* Stateful exploration: a node is completed only after its outcome is committed. */
+/* Stateful exploration: canonical Field-tag runtime. */
 function rng(seed){let s=seed>>>0;return ()=>{s+=0x6D2B79F5;let t=s;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296}}
 function shuffle(a,random=Math.random){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function validRun(r){return r&&hc().regions[r.dungeon]&&Number.isInteger(r.floor)&&r.floor>=1&&r.floor<=3&&Array.isArray(r.floors)&&r.floors.length===3&&r.floors.every(f=>Array.isArray(f.nodes)&&f.nodes.length>=10&&f.nodes.length<=12&&Array.isArray(f.open)&&f.nodes.every(n=>Number.isInteger(n.id)&&n.id>=0&&n.id<12&&Array.isArray(n.links)&&n.links.every(id=>Number.isInteger(id)&&id>=0&&id<f.nodes.length)))}
