@@ -1,28 +1,45 @@
 /* Stateful exploration: a node is completed only after its outcome is committed. */
 function rng(seed){let s=seed>>>0;return ()=>{s+=0x6D2B79F5;let t=s;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296}}
 function shuffle(a,random=Math.random){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function validRun(r){return r&&hc().regions[r.dungeon]&&Number.isInteger(r.floor)&&r.floor>=1&&r.floor<=3&&Array.isArray(r.floors)&&r.floors.length===3&&r.floors.every(f=>Array.isArray(f.nodes)&&f.nodes.length>=9&&f.nodes.length<=12&&Array.isArray(f.open)&&f.nodes.every(n=>Number.isInteger(n.id)&&n.id>=0&&n.id<12&&Array.isArray(n.links)&&n.links.every(id=>Number.isInteger(id)&&id>=0&&id<f.nodes.length)))}
+function validRun(r){return r&&hc().regions[r.dungeon]&&Number.isInteger(r.floor)&&r.floor>=1&&r.floor<=3&&Array.isArray(r.floors)&&r.floors.length===3&&r.floors.every(f=>Array.isArray(f.nodes)&&f.nodes.length>=10&&f.nodes.length<=12&&Array.isArray(f.open)&&f.nodes.every(n=>Number.isInteger(n.id)&&n.id>=0&&n.id<12&&Array.isArray(n.links)&&n.links.every(id=>Number.isInteger(id)&&id>=0&&id<f.nodes.length)))}
 const PLACE_KINDS=['廃屋','狭路・通路','広間','分岐路','高所・低所','水辺・特殊地形','崩落・障害区域','遺構・人工物','隠し区画・脇道','深部・主室'];
 const PLACE_SHORT=['廃屋','狭路','広間','分岐路','高所','水辺','崩落跡','遺構','脇道','主室'];
 function placeLabel(theme,kind){const short=PLACE_SHORT[PLACE_KINDS.indexOf(kind)]||'地点';const prefix={'森林':'森','洞窟':'岩窟','廃墟都市':'廃都','山岳':'山路','沼地':'沼','砂漠遺跡':'砂都','海上・船':'船','地下神殿':'神殿'}[theme]||theme;return prefix+'の'+short}
+function fieldDb(){return window.RPG_FIELD_SKILLS_437||{skills:{},byId:{},rows:[]}}
+function fieldDef(name){return fieldDb().skills[name]||null}
+function fieldDefById(id){return fieldDb().byId[id]||null}
+function tacticalCost(name){const d=fieldDef(name)||rules().meta(name);return Math.max(1,Number(d?.tpCost)||(Number(d?.unlocks?.[0]?.rank||d?.rank||1)>=9?2:1))}
+function fieldTier(s){const d=fieldDef(s.name);if(!d)return 1;const rank=ranksFor(s.i)[d.mastery]||0,idx={PHY:0,SKL:1,ARC:2,MND:3},stat=stats[s.i]?.[idx[d.stat]??1]||0;return Math.max(1,Math.min(3,1+Number(rank>=8||stat>=40)+Number(rank>=10||stat>=60)))}
+function fieldTagIcon(t){return ({鉱物:'◆',植物:'♣',獣:'◇',水域:'≈',機械:'⚙',遺物:'▣',聖域:'✦',呪い:'☾'})[t]||'•'}
+function fieldTagsText(n){return (n?.fieldTags||[]).map(t=>fieldTagIcon(t)+' '+t).join(' / ')||'Fieldタグなし'}
+function pickFieldTags(theme,place,type,random){const base={森林:['植物','獣'],洞窟:['鉱物','水域'],廃墟都市:['遺物','機械'],山岳:['鉱物','獣'],沼地:['植物','水域','呪い'],砂漠遺跡:['遺物','鉱物','聖域'],'海上・船':['水域','獣'],地下神殿:['遺物','聖域','呪い']}[theme]||[];const a=[...base];if(/水辺/.test(place))a.push('水域');if(/遺構|廃屋/.test(place))a.push('遺物');if(/崩落|高所/.test(place))a.push('鉱物');if(type==='forge')a.push('機械');const pool=[...new Set(a)];const count=random()<.2?0:random()<.72?1:2;return shuffle(pool,random).slice(0,Math.min(count,pool.length))}
+function nodeExtras(type,random){if(type==='boss')return[];const out=[];if(random()<.24)out.push('treasure');if(random()<.16)out.push('trap');if(random()<.08)out.push('npc');return out}
+function edgeSkillForTag(tag,random){if(tag==='水域')return'水の導き';if(tag==='植物')return'鳥瞰';if(tag==='聖域'||tag==='呪い')return'招霊';if(tag==='機械'||tag==='遺物')return random()<.7?'遺構解析':'扉解錠';return null}
+function makeFieldEdge(nodes,random){const froms=shuffle(nodes.filter(n=>n.id>=2&&n.id<=7&&!n.hidden&&n.fieldTags?.length),random);for(const a of froms){for(const tag of shuffle(a.fieldTags,random)){const skill=edgeSkillForTag(tag,random);if(!skill)continue;const targets=nodes.filter(b=>!b.hidden&&b.id>a.id+1&&b.id!==9&&!a.links.includes(b.id));if(!targets.length)continue;const b=targets[Math.floor(random()*targets.length)];return {from:a.id,to:b.id,skill,tag,unlocked:false}}}return null}
+function outgoingLinks(f,n){const extra=(f.fieldEdges||[]).filter(e=>e.unlocked&&e.from===n.id).map(e=>e.to);return [...new Set([...(n.links||[]),...extra])]}
 function gainTP(amount,source){if(!H.run||amount<=0)return;H.run.tp=(H.run.tp||0)+amount;logRun(source+'：TP +'+amount)}
 function tacticalEligible(i,n){const d=rules().meta(n);if(!H.run||!d?.unlocks?.length||learned[i].includes(n)||(H.run.temporarySkills?.[i]||[]).includes(n))return false;return d.unlocks.some(u=>{const category=rules().masteries[u.mastery]?.category;return rules().canLearn(n,u.mastery,ranksFor(i),stats[i])&&(!['源泉','術法','技能'].includes(category)||masteryOwned[i][category]?.includes(u.mastery))})}
 function tacticalMenu(){if(!H.run)return dungeon();show('<h2>Tactical Pt / TP</h2>'+HT('残り '+(H.run.tp||0)+' TP','条件を満たす未習得スキルを、この探索中だけ取得。帰還時に消失。')+names.map((name,i)=>HB(name,'一時習得 '+(H.run.temporarySkills?.[i]?.length||0)+'件','tacticalSkills',[i])).join(''))}
-function tacticalSkills(i){if(!H.run||!Number.isInteger(i)||i<0||i>=6)return;const options=Object.keys(rules().skills).filter(n=>tacticalEligible(i,n));show('<h2>'+hesc(names[i])+' / 一時習得</h2>'+HT('残り '+(H.run.tp||0)+' TP','1スキル1 TP（仮値）。取得後にスキル画面でセット。')+(options.length?options.map(n=>HB(n,skillDescription(rules().meta(n)),'tacticalAcquire',[i,n],H.run.tp<1)).join(''):HT('取得できるスキルはありません','Mastery Rankと能力条件を確認してください')))}
-function tacticalAcquire(i,n){if(!H.run||H.run.battle||!(H.run.tp>0)||!tacticalEligible(i,n))return;H.run.tp--;H.run.temporarySkills[i].push(n);logRun(names[i]+'：'+n+'を一時習得');persist();tacticalSkills(i)}
+function tacticalSkills(i){if(!H.run||!Number.isInteger(i)||i<0||i>=6)return;const options=Object.keys(rules().skills).filter(n=>tacticalEligible(i,n));show('<h2>'+hesc(names[i])+' / 一時習得</h2>'+HT('残り '+(H.run.tp||0)+' TP','必要TPは正本の習得Rankに応じて1～2。取得後にスキル画面でセット。')+(options.length?options.map(n=>{const cost=tacticalCost(n);return HB(n,'必要 '+cost+' TP / '+skillDescription(rules().meta(n)),'tacticalAcquire',[i,n],H.run.tp<cost)}).join(''):HT('取得できるスキルはありません','Mastery Rankと能力条件を確認してください')))}
+function tacticalAcquire(i,n){const cost=tacticalCost(n);if(!H.run||H.run.battle||H.run.tp<cost||!tacticalEligible(i,n))return;H.run.tp-=cost;H.run.temporarySkills[i].push(n);logRun(names[i]+'：'+n+'を一時習得（TP '+cost+'）');persist();tacticalSkills(i)}
 function makeRun(id,themes){
  const seed=(Math.random()*0xffffffff)>>>0,random=rng(seed),reg=hc().regions[id];
  const selected=(themes&&themes.length===3?themes:shuffle(reg.themes,random).slice(0,3)).map(x=>reg.themes.includes(x)?x:reg.themes[0]);
- const r={id:Date.now().toString(36)+'-'+seed.toString(36),dungeon:id,seed,floor:1,themes:selected,floors:[],pending:null,phase:null,battle:null,camped:{},mechanisms:{},research:0,hazard:0,buff:'なし',morale:'なし',stealth:hasSkill('潜伏')?1:0,log:[],baseline:resourceSnapshot(),finds:{materials:{},tools:{},weapons:[],armors:[]},startedAt:Date.now(),routeCount:0,battles:0,escapes:0,rescues:[],events:[],treasures:[],questStart:[],lastNode:null,tp:0,temporarySkills:names.map(()=>[]),pendingExp:0};
+ const r={id:Date.now().toString(36)+'-'+seed.toString(36),dungeon:id,seed,floor:1,themes:selected,floors:[],pending:null,phase:null,battle:null,camped:{},mechanisms:{},research:0,hazard:0,buff:'なし',morale:'なし',stealth:hasSkill('潜伏')?1:0,log:[],baseline:resourceSnapshot(),finds:{materials:{},tools:{},weapons:[],armors:[]},startedAt:Date.now(),routeCount:0,battles:0,escapes:0,rescues:[],events:[],treasures:[],questStart:[],lastNode:null,tp:0,temporarySkills:names.map(()=>[]),pendingExp:0,fieldSkillUses:{},crafted:{},fieldBuffs:{}};
  let pool=shuffle(hc().events.filter(e=>e.region===id),random),pi=0;
  for(let f=1;f<=3;f++){
-  const links=[[[2,3],[3,4],[5,6],[6,7],[5,7],[8],[8],[8],[9],[]],[[2,4],[2,3],[5,6],[6,7],[5,7],[8],[8],[8],[9],[]]][Math.floor(random()*2)];
+  const links=cp([[[2,3],[3,4],[5,6],[6,7],[5,7],[8],[8],[8],[9],[]],[[2,4],[2,3],[5,6],[6,7],[5,7],[8],[8],[8],[9],[]]][Math.floor(random()*2)]);
   const types=['battle','explore','event','camp','elite','merchant',random()<.5?'event':'battle','forge','explore','boss'];
   const places=shuffle(PLACE_KINDS.slice(0,9),random).concat(PLACE_KINDS[9]),tpool=terrainPool(selected[f-1]);
-  const nodes=types.map((type,i)=>({id:i,type,placeType:places[i],place:placeLabel(selected[f-1],places[i]),returnPoint:type==='camp',links:links[i],terrain:tpool[Math.floor(random()*tpool.length)],threat:1+Math.floor(random()*3),done:false,entered:false,eventId:type==='event'?pool[(pi++)%pool.length].id:null,roll:random(),stock:null,used:false}));
-  if(f<3&&random()<.25){nodes[6].links.push(10);nodes.push({id:10,type:'camp',placeType:'隠し区画・脇道',place:placeLabel(selected[f-1],'隠し区画・脇道'),returnPoint:true,links:[8],terrain:tpool[0],threat:1,done:false,entered:false,roll:random(),used:false})}
-  if(f===3)nodes.push({id:10,type:'secret',placeType:'隠し区画・脇道',place:placeLabel(selected[f-1],'隠し区画・脇道'),links:[],terrain:tpool[0],threat:1,done:false,entered:false,hidden:true,roll:random()});
-  r.floors.push({nodes,open:[0,1]});
+  const nodes=types.map((type,i)=>{const placeType=places[i],terrain=tpool[Math.floor(random()*tpool.length)];return {id:i,type,placeType,place:placeLabel(selected[f-1],placeType),returnPoint:type==='camp',links:links[i],terrain,fieldTags:pickFieldTags(selected[f-1],placeType,type,random),extras:nodeExtras(type,random),threat:1+Math.floor(random()*3),done:false,entered:false,eventId:type==='event'?pool[(pi++)%pool.length].id:null,roll:random(),stock:null,used:false}});
+  let targetCount=10+Math.floor(random()*3);if(f===3)targetCount=Math.max(11,targetCount);
+  for(let idn=10;idn<targetCount;idn++){
+   const secret=f===3&&idn===10,placeType=secret?'隠し区画・脇道':PLACE_KINDS[Math.floor(random()*(PLACE_KINDS.length-1))],type=secret?'secret':(random()<.16?'camp':random()<.38?'event':random()<.65?'explore':'battle'),terrain=tpool[Math.floor(random()*tpool.length)],source=[2,4,5,6,7][Math.floor(random()*5)];
+   const node={id:idn,type,placeType,place:placeLabel(selected[f-1],placeType),returnPoint:type==='camp',links:secret?[]:[8],terrain,fieldTags:pickFieldTags(selected[f-1],placeType,type,random),extras:nodeExtras(type,random),threat:1+Math.floor(random()*3),done:false,entered:false,eventId:type==='event'?pool[(pi++)%pool.length].id:null,roll:random(),stock:null,used:false,hidden:secret};
+   nodes.push(node);nodes[source].links.push(idn);
+  }
+  const edge=random()<.65?makeFieldEdge(nodes,random):null;
+  r.floors.push({nodes,open:[0,1],fieldEdges:edge?[edge]:[]});
  }
  return r
 }
