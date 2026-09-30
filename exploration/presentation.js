@@ -271,7 +271,7 @@ const uiActions={
  uiClearTrack(){H.tracked=null;persist();questMenu('active')},
  uiDismissStatus(){closeM();settings()},
  uiCarryUsers(n){if(H.run?.battle)return pendingBattleMenu();if(!hc().tools[n]?.battle)return;show('<h2>'+hesc(n)+'を携行</h2>'+names.map((name,i)=>HB(name,eq[i][9],'setEquip',[i,9,n])).join(''))},
- uiMapLegend(){show('<h2>地図の見方</h2><div class="legend-grid">'+[['battle','敵の気配'],['explore','調査の手掛かり'],['event','不明な出来事'],['camp','休息の気配'],['merchant','人の気配'],['forge','仕掛けの気配']].map(([type,t])=>HT(nodeIcon({type})+' '+t)).join('')+'</div><p class="small">アイコンは予兆です。敵の種類や報酬は、入ってから判明します。明るい場所を選択してください。</p>')},
+ uiMapLegend(){const entries=[['battle','敵の気配'],['explore','調査の手掛かり'],['event','不明な出来事'],['camp','休息の気配'],['merchant','人の気配'],['forge','仕掛けの気配'],['stairs','次の層'],['elite','強敵'],['boss','守護者'],['secret','隠し地点']];show('<h2>地図の見方</h2><div class="legend-grid">'+entries.map(([type,label])=>'<div class="row static legend-entry"><i>'+HUB_VISUAL.glyph(HUB_VISUAL.nodeGlyph(type))+'</i><b>'+hesc(label)+'</b></div>').join('')+'</div><p class="small">地図と同じアイコンです。強敵・守護者の区別は探索情報が十分な場合や到達後に表示されます。敵の種類や報酬は入るまで確定しません。</p>')},
  uiSupply(){if(!requireTown())return;toolShop('field')},
  uiQuestList(){questMenu('active')},
  uiInventory(t){U.inventory=t;itemCategory(t)},
