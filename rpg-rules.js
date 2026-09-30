@@ -172,6 +172,19 @@ if(canonical315?.count===315){
   else masteries[m]={category:categoryMap[m],branches};
  }
 }
+const canonicalField437=root.RPG_FIELD_SKILLS_437||(typeof require!=='undefined'?(()=>{try{return require('./exploration/field-skills-437.js')}catch(_){return null}})():null);
+if(canonicalField437?.count>=23){
+ const alias={解錠:'宝箱解錠',隠し道発見:'宝箱探知',素材鑑定:'素材見極め',探索極意:'魔物知識'};
+ for(const fd of Object.values(canonicalField437.skills)){
+  const previous=skills[fd.name]||Object.entries(alias).find(([,to])=>to===fd.name)?.[0]&&skills[Object.entries(alias).find(([,to])=>to===fd.name)[0]];
+  const d={...(previous||{}),id:fd.id,name:fd.name,mode:fd.mode,kind:'field',costType:fd.spCost?'SP':null,cost:fd.spCost||0,setCost:fd.setCost,mult:0,target:'self',unlocks:[{mastery:fd.mastery,branch:fd.branch,rank:fd.rank,stat:fd.stat,value:fd.statValue||0}],description:fd.description,field:true,fieldTags:fd.fieldTags,tpCost:fd.tpCost,fieldMeta:fd,canonical437:true};
+  if(fd.mode==='Passive')d.passive={...(d.passive||{}),fieldPassive:1};
+  skills[fd.name]=d;
+  const m=masteries[fd.mastery]||(masteries[fd.mastery]={category:['探索','士気'].includes(fd.mastery)?'技能':['信仰','呪術','魔術','符術','機巧','異能'].includes(fd.mastery)?'術法':'源泉',branches:{}});
+  m.branches[fd.branch]??=[];
+  if(!m.branches[fd.branch].includes(fd.name))m.branches[fd.branch].push(fd.name);
+ }
+}
 const legacyRankTo10=r=>({5:1,15:3,25:5,35:7,45:9,50:10}[r]??Math.max(1,Math.min(10,Math.ceil((Number(r)||1)/5))));
 if(!canonical315)for(const d of Object.values(skills))for(const u of d.unlocks||[])u.rank=legacyRankTo10(u.rank);
 const clone=x=>JSON.parse(JSON.stringify(x));
@@ -198,6 +211,6 @@ function migrateVitals(v,a,version=0,saveVersion=7){
  delete x.mp;
  return {...x,hp,sp};
 }
-const api={version:12,catalogVersion:315,resourceVersion:2,legacyDerived,migrateVitals,skills,masteries,targetRules,targetingText,skillExplain,masteryDescription,branchDescription,clone,total,derived,has,effect,cost,capacity,setCost,fits,canLearn,meta};
+const api={version:13,catalogVersion:315,fieldCatalogVersion:437,resourceVersion:2,legacyDerived,migrateVitals,skills,masteries,targetRules,targetingText,skillExplain,masteryDescription,branchDescription,clone,total,derived,has,effect,cost,capacity,setCost,fits,canLearn,meta};
 if(typeof module!=='undefined')module.exports=api;root.RPG_RULES=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
