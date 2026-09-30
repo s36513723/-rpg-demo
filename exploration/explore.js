@@ -67,11 +67,14 @@ const THEME_BACKGROUNDS=Object.freeze({
 function themeBackground(theme){return THEME_BACKGROUNDS[theme]||THEME_BACKGROUNDS['森林']}
 function themeData(){const t=H.run?.themes[(H.run?.floor||1)-1]||floorThemes[floor-1]||'森林';const d={森林:['茂み・高低差','獣・弓兵・精霊','斬・突・遠距離'],洞窟:['狭所・暗闇','ゴーレム・獣・怪異','壊・索敵'],廃墟都市:['路地・瓦礫','軽装兵・魔術師・機械','近遠の切替'],山岳:['高低差・崖','飛行・重装・獣','突・遠距離'],沼地:['悪路・瘴気','毒獣・植物・呪術師','状態回復'],砂漠遺跡:['砂塵・日陰','神官・亡者・機械','水場・相性'],'海上・船':['甲板・船倉','海賊・海獣・飛行','中距離・索敵'],地下神殿:['結界・祭壇','死霊・魔術師','封じ・探索']}[t];return {t,terrain:d[0],enemy:d[1],tactic:d[2]}}
 function placeHint(n,intel){
- if(n.done)return '✓';
- if(n.entered)return nodeName(n);
- if(intel>=2)return ({boss:'強大な気配',elite:'強敵の気配',battle:'敵の気配',merchant:'人の痕跡',camp:'安全な気配',explore:'遺物の気配',event:'不明な気配',forge:'人工物の気配'})[n.type]||'未知';
- if(intel===1)return n.threat>=3?'危険度 高':n.threat===2?'危険度 中':'危険度 低';
- return n.threat>=3?'危険':'不明';
+ const level=Math.max(intel,n.scouted||0);let hint;
+ if(n.done)hint='✓';
+ else if(n.entered)hint=nodeName(n);
+ else if(level>=2)hint=({boss:'強大な気配',elite:'強敵の気配',battle:'敵の気配',merchant:'人の痕跡',camp:'安全な気配',explore:'調査の気配',event:'不明な気配',forge:'人工物の気配'})[n.type]||'未知';
+ else if(level===1)hint=n.threat>=3?'危険度 高':n.threat===2?'危険度 中':'危険度 低';
+ else hint=n.threat>=3?'危険':'不明';
+ if(n.treasureRevealed)hint+='・宝の気配';
+ return hint+' · '+fieldTagsText(n);
 }
 function drawDungeon(){
  if(!activeRun())return town();syncRun();
