@@ -157,7 +157,7 @@ async def main():
    await slot.wait_for_load_state('load')
    await slot.wait_for_function('!!window.__test')
    bridge=await slot.evaluate("()=>({demo:new URLSearchParams(location.search).get('demo'),ctx:JSON.parse(RPG_STORE.getItem('rpg.exploreBattle')||'null'),active:!!window.__test,slot:RPG_STORE.getItem('rpg.exploration.activeSlot')})")
-   out.append({'name':'Hub preview carries the active save and battle context into the battle demo','ok':bridge['demo']=='exploration' and bridge['ctx'] is not None and bridge['ctx']['battleType']=='normal' and bridge['active'] and bridge['slot'] in (None,'1')})
+   out.append({'name':'Hub preview carries the active save and battle context into the battle demo','ok':bridge['demo']=='hub' and bridge['ctx'] is not None and bridge['ctx']['battleType']=='normal' and bridge['active'] and bridge['slot'] in (None,'1')})
    await slot.close()
    flow=await browser.new_page(viewport={'width':390,'height':844})
    await flow.add_init_script('window.__RPG_TEST__=true')
