@@ -34,7 +34,7 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - Sources: 灼陽 / 霊峰 / 海神 / 森羅 / 星辰 (0-1).
 - Spell Masteries: 信仰 / 呪術 / 魔術 / 符術 / 機巧 / 異能 (0-2).
 - Skill Masteries: 探索 / 士気 (0-2).
-- Canonical workbook 08_SkillDB contains the active 315-skill runtime catalog. Runtime data is loaded through `skill-catalog-315.js`.
+- Canonical workbook `08_SkillDB` contains the single official 437-skill catalog. Runtime data is loaded through `skill-catalog-437.js`; `skill-catalog-315.js` remains only as a migration/compatibility source for the 185 retained weapon/armor definitions and old saves.
 
 ## Equipment semantics
 - Slots: 主武器 / 副手 / 予備主 / 予備副 / 防具一式 / 装飾品 / 携行具.
@@ -117,13 +117,13 @@ Commands sit immediately above ally cards. Character appeal has priority over ti
 - Rank 0-50, +5 Rank per Mastery Pt and ability-dependent Set Capacity are obsolete implementation rules.
 - Structural rules and balance values must remain distinguishable.
 
-## 315 Skill DB normalization
-- Canonical workbook 08_SkillDB contains all 315 candidate rows with stable SK0001-SK0315 IDs.
-- 315/315 rows now have normalized implementation schema fields, including explicit mechanics for the former 24 special-review rows.
-- Runtime is now the canonical 315 catalog.
-- Old 296 saves are not fuzzily renamed: skills that still exist by current key survive; unmatched old learned skills are archived in `legacySkills` and refunded as Mastery Pt.
-- The two canonical `速射` rows use distinct runtime keys `速射（弓）` / `速射（銃）` while retaining display name `速射`.
-- Machine-readable normalization status: spec/skill-normalization-status.json.
+## 437 Skill DB
+- Canonical workbook `08_SkillDB` is the only official Skill DB and contains 437 skills.
+- Runtime composition is 185 weapon/armor skills plus 252 Source / Spell / Exploration / Morale skills from the current canonical guide.
+- The 25 Field Skills are part of those 437 records. `16_FieldSkill` and the runtime Field registry are derived views, not independent Skill DBs.
+- `skill-catalog-437.js` is the primary runtime catalog. The former 315 catalog is retained only for deterministic ID-based migration and compatible mechanics of retained weapon/armor skills.
+- Old skill names are migrated by stable ID where possible. Removed `強敵察知` is not auto-renamed; its learned point is refunded and the legacy name is archived.
+- Balance coefficients and newly normalized effect details remain playtest-controlled even when their structural role is canonical.
 
 ## 拠点・キャラクター UI（2026-09-29 確定）
 - ホームの6人カードはキャラ画像と装飾的なカード背景を使わず、名前と状態を簡潔に表示する。
