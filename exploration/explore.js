@@ -29,7 +29,7 @@ function tacticalAcquire(i,n){n=canonicalFieldName(n);const cost=tacticalCost(n)
 function makeRun(id,themes){
  const seed=(Math.random()*0xffffffff)>>>0,random=rng(seed),reg=hc().regions[id];
  const selected=(themes&&themes.length===3?themes:shuffle(reg.themes,random).slice(0,3)).map(x=>reg.themes.includes(x)?x:reg.themes[0]);
- const r={id:Date.now().toString(36)+'-'+seed.toString(36),dungeon:id,seed,floor:1,themes:selected,floors:[],pending:null,phase:null,battle:null,camped:{},mechanisms:{},research:0,hazard:0,buff:'なし',morale:'なし',stealth:hasSkill('潜伏')?1:0,log:[],baseline:resourceSnapshot(),finds:{materials:{},tools:{},weapons:[],armors:[]},startedAt:Date.now(),routeCount:0,battles:0,escapes:0,rescues:[],events:[],treasures:[],questStart:[],lastNode:null,tp:0,temporarySkills:names.map(()=>[]),pendingExp:0,fieldSkillUses:{},crafted:{},fieldBuffs:{}};
+ const r={id:Date.now().toString(36)+'-'+seed.toString(36),dungeon:id,seed,floor:1,themes:selected,floors:[],pending:null,phase:null,battle:null,camped:{},mechanisms:{},research:0,hazard:0,buff:'なし',morale:'なし',stealth:0,log:[],baseline:resourceSnapshot(),finds:{materials:{},tools:{},weapons:[],armors:[]},startedAt:Date.now(),routeCount:0,battles:0,escapes:0,rescues:[],events:[],treasures:[],questStart:[],lastNode:null,tp:0,temporarySkills:names.map(()=>[]),pendingExp:0,fieldSkillUses:{},crafted:{},fieldBuffs:{}};
  let pool=shuffle(hc().events.filter(e=>e.region===id),random),pi=0;
  for(let f=1;f<=3;f++){
   const links=cp([[[2,3],[3,4],[5,6],[6,7],[5,7],[8],[8],[8],[9],[]],[[2,4],[2,3],[5,6],[6,7],[5,7],[8],[8],[8],[9],[]]][Math.floor(random()*2)]);
@@ -198,8 +198,18 @@ function encounterData(){
  return n.encounter={front,back}
 }
 function nodeInfo(){return battlePrep()}
-function battlePrep(){const r=H.run,n=currentNode();if(!n||!['battle','elite','boss'].includes(n.type))return;if(r.battle)return pendingBattleMenu();const enc=encounterData(),intel=Math.max(intelLevel(),n.scouted||0,n.weaknessIntel||0),units=[...new Set([...enc.front,...enc.back])],known=units.map(k=>enemyIntelLine(k,intel));persist();show('<h2>'+hesc(nodeName(n))+'</h2>'+HT(n.terrain,terrainEffect(n.terrain))+HT('Field',fieldTagsText(n))+HT('敵 '+(enc.front.length+enc.back.length)+'体','前列 '+enc.front.join('・')+' / 後列 '+(enc.back.join('・')||'なし'))+HT('探索情報',intel===0?'探索技能なし：編成だけ確認できます':intel===1?'索敵：危険度と遭遇履歴を確認':'索敵＋鑑識：既知の属性・状態異常・部位まで確認')+(intel?HT('既知情報',known.join('\n')):'')+HB('探索スキルを使う','セット中のアクティブスキル','fieldNodeSkills')+HB('装備・スキル・列を確認',H.formation.filter(i=>i!==null).length+'人 / 資源を持ち越して戦闘','partyMenu',['formation'])+(n.type==='battle'?HB('隠密で通過',r.stealth>0?'潜伏：この探索の残り '+r.stealth+'回':'煙玉1個 / 所持 '+availableStock('tools','煙玉'),'skipBattle',[],!r.stealth&&!availableStock('tools','煙玉')):'')+ha(HB('地図へ','','closeM'),HB('戦闘へ','','battleDemo')))}
-function skipBattle(){const r=H.run,n=currentNode();if(!n||n.type!=='battle'||r.battle)return;if(r.stealth>0)r.stealth--;else if(availableStock('tools','煙玉')>0)inventory.tools.煙玉--;else return;r.escapes++;logRun('隠密で戦闘を回避');completeNode();closeM();drawDungeon()}
+function battlePrep(){const r=H.run,n=currentNode();if(!n||!['battle','elite','boss'].includes(n.type))return;if(r.battle)return pendingBattleMenu();const enc=encounterData(),intel=Math.max(intelLevel(),n.scouted||0,n.weaknessIntel||0),units=[...new Set([...enc.front,...enc.back])],known=units.map(k=>enemyIntelLine(k,intel));persist();show('<h2>'+hesc(nodeName(n))+'</h2>'+HT(n.terrain,terrainEffect(n.terrain))+HT('Field',fieldTagsText(n))+HT('敵 '+(enc.front.length+enc.back.length)+'体','前列 '+enc.front.join('・')+' / 後列 '+(enc.back.join('・')||'なし'))+HT('探索情報',intel===0?'探索技能なし：編成だけ確認できます':intel===1?'索敵：危険度と遭遇履歴を確認':'索敵＋鑑識：既知の属性・状態異常・部位まで確認')+(intel?HT('既知情報',known.join('\n')):'')+HB('探索スキルを使う','セット中のアクティブスキル','fieldNodeSkills')+HB('装備・スキル・列を確認',H.formation.filter(i=>i!==null).length+'人 / 資源を持ち越して戦闘','partyMenu',['formation'])+(n.type==='battle'?HB('隠密で通過',r.stealth>0?'潜伏判定 '+stealthFieldChance()+'% / 残り '+r.stealth+'回':'煙玉1個 / 所持 '+availableStock('tools','煙玉'),'skipBattle',[],!r.stealth&&!availableStock('tools','煙玉')):'')+ha(HB('地図へ','','closeM'),HB('戦闘へ','','battleDemo')))}
+function stealthFieldChance(){
+ const r=H.run,n=currentNode(),s=bestFieldSkillById('SK0072');if(!r||!n||!s)return 0;
+ const tier=fieldTier(s),skl=stats[s.i]?.[1]||20,terrain=String(n.terrain||''),cover=/茂み|暗闇|路地|濃霧|屋内|岩陰|瓦礫/.test(terrain)?10:/開所|広場|高台/.test(terrain)?-5:0;
+ return Math.max(20,Math.min(90,Math.round(48+(skl-20)*.7+tier*8-(n.threat||1)*7+cover)))
+}
+function skipBattle(){const r=H.run,n=currentNode();if(!n||n.type!=='battle'||r.battle)return;
+ if(r.stealth>0){r.stealth--;const chance=stealthFieldChance();if(Math.random()*100>=chance){logRun('潜伏失敗：敵に発見された');persist();return battlePrep()}logRun('潜伏成功：戦闘を回避（'+chance+'%）')}
+ else if(availableStock('tools','煙玉')>0){inventory.tools.煙玉--;logRun('煙玉で戦闘を回避')}
+ else return;
+ r.escapes++;completeNode();closeM();drawDungeon()
+}
 function fieldBattleEffects(){
  const r=H.run,first=bestFieldSkillById('SK0427'),guard=bestFieldSkillById('SK0076'),lore=bestFieldSkillById('SK0080');
  return {firstStrike:first?fieldTier(first):0,ambushGuard:guard?fieldTier(guard):0,monsterLore:lore?fieldTier(lore):0,escapeBonus:r?.fieldBuffs?.escapeBonus||0,weaponTune:r?.fieldBuffs?.weaponTune||0,poisonTool:r?.fieldBuffs?.poisonTool||0}
