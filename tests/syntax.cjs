@@ -12,6 +12,8 @@ assert(fs.existsSync('images/paladin-battle.webp'),'Paladin battle art missing')
 assert(battleUi.includes("run:'images/paladin-turn.webp'"),'Paladin formation/icon mapping missing');
 assert(battleUi.includes('DIRECT_FACE_SRC'),'Paladin direct face source missing');
 assert(battleUi.includes("run:['images/paladin-battle.webp',168,226]"),'Paladin battle portrait mapping missing');
+assert(battleUi.includes('skill-catalog-437.js'),'battle-v44 canonical 437 catalog missing');
+assert(battleUi.includes('unified-sp.css'),'battle-v44 must hide obsolete MP display');
 assert(battleCss.includes('data-actor-id="run"]::before{background-image:url("images/paladin-turn.webp")}'),'Paladin turn-order CSS mapping missing');
 const C315=require('../skill-catalog-315.js'),C=require('../skill-catalog-437.js'),F=require('../exploration/field-skills-437.js'),R=require('../rpg-rules.js');
 assert.equal(C315.count,315);assert.equal(C.count,437);assert.equal(F.count,25);assert.equal(Object.keys(R.skills).length,437);assert.equal(Object.keys(R.masteries).length,31);assert.equal(R.catalogVersion,437);assert.equal(R.fieldCatalogVersion,437);
