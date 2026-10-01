@@ -141,6 +141,8 @@ async def main():
    slot=await browser.new_page(viewport={'width':390,'height':844})
    await slot.add_init_script('window.__RPG_TEST__=true')
    await slot.goto('http://127.0.0.1:8139/exploration/?demo=hub',wait_until='load')
+   probe=await slot.evaluate("""()=>{const runs=Array.from({length:40},()=>makeRun('古代迷宮',['森林','洞窟','廃墟都市']));const floors=runs.flatMap(r=>r.floors);const field=fieldDb();return {sizes:floors.map(f=>f.nodes.length),tags:floors.flatMap(f=>f.nodes.map(n=>(n.fieldTags||[]).length)),edges:floors.map(f=>(f.fieldEdges||[]).length),edgeValid:floors.every(f=>(f.fieldEdges||[]).every(e=>f.nodes.some(n=>n.id===e.from)&&f.nodes.some(n=>n.id===e.to)&&!f.nodes.find(n=>n.id===e.from).links.includes(e.to))),fieldCount:Object.keys(field.skills||{}).length,crossMastery:field.skills?.['鉱脈探知']?.mastery,tpLow:tacticalCost('鉱脈探知'),tpHigh:tacticalCost('水の導き')}}""")
+   out.append({'name':'Exploration Field schema invariants','ok':all(10<=n<=12 for n in probe['sizes']) and all(0<=n<=2 for n in probe['tags']) and all(0<=n<=1 for n in probe['edges']) and probe['edgeValid'] and probe['fieldCount']==25 and probe['crossMastery']=='霊峰' and probe['tpLow']==1 and probe['tpHigh']==2,'measurements':probe})
    original=await slot.evaluate('gold')
    await slot.evaluate('()=>{gold=98765;persist()}')
    async with slot.expect_navigation():await slot.evaluate('switchSaveSlot(2)')
