@@ -2,16 +2,19 @@
 function rng(seed){let s=seed>>>0;return ()=>{s+=0x6D2B79F5;let t=s;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296}}
 function shuffle(a,random=Math.random){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function validRun(r){return r&&hc().regions[r.dungeon]&&Number.isInteger(r.floor)&&r.floor>=1&&r.floor<=3&&Array.isArray(r.floors)&&r.floors.length===3&&r.floors.every(f=>Array.isArray(f.nodes)&&f.nodes.length>=10&&f.nodes.length<=12&&Array.isArray(f.open)&&f.nodes.every(n=>Number.isInteger(n.id)&&n.id>=0&&n.id<12&&Array.isArray(n.links)&&n.links.every(id=>Number.isInteger(id)&&id>=0&&id<f.nodes.length)))}
-const PLACE_KINDS=['廃屋','狭路・通路','広間','分岐路','高所・低所','水辺・特殊地形','崩落・障害区域','遺構・人工物','隠し区画・脇道','深部・主室'];
-const PLACE_SHORT=['廃屋','狭路','広間','分岐路','高所','水辺','崩落跡','遺構','脇道','主室'];
+const PLACE_KINDS=['廃屋','狭路・通路','広間・開けた場所','分岐路','崖道・段丘','水辺・水路','崩落・障害区域','遺構・人工物','隠し区画・脇道','深部・主室'];
+const PLACE_SHORT=['廃屋','狭路','広間','分岐路','段丘','水路','崩落跡','遺構','脇道','主室'];
 function placeLabel(theme,kind){const short=PLACE_SHORT[PLACE_KINDS.indexOf(kind)]||'地点';const prefix={'森林':'森','洞窟':'岩窟','廃墟都市':'廃都','山岳':'山路','沼地':'沼','砂漠遺跡':'砂都','海上・船':'船','地下神殿':'神殿'}[theme]||theme;return prefix+'の'+short}
 function fieldDb(){return window.RPG_FIELD_SKILLS_437||{skills:{},byId:{},rows:[],aliases:{}}}
+function terrainDb(){return window.RPG_TERRAIN||null}
+function terrainTagsText(n){const T=terrainDb();return (n?.terrainTags||[]).map(id=>T?.terrainName?.(id)||id).join(' / ')||'地形未設定'}
+function ensureRunTerrain(){const r=H?.run,T=terrainDb();if(!r||!T)return;r.floors.forEach((fl,fi)=>fl.nodes.forEach(n=>T.migrateNode(n,r.themes[fi],r.seed,fi+1)))}
 function canonicalFieldName(n){const db=fieldDb();return db.canonicalName?db.canonicalName(n):(db.aliases?.[n]||n)}
 function fieldDef(name){const db=fieldDb(),key=db.canonicalName?db.canonicalName(name):(db.aliases?.[name]||name);return db.skills[key]||null}
 function fieldDefById(id){return fieldDb().byId[id]||null}
 function tacticalCost(name){const d=fieldDef(name)||rules().meta(name);return Math.max(1,Number(d?.tpCost)||(Number(d?.unlocks?.[0]?.rank||d?.rank||1)>=9?2:1))}
 function fieldTier(s){const d=fieldDef(s.name);if(!d)return 1;const rank=ranksFor(s.i)[d.mastery]||0,idx={PHY:0,SKL:1,ARC:2,MND:3},stat=stats[s.i]?.[idx[d.stat]??1]||0;return Math.max(1,Math.min(3,1+Number(rank>=8||stat>=40)+Number(rank>=10||stat>=60)))}
-function fieldTagIcon(t){return ({鉱物:'◆',植物:'♣',獣:'◇',水域:'≈',機械:'⚙',遺物:'▣',聖域:'✦',呪い:'☾'})[t]||'•'}
+function fieldTagIcon(t){return ({鉱物:'◆',植物:'♣',獣:'◇',水域:'≈',機械:'⚙',遺物:'▣',聖域:'✦',呪い:'☾',星象:'☆'})[t]||'•'}
 function fieldTagsText(n){return (n?.fieldTags||[]).map(t=>fieldTagIcon(t)+' '+t).join(' / ')||'Fieldタグなし'}
 function pickFieldTags(theme,place,type,random){const base={森林:['植物','獣'],洞窟:['鉱物','水域'],廃墟都市:['遺物','機械'],山岳:['鉱物','獣'],沼地:['植物','水域','呪い'],砂漠遺跡:['遺物','鉱物','聖域'],'海上・船':['水域','獣'],地下神殿:['遺物','聖域','呪い']}[theme]||[];const a=[...base];if(/水辺/.test(place))a.push('水域');if(/遺構|廃屋/.test(place))a.push('遺物');if(/崩落|高所/.test(place))a.push('鉱物');if(type==='forge')a.push('機械');const pool=[...new Set(a)];const count=random()<.2?0:random()<.72?1:2;return shuffle(pool,random).slice(0,Math.min(count,pool.length))}
 function nodeExtras(type,random){if(['boss','camp','merchant'].includes(type))return[];const out=[];if(random()<.24)out.push('treasure');if(random()<.16)out.push('trap');if(random()<.08)out.push('npc');return out}
