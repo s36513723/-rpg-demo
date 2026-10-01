@@ -78,3 +78,58 @@ TR13:{遺物:5,機械:4,聖域:2,呪い:2,星象:1},TR14:{遺物:3,機械:2,聖�
 TR15:{水域:5,機械:3,遺物:1},TR16:{呪い:3,遺物:2,星象:2},TR17:{星象:3,獣:1},
 TR18:{水域:3,植物:2},TR19:{呪い:4,植物:2,獣:1}
 };
+
+const BOSS={
+BF01:{name:'中立主室',template:'BT05',terrain:['TR13','TR14','TR10'],enemy:['TL00','TL08','TL00','TL00','TL00','TL00','TL09','TL00','TL08'],ally:['TL08','TL00','TL09','TL00','TL00','TL00','TL00','TL08','TL00']},
+BF02:{name:'断崖戦',template:'BT06',terrain:['TR07','TR08','TR17'],enemy:['TL09','TL10','TL07','TL07','TL08','TL09','TL00','TL07','TL10'],ally:['TL10','TL07','TL00','TL09','TL08','TL07','TL07','TL10','TL09']},
+BF03:{name:'浸水遺構',template:'BT07',terrain:['TR03','TR13'],enemy:['TL03','TL04','TL00','TL04','TL08','TL03','TL00','TL16','TL04'],ally:['TL04','TL00','TL03','TL03','TL08','TL04','TL04','TL17','TL00']},
+BF04:{name:'呪祭壇',template:'BT07',terrain:['TR13','TR14','TR16'],enemy:['TL18','TL00','TL16','TL08','TL18','TL00','TL00','TL17','TL08'],ally:['TL08','TL17','TL00','TL00','TL18','TL08','TL16','TL00','TL18']},
+BF05:{name:'機巧中枢',template:'BT07',terrain:['TR13','TR14'],enemy:['TL19','TL08','TL00','TL00','TL19','TL00','TL08','TL00','TL19'],ally:['TL00','TL19','TL08','TL19','TL00','TL00','TL00','TL08','TL19']},
+BF06:{name:'氷雪稜線',template:'BT07',terrain:['TR12','TR07','TR17'],enemy:['TL09','TL15','TL14','TL07','TL14','TL09','TL14','TL15','TL07'],ally:['TL07','TL14','TL15','TL09','TL14','TL07','TL15','TL09','TL14']}
+};
+const EXCLUDE=[['TR09','TR10'],['TR04','TR11'],['TR15','TR01'],['TR15','TR04'],['TR15','TR11'],['TR15','TR12']];
+function hashSeed(v){let h=2166136261>>>0;for(const ch of String(v)){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+function randomFrom(seed){let s=(Number(seed)>>>0)||1;return()=>{s+=0x6D2B79F5;let t=s;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
+function weighted(entries,rand){const a=Array.isArray(entries)?entries:Object.entries(entries||{}),sum=a.reduce((n,x)=>n+Math.max(0,Number(x[1])||0),0);if(!sum)return a[0]?.[0]||null;let p=rand()*sum;for(const [k,w] of a){p-=Math.max(0,Number(w)||0);if(p<=0)return k}return a[a.length-1]?.[0]||null}
+function weightedDistinct(weights,count,rand){const work={...weights},out=[];while(out.length<count&&Object.keys(work).length){const k=weighted(work,rand);if(!k)break;out.push(k);delete work[k]}return out}
+function terrainName(id){return TERRAIN[id]?.name||String(id||'')}
+function tileName(id){return TILE[id]?.name||String(id||'')}
+function prohibited(a,b){return EXCLUDE.some(x=>x.includes(a)&&x.includes(b))}
+function allowedSecondary(primary,id,place){if(!id||id===primary||prohibited(primary,id))return false;return !(place?.forbidden||[]).includes(id)}
+function placeSpec(name){return PLACE[name]||PLACE['分岐路']}
+function fieldCount(rand){const x=rand();return x<.25?0:x<.80?1:2}
+function generatePlace(theme,placeType,seed,battleType='normal'){
+ const rand=randomFrom(seed),td=THEME[theme]||THEME['森林'],ps=placeSpec(placeType);
+ let primary=ps.required||weighted(td.primary,rand);
+ if(!TERRAIN[primary]||TERRAIN[primary].condition)primary=weighted(td.primary,rand);
+ const weights={};for(const [id,w] of td.secondary||[])if(allowedSecondary(primary,id,ps))weights[id]=(weights[id]||0)+w;
+ for(const id of ps.preferred||[])if(TERRAIN[id]&&!TERRAIN[id].condition&&allowedSecondary(primary,id,ps))weights[id]=(weights[id]||0)+2;
+ const secondary=rand()<.65&&Object.keys(weights).length?[weighted(weights,rand)]:[];
+ const conditionChance=['elite','boss','event'].includes(battleType)?.50:.30;
+ let condition=null;if(rand()<conditionChance){const candidates=(td.condition||[]).filter(([id])=>!(ps.forbidden||[]).includes(id));condition=weighted(candidates,rand)}
+ const terrainTags=[primary,...secondary,condition].filter(Boolean);
+ const fw={};for(const id of terrainTags)for(const [tag,w]of Object.entries(FIELD_BY_TERRAIN[id]||{}))fw[tag]=(fw[tag]||0)+w;
+ for(const [tag,w]of Object.entries(ps.field||{}))fw[tag]=(fw[tag]||0)+w;
+ const fieldTags=weightedDistinct(fw,fieldCount(rand),rand);
+ const battleOverlay=ps.overlay==='field_match'||ps.overlay==='boss_or_event'&&['boss','event'].includes(battleType);
+ return {placeTypeId:ps.id,primaryTerrain:primary,secondaryTerrains:secondary,conditionTerrain:condition,terrainTags,fieldTags,battleOverlay};
+}
+function addWeights(dst,src,m=1){for(const[k,v]of Object.entries(src||{}))dst[k]=(dst[k]||0)+Number(v||0)*m}
+function boardWeights(place){const w={};addWeights(w,TERRAIN[place.primaryTerrain]?.tiles,2);for(const t of place.secondaryTerrains||[])addWeights(w,TERRAIN[t]?.tiles,1);addWeights(w,placeSpec(place.placeType)?.tileAdd,1);if(!Object.keys(w).length)w.TL00=1;return w}
+function outerIndex(i){const r=Math.floor(i/3),c=i%3;return r===0||r===2||c===0||c===2}
+function hazardDir(i){const r=Math.floor(i/3),c=i%3;if(r===0)return'back';if(r===2)return'front';return c===0?'left':'right'}
+function replaceSome(cells,ids,count,tile,rand,filter=()=>true){const ix=cells.map((_,i)=>i).filter(i=>ids.includes(cells[i].baseTile)&&filter(i));for(const i of ix.sort(()=>rand()-.5).slice(0,count))cells[i].baseTile=tile}
+function ensureAtLeast(cells,ids,min,tile,rand,filter=()=>true){let have=cells.filter(c=>ids.includes(c.baseTile)).length;if(have>=min)return;const candidates=cells.map((_,i)=>i).filter(i=>!ids.includes(cells[i].baseTile)&&filter(i)).sort(()=>rand()-.5);for(const i of candidates.slice(0,min-have))cells[i].baseTile=tile}
+function ensureAtMost(cells,ids,max,repl,rand){let ix=cells.map((c,i)=>ids.includes(c.baseTile)?i:-1).filter(i=>i>=0);if(ix.length<=max)return;for(const i of ix.sort(()=>rand()-.5).slice(max))cells[i].baseTile=repl}
+function enforceCoverage(cells,primary,rand){
+ if(primary==='TR03'){ensureAtLeast(cells,['TL03','TL04'],4,'TL04',rand);ensureAtMost(cells,['TL03','TL04'],9,'TL00',rand)}
+ if(primary==='TR04'){ensureAtLeast(cells,['TL03','TL04','TL05','TL02'],7,'TL05',rand);ensureAtMost(cells,['TL03','TL04','TL05','TL02'],13,'TL01',rand);ensureAtMost(cells,['TL06'],2,'TL05',rand)}
+ if(primary==='TR05'){ensureAtLeast(cells,['TL05'],5,'TL05',rand);ensureAtMost(cells,['TL05'],10,'TL04',rand)}
+ if(primary==='TR07'){ensureAtLeast(cells,['TL09'],2,'TL09',rand);ensureAtMost(cells,['TL09'],4,'TL07',rand)}
+ if(primary==='TR08'){ensureAtLeast(cells,['TL10'],2,'TL10',rand,outerIndex);ensureAtMost(cells,['TL10'],4,'TL07',rand);cells.forEach((c,i)=>{if(c.baseTile==='TL10'&&!outerIndex(i))c.baseTile='TL07'})}
+ if(primary==='TR10'){ensureAtLeast(cells,['TL00','TL01','TL12'],12,'TL00',rand);ensureAtMost(cells,['TL08'],2,'TL00',rand)}
+ if(primary==='TR11'){ensureAtLeast(cells,['TL12','TL13'],8,'TL12',rand);ensureAtMost(cells,['TL12','TL13'],14,'TL00',rand);ensureAtMost(cells,['TL13'],3,'TL12',rand)}
+ if(primary==='TR12'){ensureAtLeast(cells,['TL14','TL15'],8,'TL14',rand);ensureAtMost(cells,['TL14','TL15'],14,'TL00',rand);ensureAtMost(cells,['TL15'],4,'TL14',rand)}
+ if(primary==='TR15'){ensureAtLeast(cells,['TL10'],2,'TL10',rand,outerIndex);ensureAtMost(cells,['TL10'],4,'TL00',rand);cells.forEach((c,i)=>{if(c.baseTile==='TL10'&&!outerIndex(i))c.baseTile='TL00'})}
+ return cells
+}
