@@ -123,7 +123,7 @@ function activateFieldSkill(name){
  const craftMat={SK0389:'薬草',SK0390:'毒素材',SK0408:'鉱石'}[d.id];if(craftMat&&!availableMaterial(craftMat))return note((hc().labels[craftMat]||craftMat)+'の鑑定済み在庫がありません。探索中に拾った未鑑定素材は使えません。');
  if(!consumeFieldSP(s))return;
  if(gather){got=grant({materials:gather});result='採取段階 '+tier+'。'+got.join(' / ')}
- else if(edge){edge.unlocked=true;if(!n.links.includes(edge.to))n.links.push(edge.to);result='条件付き特殊経路を開通した。新しい場所は増やさず、既存の「'+(f.nodes.find(x=>x.id===edge.to)?.place||'地点')+'」へ接続した。'}
+ else if(edge){edge.unlocked=true;result='条件付き特殊経路を開通した。新しい場所は増やさず、既存の「'+(f.nodes.find(x=>x.id===edge.to)?.place||'地点')+'」へ接続した。'}
  else if(d.id==='SK0415'){r.fieldBuffs.weaponTune=Math.max(r.fieldBuffs.weaponTune||0,tier);result='現地整備を完了。次の戦闘だけ武器性能を段階 '+tier+' で強化する。'}
  else if(d.id==='SK0408'){loot.鉱石--;inventory.tools.研磨具=(inventory.tools.研磨具||0)+1;r.crafted.研磨具=(r.crafted.研磨具||0)+1;result='鑑定済み鉱石を1個使い、探索中に使える研磨具を1個作成した。'}
  else if(d.id==='SK0389'){loot.薬草--;inventory.tools.回復薬=(inventory.tools.回復薬||0)+1;r.crafted.回復薬=(r.crafted.回復薬||0)+1;result='鑑定済み薬草を1個使い、探索中に使える回復薬を1個調合した。'}
