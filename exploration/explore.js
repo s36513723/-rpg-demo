@@ -5,7 +5,8 @@ function validRun(r){return r&&hc().regions[r.dungeon]&&Number.isInteger(r.floor
 const PLACE_KINDS=['廃屋','狭路・通路','広間','分岐路','高所・低所','水辺・特殊地形','崩落・障害区域','遺構・人工物','隠し区画・脇道','深部・主室'];
 const PLACE_SHORT=['廃屋','狭路','広間','分岐路','高所','水辺','崩落跡','遺構','脇道','主室'];
 function placeLabel(theme,kind){const short=PLACE_SHORT[PLACE_KINDS.indexOf(kind)]||'地点';const prefix={'森林':'森','洞窟':'岩窟','廃墟都市':'廃都','山岳':'山路','沼地':'沼','砂漠遺跡':'砂都','海上・船':'船','地下神殿':'神殿'}[theme]||theme;return prefix+'の'+short}
-function fieldDb(){return window.RPG_FIELD_SKILLS_437||{skills:{},byId:{},rows:[]}}
+function fieldDb(){return window.RPG_FIELD_SKILLS_437||{skills:{},byId:{},rows:[],aliases:{}}}
+function canonicalFieldName(n){const db=fieldDb();return db.canonicalName?db.canonicalName(n):(db.aliases?.[n]||n)}
 function fieldDef(name){const db=fieldDb(),key=db.canonicalName?db.canonicalName(name):(db.aliases?.[name]||name);return db.skills[key]||null}
 function fieldDefById(id){return fieldDb().byId[id]||null}
 function tacticalCost(name){const d=fieldDef(name)||rules().meta(name);return Math.max(1,Number(d?.tpCost)||(Number(d?.unlocks?.[0]?.rank||d?.rank||1)>=9?2:1))}
