@@ -46,3 +46,35 @@ TR14:{name:'石造',tiles:{TL00:5,TL08:3,TL09:1,TL11:3}},
 TR15:{name:'船上',tiles:{TL00:6,TL08:2,TL09:1,TL10:4}},
 TR16:{name:'暗所',condition:true},TR17:{name:'強風',condition:true},TR18:{name:'豪雨',condition:true},TR19:{name:'瘴気',condition:true}
 };
+
+const THEME={
+'森林':{primary:[['TR01',5],['TR02',4]],secondary:[['TR03',2],['TR06',1],['TR07',1],['TR10',1],['TR13',1]],condition:[['TR16',1],['TR18',1]]},
+'洞窟':{primary:[['TR06',5],['TR09',4]],secondary:[['TR03',2],['TR07',2],['TR13',1],['TR14',2]],condition:[['TR16',4],['TR19',1]]},
+'廃墟都市':{primary:[['TR13',5],['TR14',4]],secondary:[['TR10',3],['TR09',2],['TR07',2],['TR06',1]],condition:[['TR16',1],['TR17',1]]},
+'山岳':{primary:[['TR06',5],['TR07',5]],secondary:[['TR08',3],['TR10',2],['TR12',2],['TR02',1]],condition:[['TR17',3],['TR18',1]]},
+'沼地':{primary:[['TR04',5],['TR05',4],['TR03',4]],secondary:[['TR02',2],['TR01',1]],condition:[['TR16',1],['TR18',2],['TR19',3]]},
+'砂漠遺跡':{primary:[['TR11',5],['TR13',4]],secondary:[['TR14',3],['TR10',3],['TR07',2],['TR06',1]],condition:[['TR16',1],['TR17',1]]},
+'海上・船':{primary:[['TR15',5]],secondary:[['TR03',3],['TR09',2],['TR10',2],['TR07',2]],condition:[['TR17',3],['TR18',2]]},
+'地下神殿':{primary:[['TR13',5],['TR14',5]],secondary:[['TR09',3],['TR03',1],['TR07',1]],condition:[['TR16',4],['TR19',2]]}
+};
+const PLACE={
+'廃屋':{id:'PT01',preferred:['TR13','TR14','TR09'],tileAdd:{TL08:2,TL11:2},field:{機械:2,遺物:2},overlay:false},
+'狭路・通路':{id:'PT02',required:'TR09',preferred:['TR06','TR14','TR13','TR16'],forbidden:['TR10'],tileAdd:{TL08:1,TL11:1},field:{機械:2,遺物:2},overlay:false},
+'広間・開けた場所':{id:'PT03',required:'TR10',preferred:['TR02','TR11','TR14','TR15'],forbidden:['TR09'],tileAdd:{TL00:3},field:{獣:2,星象:2},overlay:false},
+'分岐路':{id:'PT04',preferred:['TR09','TR10','TR13','TR01'],tileAdd:{},field:{},overlay:false},
+'崖道・段丘':{id:'PT05',required:'TR07',preferred:['TR08','TR06','TR17'],tileAdd:{TL09:2,TL10:2},field:{鉱物:2,獣:2},overlay:false},
+'水辺・水路':{id:'PT06',required:'TR03',preferred:['TR04','TR06','TR02','TR14'],tileAdd:{TL03:2,TL04:3},field:{水域:3,植物:2,鉱物:2},overlay:false},
+'崩落・障害区域':{id:'PT07',preferred:['TR06','TR13','TR14','TR09'],tileAdd:{TL11:4,TL08:1},field:{鉱物:2,遺物:2},overlay:false},
+'遺構・人工物':{id:'PT08',required:'TR13',preferred:['TR14','TR09','TR10','TR16'],tileAdd:{TL11:2,TL08:2},field:{遺物:3,機械:3,聖域:2,呪い:2,星象:1},overlay:'field_match'},
+'隠し区画・脇道':{id:'PT09',preferred:['TR09','TR16','TR13','TR01'],forbidden:['TR10'],tileAdd:{TL08:1,TL02:1},field:{遺物:2,鉱物:2,植物:2},overlay:false},
+'深部・主室':{id:'PT10',preferred:['TR10','TR13','TR14','TR06'],tileAdd:{TL00:2},field:{遺物:2,聖域:2,呪い:2,星象:2},overlay:'boss_or_event'}
+};
+const FIELD_BY_TERRAIN={
+TR01:{植物:5,獣:4,水域:1},TR02:{植物:4,獣:3,水域:1},TR03:{水域:5,植物:1,獣:1,鉱物:1},
+TR04:{水域:5,植物:4,獣:3,呪い:1},TR05:{水域:3,植物:2,獣:1},TR06:{鉱物:5,獣:2,遺物:1},
+TR07:{鉱物:3,獣:2,星象:1},TR08:{鉱物:3,獣:3,星象:1},TR09:{遺物:2,機械:2,鉱物:2},
+TR10:{獣:3,星象:2,植物:1},TR11:{遺物:3,鉱物:2,星象:1},TR12:{獣:3,鉱物:3,星象:1},
+TR13:{遺物:5,機械:4,聖域:2,呪い:2,星象:1},TR14:{遺物:3,機械:2,聖域:2,呪い:2},
+TR15:{水域:5,機械:3,遺物:1},TR16:{呪い:3,遺物:2,星象:2},TR17:{星象:3,獣:1},
+TR18:{水域:3,植物:2},TR19:{呪い:4,植物:2,獣:1}
+};
