@@ -34,13 +34,29 @@ rows.push(...[
 ["SK0080","探索","鑑識","魔物知識","戦闘勝利時に敵素材の候補・正体を見抜き、通常戦利品の取得候補を広げる。","Rank 7／SKL 0／1 MPt",1,2,"なし","RankとSKLで素材候補・希少候補・選別/追加取得の段階が上がる。","戦闘勝利時（セット中自動）","汎用"]
 ]);
 rows.push(...[
-["SK0389","魔術","錬金","回復用簡易調合","探索中に回復用の携行品を簡易作成する。","Rank 6／ARC 0／1 MPt",1,2,"SP 10","持込済みの識別素材を使い、完成品は探索中に使用できる。","探索地点","素材依存"],
-["SK0390","魔術","錬金","特殊加工調合","探索中に加工用の携行品を簡易作成する。","Rank 8／ARC 0／1 MPt",1,3,"SP 10","持込済みの識別素材を使い、完成品は探索中に使用できる。","探索地点","素材依存"]
+["SK0389","魔術","錬金","\u56de\u5fa9\u85ac\u8abf\u5408","探索中に回復用の携行品を簡易作成する。","Rank 6／ARC 0／1 MPt",1,2,"SP 10","持込済みの識別素材を使い、完成品は探索中に使用できる。","探索地点","素材依存"],
+["SK0390","魔術","錬金","\u6bd2\u85ac\u8abf\u5408","探索中に加工用の携行品を簡易作成する。","Rank 8／ARC 0／1 MPt",1,3,"SP 10","持込済みの識別素材を使い、完成品は探索中に使用できる。","探索地点","素材依存"]
 ]);
 function reqInfo(s){const m=String(s||'').match(/Rank\s*(\d+).*?(PHY|SKL|ARC|MND)\s*(\d+)/);return {rank:m?+m[1]:1,stat:m?m[2]:'SKL',value:m?+m[3]:0}}
 function spInfo(s){const m=String(s||'').match(/SP\s*(\d+)/);return m?+m[1]:0}
 const skills={},byId={};
 for(const r of rows){const[id,mastery,branch,name,description,req,tpCost,setCost,costText,extra,scene,tags]=r,q=reqInfo(req),automatic=/セット中自動/.test(scene);const d={id,mastery,branch,name,description,rank:q.rank,stat:q.stat,statValue:q.value,tpCost,setCost,spCost:spInfo(costText),costText,extra,scene,fieldTags:String(tags||'').split(';').filter(Boolean),mode:automatic?'Passive':'Field',kind:'field',canonical437:true};skills[name]=d;byId[id]=d}
-const api={version:1,catalogVersion:437,count:rows.length,canonicalCount:25,rows,skills,byId};
+const api={version:1,catalogVersion:437,count:rows.length,canonicalCount:25,rows,skills,byId,aliases:{}};
+function installIntoRules(){
+ const R=root.RPG_RULES;if(!R?.skills||!R?.masteries)return;
+ for(const d of Object.values(skills)){
+  let legacy=null;
+  for(const [k,v] of Object.entries(R.skills))if(v?.id===d.id){legacy=k;break}
+  if(legacy&&legacy!==d.name)api.aliases[legacy]=d.name;
+  const rt={id:d.id,name:d.name,mode:d.mode,kind:'field',costType:d.spCost?'SP':null,cost:d.spCost,setCost:d.setCost,mult:0,attr:'無',range:'none',scope:'single',stat:d.stat,target:'self',unlocks:[{mastery:d.mastery,branch:d.branch,rank:d.rank,stat:d.stat,value:d.statValue}],description:d.description,fieldTags:d.fieldTags,tpCost:d.tpCost,fieldSpec:d,canonical:true};
+  R.skills[d.name]=rt;
+  if(legacy&&legacy!==d.name)R.skills[legacy]=rt;
+  const m=R.masteries[d.mastery];if(m){
+   m.branches[d.branch]??=[];
+   m.branches[d.branch]=[...new Set(m.branches[d.branch].map(n=>R.skills[n]?.id===d.id?d.name:n).concat(d.name))];
+  }
+ }
+}
+api.canonicalName=n=>api.aliases[n]||n;api.installIntoRules=installIntoRules;installIntoRules();
 if(typeof module!=='undefined')module.exports=api;root.RPG_FIELD_SKILLS_437=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
