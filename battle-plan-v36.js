@@ -345,7 +345,10 @@ function applyExploreContext(){
  const ids=HT.map(u=>u.id),active=Array.isArray(ctx.activeMembers)?ctx.activeMembers:ids.map((_,i)=>i);
  party=party.filter(u=>active.includes(ids.indexOf(u.id)));
  for(const u of party){
-  const i=ids.indexOf(u.id),a=ctx.stats?.[i],v=ctx.vitals?.[i];
+  const i=ids.indexOf(u.id),a=ctx.stats?.[i],v=ctx.vitals?.[i],gear=ctx.equipment?.[i],armorFamily=ctx.armor?.[i],armorKey={魔装:'magic',軽装:'light',重装:'heavy'}[armorFamily];
+  if(armorKey)u.armor=armorKey;
+  if(gear){const main=weaponKeyByName(equipmentName(gear,0)),reserve=weaponKeyByName(equipmentName(gear,2));u.weapons=[main,reserve];u.wi=0;u.weapon=W[main]||W.unarmed;u.currentOffhand=equipmentName(gear,1);u.reserveOffhand=equipmentName(gear,3)}
+  if(Array.isArray(ctx.skillSet?.[i]))u.skills=ctx.skillSet[i].map(canonicalAction).filter(Boolean);
   if(Array.isArray(a)&&a.length>=4){[u.PHY,u.SKL,u.ARC,u.MND]=a.map(Number);const d=window.RPG_RULES?.derived(a)||derived(...a);u.maxHp=d.hp;u.maxSp=d.sp;u.maxMp=d.mp;u.physDef=u.PHY+ARM[u.armor].p;u.magDef=u.ARC+u.MND+ARM[u.armor].m}
   if(v){u.hp=clamp(Number(v.hp)||0,0,u.maxHp);u.sp=clamp(Number(v.sp)||0,0,u.maxSp);u.mp=clamp(Number(v.mp)||0,0,u.maxMp);u.status={...u.status,...(v.status||{})};u.alive=u.hp>0}
   const cell=ctx.formation?.indexOf(i)??-1;
@@ -373,7 +376,7 @@ function getDraft(u){if(!drafts.has(u.id))drafts.set(u.id,{key:'attack',targetId
 function actionFor(u,key=getDraft(u).key){return key==='attack'?normal(u):u.skills[Number(key)]||normal(u)}
 function canReach(a,t,r){
  if(!t?.alive||t.hp<=0)return false;
- if(r==='far'||r==='all')return true;
+ if(['far','long','global','all'].includes(r))return true;
  const side=t.enemy?enemies:party,ar=rankIndex(a),tr=rankIndex(t),fr=frontRank(side);
  if(r==='near')return ar===0&&tr===fr;
  if(r==='mid')return(ar<=1&&tr===fr)||(ar===0&&tr<=fr+1);
