@@ -4,14 +4,14 @@
   "source": "canonical workbook 08_SkillDB",
   "implementation_is_confirmation": false,
   "current_runtime": {
-    "skills": 315,
+    "skills": 437,
     "mastery_count": 31,
     "rank_model": "1-10 canonical runtime",
-    "status": "現行315正式ランタイム"
+    "status": "現行437正式ランタイム"
   },
   "target_candidate": {
-    "total_skills": 315,
-    "base_slots": 310,
+    "total_skills": 437,
+    "base_slots": 432,
     "extra_slots": 5,
     "structure": {
       "weapon_masteries": {
@@ -21,23 +21,25 @@
       },
       "armor_masteries": {
         "count": 3,
-        "skills_per_mastery": 10,
-        "total": 30
+        "canonical_base_total": 30,
+        "rescue_compatibility_extra": 5,
+        "total": 35
       },
       "source_masteries": {
         "count": 5,
-        "skills_per_mastery": 10,
-        "total": 50
+        "skills_per_mastery": 20,
+        "total": 100
       },
       "spell_masteries": {
         "count": 6,
-        "skills_per_mastery": 10,
-        "total": 60
+        "skills_per_mastery": 20,
+        "total": 120
       },
       "skill_masteries": {
         "count": 2,
-        "skills_per_mastery": 10,
-        "total": 20
+        "exploration": 12,
+        "morale": 20,
+        "total": 32
       }
     },
     "rank_model": {
@@ -116,7 +118,7 @@
   "exact_catalog": {
     "status": "取得済み",
     "known_complete_list": true,
-    "note": "Canonical workbook 08_SkillDB is the active 315 runtime source. skill-catalog-315.js carries the runtime catalog; balance coefficients remain test-adjustable.",
+    "note": "Canonical workbook 08_SkillDB is the single active 437-skill source. skill-catalog-437.js is the runtime catalog; 15/16 are derived views and balance coefficients remain test-adjustable.",
     "required_fields": [
       "skill_id",
       "name",
@@ -165,11 +167,11 @@
     "do_not_delete_current_skills_from_target_count_alone": true,
     "do_not_convert_rank_0_50_to_1_10_without_exact_mapping": false,
     "promotion_rule": "Old 296 learned skills are not fuzzily renamed. Exact current names survive; unmatched old learned skills are archived in legacySkills and refunded as Mastery Pt.",
-    "audit": "spec/skill-migration-296-to-315.json",
+    "audit": "spec/skill-migration-296-to-315.json (historical) + runtime 315→437 stable-ID/alias migration",
     "exact_unique_name_matches": 40,
     "ambiguous_names": [
       "速射"
     ],
-    "runtime_migration": "refund_unmatched_legacy_skills"
+    "runtime_migration": "stable_id_alias_then_archive_and_refund_removed"
   }
 }
