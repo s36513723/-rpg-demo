@@ -1,6 +1,6 @@
 # Current RPG Specification Mirror
 
-Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural rules here override old implementation values.
+Canonical workbook: RPG制作_仕様正本_戦場地形完全設計_2026-10-01.xlsx. Confirmed/structural rules here override old implementation values.
 
 ## Core
 - Mobile portrait UI; 6 allies on a 3x3 ally grid, enemy side basically 3x3.
@@ -71,7 +71,7 @@ Canonical workbook: RPG制作_仕様正本_同期版.xlsx. Confirmed/structural 
 - A respec item can reset stat allocations, Mastery ranks and learned skills, including the chosen Source, and return their spent points. Initial placement: first clear of each chapter boss and one one-time high-difficulty quest; it is not sold normally.
 - One dungeon expedition is basically **3 layers, with a boss at the end of every layer**. The Layer 3 boss is the dungeon's final boss.
 - Each dungeon has its own fixed theme, scenery, enemies, terrain, events, materials, treasure, bosses and story. Random generation stays inside that dungeon theme.
-- Exploration is presented as **places**, not abstract function nodes. Ten shared place archetypes are used across dungeons, with theme-specific names/visuals: 廃屋 / 狭路・通路 / 広間・開けた場所 / 分岐路 / 高所・低所 / 水辺・特殊地形 / 崩落・障害区域 / 遺構・人工物 / 隠し区画・脇道 / 深部・主室. The exact labels are provisional.
+- Exploration is presented as **places**, not abstract function nodes. Ten shared place archetypes are used across dungeons, with theme-specific names/visuals: 廃屋 / 狭路・通路 / 広間・開けた場所 / 分岐路 / 崖道・段丘 / 水辺・水路 / 崩落・障害区域 / 遺構・人工物 / 隠し区画・脇道 / 深部・主室. The exact labels are provisional.
 - A place may contain normal enemies, strong enemies, a merchant, treasure, a trap, rest, an NPC, an exploration target, a special event, nothing, or a combination of these.
 - Routes should have different risk/reward character such as a dangerous shortcut, safer detour, or treasure-oriented route. Exploration skills can increase route information and available choices.
 - Unchosen places are not carried over to the next expedition. The map is regenerated on the next run.
