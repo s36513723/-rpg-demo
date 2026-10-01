@@ -235,7 +235,7 @@ terrainRule('地下回廊','中距離威力＋8%')
 const EXTRA_STATUS={blind:'盲目',sleep:'睡眠',agitate:'動揺',temptation:'誘惑'};const STATUS=[['poison','猛毒','毒'],['stun','気絶','気絶'],['headBind','頭封じ','頭封'],['armBind','腕封じ','腕封'],['legBind','脚封じ','脚封']];
 const live=list=>list.filter(u=>u.alive&&u.hp>0),col=u=>u.row==='back'?Math.max(1,u.slot-3):u.slot,clamp=(n,a,b)=>Math.min(b,Math.max(a,n));
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const rangeName=r=>({near:'近距離',mid:'中距離',far:'遠距離',all:'全域'}[r]||r);
+const rangeName=r=>({near:'近距離',mid:'中距離',far:'遠距離',long:'長距離',global:'全域',all:'全域'}[r]||r);
 const scopeName=s=>({'cross':'十字','x':'X字','3x3':'3×3',vertical:'縦列',horizontal:'横列',single:'単体',row:'1列',all:'全体',random:'ランダム複数',pierce:'前後貫通',adjacent:'隣接'}[s.targeting?.area]||{single:'単体',row:'1列',all:'全体',random:'ランダム複数',pierce:'前後貫通',adjacent:'隣接'}[s.scope||'single']);
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let party=[],enemies=[],terrain=TERRAINS[0],round=1,idx=0,phase='command',busy=false,over=false;
@@ -258,7 +258,7 @@ function weaponPassive(u,a,t){const n=u.weapon?.name||'';let m=1;if(/戦斧|斧/
 function normal(u){return {name:'通常攻撃',kind:'attack',range:u.weapon?.range||'near',attr:u.weapon?.attr||'壊',target:'enemy',scope:'single',stat:u.weapon?.normalStat||'PHY',mult:1,body:['arms'],hit:u.twoHandGrip?6:0,speed:0}}
 function getDraft(u){if(!drafts.has(u.id))drafts.set(u.id,{key:'attack',targetId:null});return drafts.get(u.id)}
 function actionFor(u,key=getDraft(u).key){return key==='throw'?throwAction(u)||normal(u):key==='attack'?normal(u):u.skills[Number(key)]||normal(u)}
-function canReach(a,t,r){if(!t?.alive||t.hp<=0)return false;if(r==='far'||r==='all')return true;const targetSide=t.enemy?enemies:party,actorSide=a.enemy?enemies:party,tr=live(targetSide).some(x=>x.row==='front')?t.row:'front',ar=live(actorSide).some(x=>x.row==='front')?a.row:'front';return r==='mid'?tr==='front'||ar==='front':ar==='front'&&tr==='front'}
+function canReach(a,t,r){if(!t?.alive||t.hp<=0)return false;if(['far','long','global','all'].includes(r))return true;const targetSide=t.enemy?enemies:party,actorSide=a.enemy?enemies:party,tr=live(targetSide).some(x=>x.row==='front')?t.row:'front',ar=live(actorSide).some(x=>x.row==='front')?a.row:'front';return r==='mid'?tr==='front'||ar==='front':ar==='front'&&tr==='front'}
 function battleWeaponKind(n){if(!n||n==='なし')return'なし';if(/拳|格闘/.test(n))return'格闘';if(/槌/.test(n))return'槌';if(/斧/.test(n))return'斧';if(/短剣/.test(n))return'短剣';if(/剣/.test(n))return'剣';if(/槍/.test(n))return'槍';if(/鞭/.test(n))return'鞭';if(/鎌/.test(n))return'鎌';if(/刀/.test(n))return'刀';if(/弓/.test(n))return'弓';if(/銃/.test(n))return'銃';if(/杖/.test(n))return'杖';if(/盾/.test(n))return'盾';if(/投げナイフ|鉄針|投石|爆弾|煙玉/.test(n))return'投擲';return n}
 function activeWeaponKinds(u){return new Set([battleWeaponKind(u.weapon?.name),battleWeaponKind(u.currentOffhand)])}
 function weaponSkillReason(u,a){if(u.enemy)return '';const req=a.weapons||rulebook().skills[a.name]?.weapons;if(!req?.length)return '';const kinds=activeWeaponKinds(u);if(req.includes('格闘')&&((u.weapon?.name==='無手'&&(u.currentOffhand||'なし')==='なし')||kinds.has('格闘')))return '';if(req.includes('投擲')&&throwAction(u))return '';return req.some(x=>kinds.has(x))?'':'対応装備：'+req.join(' / ')}
