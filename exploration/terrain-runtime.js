@@ -133,3 +133,50 @@ function enforceCoverage(cells,primary,rand){
  if(primary==='TR15'){ensureAtLeast(cells,['TL10'],2,'TL10',rand,outerIndex);ensureAtMost(cells,['TL10'],4,'TL00',rand);cells.forEach((c,i)=>{if(c.baseTile==='TL10'&&!outerIndex(i))c.baseTile='TL00'})}
  return cells
 }
+
+function applyFieldOverlay(cells,place,rand){
+ if(!place.battleOverlay)return;
+ const options=[];
+ if(place.fieldTags?.includes('遺物')||place.fieldTags?.includes('星象'))options.push('TL16');
+ if(place.fieldTags?.includes('聖域'))options.push('TL17');
+ if(place.fieldTags?.includes('呪い'))options.push('TL18','TL18');
+ if(place.fieldTags?.includes('機械'))options.push('TL19','TL19');
+ for(const id of options.slice(0,2)){const i=Math.floor(rand()*cells.length);cells[i].baseTile=id}
+}
+function safeSide(cells,maxRisk3=0,minSafe=6){
+ let risk3=cells.map((c,i)=>TILE[c.baseTile]?.risk>=3?i:-1).filter(i=>i>=0);
+ for(const i of risk3.slice(maxRisk3))cells[i].baseTile='TL00';
+ const safe=cells.filter(c=>(TILE[c.baseTile]?.risk||0)<=1).length;
+ if(safe<minSafe){let need=minSafe-safe;for(const c of cells){if(need<=0)break;if((TILE[c.baseTile]?.risk||0)>1){c.baseTile='TL00';need--}}}
+}
+function fixedBoss(bfId,seed){
+ const bf=BOSS[bfId]||BOSS.BF01,rand=randomFrom(seed),mk=(side,arr)=>arr.map((id,i)=>({index:i,side,baseTile:id,overlay:null,hazardDir:id==='TL10'?hazardDir(i):null}));
+ return {version:1,seed:Number(seed)>>>0,templateId:bf.template,bossFieldId:bfId,name:bf.name,primaryTerrain:bf.terrain[0],secondaryTerrains:bf.terrain.slice(1).filter(x=>!TERRAIN[x]?.condition),conditionTerrain:bf.terrain.find(x=>TERRAIN[x]?.condition)||null,terrainTags:bf.terrain.slice(),cells:{enemy:mk('enemy',bf.enemy),ally:mk('ally',bf.ally)},windDir:bf.terrain.includes('TR17')?(rand()<.5?'left':'right'):null,ambush:false,fixed:true}
+}
+function bossFieldFor(place,theme){
+ if(place.primaryTerrain==='TR12')return'BF06';
+ if(place.terrainTags?.includes('TR08')||theme==='山岳')return'BF02';
+ if(place.terrainTags?.includes('TR03')||theme==='海上・船')return'BF03';
+ if(place.fieldTags?.includes('機械'))return'BF05';
+ if(place.fieldTags?.includes('呪い')||place.conditionTerrain==='TR16'||theme==='地下神殿')return'BF04';
+ return'BF01'
+}
+function createBattlefield(place,seed,battleType='normal',theme='森林'){
+ if(battleType==='boss')return fixedBoss(bossFieldFor(place,theme),seed);
+ const rand=randomFrom(seed),weights=boardWeights(place),make=side=>Array.from({length:9},(_,i)=>({index:i,side,baseTile:weighted(weights,rand)||'TL00',overlay:null,hazardDir:null}));
+ const all=[...make('enemy'),...make('ally')];enforceCoverage(all,place.primaryTerrain,rand);applyFieldOverlay(all,place,rand);
+ const enemy=all.slice(0,9),ally=all.slice(9);for(const side of [enemy,ally])side.forEach((c,i)=>{if(c.baseTile==='TL10')c.hazardDir=hazardDir(i)});
+ if(place.primaryTerrain==='TR03'){for(const side of [enemy,ally]){let land=side.filter(c=>!['TL03','TL04'].includes(c.baseTile)).length;for(const c of side){if(land>=2)break;if(['TL03','TL04'].includes(c.baseTile)){c.baseTile='TL00';land++}}}}
+ const templateId=battleType==='elite'?'BT03':place.primaryTerrain&&['TR03','TR04','TR12'].includes(place.primaryTerrain)?'BT02':'BT01';
+ safeSide(ally,battleType==='elite'?1:0,6);safeSide(enemy,1,battleType==='elite'?5:6);
+ return {version:1,seed:Number(seed)>>>0,templateId,bossFieldId:null,name:terrainName(place.primaryTerrain),primaryTerrain:place.primaryTerrain,secondaryTerrains:[...(place.secondaryTerrains||[])],conditionTerrain:place.conditionTerrain||null,terrainTags:[...(place.terrainTags||[])],cells:{enemy,ally},windDir:place.conditionTerrain==='TR17'?(rand()<.5?'left':'right'):null,ambush:false,fixed:false}
+}
+function migrateNode(node,theme,runSeed,floor=1){
+ const seed=node.encounterSeed??hashSeed(runSeed+':'+floor+':'+node.id);
+ const placeType=PLACE[node.placeType]?node.placeType:({'高所・低所':'崖道・段丘','水辺・特殊地形':'水辺・水路'}[node.placeType]||node.placeType||'分岐路');
+ let spec;if(node.primaryTerrain){spec={placeTypeId:node.placeTypeId||placeSpec(placeType).id,primaryTerrain:node.primaryTerrain,secondaryTerrains:node.secondaryTerrains||[],conditionTerrain:node.conditionTerrain||null,terrainTags:node.terrainTags||[node.primaryTerrain,...(node.secondaryTerrains||[]),node.conditionTerrain].filter(Boolean),fieldTags:node.fieldTags||[],battleOverlay:node.battleOverlay??false}}else spec=generatePlace(theme,placeType,seed,node.type);
+ return Object.assign(node,{placeType,placeTypeId:spec.placeTypeId,primaryTerrain:spec.primaryTerrain,secondaryTerrains:spec.secondaryTerrains,conditionTerrain:spec.conditionTerrain,terrainTags:spec.terrainTags,fieldTags:spec.fieldTags,battleOverlay:spec.battleOverlay,encounterSeed:seed,terrain:terrainName(spec.primaryTerrain)});
+}
+const api={version:1,TILE,TERRAIN,THEME,PLACE,FIELD_BY_TERRAIN,BOSS,hashSeed,randomFrom,weighted,terrainName,tileName,placeSpec,generatePlace,createBattlefield,migrateNode};
+if(typeof module!=='undefined')module.exports=api;root.RPG_TERRAIN=api;
+})(typeof globalThis!=='undefined'?globalThis:this);
