@@ -1,3 +1,4 @@
+// Canonical runtime export: 437 SkillDB.
 import fs from "node:fs";
 import { createRequire } from "node:module";
 
