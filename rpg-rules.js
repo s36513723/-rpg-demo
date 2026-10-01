@@ -176,6 +176,7 @@ const canonicalField437=root.RPG_FIELD_SKILLS_437||(typeof require!=='undefined'
 if(canonicalField437?.count>=23){
  const alias={解錠:'宝箱解錠',隠し道発見:'宝箱探知',素材鑑定:'素材見極め',探索極意:'魔物知識'};
  for(const fd of Object.values(canonicalField437.skills)){
+  for(const md of Object.values(masteries))for(const branch of Object.keys(md.branches||{}))md.branches[branch]=(md.branches[branch]||[]).filter(n=>skills[n]?.id!==fd.id);
   const previous=skills[fd.name]||Object.entries(alias).find(([,to])=>to===fd.name)?.[0]&&skills[Object.entries(alias).find(([,to])=>to===fd.name)[0]];
   const d={...(previous||{}),id:fd.id,name:fd.name,mode:fd.mode,kind:'field',costType:fd.spCost?'SP':null,cost:fd.spCost||0,setCost:fd.setCost,mult:0,target:'self',unlocks:[{mastery:fd.mastery,branch:fd.branch,rank:fd.rank,stat:fd.stat,value:fd.statValue||0}],description:fd.description,field:true,fieldTags:fd.fieldTags,tpCost:fd.tpCost,fieldMeta:fd,canonical437:true};
   if(fd.mode==='Passive')d.passive={...(d.passive||{}),fieldPassive:1};
