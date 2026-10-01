@@ -334,13 +334,19 @@
         "EXP"
       ],
       "quantities": "balance_pending"
+    },
+    "skill_db": {
+      "canonical_count": 437,
+      "source": "08_SkillDB",
+      "runtime": "skill-catalog-437.js",
+      "field_view": "derived"
     }
   },
   "workstreams": {
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "exploration_four_field_panels_2026-09-30",
+  "last_sync_status": "canonical_437_skilldb_exploration_runtime_2026-10-02",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
@@ -354,7 +360,7 @@
     "temporary_skill_tp_cost_status": "初期実装値・正本で未決定"
   },
   "implementation_inventory": {
-    "skills": 315,
+    "skills": 437,
     "masteries": 31,
     "mastery_rank": {
       "min": 1,
@@ -392,17 +398,17 @@
     },
     "skill_review": {
       "source": "tools/review-skills.mjs",
-      "current_runtime_skills": 315,
+      "current_runtime_skills": 437,
       "generated_report": "spec/generated/skill-review.json",
       "policy": "mechanical triage only; user approval required for design changes"
     },
     "skill_catalog_target": {
-      "candidate_total": 315,
-      "base_slots": 310,
+      "candidate_total": 437,
+      "base_slots": 432,
       "extra_slots": 5,
       "rank_model": "1-10",
       "status": "構造確定",
-      "exact_catalog": "canonical workbook 08_SkillDB complete design table",
+      "exact_catalog": "canonical workbook 08_SkillDB 437-row design table",
       "runtime_replacement": true,
       "migration_audit": {
         "path": "spec/skill-migration-296-to-315.json",
@@ -410,11 +416,11 @@
         "ambiguous_names": [
           "速射"
         ],
-        "policy": "Legacy 296 audit retained for traceability. Active migration archives unmatched old learned skills and refunds their learned-skill points."
+        "policy": "296→315 audit retained as historical traceability; active 315→437 migration uses stable IDs/aliases, archives removed skills and refunds their points."
       },
       "normalization": {
-        "canonical": 315,
-        "schema_normalized": 315,
+        "canonical": 437,
+        "schema_normalized": 437,
         "needs_special_review": 0,
         "path": "spec/skill-normalization-status.json"
       }
