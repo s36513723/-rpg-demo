@@ -1108,3 +1108,5 @@
 .legend-grid .legend-entry{display:flex;align-items:center;gap:8px;min-height:44px;padding:7px 9px}
 .legend-grid .legend-entry i{display:flex;flex:none;color:#e8cf84;font-style:normal}
 .legend-grid .legend-entry .ui-icon{width:23px;height:23px}
+
+.expedition .route-svg path.special-route{stroke-dasharray:4 3;stroke-width:1.8;opacity:.95}
