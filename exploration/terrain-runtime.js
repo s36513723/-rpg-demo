@@ -1,0 +1,48 @@
+/* Canonical terrain / battlefield runtime from sheets 19-29. */
+(function(root){'use strict';
+const TILE={
+TL00:{name:'通常',risk:0},
+TL01:{name:'草地',risk:0,shinraEffect:.05},
+TL02:{name:'茂み',risk:1,incomingRangedHit:-10,shinraStatus:5},
+TL03:{name:'水場',risk:1,waterEffect:.10,incomingFire:-.10,speed:-.10},
+TL04:{name:'浅瀬',risk:1,waterEffect:.05,speed:-.05},
+TL05:{name:'泥濘',risk:2,speed:-.15,evasion:-10,moveMax:1,ground:true},
+TL06:{name:'毒沼',risk:3,speed:-.10,endRoundHp:.04,ground:true},
+TL07:{name:'岩場',risk:1,incomingPhysical:-.05,forcedDelta:-1},
+TL08:{name:'遮蔽',risk:1,incomingRangedHit:-20,areaIgnores:true},
+TL09:{name:'高所',risk:0,highAccuracy:10,highDamage:.10},
+TL10:{name:'危険縁',risk:3,edgeDamage:.15,bossEdgeDamage:.05},
+TL11:{name:'瓦礫',risk:1,incomingPhysical:-.10,speed:-.10},
+TL12:{name:'砂地',risk:1,speed:-.05,evasion:-5,ground:true},
+TL13:{name:'流砂',risk:3,speed:-.20,evasion:-10,moveMax:1,ground:true},
+TL14:{name:'雪地',risk:1,speed:-.10,forcedDelta:-1,ground:true},
+TL15:{name:'氷面',risk:2,evasion:-10,forcedDelta:1,ground:true},
+TL16:{name:'術式陣',risk:1,sourceSp:-2,sourceEffect:.10,incomingMagic:.10},
+TL17:{name:'聖印',risk:0,healingReceived:.20,statusResist:10,bindResist:10},
+TL18:{name:'呪刻',risk:2,statusApply:10,bindApply:10,statusResist:-10,bindResist:-10},
+TL19:{name:'機構床',risk:0,kikouSp:-2,deviceRounds:1},
+TL20:{name:'氷床',risk:2,speed:-.15,evasion:-10,forcedDelta:1,ground:true,temp:2},
+TL21:{name:'炎上',risk:3,endRoundFire:.05,temp:2},
+TL22:{name:'砂幕',risk:1,outgoingRangedHit:-15,incomingRangedHit:-15,speed:-.05,temp:2},
+TL23:{name:'煙霧',risk:1,outgoingRangedHit:-15,incomingRangedHit:-15,temp:2},
+TL24:{name:'霧幕',risk:0,incomingRangedHit:-15,temp:2},
+TL25:{name:'石壁',risk:0,incomingPhysical:-.15,incomingRangedHit:-15,forcedDelta:-1,temp:2}
+};
+const TERRAIN={
+TR01:{name:'森林',tiles:{TL00:1,TL01:5,TL02:4,TL07:1,TL08:1}},
+TR02:{name:'草地',tiles:{TL00:3,TL01:6,TL02:2,TL07:1}},
+TR03:{name:'水辺',tiles:{TL00:1,TL01:2,TL03:5,TL04:6,TL07:2,TL12:2}},
+TR04:{name:'湿地',tiles:{TL01:2,TL02:2,TL03:3,TL04:4,TL05:5,TL06:1}},
+TR05:{name:'泥濘',tiles:{TL01:1,TL03:1,TL04:2,TL05:6,TL06:1}},
+TR06:{name:'岩場',tiles:{TL00:2,TL07:6,TL08:3,TL09:1,TL11:1}},
+TR07:{name:'高低差',tiles:{TL00:2,TL07:3,TL08:1,TL09:5,TL10:2}},
+TR08:{name:'崖',tiles:{TL00:1,TL07:3,TL08:1,TL09:3,TL10:6}},
+TR09:{name:'狭所',tiles:{TL00:3,TL07:3,TL08:3,TL11:2}},
+TR10:{name:'開地',tiles:{TL00:7,TL01:2,TL09:1,TL12:2}},
+TR11:{name:'砂地',tiles:{TL00:1,TL07:1,TL09:1,TL12:6,TL13:2}},
+TR12:{name:'雪氷',tiles:{TL00:1,TL07:2,TL09:1,TL14:6,TL15:3}},
+TR13:{name:'遺構',tiles:{TL00:3,TL08:4,TL09:1,TL11:5}},
+TR14:{name:'石造',tiles:{TL00:5,TL08:3,TL09:1,TL11:3}},
+TR15:{name:'船上',tiles:{TL00:6,TL08:2,TL09:1,TL10:4}},
+TR16:{name:'暗所',condition:true},TR17:{name:'強風',condition:true},TR18:{name:'豪雨',condition:true},TR19:{name:'瘴気',condition:true}
+};
