@@ -382,9 +382,10 @@ function canReach(a,t,r){
  if(r==='mid')return(ar<=1&&tr===fr)||(ar===0&&tr<=fr+1);
  return false;
 }
-function targets(u,a){return a.target==='ally'?live(party):live(enemies).filter(t=>canReach(u,t,a.range))}
+function weaponMasteryName(u){return ({戦槌:'槌',戦斧:'斧',短剣:'短剣',回刃:'投擲',剣:'剣',長槍:'槍',槍:'槍',長弓:'弓',弓:'弓',杖:'杖',呪符:'符術',鞭:'鞭',鎌:'鎌',刀:'刀',銃:'銃',格闘:'格闘',小盾:'盾',無手:'無手'})[u.weapon?.name]||u.weapon?.name}
+function targets(u,a){if(a.target==='self')return [u];return a.target==='ally'?live(party):live(enemies).filter(t=>canReach(u,t,a.range))}
 function enough(u,a){return !a.costType||u[a.costType.toLowerCase()]>=a.cost}
-function unavailable(u,a){if(a.kind==='spell'&&u.status.headBind>0)return'頭封じ';if(!enough(u,a))return a.costType+'不足';if(!targets(u,a).length)return'射程内に対象なし';return''}
+function unavailable(u,a){if(a.kind==='spell'&&u.status.headBind>0)return'頭封じ';if(a.weapons?.length&&!a.weapons.includes(weaponMasteryName(u)))return'現在の武器では使用不可';if(!enough(u,a))return a.costType+'不足';if(!targets(u,a).length)return'射程内に対象なし';return''}
 function defaultTarget(u,a){const ts=targets(u,a),old=ts.find(t=>t.id===getDraft(u).targetId);if(old)return old;if(a.heal)return [...ts].sort((x,y)=>x.hp/x.maxHp-y.hp/y.maxHp)[0];return [...ts].sort((x,y)=>rankIndex(x)-rankIndex(y)||col(x)-col(y))[0]}
 function ensureTarget(u,a){const t=defaultTarget(u,a);getDraft(u).targetId=t?.id||null;return targets(u,a)}
 function editable(){return !busy&&!over}
