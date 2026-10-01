@@ -18,6 +18,38 @@ function edgeSkillForTag(tag,random){if(tag==='水域')return'水の導き';if(t
 function makeFieldEdge(nodes,random){const froms=shuffle(nodes.filter(n=>n.id>=2&&n.id<=7&&!n.hidden&&n.fieldTags?.length),random);for(const a of froms){for(const tag of shuffle(a.fieldTags,random)){const skill=edgeSkillForTag(tag,random);if(!skill)continue;const targets=nodes.filter(b=>!b.hidden&&b.id>a.id+1&&b.id!==9&&!a.links.includes(b.id));if(!targets.length)continue;const b=targets[Math.floor(random()*targets.length)];return {from:a.id,to:b.id,skill,tag,unlocked:false}}}return null}
 function outgoingLinks(f,n){const extra=(f.fieldEdges||[]).filter(e=>e.unlocked&&e.from===n.id).map(e=>e.to);return [...new Set([...(n.links||[]),...extra])]}
 function gainTP(amount,source){if(!H.run||amount<=0)return;H.run.tp=(H.run.tp||0)+amount;logRun(source+'：TP +'+amount)}
+function fieldRegistry(){return window.RPG_FIELD_SKILLS_437||{skills:{},aliases:{},canonicalName:n=>n}}
+function canonicalFieldName(n){const F=fieldRegistry();return F.canonicalName?F.canonicalName(n):(F.aliases?.[n]||n)}
+function fieldDef(n){return fieldRegistry().skills?.[canonicalFieldName(n)]||null}
+function tacticalCost(n){const d=rules().meta(n),rank=Math.min(...(d?.unlocks||[{rank:1}]).map(u=>Number(u.rank)||1));return rank>=9?2:1}
+function fieldStage(i,d){if(!d)return 0;const rank=ranksFor(i)?.[d.mastery]||0,idx={PHY:0,SKL:1,ARC:2,MND:3},stat=stats[i]?.[idx[d.stat]??1]||0;let stage=1;if(rank>=Math.min(10,d.rank+2)||stat>=30)stage=2;if(rank>=10&&stat>=40)stage=3;return stage}
+function fieldTagCandidates(theme,placeType,type){
+ const base={森林:['植物','獣'],洞窟:['鉱物','遺物'],廃墟都市:['遺物','機械'],山岳:['鉱物','獣'],沼地:['植物','水域','呪い'],砂漠遺跡:['遺物','機械','聖域'],'海上・船':['水域','獣'],地下神殿:['遺物','聖域','呪い']}[theme]||[];
+ const extra=[];if(/水辺/.test(placeType))extra.push('水域');if(/遺構|廃屋/.test(placeType))extra.push('遺物');if(/崩落/.test(placeType))extra.push('鉱物');if(/隠し/.test(placeType))extra.push('遺物');if(type==='forge')extra.push('機械');return [...new Set(base.concat(extra))]
+}
+function assignFieldTags(n,theme,random){
+ const pool=fieldTagCandidates(theme,n.placeType,n.type);let count=random()<.15?0:1;if(pool.length>1&&random()<.35)count=2;n.fieldTags=shuffle(pool,random).slice(0,count);
+ n.fieldState={treasure:random()<.22?{hidden:true,opened:false,rarity:1+Math.floor(random()*3)}:null,trap:random()<.14?{hidden:true,cleared:false,difficulty:1+Math.floor(random()*3)}:null,resource:false};
+ if(n.fieldTags.some(t=>['鉱物','植物','獣','水域','機械','遺物'].includes(t))&&random()<.55)n.fieldState.resource=true;
+ return n
+}
+function routeSkillFor(tags){if(tags.includes('水域'))return '水の導き';if(tags.includes('植物'))return '鳥瞰';if(tags.includes('聖域')||tags.includes('呪い'))return '招霊';if(tags.includes('遺物')||tags.includes('機械'))return '遺構解析';return '扉解錠'}
+function enrichFieldRun(r,random){
+ for(const fl of r.floors){
+  const theme=r.themes[r.floors.indexOf(fl)],target=Math.max(fl.nodes.length,10+Math.floor(random()*3));
+  while(fl.nodes.length<target&&fl.nodes.length<12){
+   const id=fl.nodes.length,types=['explore','event','battle','merchant'],type=random()<.12?'camp':types[Math.floor(random()*types.length)],kind=PLACE_KINDS[Math.floor(random()*9)],n={id,type,placeType:kind,place:placeLabel(theme,kind),returnPoint:type==='camp',links:[8],terrain:terrainPool(theme)[Math.floor(random()*terrainPool(theme).length)],threat:1+Math.floor(random()*3),done:false,entered:false,eventId:type==='event'?null:null,roll:random(),stock:null,used:false};
+   const from=[2,3,4,5,6,7][Math.floor(random()*6)];if(fl.nodes[from]&&!fl.nodes[from].links.includes(id))fl.nodes[from].links.push(id);fl.nodes.push(n)
+  }
+  fl.nodes.forEach(n=>assignFieldTags(n,theme,random));
+  fl.specialEdges=[];
+  if(random()<.65){
+   const froms=fl.nodes.filter(n=>n.id>=2&&n.id<=7&&!n.hidden),from=froms[Math.floor(random()*froms.length)],to=fl.nodes.find(n=>n.id===8)||fl.nodes.find(n=>n.type==='boss');
+   if(from&&to&&!from.links.includes(to.id)){const skill=routeSkillFor(from.fieldTags||[]);fl.specialEdges.push({from:from.id,to:to.id,skill,tag:(from.fieldTags||[])[0]||'汎用',unlocked:false})}
+  }
+ }
+ return r
+}
 function tacticalEligible(i,n){const d=rules().meta(n);if(!H.run||!d?.unlocks?.length||learned[i].includes(n)||(H.run.temporarySkills?.[i]||[]).includes(n))return false;return d.unlocks.some(u=>{const category=rules().masteries[u.mastery]?.category;return rules().canLearn(n,u.mastery,ranksFor(i),stats[i])&&(!['源泉','術法','技能'].includes(category)||masteryOwned[i][category]?.includes(u.mastery))})}
 function tacticalMenu(){if(!H.run)return dungeon();show('<h2>Tactical Pt / TP</h2>'+HT('残り '+(H.run.tp||0)+' TP','条件を満たす未習得スキルを、この探索中だけ取得。帰還時に消失。')+names.map((name,i)=>HB(name,'一時習得 '+(H.run.temporarySkills?.[i]?.length||0)+'件','tacticalSkills',[i])).join(''))}
 function tacticalSkills(i){if(!H.run||!Number.isInteger(i)||i<0||i>=6)return;const options=Object.keys(rules().skills).filter(n=>tacticalEligible(i,n));show('<h2>'+hesc(names[i])+' / 一時習得</h2>'+HT('残り '+(H.run.tp||0)+' TP','必要TPは正本の習得Rankに応じて1～2。取得後にスキル画面でセット。')+(options.length?options.map(n=>{const cost=tacticalCost(n);return HB(n,'必要 '+cost+' TP / '+skillDescription(rules().meta(n)),'tacticalAcquire',[i,n],H.run.tp<cost)}).join(''):HT('取得できるスキルはありません','Mastery Rankと能力条件を確認してください')))}
@@ -41,7 +73,7 @@ function makeRun(id,themes){
   const edge=random()<.65?makeFieldEdge(nodes,random):null;
   r.floors.push({nodes,open:[0,1],fieldEdges:edge?[edge]:[]});
  }
- return r
+ return enrichFieldRun(r,random)
 }
 function currentNode(){return H?.run?.pending!=null?H.run.floors[H.run.floor-1].nodes.find(n=>n.id===H.run.pending):null}
 function nodeName(n){return ({battle:'戦闘',explore:'調査',event:'出来事',camp:'野営',elite:'強敵',merchant:'旅商人',forge:'工房',stairs:'次の層',boss:'守護者',secret:'隠し地点'})[n.type]||'地点'}
