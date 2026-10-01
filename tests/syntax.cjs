@@ -13,8 +13,8 @@ assert(battleUi.includes("run:'images/paladin-turn.webp'"),'Paladin formation/ic
 assert(battleUi.includes('DIRECT_FACE_SRC'),'Paladin direct face source missing');
 assert(battleUi.includes("run:['images/paladin-battle.webp',168,226]"),'Paladin battle portrait mapping missing');
 assert(battleCss.includes('data-actor-id="run"]::before{background-image:url("images/paladin-turn.webp")}'),'Paladin turn-order CSS mapping missing');
-const C=require('../skill-catalog-315.js'),R=require('../rpg-rules.js');
-assert.equal(C.count,315);assert.equal(Object.keys(R.skills).length,315);assert.equal(Object.keys(R.masteries).length,31);assert.equal(R.catalogVersion,315);
+const C=require('../skill-catalog-315.js'),F=require('../exploration/field-skills-437.js'),R=require('../rpg-rules.js');
+assert.equal(C.count,315);assert.equal(F.count,25);assert.equal(Object.keys(R.skills).length,335);assert.equal(Object.keys(R.masteries).length,31);assert.equal(R.catalogVersion,315);assert.equal(R.fieldCatalogVersion,437);
 assert(R.skills['速射（弓）']);assert(R.skills['速射（銃）']);assert.equal(R.skills['速射（弓）'].name,'速射');assert.equal(R.skills['速射（銃）'].name,'速射');
 for(const [n,d]of Object.entries(R.skills)){
  assert.equal(n,d.catalogKey||d.name);assert(['Active','Passive','Field'].includes(d.mode));assert(d.setCost>=1&&d.setCost<=4,n+' cost');
@@ -23,12 +23,12 @@ for(const [n,d]of Object.entries(R.skills)){
  if(d.mode==='Active'){assert(Number.isFinite(d.mult));assert(Number.isFinite(d.cost));assert.equal(d.costType,'SP');assert(['near','mid','far','all'].includes(d.range));assert(['single','row','all','pierce','adjacent','random'].includes(d.scope));const t=d.targeting;assert(t,n+' targeting');assert(['enemy','ally','self'].includes(t.side),n+' targeting side');assert(['same','select','self'].includes(t.column),n+' targeting column');assert(['front','through','last','ally','self'].includes(t.order),n+' targeting order');assert(['single','cross','x','vertical','horizontal','3x3'].includes(t.area),n+' targeting area');}
  if(d.mode==='Passive')assert(Object.keys(d.passive).length,n+' passive');
 }
-assert.equal(R.version,12);assert.equal(R.targetRules.board.allyNear,'back');assert.equal(R.targetRules.board.enemyNear,'front');assert.equal(R.targetRules.board.forwardAxis,'vertical');
+assert.equal(R.version,13);assert.equal(R.targetRules.board.allyNear,'back');assert.equal(R.targetRules.board.enemyNear,'front');assert.equal(R.targetRules.board.forwardAxis,'vertical');
 assert.deepEqual(R.targetRules.normalAttack,{side:'enemy',column:'same',order:'front',area:'single'});
 assert.equal(R.targetRules.emptySameColumn,'choose-occupied-column');assert.equal(R.targetRules.throughFallback,'front');assert.equal(R.targetRules.counterChain,false);
 assert(R.skills['毒刃'].poison);assert(R.skills['頭封じの符'].headBind);assert(R.skills['誘惑'].temptation);assert(R.skills['盾撃'].stun);
 assert(R.skills['照準器'].special?.lockOn);assert(R.skills['大元素術'].cast===1&&R.skills['大元素術'].mult>0);assert(R.skills['蘇生祈願'].revive);assert(R.skills['誘惑'].special?.temptation);
-assert.equal(R.skills['解錠'].mode,'Field');assert.equal(R.skills['魔装極意'].mode,'Passive');
+assert.equal(R.skills['宝箱解錠'].mode,'Field');assert.equal(R.skills['魔装極意'].mode,'Passive');
 for(const [n,d] of Object.entries(R.skills)){const text=R.skillExplain(d);assert.equal(typeof text,'string',n+' explanation type');assert(text.trim().length>=2,n+' explanation')}
 for(const [n,d] of Object.entries(R.masteries)){assert(R.masteryDescription(n).trim().length>=8,n+' mastery explanation');for(const b of Object.keys(d.branches))assert(R.branchDescription(n,b).trim().length>=2,n+' / '+b+' branch explanation')}
 for(const file of ['battle-v29.js','exploration/index.html']){
@@ -58,7 +58,7 @@ assert(hubSource.includes("awardExperience(60,'依頼達成'"),'quest EXP reward
 assert(hubSource.includes("awardExperience(100,'章報告'"),'story EXP reward');
 assert(!/grant\(\{[^\n}]*stat:/.test(exploreSource),'exploration no longer grants Stat Pt directly');
 assert(!/grant\(\{[^\n}]*stat:/.test(hubSource),'hub no longer grants Stat Pt directly');
-console.log('Syntax, local assets, canonical 315 runtime skills and 31 masteries under Rank 1-10 rules: PASS');
+console.log('Syntax, local assets, canonical 315 battle skills + 25 canonical Field Skills and 31 masteries: PASS');
 
 const caster=[10,10,60,20],old=R.legacyDerived(caster),max=R.derived(caster);
 assert.equal(R.resourceVersion,2);assert.equal(max.sp,100);assert.equal(R.capacity(caster,[]),12);assert(!('mp' in max),'current derived vitals must not expose MP');
