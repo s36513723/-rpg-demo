@@ -2,7 +2,7 @@
   "schema_version": 2,
   "canonical_spec": {
     "type": "xlsx",
-    "logical_name": "RPG制作_仕様正本_同期版.xlsx",
+    "logical_name": "RPG制作_仕様正本_戦場地形完全設計_2026-10-01.xlsx",
     "owner": "user",
     "editing_policy": "User gives natural-language decisions; assistant updates workbook and propagates to repo implementation."
   },
@@ -242,8 +242,8 @@
         "狭路・通路",
         "広間・開けた場所",
         "分岐路",
-        "高所・低所",
-        "水辺・特殊地形",
+        "崖道・段丘",
+        "水辺・水路",
         "崩落・障害区域",
         "遺構・人工物",
         "隠し区画・脇道",
