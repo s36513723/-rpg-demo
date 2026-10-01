@@ -3,9 +3,9 @@
   "status": "要レビュー",
   "note": "Mechanical triage only. Exact duplicates can still be intentional across different Masteries. Do not auto-delete or auto-balance from this report.",
   "totals": {
-    "skills": 335,
-    "active": 241,
-    "passive": 68,
+    "skills": 437,
+    "active": 342,
+    "passive": 73,
     "exact_duplicate_groups": 0,
     "same_mastery_exact_duplicate_groups": 0,
     "cross_mastery_only_exact_duplicate_groups": 0,
@@ -40,34 +40,6 @@
         "cast": 0,
         "masteries": [
           "剣"
-        ]
-      },
-      {
-        "name": "衰弱呪",
-        "cost": 6,
-        "mult": 1,
-        "simple_mult_per_sp": 0.1667,
-        "scope": "single",
-        "range": "far",
-        "attr": "闇",
-        "setCost": 1,
-        "cast": 0,
-        "masteries": [
-          "呪術"
-        ]
-      },
-      {
-        "name": "勇壮歌",
-        "cost": 6,
-        "mult": 1,
-        "simple_mult_per_sp": 0.1667,
-        "scope": "single",
-        "range": "near",
-        "attr": "無",
-        "setCost": 1,
-        "cast": 0,
-        "masteries": [
-          "士気"
         ]
       },
       {
@@ -155,34 +127,6 @@
         ]
       },
       {
-        "name": "星夜",
-        "cost": 6,
-        "mult": 1,
-        "simple_mult_per_sp": 0.1667,
-        "scope": "single",
-        "range": "far",
-        "attr": "無",
-        "setCost": 1,
-        "cast": 0,
-        "masteries": [
-          "星辰"
-        ]
-      },
-      {
-        "name": "重力",
-        "cost": 6,
-        "mult": 1,
-        "simple_mult_per_sp": 0.1667,
-        "scope": "single",
-        "range": "far",
-        "attr": "無",
-        "setCost": 1,
-        "cast": 0,
-        "masteries": [
-          "星辰"
-        ]
-      },
-      {
         "name": "杖打",
         "cost": 6,
         "mult": 1,
@@ -267,48 +211,6 @@
         ]
       },
       {
-        "name": "灼熱",
-        "cost": 6,
-        "mult": 1,
-        "simple_mult_per_sp": 0.1667,
-        "scope": "single",
-        "range": "far",
-        "attr": "火",
-        "setCost": 1,
-        "cast": 0,
-        "masteries": [
-          "灼陽"
-        ]
-      },
-      {
-        "name": "神陽",
-        "cost": 6,
-        "mult": 1,
-        "simple_mult_per_sp": 0.1667,
-        "scope": "single",
-        "range": "far",
-        "attr": "光",
-        "setCost": 1,
-        "cast": 0,
-        "masteries": [
-          "灼陽"
-        ]
-      },
-      {
-        "name": "念動衝",
-        "cost": 6,
-        "mult": 1,
-        "simple_mult_per_sp": 0.1667,
-        "scope": "single",
-        "range": "far",
-        "attr": "無",
-        "setCost": 1,
-        "cast": 0,
-        "masteries": [
-          "異能"
-        ]
-      },
-      {
         "name": "盾撃",
         "cost": 6,
         "mult": 1,
@@ -348,20 +250,6 @@
         "cast": 0,
         "masteries": [
           "短剣"
-        ]
-      },
-      {
-        "name": "火符",
-        "cost": 6,
-        "mult": 1,
-        "simple_mult_per_sp": 0.1667,
-        "scope": "single",
-        "range": "far",
-        "attr": "火",
-        "setCost": 1,
-        "cast": 0,
-        "masteries": [
-          "符術"
         ]
       },
       {
@@ -407,6 +295,34 @@
         ]
       },
       {
+        "name": "払い鞭",
+        "cost": 6,
+        "mult": 1,
+        "simple_mult_per_sp": 0.1667,
+        "scope": "row",
+        "range": "mid",
+        "attr": "斬",
+        "setCost": 1,
+        "cast": 0,
+        "masteries": [
+          "鞭"
+        ]
+      },
+      {
+        "name": "灼熱",
+        "cost": 6,
+        "mult": 1,
+        "simple_mult_per_sp": 0.1667,
+        "scope": "single",
+        "range": "far",
+        "attr": "火",
+        "setCost": 1,
+        "cast": 0,
+        "masteries": [
+          "灼陽"
+        ]
+      },
+      {
         "name": "氷嶺",
         "cost": 6,
         "mult": 1,
@@ -421,30 +337,142 @@
         ]
       },
       {
-        "name": "払い鞭",
+        "name": "潮汐",
         "cost": 6,
         "mult": 1,
         "simple_mult_per_sp": 0.1667,
         "scope": "row",
-        "range": "mid",
-        "attr": "斬",
+        "range": "far",
+        "attr": "水",
         "setCost": 1,
         "cast": 0,
         "masteries": [
-          "鞭"
+          "海神"
+        ]
+      },
+      {
+        "name": "重力",
+        "cost": 6,
+        "mult": 1,
+        "simple_mult_per_sp": 0.1667,
+        "scope": "single",
+        "range": "far",
+        "attr": "土",
+        "setCost": 1,
+        "cast": 0,
+        "masteries": [
+          "星辰"
+        ]
+      },
+      {
+        "name": "火球",
+        "cost": 6,
+        "mult": 1,
+        "simple_mult_per_sp": 0.1667,
+        "scope": "single",
+        "range": "far",
+        "attr": "火",
+        "setCost": 1,
+        "cast": 0,
+        "masteries": [
+          "魔術"
+        ]
+      },
+      {
+        "name": "風刃",
+        "cost": 6,
+        "mult": 1,
+        "simple_mult_per_sp": 0.1667,
+        "scope": "single",
+        "range": "far",
+        "attr": "風",
+        "setCost": 1,
+        "cast": 0,
+        "masteries": [
+          "魔術"
+        ]
+      },
+      {
+        "name": "火符",
+        "cost": 6,
+        "mult": 1,
+        "simple_mult_per_sp": 0.1667,
+        "scope": "single",
+        "range": "far",
+        "attr": "火",
+        "setCost": 1,
+        "cast": 0,
+        "masteries": [
+          "符術"
+        ]
+      },
+      {
+        "name": "念動衝",
+        "cost": 6,
+        "mult": 1,
+        "simple_mult_per_sp": 0.1667,
+        "scope": "single",
+        "range": "far",
+        "attr": "無",
+        "setCost": 1,
+        "cast": 0,
+        "masteries": [
+          "異能"
+        ]
+      },
+      {
+        "name": "発火",
+        "cost": 8,
+        "mult": 1.1,
+        "simple_mult_per_sp": 0.1375,
+        "scope": "single",
+        "range": "far",
+        "attr": "火",
+        "setCost": 1,
+        "cast": 0,
+        "masteries": [
+          "異能"
         ]
       }
     ],
     "simple_sp_efficiency_low": [
       {
-        "name": "奈落",
+        "name": "森羅万象",
         "cost": 25,
-        "mult": 1.9,
-        "simple_mult_per_sp": 0.076,
-        "scope": "row",
+        "mult": 1.1,
+        "simple_mult_per_sp": 0.044,
+        "scope": "all",
+        "range": "far",
+        "attr": "風",
+        "setCost": 4,
+        "cast": 0,
+        "masteries": [
+          "森羅"
+        ]
+      },
+      {
+        "name": "五行大符",
+        "cost": 25,
+        "mult": 1.1,
+        "simple_mult_per_sp": 0.044,
+        "scope": "all",
+        "range": "far",
+        "attr": "火",
+        "setCost": 4,
+        "cast": 0,
+        "masteries": [
+          "符術"
+        ]
+      },
+      {
+        "name": "吸命",
+        "cost": 16,
+        "mult": 1.1,
+        "simple_mult_per_sp": 0.0688,
+        "scope": "single",
         "range": "far",
         "attr": "闇",
-        "setCost": 4,
+        "setCost": 3,
         "cast": 0,
         "masteries": [
           "呪術"
@@ -465,20 +493,6 @@
         ]
       },
       {
-        "name": "星落",
-        "cost": 25,
-        "mult": 1.9,
-        "simple_mult_per_sp": 0.076,
-        "scope": "single",
-        "range": "far",
-        "attr": "無",
-        "setCost": 4,
-        "cast": 1,
-        "masteries": [
-          "星辰"
-        ]
-      },
-      {
         "name": "大詠唱",
         "cost": 25,
         "mult": 1.9,
@@ -490,62 +504,6 @@
         "cast": 1,
         "masteries": [
           "杖"
-        ]
-      },
-      {
-        "name": "迎撃装置",
-        "cost": 25,
-        "mult": 1.9,
-        "simple_mult_per_sp": 0.076,
-        "scope": "single",
-        "range": "far",
-        "attr": "無",
-        "setCost": 4,
-        "cast": 0,
-        "masteries": [
-          "機巧"
-        ]
-      },
-      {
-        "name": "大海嘯",
-        "cost": 25,
-        "mult": 1.9,
-        "simple_mult_per_sp": 0.076,
-        "scope": "single",
-        "range": "far",
-        "attr": "水",
-        "setCost": 4,
-        "cast": 1,
-        "masteries": [
-          "海神"
-        ]
-      },
-      {
-        "name": "日輪",
-        "cost": 25,
-        "mult": 1.9,
-        "simple_mult_per_sp": 0.076,
-        "scope": "single",
-        "range": "far",
-        "attr": "火",
-        "setCost": 4,
-        "cast": 1,
-        "masteries": [
-          "灼陽"
-        ]
-      },
-      {
-        "name": "現象暴走",
-        "cost": 25,
-        "mult": 1.9,
-        "simple_mult_per_sp": 0.076,
-        "scope": "single",
-        "range": "far",
-        "attr": "火",
-        "setCost": 4,
-        "cast": 0,
-        "masteries": [
-          "異能"
         ]
       },
       {
@@ -577,20 +535,6 @@
         ]
       },
       {
-        "name": "山嶺崩し",
-        "cost": 25,
-        "mult": 1.9,
-        "simple_mult_per_sp": 0.076,
-        "scope": "single",
-        "range": "far",
-        "attr": "土",
-        "setCost": 4,
-        "cast": 1,
-        "masteries": [
-          "霊峰"
-        ]
-      },
-      {
         "name": "大捕縛",
         "cost": 25,
         "mult": 1.9,
@@ -605,17 +549,101 @@
         ]
       },
       {
-        "name": "大元素術",
+        "name": "日輪",
         "cost": 25,
         "mult": 1.9,
         "simple_mult_per_sp": 0.076,
         "scope": "single",
         "range": "far",
-        "attr": "無",
+        "attr": "火",
+        "setCost": 4,
+        "cast": 1,
+        "masteries": [
+          "灼陽"
+        ]
+      },
+      {
+        "name": "山嶺崩し",
+        "cost": 25,
+        "mult": 1.9,
+        "simple_mult_per_sp": 0.076,
+        "scope": "single",
+        "range": "far",
+        "attr": "土",
+        "setCost": 4,
+        "cast": 1,
+        "masteries": [
+          "霊峰"
+        ]
+      },
+      {
+        "name": "大海嘯",
+        "cost": 25,
+        "mult": 1.9,
+        "simple_mult_per_sp": 0.076,
+        "scope": "all",
+        "range": "far",
+        "attr": "水",
+        "setCost": 4,
+        "cast": 1,
+        "masteries": [
+          "海神"
+        ]
+      },
+      {
+        "name": "星落",
+        "cost": 25,
+        "mult": 1.9,
+        "simple_mult_per_sp": 0.076,
+        "scope": "adjacent",
+        "range": "far",
+        "attr": "光",
+        "setCost": 4,
+        "cast": 1,
+        "masteries": [
+          "星辰"
+        ]
+      },
+      {
+        "name": "奈落",
+        "cost": 25,
+        "mult": 1.9,
+        "simple_mult_per_sp": 0.076,
+        "scope": "row",
+        "range": "far",
+        "attr": "闇",
+        "setCost": 4,
+        "cast": 0,
+        "masteries": [
+          "呪術"
+        ]
+      },
+      {
+        "name": "大元素術",
+        "cost": 25,
+        "mult": 1.9,
+        "simple_mult_per_sp": 0.076,
+        "scope": "all",
+        "range": "far",
+        "attr": "火",
         "setCost": 4,
         "cast": 1,
         "masteries": [
           "魔術"
+        ]
+      },
+      {
+        "name": "現象暴走",
+        "cost": 25,
+        "mult": 1.9,
+        "simple_mult_per_sp": 0.076,
+        "scope": "all",
+        "range": "far",
+        "attr": "火",
+        "setCost": 4,
+        "cast": 0,
+        "masteries": [
+          "異能"
         ]
       },
       {
@@ -661,20 +689,6 @@
         ]
       },
       {
-        "name": "重圧（星辰）",
-        "cost": 16,
-        "mult": 1.25,
-        "simple_mult_per_sp": 0.0781,
-        "scope": "single",
-        "range": "far",
-        "attr": "無",
-        "setCost": 3,
-        "cast": 0,
-        "masteries": [
-          "星辰"
-        ]
-      },
-      {
         "name": "崩拳",
         "cost": 16,
         "mult": 1.25,
@@ -700,20 +714,6 @@
         "cast": 0,
         "masteries": [
           "槌"
-        ]
-      },
-      {
-        "name": "乾熱",
-        "cost": 16,
-        "mult": 1.25,
-        "simple_mult_per_sp": 0.0781,
-        "scope": "single",
-        "range": "far",
-        "attr": "火",
-        "setCost": 3,
-        "cast": 0,
-        "masteries": [
-          "灼陽"
         ]
       },
       {
@@ -745,127 +745,121 @@
         ]
       },
       {
-        "name": "破邪",
+        "name": "乾熱",
         "cost": 16,
-        "mult": 1.45,
-        "simple_mult_per_sp": 0.0906,
+        "mult": 1.25,
+        "simple_mult_per_sp": 0.0781,
         "scope": "single",
         "range": "far",
-        "attr": "闇",
+        "attr": "火",
         "setCost": 3,
+        "cast": 0,
+        "masteries": [
+          "灼陽"
+        ]
+      },
+      {
+        "name": "炎柱",
+        "cost": 21,
+        "mult": 1.7,
+        "simple_mult_per_sp": 0.081,
+        "scope": "row",
+        "range": "far",
+        "attr": "火",
+        "setCost": 4,
+        "cast": 0,
+        "masteries": [
+          "灼陽"
+        ]
+      },
+      {
+        "name": "渦潮",
+        "cost": 21,
+        "mult": 1.7,
+        "simple_mult_per_sp": 0.081,
+        "scope": "single",
+        "range": "far",
+        "attr": "水",
+        "setCost": 4,
+        "cast": 0,
+        "masteries": [
+          "海神"
+        ]
+      },
+      {
+        "name": "オーロラ",
+        "cost": 21,
+        "mult": 1.7,
+        "simple_mult_per_sp": 0.081,
+        "scope": "row",
+        "range": "far",
+        "attr": "水",
+        "setCost": 4,
+        "cast": 0,
+        "masteries": [
+          "星辰"
+        ]
+      },
+      {
+        "name": "聖光の裁き",
+        "cost": 21,
+        "mult": 1.7,
+        "simple_mult_per_sp": 0.081,
+        "scope": "row",
+        "range": "far",
+        "attr": "光",
+        "setCost": 4,
         "cast": 0,
         "masteries": [
           "信仰"
         ]
       },
       {
-        "name": "大太刀薙ぎ",
-        "cost": 16,
-        "mult": 1.45,
-        "simple_mult_per_sp": 0.0906,
-        "scope": "row",
-        "range": "near",
-        "attr": "斬",
-        "setCost": 3,
-        "cast": 0,
-        "masteries": [
-          "刀"
-        ]
-      },
-      {
-        "name": "連環剣",
-        "cost": 16,
-        "mult": 1.45,
-        "simple_mult_per_sp": 0.0906,
-        "scope": "single",
-        "range": "near",
-        "attr": "斬",
-        "setCost": 3,
-        "cast": 0,
-        "masteries": [
-          "剣"
-        ]
-      },
-      {
-        "name": "死霊召喚",
-        "cost": 16,
-        "mult": 1.45,
-        "simple_mult_per_sp": 0.0906,
-        "scope": "single",
-        "range": "far",
-        "attr": "闇",
-        "setCost": 3,
-        "cast": 0,
-        "masteries": [
-          "呪術"
-        ]
-      },
-      {
-        "name": "一斉射",
-        "cost": 16,
-        "mult": 1.45,
-        "simple_mult_per_sp": 0.0906,
+        "name": "水弾",
+        "cost": 21,
+        "mult": 1.7,
+        "simple_mult_per_sp": 0.081,
         "scope": "row",
         "range": "far",
-        "attr": "突",
-        "setCost": 3,
+        "attr": "水",
+        "setCost": 4,
         "cast": 0,
         "masteries": [
-          "弓"
+          "魔術"
         ]
       },
       {
-        "name": "回刃",
-        "cost": 16,
-        "mult": 1.45,
-        "simple_mult_per_sp": 0.0906,
+        "name": "光刃",
+        "cost": 21,
+        "mult": 1.7,
+        "simple_mult_per_sp": 0.081,
         "scope": "single",
         "range": "far",
-        "attr": "突",
-        "setCost": 3,
+        "attr": "光",
+        "setCost": 4,
         "cast": 0,
         "masteries": [
-          "投擲"
+          "機巧"
         ]
       },
       {
-        "name": "仕掛爆弾",
-        "cost": 16,
-        "mult": 1.45,
-        "simple_mult_per_sp": 0.0906,
+        "name": "終曲",
+        "cost": 21,
+        "mult": 1.7,
+        "simple_mult_per_sp": 0.081,
         "scope": "single",
         "range": "far",
-        "attr": "突",
-        "setCost": 3,
+        "attr": "無",
+        "setCost": 4,
         "cast": 0,
         "masteries": [
-          "投擲"
-        ]
-      },
-      {
-        "name": "夢歩",
-        "cost": 16,
-        "mult": 1.45,
-        "simple_mult_per_sp": 0.0906,
-        "scope": "single",
-        "range": "far",
-        "attr": "闇",
-        "setCost": 3,
-        "cast": 0,
-        "masteries": [
-          "星辰"
+          "士気"
         ]
       }
     ]
   },
   "cross_mastery_exact_duplicates": [],
   "by_mastery": {
-    "信仰": {
-      "skill_count": 10,
-      "branch_count": 4,
-      "active": 9,
-      "passive": 1
-    },
     "刀": {
       "skill_count": 10,
       "branch_count": 4,
@@ -875,18 +869,6 @@
     "剣": {
       "skill_count": 10,
       "branch_count": 4,
-      "active": 9,
-      "passive": 1
-    },
-    "呪術": {
-      "skill_count": 10,
-      "branch_count": 4,
-      "active": 10,
-      "passive": 0
-    },
-    "士気": {
-      "skill_count": 10,
-      "branch_count": 5,
       "active": 9,
       "passive": 1
     },
@@ -902,23 +884,11 @@
       "active": 9,
       "passive": 1
     },
-    "探索": {
-      "skill_count": 17,
-      "branch_count": 5,
-      "active": 0,
-      "passive": 4
-    },
     "斧": {
       "skill_count": 10,
       "branch_count": 2,
       "active": 8,
       "passive": 2
-    },
-    "星辰": {
-      "skill_count": 10,
-      "branch_count": 8,
-      "active": 9,
-      "passive": 1
     },
     "杖": {
       "skill_count": 10,
@@ -929,12 +899,6 @@
     "格闘": {
       "skill_count": 10,
       "branch_count": 5,
-      "active": 9,
-      "passive": 1
-    },
-    "森羅": {
-      "skill_count": 13,
-      "branch_count": 10,
       "active": 9,
       "passive": 1
     },
@@ -950,35 +914,11 @@
       "active": 9,
       "passive": 1
     },
-    "機巧": {
-      "skill_count": 14,
-      "branch_count": 6,
-      "active": 9,
-      "passive": 1
-    },
-    "海神": {
-      "skill_count": 12,
-      "branch_count": 7,
-      "active": 9,
-      "passive": 1
-    },
-    "灼陽": {
-      "skill_count": 10,
-      "branch_count": 6,
-      "active": 9,
-      "passive": 1
-    },
     "無手": {
       "skill_count": 10,
       "branch_count": 4,
       "active": 4,
       "passive": 6
-    },
-    "異能": {
-      "skill_count": 10,
-      "branch_count": 4,
-      "active": 9,
-      "passive": 1
     },
     "盾": {
       "skill_count": 10,
@@ -991,12 +931,6 @@
       "branch_count": 5,
       "active": 8,
       "passive": 2
-    },
-    "符術": {
-      "skill_count": 11,
-      "branch_count": 4,
-      "active": 10,
-      "passive": 0
     },
     "軽装": {
       "skill_count": 11,
@@ -1022,35 +956,101 @@
       "active": 9,
       "passive": 1
     },
-    "霊峰": {
-      "skill_count": 11,
-      "branch_count": 6,
-      "active": 9,
-      "passive": 1
-    },
     "鞭": {
       "skill_count": 10,
       "branch_count": 5,
       "active": 8,
       "passive": 2
     },
-    "魔術": {
-      "skill_count": 12,
-      "branch_count": 4,
-      "active": 9,
-      "passive": 1
-    },
     "魔装": {
       "skill_count": 13,
       "branch_count": 2,
       "active": 2,
       "passive": 11
+    },
+    "灼陽": {
+      "skill_count": 20,
+      "branch_count": 4,
+      "active": 18,
+      "passive": 2
+    },
+    "霊峰": {
+      "skill_count": 20,
+      "branch_count": 4,
+      "active": 18,
+      "passive": 1
+    },
+    "海神": {
+      "skill_count": 20,
+      "branch_count": 4,
+      "active": 17,
+      "passive": 1
+    },
+    "森羅": {
+      "skill_count": 20,
+      "branch_count": 4,
+      "active": 16,
+      "passive": 1
+    },
+    "星辰": {
+      "skill_count": 20,
+      "branch_count": 4,
+      "active": 19,
+      "passive": 1
+    },
+    "信仰": {
+      "skill_count": 20,
+      "branch_count": 4,
+      "active": 19,
+      "passive": 1
+    },
+    "呪術": {
+      "skill_count": 20,
+      "branch_count": 4,
+      "active": 20,
+      "passive": 0
+    },
+    "魔術": {
+      "skill_count": 20,
+      "branch_count": 4,
+      "active": 15,
+      "passive": 3
+    },
+    "符術": {
+      "skill_count": 20,
+      "branch_count": 4,
+      "active": 18,
+      "passive": 1
+    },
+    "機巧": {
+      "skill_count": 20,
+      "branch_count": 4,
+      "active": 14,
+      "passive": 2
+    },
+    "異能": {
+      "skill_count": 20,
+      "branch_count": 4,
+      "active": 19,
+      "passive": 1
+    },
+    "探索": {
+      "skill_count": 12,
+      "branch_count": 4,
+      "active": 0,
+      "passive": 3
+    },
+    "士気": {
+      "skill_count": 20,
+      "branch_count": 4,
+      "active": 18,
+      "passive": 2
     }
   },
   "interpretation": [
     "同じMastery内で完全同型の技は、取得順・役割差・死にスキル化を最優先で確認する。",
     "別Mastery間の同型技は、世界観上の別経路として意図的な可能性があるため即統合しない。",
     "mult/SPは範囲・状態異常・詠唱・射程を無視した単純指標なので、外れ値の発見にだけ使う。",
-    "戦闘系315ベースに探索用437 Field Skillオーバーレイを接続中。バランス値はプレイテスト対象。"
+    "437件の単一SkillDBを戦闘・探索で共用。Field Skillは同一DBの派生表示。バランス値はプレイテスト対象。"
   ]
 }
