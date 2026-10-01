@@ -45,6 +45,7 @@ const api={version:1,catalogVersion:437,count:rows.length,canonicalCount:25,rows
 function installIntoRules(){
  const R=root.RPG_RULES;if(!R?.skills||!R?.masteries)return;
  for(const d of Object.values(skills)){
+  for(const md of Object.values(R.masteries))for(const branch of Object.keys(md.branches||{}))md.branches[branch]=(md.branches[branch]||[]).filter(n=>R.skills[n]?.id!==d.id);
   let legacy=null;
   for(const [k,v] of Object.entries(R.skills))if(v?.id===d.id){legacy=k;break}
   if(legacy&&legacy!==d.name)api.aliases[legacy]=d.name;
