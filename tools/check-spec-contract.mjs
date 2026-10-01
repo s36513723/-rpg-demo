@@ -48,19 +48,19 @@ if (status.initial_implementation_values?.combo_fire_to_wind_bonus?.status !== "
 if (status.obsolete_legacy?.MP?.status !== "廃止旧仕様") errors.push("MP must be classified as obsolete legacy");
 if (balance.overall_status !== "要レビュー") errors.push("battle balance registry must remain review-controlled until explicit confirmation");
 for (const key of ["hp_sp","damage","hit_evade","critical","weight","status_and_binds","weakness","repeat_action","action_speed"]) if (balance.systems?.[key]?.status !== "要レビュー") errors.push(`balance system ${key} must remain 要レビュー until explicitly confirmed`);
-if (!["構造確定","確定"].includes(skillTarget.status)) errors.push("315-skill target structure must be current");
-if (skillTarget.current_runtime?.skills !== 315) errors.push("skill target registry must describe the current 315-skill runtime");
-if (skillTarget.target_candidate?.total_skills !== 315 || skillTarget.target_candidate?.base_slots !== 310 || skillTarget.target_candidate?.extra_slots !== 5) errors.push("315-skill target arithmetic mismatch");
-if (skillTarget.exact_catalog?.known_complete_list !== true) errors.push("canonical workbook 315 catalog must be marked available");
+if (!["構造確定","確定"].includes(skillTarget.status)) errors.push("437-skill target structure must be current");
+if (skillTarget.current_runtime?.skills !== 437) errors.push("skill target registry must describe the current 437-skill runtime");
+if (skillTarget.target_candidate?.total_skills !== 437 || skillTarget.target_candidate?.base_slots !== 432 || skillTarget.target_candidate?.extra_slots !== 5) errors.push("437-skill target arithmetic mismatch");
+if (skillTarget.exact_catalog?.known_complete_list !== true) errors.push("canonical workbook 437 catalog must be marked available");
 if (!skillTarget.migration_policy?.do_not_invent_missing_names) errors.push("skill migration must never invent names");
 if (skillMigration.canonical_count !== 315 || skillMigration.legacy_runtime_count !== 296) errors.push("skill migration audit counts must remain 315 vs 296");
 if (skillMigration.exact_unique_name_matches !== 40) errors.push("skill migration audit exact-match baseline changed; regenerate from canonical workbook before migration");
 if (!skillMigration.ambiguous_canonical_rows?.includes("速射")) errors.push("legacy migration audit must preserve the bow/gun 速射 ambiguity");
-if (status.current_runtime?.skill_count !== 315) errors.push("status registry must mark 315 active runtime");
-if (manifest.implementation_inventory?.skills !== 315) errors.push("manifest runtime skill count must be 315");
-if (manifest.implementation_inventory?.skill_catalog_target?.runtime_replacement !== true) errors.push("manifest must mark 315 runtime replacement complete");
-if (skillNormalization.canonical_count !== 315) errors.push("normalized SkillDB must contain 315 canonical rows");
-if (skillNormalization.schema_normalized !== 315 || skillNormalization.needs_special_review !== 0) errors.push("SkillDB normalization coverage must remain 315 normalized / 0 special review until the canonical workbook changes");
+if (status.current_runtime?.skill_count !== 437) errors.push("status registry must mark 437 active runtime");
+if (manifest.implementation_inventory?.skills !== 437) errors.push("manifest runtime skill count must be 437");
+if (manifest.implementation_inventory?.skill_catalog_target?.runtime_replacement !== true) errors.push("manifest must mark 437 runtime replacement complete");
+if (skillNormalization.canonical_count !== 437) errors.push("normalized SkillDB must contain 437 canonical rows");
+if (skillNormalization.schema_normalized !== 437 || skillNormalization.needs_special_review !== 0) errors.push("SkillDB normalization coverage must remain 437 normalized / 0 special review until the canonical workbook changes");
 if (skillNormalization.special_review?.length !== 0) errors.push("SkillDB special-review list must be empty after full normalization");
 
 for (const token of ["Mandatory workflow","Definition of done","canonical specification workbook"]) {
