@@ -27,7 +27,7 @@ for(const [n,d]of Object.entries(R.skills)){
 assert.equal(R.version,14);assert.equal(R.targetRules.board.allyNear,'back');assert.equal(R.targetRules.board.enemyNear,'front');assert.equal(R.targetRules.board.forwardAxis,'vertical');
 assert.deepEqual(R.targetRules.normalAttack,{side:'enemy',column:'same',order:'front',area:'single'});
 assert.equal(R.targetRules.emptySameColumn,'choose-occupied-column');assert.equal(R.targetRules.throughFallback,'front');assert.equal(R.targetRules.counterChain,false);
-assert(R.skills['毒刃'].poison);assert(R.skills['頭封じの符'].headBind);assert(R.skills['誘惑'].temptation);assert(R.skills['盾撃'].stun);
+assert(R.skills['毒刃'].poison);assert(R.skills['頭封じの符'].headBind);assert(R.skills['誘惑'].temptation);assert(R.skills['盾撃'].stun);assert.equal(R.skills['集中指示'].target,'enemy');assert(R.skills['集中指示'].special?.lockOn,'集中指示 lock-on');
 assert(R.skills['照準器'].special?.lockOn);assert(R.skills['大元素術'].cast===1&&R.skills['大元素術'].mult>0);assert(R.skills['蘇生祈願'].revive);assert(R.skills['誘惑'].special?.temptation);
 assert.equal(R.skills['宝箱解錠'].mode,'Field');assert.equal(R.skills['魔装極意'].mode,'Passive');
 for(const [n,d] of Object.entries(R.skills)){const text=R.skillExplain(d);assert.equal(typeof text,'string',n+' explanation type');assert(text.trim().length>=2,n+' explanation')}
