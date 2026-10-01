@@ -103,7 +103,7 @@ function fieldSkillApplies(s,n){
  if(d.fieldTags.includes('素材依存')||d.fieldTags.includes('汎用'))return true;
  return d.fieldTags.some(t=>(n.fieldTags||[]).includes(t))
 }
-function fieldSkillEdge(s,n){const f=H.run.floors[H.run.floor-1];return (f.fieldEdges||[]).find(e=>!e.unlocked&&e.from===n.id&&(e.skill===s.name||e.skill===s.sourceName||s.def.fieldTags.includes(e.tag)))}
+function fieldSkillEdge(s,n){const f=H.run.floors[H.run.floor-1],name=canonicalFieldName(s.name),source=canonicalFieldName(s.sourceName);return (f.fieldEdges||[]).find(e=>!e.unlocked&&e.from===n.id&&canonicalFieldName(e.skill)===name||!e.unlocked&&e.from===n.id&&canonicalFieldName(e.skill)===source)}
 function fieldNodeSkills(){const n=currentNode();if(!n||n.done||H.run.battle)return resumeNode();const skills=setExplorationSkills().filter(s=>fieldSkillApplies(s,n)),used=H.run.fieldSkillUses||{};show('<h2>この地点で使う探索スキル</h2>'+HT('場所Fieldタグ',fieldTagsText(n))+(skills.length?skills.map(s=>{const key=H.run.floor+':'+n.id+':'+s.def.id,tier=fieldTier(s),edge=fieldSkillEdge(s,n);return HB(s.name,s.user+' / 段階 '+tier+' / '+(edge?'特殊経路あり':'対応 '+s.def.fieldTags.join('・'))+' / '+s.def.description,'activateFieldSkill',[s.name],!!used[key]||vitals[s.i].sp<(s.def.spCost||0))}).join(''):HT('この地点で使えるField Skillはありません','対応Fieldタグかスキルセットを確認してください。'))+back())}
 function bestFieldSkillById(id){return setExplorationSkills().filter(s=>s.def.id===id).sort((a,b)=>fieldTier(b)-fieldTier(a))[0]||null}
 function availableMaterial(n){return Math.max(0,(loot[n]||0)-(H.unappraised?.materials?.[n]||0)-(H.run?.finds?.materials?.[n]||0))}
