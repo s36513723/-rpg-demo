@@ -162,18 +162,21 @@ function skillExplain(d){
  const body=out.length?out.slice(0,3).join('。'):(d.description||'固有効果を発動する').replace(/。+$/,'');
  return (head?head+'。':'')+body.replace(/。+$/,'')+'。';
 }
+const canonical437=root.RPG_SKILLS_437||(typeof require!=='undefined'?(()=>{try{return require('./skill-catalog-437.js')}catch(_){return null}})():null);
 const canonical315=root.RPG_SKILLS_315||(typeof require!=='undefined'?(()=>{try{return require('./skill-catalog-315.js')}catch(_){return null}})():null);
-if(canonical315?.count===315){
+const activeCatalog=canonical437?.count===437?canonical437:canonical315?.count===315?canonical315:null;
+const categoryMap={無手:'武器',格闘:'武器',短剣:'武器',剣:'武器',槌:'武器',斧:'武器',槍:'武器',鞭:'武器',鎌:'武器',刀:'武器',弓:'武器',銃:'武器',杖:'武器',盾:'武器',投擲:'武器',魔装:'防具',軽装:'防具',重装:'防具',灼陽:'源泉',霊峰:'源泉',海神:'源泉',森羅:'源泉',星辰:'源泉',信仰:'術法',呪術:'術法',魔術:'術法',符術:'術法',機巧:'術法',異能:'術法',探索:'技能',士気:'技能'};
+if(activeCatalog){
  for(const k of Object.keys(skills))delete skills[k];
- Object.assign(skills,canonical315.skills);
- const categoryMap={無手:'武器',格闘:'武器',短剣:'武器',剣:'武器',槌:'武器',斧:'武器',槍:'武器',鞭:'武器',鎌:'武器',刀:'武器',弓:'武器',銃:'武器',杖:'武器',盾:'武器',投擲:'武器',魔装:'防具',軽装:'防具',重装:'防具',灼陽:'源泉',霊峰:'源泉',海神:'源泉',森羅:'源泉',星辰:'源泉',信仰:'術法',呪術:'術法',魔術:'術法',符術:'術法',機巧:'術法',異能:'術法',探索:'技能',士気:'技能'};
- for(const [m,branches] of Object.entries(canonical315.branches)){
+ Object.assign(skills,activeCatalog.skills);
+ for(const [old,key] of Object.entries(activeCatalog.aliases||{}))if(!Object.prototype.hasOwnProperty.call(skills,old)&&skills[key])Object.defineProperty(skills,old,{value:skills[key],enumerable:false});
+ for(const [m,branches] of Object.entries(activeCatalog.branches)){
   if(masteries[m]){masteries[m].branches=branches;masteries[m].category=categoryMap[m]||masteries[m].category}
   else masteries[m]={category:categoryMap[m],branches};
  }
 }
 const canonicalField437=root.RPG_FIELD_SKILLS_437||(typeof require!=='undefined'?(()=>{try{return require('./exploration/field-skills-437.js')}catch(_){return null}})():null);
-if(canonicalField437?.count>=23){
+if(!canonical437&&canonicalField437?.count>=23){
  const alias={解錠:'宝箱解錠',隠し道発見:'宝箱探知',素材鑑定:'素材見極め',探索極意:'魔物知識'};
  for(const fd of Object.values(canonicalField437.skills)){
   for(const md of Object.values(masteries))for(const branch of Object.keys(md.branches||{}))md.branches[branch]=(md.branches[branch]||[]).filter(n=>skills[n]?.id!==fd.id);
@@ -187,7 +190,7 @@ if(canonicalField437?.count>=23){
  }
 }
 const legacyRankTo10=r=>({5:1,15:3,25:5,35:7,45:9,50:10}[r]??Math.max(1,Math.min(10,Math.ceil((Number(r)||1)/5))));
-if(!canonical315)for(const d of Object.values(skills))for(const u of d.unlocks||[])u.rank=legacyRankTo10(u.rank);
+if(!activeCatalog)for(const d of Object.values(skills))for(const u of d.unlocks||[])u.rank=legacyRankTo10(u.rank);
 const clone=x=>JSON.parse(JSON.stringify(x));
 const total=a=>a.reduce((s,x)=>s+x,0);
 function legacyDerived(a){const T=total(a),P=Math.max(0,a[0]-10),S=Math.max(0,a[1]-10),M=Math.max(0,a[2]+a[3]-20);return {hp:Math.floor(100+.5*(T-100)+2*P+Math.max(0,P-20)),sp:Math.floor(20+.1*(T-100)+.4*P+S),mp:Math.floor(M<=50?2*M:100+.5*(M-50))}}
@@ -212,6 +215,6 @@ function migrateVitals(v,a,version=0,saveVersion=7){
  delete x.mp;
  return {...x,hp,sp};
 }
-const api={version:13,catalogVersion:315,fieldCatalogVersion:437,resourceVersion:2,legacyDerived,migrateVitals,skills,masteries,targetRules,targetingText,skillExplain,masteryDescription,branchDescription,clone,total,derived,has,effect,cost,capacity,setCost,fits,canLearn,meta};
+const api={version:14,catalogVersion:canonical437?.count===437?437:315,fieldCatalogVersion:437,resourceVersion:2,legacyDerived,migrateVitals,skills,masteries,targetRules,targetingText,skillExplain,masteryDescription,branchDescription,clone,total,derived,has,effect,cost,capacity,setCost,fits,canLearn,meta};
 if(typeof module!=='undefined')module.exports=api;root.RPG_RULES=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
