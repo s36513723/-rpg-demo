@@ -1,8 +1,8 @@
 {
-  "schema_version": 1,
-  "source": "RPG制作_仕様正本_同期版.xlsx / 08_SkillDB",
-  "canonical_count": 315,
-  "schema_normalized": 315,
+  "schema_version": 2,
+  "source": "RPG制作_仕様正本_戦場地形完全設計_2026-10-01.xlsx / 08_SkillDB",
+  "canonical_count": 437,
+  "schema_normalized": 437,
   "needs_special_review": 0,
   "normalized_fields": [
     "skill_id",
@@ -29,5 +29,5 @@
     "mechanic_spec"
   ],
   "special_review": [],
-  "runtime_policy": "All 315 canonical rows are schema-normalized. Runtime switch is still blocked by the separate 296->315 save/learned-skill migration problem: only 40 unique exact-name matches are safe automatically, 速射 is ambiguous, and renamed/replaced skills need explicit mapping."
+  "runtime_policy": "All 437 canonical rows are the active runtime catalog. The former 315 catalog remains migration/compatibility input only; Field Skill is derived from the same 437 records."
 }
