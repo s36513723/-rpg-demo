@@ -202,7 +202,7 @@ function battlePrep(){const r=H.run,n=currentNode();if(!n||!['battle','elite','b
 function stealthFieldChance(){
  const r=H.run,n=currentNode(),s=bestFieldSkillById('SK0072');if(!r||!n||!s)return 0;
  const tier=fieldTier(s),skl=stats[s.i]?.[1]||20,terrain=String(n.terrain||''),cover=/茂み|暗闇|路地|濃霧|屋内|岩陰|瓦礫/.test(terrain)?10:/開所|広場|高台/.test(terrain)?-5:0;
- return Math.max(20,Math.min(90,Math.round(48+(skl-20)*.7+tier*8-(n.threat||1)*7+cover)))
+ return Math.max(0,Math.min(95,Math.round(48+(skl-20)*.7+tier*8-(n.threat||1)*7+cover)))
 }
 function skipBattle(){const r=H.run,n=currentNode();if(!n||n.type!=='battle'||r.battle)return;
  if(r.stealth>0){r.stealth--;const chance=stealthFieldChance();if(Math.random()*100>=chance){logRun('潜伏失敗：敵に発見された');persist();return battlePrep()}logRun('潜伏成功：戦闘を回避（'+chance+'%）')}
@@ -210,16 +210,21 @@ function skipBattle(){const r=H.run,n=currentNode();if(!n||n.type!=='battle'||r.
  else return;
  r.escapes++;completeNode();closeM();drawDungeon()
 }
+function fieldChance(n){return Math.max(0,Math.min(95,Math.round(n)))}
 function openingFieldChance(s){
- const n=currentNode();if(!s||!n)return 0;const tier=fieldTier(s),skl=stats[s.i]?.[1]||20;
- return Math.max(20,Math.min(90,Math.round(45+(skl-20)*.65+tier*8-(n.threat||1)*7)))
+ const n=currentNode();if(!s||!n)return 0;const skl=stats[s.i]?.[1]||20;
+ return fieldChance(20+(skl-20)*.65-(n.threat||1)*5+15)
+}
+function ambushFieldChance(guard){
+ const n=currentNode();if(!n)return 0;const terrain=String(n.terrain||''),exposure=/開所|広場|高台/.test(terrain)?8:/茂み|暗闇|濃霧|岩陰|屋内/.test(terrain)?-7:0;
+ return fieldChance(10+(n.threat||1)*8+exposure-(guard?15:0))
 }
 function fieldBattleEffects(){
- const r=H.run,first=bestFieldSkillById('SK0427'),guard=bestFieldSkillById('SK0076'),lore=bestFieldSkillById('SK0080'),firstChance=openingFieldChance(first),guardChance=openingFieldChance(guard);
- const firstTier=first&&Math.random()*100<firstChance?fieldTier(first):0,guardTier=guard&&Math.random()*100<guardChance?fieldTier(guard):0;
- if(first)logRun('先制攻撃判定 '+firstChance+'%：'+(firstTier?'成功':'不発'));
- if(guard)logRun('奇襲回避判定 '+guardChance+'%：'+(guardTier?'成功':'不発'));
- return {firstStrike:firstTier,ambushGuard:guardTier,monsterLore:lore?fieldTier(lore):0,escapeBonus:r?.fieldBuffs?.escapeBonus||0,weaponTune:r?.fieldBuffs?.weaponTune||0,poisonTool:r?.fieldBuffs?.poisonTool||0}
+ const r=H.run,first=bestFieldSkillById('SK0427'),guard=bestFieldSkillById('SK0076'),lore=bestFieldSkillById('SK0080'),ambushChance=ambushFieldChance(guard);
+ const enemyAmbush=Math.random()*100<ambushChance,firstChance=!enemyAmbush?openingFieldChance(first):0,firstTier=!enemyAmbush&&first&&Math.random()*100<firstChance?fieldTier(first):0;
+ logRun('敵奇襲判定 '+ambushChance+'%：'+(enemyAmbush?'奇襲発生':'回避'));
+ if(first)logRun(enemyAmbush?'先制攻撃判定：敵奇襲のため実施なし':'先制攻撃判定 '+firstChance+'%：'+(firstTier?'成功':'不発'));
+ return {enemyAmbush,firstStrike:firstTier,ambushGuard:guard?fieldTier(guard):0,monsterLore:lore?fieldTier(lore):0,escapeBonus:r?.fieldBuffs?.escapeBonus||0,weaponTune:r?.fieldBuffs?.weaponTune||0,poisonTool:r?.fieldBuffs?.poisonTool||0}
 }
 function monsterLoreReward(enc,tier){
  const tags=[...(enc?.front||[]),...(enc?.back||[])].join('・');let normal=region().material,rare=null;
