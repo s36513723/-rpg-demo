@@ -111,7 +111,7 @@ function consumeFieldSP(s){const cost=s.def.spCost||0;if(!cost)return true;if(vi
 function fieldGatherReward(id,tier){
  if(id==='SK0334')return tier===1?{鉱石:1}:tier===2?{鉱石:1,結晶:1}:{鉱石:1,結晶:1,希少鉱:1};
  if(id==='SK0339')return tier===1?{水産素材:1}:tier===2?{水産素材:2}:{水産素材:2,希少水産素材:1};
- if(id==='SK0350')return tier===1?{植物素材:1}:tier===2?{植物素材:2}:{植物素材:2,希少植物素材:1};
+ if(id==='SK0350')return tier===1?{薬草:1}:tier===2?{薬草:1,毒素材:1}:{薬草:1,毒素材:1,希少植物素材:1};
  if(id==='SK0355')return tier===1?{獣素材:1}:tier===2?{獣素材:2}:{獣素材:2,希少獣素材:1};
  if(id==='SK0414')return tier===1?{機巧部品:1}:tier===2?{機巧部品:2}:{機巧部品:2,希少機巧部品:1};
  return null
@@ -120,14 +120,14 @@ function activateFieldSkill(name){
  const n=currentNode(),r=H.run,s=setExplorationSkills().find(x=>x.name===name&&fieldSkillApplies(x,n));if(!n||n.done||r.battle||!s)return;
  const d=s.def,key=r.floor+':'+n.id+':'+d.id;r.fieldSkillUses||={};if(r.fieldSkillUses[key])return;
  const tier=fieldTier(s),f=r.floors[r.floor-1],edge=fieldSkillEdge(s,n),gather=fieldGatherReward(d.id,tier);let result='',got=[];
- if(['SK0389','SK0390','SK0408'].includes(d.id)&&!Object.keys(loot).some(x=>availableMaterial(x)>0))return note('簡易加工に使える鑑定済み素材がありません。');
+ const craftMat={SK0389:'薬草',SK0390:'毒素材',SK0408:'鉱石'}[d.id];if(craftMat&&!availableMaterial(craftMat))return note((hc().labels[craftMat]||craftMat)+'の鑑定済み在庫がありません。探索中に拾った未鑑定素材は使えません。');
  if(!consumeFieldSP(s))return;
  if(gather){got=grant({materials:gather});result='採取段階 '+tier+'。'+got.join(' / ')}
  else if(edge){edge.unlocked=true;if(!n.links.includes(edge.to))n.links.push(edge.to);result='条件付き特殊経路を開通した。新しい場所は増やさず、既存の「'+(f.nodes.find(x=>x.id===edge.to)?.place||'地点')+'」へ接続した。'}
  else if(d.id==='SK0415'){r.fieldBuffs.weaponTune=Math.max(r.fieldBuffs.weaponTune||0,tier);result='現地整備を完了。次の戦闘だけ武器性能を段階 '+tier+' で強化する。'}
- else if(d.id==='SK0408'){const mat=Object.keys(loot).find(x=>availableMaterial(x)>0);loot[mat]--;inventory.tools.研磨具=(inventory.tools.研磨具||0)+1;r.crafted.研磨具=(r.crafted.研磨具||0)+1;result=mat+'を使い、探索中に使える研磨具を1個作成した。'}
- else if(d.id==='SK0389'){const mat=Object.keys(loot).find(x=>availableMaterial(x)>0);loot[mat]--;inventory.tools.回復薬=(inventory.tools.回復薬||0)+1;r.crafted.回復薬=(r.crafted.回復薬||0)+1;result='鑑定済み素材を1個使い、探索中に使える回復薬を1個調合した。'}
- else if(d.id==='SK0390'){const mat=Object.keys(loot).find(x=>availableMaterial(x)>0);loot[mat]--;inventory.tools.毒加工具=(inventory.tools.毒加工具||0)+1;r.crafted.毒加工具=(r.crafted.毒加工具||0)+1;result='鑑定済み素材を1個使い、探索中に使える毒加工具を1個調合した。'}
+ else if(d.id==='SK0408'){loot.鉱石--;inventory.tools.研磨具=(inventory.tools.研磨具||0)+1;r.crafted.研磨具=(r.crafted.研磨具||0)+1;result='鑑定済み鉱石を1個使い、探索中に使える研磨具を1個作成した。'}
+ else if(d.id==='SK0389'){loot.薬草--;inventory.tools.回復薬=(inventory.tools.回復薬||0)+1;r.crafted.回復薬=(r.crafted.回復薬||0)+1;result='鑑定済み薬草を1個使い、探索中に使える回復薬を1個調合した。'}
+ else if(d.id==='SK0390'){loot.毒素材--;inventory.tools.毒加工具=(inventory.tools.毒加工具||0)+1;r.crafted.毒加工具=(r.crafted.毒加工具||0)+1;result='鑑定済み毒素材を1個使い、探索中に使える毒加工具を1個調合した。'}
  else if(d.id==='SK0071'){const reward={[region().material]:tier>=3?2:1};if(tier>=2)reward.結晶=1;n.treasureOpened=true;got=grant({materials:reward});if(tier>=3)gainTP(1,'特殊な宝');result='宝箱を安全に解錠した。'+got.join(' / ')}
  else if(d.id==='SK0075'){if(!(n.extras||[]).includes('trap'))result='解除対象の罠は見つからない。';else{n.trapDisabled=true;result='罠を解除した。対応段階 '+tier+'。'}}
  else if(d.id==='SK0072'){r.stealth=(r.stealth||0)+1;result='通常敵を避けるための潜伏機会を1回確保した。'}
