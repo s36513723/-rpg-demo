@@ -26,7 +26,7 @@ function addEffects(d,r){
  if(/蘇生/.test(r[7]+r[8])&&!d.revive)d.revive=.25;
  if(/引寄/.test(text))d.pull=1;if(/押出|吹飛/.test(text))d.push=1;
  if(/挑発付与/.test(text))d.special={...(d.special||{}),taunt:{turns:2}};
- if(/ロックオン付与/.test(text))d.special={...(d.special||{}),lockOn:{turns:2,teamUnique:true}};
+ if(/ロックオン付与/.test(text)){d.special={...(d.special||{}),lockOn:{turns:2,teamUnique:true}};d.target='enemy'};
  if(/カウンター/.test(text))d.reaction={trigger:'hit',kind:'counter',target:'attacker',area:'single',noChain:true};
  if(/詠唱1R/.test(text))d.cast=1;
  if(/強化効果：攻撃/.test(text)){d.buff='attack';d.magnitude=.2}
