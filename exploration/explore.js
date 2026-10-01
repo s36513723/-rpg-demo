@@ -88,7 +88,18 @@ function drawDungeon(){
 }
 function setExplorationSkills(){const best=new Map();skillSet.forEach((set,i)=>{if(vitals[i].hp<=0)return;for(const n of set){if(!skillUsable(i,n))continue;const meta=rules().meta(n),d=fieldDef(n)||fieldDefById(meta?.id);if(!d)continue;const s={name:d.name,sourceName:n,user:names[i],i,mode:d.mode,def:d},old=best.get(d.id);if(!old||fieldTier(s)>fieldTier(old))best.set(d.id,s)}});return [...best.values()]}
 function fieldExplorationSkills(){if(!activeRun())return dungeon();const skills=setExplorationSkills();show('<h2>探索スキル</h2>'+HT('場所Fieldタグ','地図・地点画面で確認できます。探索Mastery以外のField Skillも対象です。')+(skills.length?skills.map(s=>HT(s.name,s.user+' / '+s.def.mastery+'・'+s.def.branch+' / '+(s.mode==='Passive'?'自動':'地点で使用')+' / 対応 '+s.def.fieldTags.join('・'))).join(''):HT('使用できる探索スキルはありません','誰かのスキルセットにField Skillを入れてください。'))+back())}
-function fieldSkillApplies(s,n){const d=s.def;if(!n||!d||d.mode==='Passive')return false;if(d.scene==='戦闘'&&!['battle','elite','boss'].includes(n.type))return false;if(d.fieldTags.includes('汎用')||d.fieldTags.includes('素材依存'))return true;return d.fieldTags.some(t=>(n.fieldTags||[]).includes(t))}
+function fieldSkillApplies(s,n){
+ const d=s.def;if(!n||!d||d.mode==='Passive')return false;const extra=n.extras||[],edge=fieldSkillEdge(s,n);
+ if(d.id==='SK0071')return extra.includes('treasure')&&!!n.treasureRevealed&&!n.treasureOpened;
+ if(d.id==='SK0075')return extra.includes('trap')&&!n.trapDisabled;
+ if(d.id==='SK0426')return !!edge;
+ if(['SK0340','SK0348','SK0404','SK0413'].includes(d.id))return !!edge||d.fieldTags.some(t=>(n.fieldTags||[]).includes(t));
+ if(d.id==='SK0072')return n.type==='battle';
+ if(d.id==='SK0428')return ['battle','elite'].includes(n.type);
+ if(d.id==='SK0078')return ['battle','elite','boss'].includes(n.type);
+ if(d.fieldTags.includes('素材依存')||d.fieldTags.includes('汎用'))return true;
+ return d.fieldTags.some(t=>(n.fieldTags||[]).includes(t))
+}
 function fieldSkillEdge(s,n){const f=H.run.floors[H.run.floor-1];return (f.fieldEdges||[]).find(e=>!e.unlocked&&e.from===n.id&&(e.skill===s.name||e.skill===s.sourceName||s.def.fieldTags.includes(e.tag)))}
 function fieldNodeSkills(){const n=currentNode();if(!n||n.done||H.run.battle)return resumeNode();const skills=setExplorationSkills().filter(s=>fieldSkillApplies(s,n)),used=H.run.fieldSkillUses||{};show('<h2>この地点で使う探索スキル</h2>'+HT('場所Fieldタグ',fieldTagsText(n))+(skills.length?skills.map(s=>{const key=H.run.floor+':'+n.id+':'+s.def.id,tier=fieldTier(s),edge=fieldSkillEdge(s,n);return HB(s.name,s.user+' / 段階 '+tier+' / '+(edge?'特殊経路あり':'対応 '+s.def.fieldTags.join('・'))+' / '+s.def.description,'activateFieldSkill',[s.name],!!used[key]||vitals[s.i].sp<(s.def.spCost||0))}).join(''):HT('この地点で使えるField Skillはありません','対応Fieldタグかスキルセットを確認してください。'))+back())}
 function bestFieldSkillById(id){return setExplorationSkills().filter(s=>s.def.id===id).sort((a,b)=>fieldTier(b)-fieldTier(a))[0]||null}
@@ -111,10 +122,10 @@ function activateFieldSkill(name){
  if(gather){got=grant({materials:gather});result='採取段階 '+tier+'。'+got.join(' / ')}
  else if(edge){edge.unlocked=true;if(!n.links.includes(edge.to))n.links.push(edge.to);result='条件付き特殊経路を開通した。新しい場所は増やさず、既存の「'+(f.nodes.find(x=>x.id===edge.to)?.place||'地点')+'」へ接続した。'}
  else if(d.id==='SK0415'){r.fieldBuffs.weaponTune=Math.max(r.fieldBuffs.weaponTune||0,tier);result='現地整備を完了。次の戦闘だけ武器性能を段階 '+tier+' で強化する。'}
- else if(d.id==='SK0408'){const mat=Object.keys(loot).find(x=>availableMaterial(x)>0);loot[mat]--;r.crafted.研磨具=(r.crafted.研磨具||0)+1;result=mat+'を使い、探索中に使える研磨具を1個作成した。'}
- else if(d.id==='SK0389'){const mat=Object.keys(loot).find(x=>availableMaterial(x)>0);loot[mat]--;r.crafted.応急調合品=(r.crafted.応急調合品||0)+1;result='鑑定済み素材を1個使い、探索中に使える応急調合品を1個作成した。'}
- else if(d.id==='SK0390'){const mat=Object.keys(loot).find(x=>availableMaterial(x)>0);loot[mat]--;r.crafted.加工用調合品=(r.crafted.加工用調合品||0)+1;result='鑑定済み素材を1個使い、探索中に使える加工用調合品を1個作成した。'}
- else if(d.id==='SK0071'){if(!(n.extras||[]).includes('treasure'))result='この場所には解錠対象の宝箱は見つからない。';else{n.treasureRevealed=true;n.treasureOpened=true;got=grant({materials:{[region().material]:tier>=3?2:1,結晶:tier>=2?1:0}});result='宝箱を安全に解錠した。'+got.join(' / ')}}
+ else if(d.id==='SK0408'){const mat=Object.keys(loot).find(x=>availableMaterial(x)>0);loot[mat]--;inventory.tools.研磨具=(inventory.tools.研磨具||0)+1;r.crafted.研磨具=(r.crafted.研磨具||0)+1;result=mat+'を使い、探索中に使える研磨具を1個作成した。'}
+ else if(d.id==='SK0389'){const mat=Object.keys(loot).find(x=>availableMaterial(x)>0);loot[mat]--;inventory.tools.回復薬=(inventory.tools.回復薬||0)+1;r.crafted.回復薬=(r.crafted.回復薬||0)+1;result='鑑定済み素材を1個使い、探索中に使える回復薬を1個調合した。'}
+ else if(d.id==='SK0390'){const mat=Object.keys(loot).find(x=>availableMaterial(x)>0);loot[mat]--;inventory.tools.毒加工具=(inventory.tools.毒加工具||0)+1;r.crafted.毒加工具=(r.crafted.毒加工具||0)+1;result='鑑定済み素材を1個使い、探索中に使える毒加工具を1個調合した。'}
+ else if(d.id==='SK0071'){const reward={[region().material]:tier>=3?2:1};if(tier>=2)reward.結晶=1;n.treasureOpened=true;got=grant({materials:reward});if(tier>=3)gainTP(1,'特殊な宝');result='宝箱を安全に解錠した。'+got.join(' / ')}
  else if(d.id==='SK0075'){if(!(n.extras||[]).includes('trap'))result='解除対象の罠は見つからない。';else{n.trapDisabled=true;result='罠を解除した。対応段階 '+tier+'。'}}
  else if(d.id==='SK0072'){r.stealth=(r.stealth||0)+1;result='通常敵を避けるための潜伏機会を1回確保した。'}
  else if(d.id==='SK0073'){n.scouted=Math.max(n.scouted||0,tier);result='索敵段階 '+tier+'。敵・危険・周辺ルート情報を更新した。'}
@@ -133,7 +144,7 @@ function resumeNode(){const r=H.run,n=currentNode();if(!r||!n)return drawDungeon
 function resolveNodeExtras(n){
  const r=H.run;if(!r||n.extrasResolved)return;const extra=n.extras||[],notes=[];
  if(extra.includes('trap')){if(n.trapDisabled)notes.push('罠解除済み');else{fieldDamage(.04,'地点の罠');notes.push('罠で最大HPの4%を消耗')}}
- if(extra.includes('treasure')&&!n.treasureOpened){const detect=bestFieldSkillById('SK0079'),tier=detect?fieldTier(detect):0,found=n.treasureRevealed||n.roll<.48;if(found){const reward={[region().material]:1};if(tier>=2)reward.結晶=1;if(tier>=3)reward[region().material]=2;const got=grant({materials:reward});notes.push('宝 '+got.join(' / '));if(n.roll>.82)gainTP(1,'特殊な宝')}else notes.push('隠された宝は見つけられなかった');n.treasureOpened=true}
+ if(extra.includes('treasure')&&!n.treasureOpened&&n.treasureRevealed)notes.push('未開封の宝箱を残した');
  if(extra.includes('npc')){r.research++;notes.push('人の痕跡から探索記録 +1')}
  if(notes.length)logRun(n.place+'：'+notes.join(' / '));n.extrasResolved=true
 }
