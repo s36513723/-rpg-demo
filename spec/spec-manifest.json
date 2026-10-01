@@ -304,8 +304,8 @@
         "purpose": "temporarily acquire an unlearned skill for the current expedition",
         "normal_prerequisites_apply": true,
         "reset_at_expedition_end": true,
-        "gain_and_cost_status": "獲得量は初期実装値・取得コストは未決定",
-        "status": "確定・獲得量は初期実装値・取得コスト未決定",
+        "gain_and_cost_status": "獲得量・取得費用とも初期実装値",
+        "status": "確定構造・数値は初期実装値",
         "gain_status": "初期実装値",
         "gain_schedule": {
           "expedition_start": 0,
@@ -323,7 +323,11 @@
         },
         "expected_full_clear_total": "6-9",
         "gain_cap": "none",
-        "cost_status": "未決定"
+        "cost_status": "初期実装値",
+        "cost_schedule": {
+          "rank_1_8": 1,
+          "rank_9_10": 2
+        }
       }
     },
     "expedition_success": {
@@ -356,8 +360,11 @@
     "dual_wield_cost": 4,
     "two_hand_physical_defense_reduction": 0.1,
     "two_hand_defense_reduction_rounds": 2,
-    "temporary_skill_tp_cost": 1,
-    "temporary_skill_tp_cost_status": "初期実装値・正本で未決定"
+    "temporary_skill_tp_cost": {
+      "rank_1_8": 1,
+      "rank_9_10": 2
+    },
+    "temporary_skill_tp_cost_status": "初期実装値"
   },
   "implementation_inventory": {
     "skills": 437,
