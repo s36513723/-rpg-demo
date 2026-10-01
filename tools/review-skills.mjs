@@ -84,10 +84,10 @@ const report={
     "同じMastery内で完全同型の技は、取得順・役割差・死にスキル化を最優先で確認する。",
     "別Mastery間の同型技は、世界観上の別経路として意図的な可能性があるため即統合しない。",
     "mult/SPは範囲・状態異常・詠唱・射程を無視した単純指標なので、外れ値の発見にだけ使う。",
-    "戦闘系315ベースに探索用437 Field Skillオーバーレイを接続中。バランス値はプレイテスト対象。"
+    "437件の単一SkillDBを戦闘・探索で共用。Field Skillは同一DBの派生表示。バランス値はプレイテスト対象。"
   ]
 };
 
-if(report.totals.skills!==335)throw new Error("Expected 335 runtime skill keys");
+if(report.totals.skills!==437)throw new Error("Expected 437 runtime skill keys");
 fs.writeFileSync(new URL("../spec/generated/skill-review.json",import.meta.url),JSON.stringify(report,null,2)+"\n");
 console.log(`Skill review: ${report.totals.skills} skills, ${report.totals.exact_duplicate_groups} exact duplicate groups, ${report.totals.same_mastery_exact_duplicate_groups} same-Mastery groups.`);
