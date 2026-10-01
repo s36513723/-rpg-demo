@@ -3,9 +3,9 @@
   "status": "要レビュー",
   "note": "Mechanical triage only. Exact duplicates can still be intentional across different Masteries. Do not auto-delete or auto-balance from this report.",
   "totals": {
-    "skills": 315,
+    "skills": 335,
     "active": 241,
-    "passive": 65,
+    "passive": 68,
     "exact_duplicate_groups": 0,
     "same_mastery_exact_duplicate_groups": 0,
     "cross_mastery_only_exact_duplicate_groups": 0,
@@ -903,10 +903,10 @@
       "passive": 1
     },
     "探索": {
-      "skill_count": 10,
+      "skill_count": 17,
       "branch_count": 5,
       "active": 0,
-      "passive": 1
+      "passive": 4
     },
     "斧": {
       "skill_count": 10,
@@ -933,8 +933,8 @@
       "passive": 1
     },
     "森羅": {
-      "skill_count": 10,
-      "branch_count": 7,
+      "skill_count": 13,
+      "branch_count": 10,
       "active": 9,
       "passive": 1
     },
@@ -951,14 +951,14 @@
       "passive": 1
     },
     "機巧": {
-      "skill_count": 10,
-      "branch_count": 4,
+      "skill_count": 14,
+      "branch_count": 6,
       "active": 9,
       "passive": 1
     },
     "海神": {
-      "skill_count": 10,
-      "branch_count": 6,
+      "skill_count": 12,
+      "branch_count": 7,
       "active": 9,
       "passive": 1
     },
@@ -993,7 +993,7 @@
       "passive": 2
     },
     "符術": {
-      "skill_count": 10,
+      "skill_count": 11,
       "branch_count": 4,
       "active": 10,
       "passive": 0
@@ -1023,8 +1023,8 @@
       "passive": 1
     },
     "霊峰": {
-      "skill_count": 10,
-      "branch_count": 5,
+      "skill_count": 11,
+      "branch_count": 6,
       "active": 9,
       "passive": 1
     },
@@ -1035,7 +1035,7 @@
       "passive": 2
     },
     "魔術": {
-      "skill_count": 10,
+      "skill_count": 12,
       "branch_count": 4,
       "active": 9,
       "passive": 1
@@ -1051,6 +1051,6 @@
     "同じMastery内で完全同型の技は、取得順・役割差・死にスキル化を最優先で確認する。",
     "別Mastery間の同型技は、世界観上の別経路として意図的な可能性があるため即統合しない。",
     "mult/SPは範囲・状態異常・詠唱・射程を無視した単純指標なので、外れ値の発見にだけ使う。",
-    "315スキルの個別値は構造確定済みだが、バランス値はプレイテスト対象。"
+    "戦闘系315ベースに探索用437 Field Skillオーバーレイを接続中。バランス値はプレイテスト対象。"
   ]
 }
