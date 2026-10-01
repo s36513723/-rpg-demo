@@ -16,8 +16,9 @@ assert(battleCss.includes('data-actor-id="run"]::before{background-image:url("im
 const C=require('../skill-catalog-315.js'),F=require('../exploration/field-skills-437.js'),R=require('../rpg-rules.js');
 assert.equal(C.count,315);assert.equal(F.count,25);assert.equal(Object.keys(R.skills).length,335);assert.equal(Object.keys(R.masteries).length,31);assert.equal(R.catalogVersion,315);assert.equal(R.fieldCatalogVersion,437);
 assert(R.skills['速射（弓）']);assert(R.skills['速射（銃）']);assert.equal(R.skills['速射（弓）'].name,'速射');assert.equal(R.skills['速射（銃）'].name,'速射');
+const fieldAliases={解錠:'宝箱解錠',隠し道発見:'宝箱探知',素材鑑定:'素材見極め',探索極意:'魔物知識'};
 for(const [n,d]of Object.entries(R.skills)){
- assert.equal(n,d.catalogKey||d.name);assert(['Active','Passive','Field'].includes(d.mode));assert(d.setCost>=1&&d.setCost<=4,n+' cost');
+ assert(n===(d.catalogKey||d.name)||fieldAliases[n]===d.name,n+' key/name');assert(['Active','Passive','Field'].includes(d.mode));assert(d.setCost>=1&&d.setCost<=4,n+' cost');
  assert(Array.isArray(d.unlocks)&&d.unlocks.length,n+' unlocks');
  for(const u of d.unlocks){assert(R.masteries[u.mastery],n+' mastery');assert(u.rank>=1&&u.rank<=10);assert(['PHY','SKL','ARC','MND'].includes(u.stat))}
  if(d.mode==='Active'){assert(Number.isFinite(d.mult));assert(Number.isFinite(d.cost));assert.equal(d.costType,'SP');assert(['near','mid','far','all'].includes(d.range));assert(['single','row','all','pierce','adjacent','random'].includes(d.scope));const t=d.targeting;assert(t,n+' targeting');assert(['enemy','ally','self'].includes(t.side),n+' targeting side');assert(['same','select','self'].includes(t.column),n+' targeting column');assert(['front','through','last','ally','self'].includes(t.order),n+' targeting order');assert(['single','cross','x','vertical','horizontal','3x3'].includes(t.area),n+' targeting area');}
