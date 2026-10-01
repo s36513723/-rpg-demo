@@ -42,7 +42,7 @@ const masteryRows = Object.entries(R.masteries).map(([name,d]) => {
 });
 fs.writeFileSync(new URL("implemented-masteries.csv", outDir), [row(masteryHeaders),...masteryRows].join("\n")+"\n");
 
-if (skillRows.length !== 335) throw new Error("Expected 335 runtime skill keys (315 baseline + canonical Field overlay/aliases), got "+skillRows.length);
+if (skillRows.length !== 437) throw new Error("Expected 437 canonical runtime skill keys, got "+skillRows.length);
 if (masteryRows.length !== 31) throw new Error("Expected 31 masteries, got "+masteryRows.length);
 if (skillRows.some(line => /"MP"|mpDiscount|mpOnce/.test(line))) throw new Error("Legacy MP schema leaked into current skill CSV");
 console.log(`Generated ${skillRows.length} skills and ${masteryRows.length} masteries.`);
