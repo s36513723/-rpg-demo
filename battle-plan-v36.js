@@ -460,7 +460,7 @@ function canReach(a,t,r){
 }
 function weaponMasteryName(u){return ({戦槌:'槌',戦斧:'斧',短剣:'短剣',回刃:'投擲',剣:'剣',長槍:'槍',槍:'槍',長弓:'弓',弓:'弓',杖:'杖',呪符:'符術',鞭:'鞭',鎌:'鎌',刀:'刀',銃:'銃',格闘:'格闘',小盾:'盾',無手:'無手'})[u.weapon?.name]||u.weapon?.name}
 function targets(u,a){if(a.target==='self')return [u];return a.target==='ally'?live(party):live(enemies).filter(t=>canReach(u,t,a.range))}
-function enough(u,a){return !a.costType||u[a.costType.toLowerCase()]>=a.cost}
+function enough(u,a){return !a.costType||u[a.costType.toLowerCase()]>=terrainActionCost(u,a)}
 function unavailable(u,a){if(a.kind==='spell'&&u.status.headBind>0)return'頭封じ';if(a.weapons?.length&&!a.weapons.includes(weaponMasteryName(u)))return'現在の武器では使用不可';if(!enough(u,a))return a.costType+'不足';if(!targets(u,a).length)return'射程内に対象なし';return''}
 function defaultTarget(u,a){const ts=targets(u,a),old=ts.find(t=>t.id===getDraft(u).targetId);if(old)return old;if(a.heal)return [...ts].sort((x,y)=>x.hp/x.maxHp-y.hp/y.maxHp)[0];return [...ts].sort((x,y)=>rankIndex(x)-rankIndex(y)||col(x)-col(y))[0]}
 function ensureTarget(u,a){const t=defaultTarget(u,a);getDraft(u).targetId=t?.id||null;return targets(u,a)}
@@ -709,10 +709,10 @@ function setBattle(on){$('commandPanel').classList.toggle('resolving',on);$('com
 async function animateSwap(a,b,text,token){check(token);clearEffects();displayActorId=(b.alive&&!b.enemy?b.id:!a.enemy?a.id:null);activeTurnId=displayActorId;updatePortrait();const before=new Map([a,b].map(u=>[u.id,nodes.get(u.id).getBoundingClientRect()]));const row=a.row,slot=a.slot;a.row=b.row;a.slot=b.slot;b.row=row;b.slot=slot;render();$('battleMessage').className='battle-message sys';$('battleMessageText').textContent=text;log(text,'sys');const animations=[];for(const[u,i]of [[a,0],[b,1]]){const el=nodes.get(u.id),from=before.get(u.id),to=el.getBoundingClientRect(),dx=from.left-to.left,dy=from.top-to.top,w=i?3:-3;el.classList.add('moving');el.style.transformOrigin='top left';const sx=from.width/to.width,sy=from.height/to.height;const frames=[{transform:`translate(${dx}px,${dy}px) scale(${sx},${sy})`,offset:0},{transform:`translate(${dx*.72+w}px,${dy*.72}px) rotate(${i?.7:-.7}deg)`,offset:.28},{transform:`translate(${dx*.4-w}px,${dy*.4}px) rotate(${i?-.7:.7}deg)`,offset:.6},{transform:'translate(0,0) rotate(0deg)',offset:1}];if(typeof el.animate==='function'){const anim=el.animate(reduced?[{opacity:.7},{opacity:1}]:frames,{duration:reduced?100:1100*paceOptions[paceIndex].scale,easing:'linear',fill:'both'});activeAnimations.add(anim);animations.push(anim.finished.catch(()=>{}).then(()=>{anim.cancel();activeAnimations.delete(anim);el.classList.remove('moving');el.style.transformOrigin=''}))}else el.classList.remove('moving')}await Promise.all(animations);check(token);await waitRead(text,token,350)}
 async function switchWeapon(){if(!editable())return;cancelTarget();const token=session,u=current();displayActorId=u.id;activeTurnId=u.id;busy=true;closeSheet();setBattle(true);u.wi=u.wi?0:1;u.weapon=W[u.weapons[u.wi]];render();nodes.get(u.id)?.classList.add('battle-switch');$('playbackTitle').textContent='換装';$('battleMessageText').textContent=u.name+'は'+u.weapon.name+'へ換装！';try{await waitRead($('battleMessageText').textContent,token,850)}catch(e){if(e!==CANCEL)throw e}finally{if(token===session){busy=false;setBattle(false);render()}}}
 function affinity(t,attr){return t.weak?.[attr]??t.resist?.[attr]??1}
-function hit(a,t,act){if(t.status.legBind>0)return 100;return clamp(90+(a.SKL-t.SKL)*.5+(act.hit||0)+(act.kind==='spell'?0:(a.weapon?.hit||0)+terrain.wHit(a.weapon)),30,100)}
+function hit(a,t,act){if(t.status.legBind>0)return 100;return clamp(90+(a.SKL-t.SKL)*.5+(act.hit||0)+(act.kind==='spell'?0:(a.weapon?.hit||0)+terrain.wHit(a.weapon))+terrainHitBonus(a,t,act),30,100)}
 function attackValue(a,act){let v;if(act.kind==='attack')v=(a.weapon?.power||0)+(a.weapon?.normal==='SKL'?a.SKL:a.PHY);else if(act.stat==='ARC')v=14+a.ARC;else if(act.stat==='MND')v=12+a.MND;else if(act.stat==='SKL')v=(a.weapon?.power||0)+a.SKL;else if(act.stat==='MIX')v=(a.weapon?.power||0)+.5*a.PHY+.5*a.ARC;else v=(a.weapon?.power||0)+a.PHY;const tune=!a.enemy&&act.kind!=='spell'?Number(EXPCTX?.fieldEffects?.weaponTune||0):0;return tune?v*(1+.05*(tune+1)):v}
-function damage(a,t,act){const magic=act.kind==='spell'||['ARC','MND'].includes(act.stat),def=magic?t.magDef:t.physDef,crit=Math.random()*100<clamp(5+(a.SKL-t.SKL)/4+(act.critBonus||0),0,50),aff=affinity(t,act.attr);let terrainMult=1;if(act.kind==='attack'&&a.weapon?.range==='far'&&(terrain.name!=='高台'||a.row==='back'))terrainMult=terrain.ranged;const value=Math.floor(attackValue(a,act)*(act.mult??1)*100/(100+def)*aff*(crit?1.5:1)*terrainMult*(.95+Math.random()*.1)*(t.defending?.5:1));return{value:aff===0?0:Math.max(1,value),crit,weak:aff>1}}
-function speed(u,q){if(u.status.legBind>0)return-999;const opening=round===1,fx=EXPCTX?.fieldEffects||{};if(u.enemy)return u.SKL+(u.spell?.speed||0)+(opening&&fx.enemyAmbush?20:0);const a=q?.action||normal(u),first=opening&&fx.firstStrike?10+5*Number(fx.firstStrike):0,ambush=opening&&fx.enemyAmbush?-15:0;return u.SKL+(a.speed||0)+(a.kind==='spell'?0:(u.weapon?.speed||0)+terrain.wSpeed(u.weapon))+first+ambush}
+function damage(a,t,act){const magic=act.kind==='spell'||['ARC','MND'].includes(act.stat),def=magic?t.magDef:t.physDef,crit=Math.random()*100<clamp(5+(a.SKL-t.SKL)/4+(act.critBonus||0),0,50),aff=affinity(t,act.attr);let terrainMult=1;if(act.kind==='attack'&&a.weapon?.range==='far'&&(terrain.name!=='高台'||a.row==='back'))terrainMult=terrain.ranged;terrainMult*=1+terrainDamageMod(a,t,act);const value=Math.floor(attackValue(a,act)*(act.mult??1)*100/(100+def)*aff*(crit?1.5:1)*terrainMult*(.95+Math.random()*.1)*(t.defending?.5:1));return{value:aff===0?0:Math.max(1,value),crit,weak:aff>1}}
+function speed(u,q){if(u.status.legBind>0)return-999;const opening=round===1,fx=EXPCTX?.fieldEffects||{},tile=unitTerrain(u).effect,tileSpeed=(tile.speed||0)*u.SKL;if(u.enemy)return u.SKL+tileSpeed+(u.spell?.speed||0)+(opening&&fx.enemyAmbush?20:0);const a=q?.action||normal(u),first=opening&&fx.firstStrike?10+5*Number(fx.firstStrike):0,ambush=opening&&fx.enemyAmbush?-15:0;return u.SKL+tileSpeed+(a.speed||0)+(a.kind==='spell'?0:(u.weapon?.speed||0)+terrain.wSpeed(u.weapon))+first+ambush}
 async function defeated(u,token){
  if(u.hp>0||!u.alive)return;
  u.hp=0;u.alive=false;render();await say(u.name+'は戦闘不能。',token,'sys');
@@ -722,7 +722,7 @@ async function defeated(u,token){
  used.add(c);const reserve=live(enemies).find(x=>x.row==='back'&&col(x)===c);
  if(reserve)await animateSwap(u,reserve,reserve.name+'が前列へ交代。',token);
 }
-async function applyStatuses(a,t,act,token){if(t.hp<=0)return;if(!a.enemy&&EXPCTX?.fieldEffects?.poisonTool&&act.kind==='attack'&&!act.poison&&Math.random()*100<30){t.status.poison=Math.max(t.status.poison||0,3);render();await say(t.name+'に猛毒！',token,'sys')}for(const[k,n]of STATUS){if(!act[k])continue;let st=k==='stun'?a.PHY:a.SKL;if(act.stat==='ARC')st=a.ARC;if(act.stat==='MND')st=a.MND;if(Math.random()*100<clamp(act[k]+.75*(st-t.MND),5,95)){t.status[k]=k==='poison'?3:k==='stun'?1:2;render();await say(t.name+'に'+n+'！',token,'sys')}}}
+async function applyStatuses(a,t,act,token){if(t.hp<=0)return;if(!a.enemy&&EXPCTX?.fieldEffects?.poisonTool&&act.kind==='attack'&&!act.poison&&Math.random()*100<30){t.status.poison=Math.max(t.status.poison||0,3);render();await say(t.name+'に猛毒！',token,'sys')}for(const[k,n]of STATUS){if(!act[k])continue;let st=k==='stun'?a.PHY:a.SKL;if(act.stat==='ARC')st=a.ARC;if(act.stat==='MND')st=a.MND;if(Math.random()*100<clamp(act[k]+.75*(st-t.MND)+terrainStatusDelta(a,t,k),5,95)){t.status[k]=k==='poison'?3:k==='stun'?1:2;render();await say(t.name+'に'+n+'！',token,'sys')}}}
 function affectedTargets(a,primary,candidates){
  const scope=a.scope||'single';
  if(scope==='all')return candidates;
@@ -737,12 +737,12 @@ async function execute(u,q,token){check(token);if(!u.alive)return;displayActorId
  const intro=a.kind==='attack'?u.name+'の攻撃！':u.name+'は「'+a.name+'」を'+(a.kind==='spell'?'唱えた！':'使った！');
  $('playbackTitle').textContent=u.name;
  await say(intro,token,'',{actorId:u.id},false);
- if(a.costType)u[a.costType.toLowerCase()]-=a.cost;
+ if(a.costType)u[a.costType.toLowerCase()]-=terrainActionCost(u,a);
  // Resolve every affected unit separately so damage, portrait and feedback stay in sync.
  for(const victim of affectedTargets(a,t,ts)){
   check(token);
   if(!victim.alive)continue;
-  if(a.heal){const n=Math.min(victim.maxHp-victim.hp,Math.floor(12+u.MND*.8));victim.hp+=n;render();await say(victim.name+'のHPが '+n+' 回復。',token,'ok',{targetId:victim.id,heal:true,value:n});continue}
+  if(a.heal){const n=Math.min(victim.maxHp-victim.hp,Math.max(1,Math.floor((12+u.MND*.8)*(1+terrainHealMod(victim)))));victim.hp+=n;render();await say(victim.name+'のHPが '+n+' 回復。',token,'ok',{targetId:victim.id,heal:true,value:n});continue}
   if(Math.random()*100>hit(u,victim,a)){render();await say(victim.name+'は攻撃をかわした！',token,'sys');continue}
   const d=damage(u,victim,a);
   victim.hp=Math.max(0,victim.hp-d.value);
@@ -750,6 +750,7 @@ async function execute(u,q,token){check(token);if(!u.alive)return;displayActorId
   render();
   await say(victim.name+'に '+d.value+' ダメージ！'+(d.weak?'\n弱点を突いた！':'')+(d.crit?'\n会心の一撃！':''),token,u.enemy?'bad':d.weak?'ok':'',{targetId:victim.id,value:d.value,label:d.crit?'CRITICAL':d.weak?'WEAK':''});
   await applyStatuses(u,victim,a,token);
+  if(victim.alive&&(a.push||a.pull))await terrainForceMove(victim,a.push?'back':'front',Math.max(Number(a.push)||0,Number(a.pull)||0,1),token);
   await defeated(victim,token);
  }
 }
