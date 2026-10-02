@@ -427,6 +427,16 @@ async function terrainRoundEffect(u,token){
  const n=Math.max(1,Math.floor(u.maxHp*pct));u.hp=Math.max(0,u.hp-n);render();await say(u.name+'は'+label+'で '+n+' ダメージ。',token,'bad',{targetId:u.id,value:n});await defeated(u,token)
 }
 function forcedRows(u){return u.enemy?['front','mid','back']:['front','mid','rear']}
+function forcedMovePreview(u,direction,baseDistance){
+ const T=terrainApi();if(!T||!battlefield||!u)return'';const rows=forcedRows(u),startRow=u.enemy?u.row:u.rank,start=rows.indexOf(startRow),cell=unitCell(u),e=T.unitTileEffect(battlefield,u).effect,parts=[];let dist=Math.max(0,Number(baseDistance)||1),delta=Number(e.forcedDelta)||0;
+ if(delta){dist+=delta;parts.push((cell?.tempTile==='TL15'||cell?.baseTile==='TL15'?'氷面':'地形')+(delta>0?' +':' ')+delta)}
+ if(battlefield.conditionTerrain==='TR17'&&battlefield.windDir){const wd=battlefield.windDir===direction?1:{front:'back',back:'front'}[battlefield.windDir]===direction?-1:0;if(wd){dist+=wd;parts.push('強風 '+(wd>0?'+':'')+wd)}}
+ dist=Math.max(0,Math.min(2,dist));let pos=start,edge=false;
+ for(let step=0;step<dist;step++){const next=pos+(direction==='back'?1:-1);if(next<0||next>=rows.length){const here=terrainApi().cellFor(battlefield,u.enemy?'enemy':'ally',rows[pos],col(u));edge=(here?.baseTile==='TL10'||here?.tempTile==='TL10')&&here.hazardDir===direction&&!T.isFlying(u);break}const nr=rows[next],other=live(u.enemy?enemies:party).find(x=>x.id!==u.id&&(x.enemy?x.row:x.rank)===nr&&col(x)===col(u));if(other)break;pos=next}
+ const dest=rows[pos];if(dest!==startRow)parts.unshift((u.enemy?dest.toUpperCase():RANK_LABEL[dest])+'へ');
+ if(edge)parts.push('危険縁 '+Math.round((EXPCTX?.boss?T.TILE.TL10.bossEdgeDamage:T.TILE.TL10.edgeDamage)*100)+'%');
+ return parts.length?'強制移動 '+parts.join(' / '):'強制移動なし'
+}
 async function terrainForceMove(u,direction,baseDistance,token){
  const T=terrainApi();if(!T||!battlefield||!u.alive)return false;const rows=forcedRows(u),side=u.enemy?'enemy':'ally',current=rows.indexOf(u.enemy?u.row:u.rank),start=T.unitTileEffect(battlefield,u).effect;let dist=Math.max(0,Number(baseDistance)||1)+(Number(start.forcedDelta)||0);
  if(battlefield.conditionTerrain==='TR17'&&battlefield.windDir){if(battlefield.windDir===direction)dist++;else if({front:'back',back:'front'}[battlefield.windDir]===direction)dist--}
@@ -656,7 +666,7 @@ function queueMove(rank,gridCol){
 const sheet=$('choiceSheet');
 function closeSheet(){if(sheet.open)sheet.close()}
 function effectText(a){const out=[];if(a.heal)out.push('HP回復');else out.push('威力 ×'+a.mult);for(const[k,n]of STATUS)if(a[k])out.push(n+' 基礎'+a[k]+'%');if(a.critBonus)out.push('会心率＋'+a.critBonus);return out.join(' / ')}
-function syncActionDescription(){const box=$('actionDescription');if(!box)return;const u=current(),a=targetMode&&u?actionFor(u,targetMode.key):null;box.hidden=!a;if(!a)return;$('actionTitle').textContent=a.name;$('actionEffect').textContent=scopeName(a)+' · '+rangeName(a.range)+' · '+effectText(a)}
+function syncActionDescription(){const box=$('actionDescription');if(!box)return;const u=current(),a=targetMode&&u?actionFor(u,targetMode.key):null;box.hidden=!a;if(!a)return;const ts=u?targets(u,a):[],targetId=targetMode?.previewId||getDraft(u)?.targetId,t=ts.find(x=>x.id===targetId)||ts[0],force=t&&(a.push||a.pull)?forcedMovePreview(t,a.push?'back':'front',Math.max(Number(a.push)||0,Number(a.pull)||0,1)):'';$('actionTitle').textContent=a.name;$('actionEffect').textContent=scopeName(a)+' · '+rangeName(a.range)+' · '+effectText(a)+(force?' · '+force:'')}
 function chooseSkill(key){if(!editable())return;const u=current(),a=actionFor(u,key),reason=unavailable(u,a);if(reason){notify(reason);return}const previous=targetMode?.actorId===u.id?targetMode.previous:{...getDraft(u)};getDraft(u).key=key;ensureTarget(u,a);commandFocus='skills';targetMode={actorId:u.id,key,previous,previewId:null};closeSheet();render()}
 function openSheet(mode='skills'){sheet.dataset.mode=mode;
  if(!editable()&&!['more','terrain','history'].includes(mode))return;
