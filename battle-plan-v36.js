@@ -637,7 +637,7 @@ function toggleActor(id){
  if(commandOpen&&current()?.id===id){closeCommands();return}
  selectActor(id);
 }
-function selectActor(id){const i=party.findIndex(u=>u.id===id&&u.alive);if(i<0||!editable())return;cancelTarget();const u=party[i];if(u.queued){u.queued=null;u.defending=false}idx=i;phase='command';commandOpen=true;getDraft(u).key='attack';commandFocus='attack';render()}
+function selectActor(id){const i=party.findIndex(u=>u.id===id&&u.alive);if(i<0||!editable())return;cancelTarget();const u=party[i];if(u.queued){u.queued=null;u.defending=false}idx=i;if(prepMode){phase='prep';commandOpen=false;render();return}phase='command';commandOpen=true;getDraft(u).key='attack';commandFocus='attack';render()}
 function advance(){targetMode=null;const next=fastestPendingIndex();if(next>=0){idx=next;phase='command';commandOpen=true;commandFocus='attack';render();return}phase='ready';commandOpen=false;render();setTimeout(()=>{if(editable()&&live(party).length&&live(party).every(u=>u.queued))resolve()},0)}
 function queue(){if(!editable())return;const u=current(),a=actionFor(u),reason=unavailable(u,a);if(reason){notify(reason);return}ensureTarget(u,a);u.defending=false;u.queued={type:a.kind==='attack'?'attack':'skill',action:a,targetId:getDraft(u).targetId};advance()}
 function attack(){if(!editable())return;cancelTarget();const u=current(),previous={...getDraft(u)};getDraft(u).key='attack';const a=normal(u),reason=unavailable(u,a);if(reason){notify(reason);return}ensureTarget(u,a);commandFocus='attack';targetMode={actorId:u.id,key:'attack',previous,previewId:null};render()}
