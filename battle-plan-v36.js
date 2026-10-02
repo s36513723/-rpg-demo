@@ -560,7 +560,7 @@ function updatePortrait(){
 function render(){
  if(editable()&&phase==='command'&&!busy){const cur=current();if(!cur?.alive||cur.queued){const auto=fastestPendingIndex();if(auto>=0){idx=auto;commandOpen=true}}}
  renderCards();renderOrder();updatePortrait();
- if(window.SanctuaryView)window.SanctuaryView.sync(party,enemies,{busy,over,commandOpen,displayActorId,activeTurnId,actorId:current()?.id});
+ if(window.SanctuaryView)window.SanctuaryView.sync(party,enemies,{busy,over,commandOpen,displayActorId,activeTurnId,actorId:current()?.id,battlefield,prepMode});
  const readyOnly=editable()&&!commandOpen&&phase==='ready';
  $('commandPanel').classList.toggle('command-open',editable()&&commandOpen);
  $('commandPanel').classList.toggle('command-closed',editable()&&!commandOpen&&!readyOnly);
@@ -633,13 +633,14 @@ function attack(){if(!editable())return;cancelTarget();const u=current(),previou
 function simpleCommand(type){if(!editable())return;cancelTarget();const u=current();if(type==='escape'&&u.status.legBind>0){notify('脚封じで行動できません');return}u.defending=type==='defend';u.queued={type};commandFocus=type==='defend'?'defend':null;advance()}
 function queueMove(rank,gridCol){
  if(!editable())return;
- const u=current();
- if(u.status.legBind>0){notify('脚封じで移動できません');return}
+ const u=current();if(!u)return;
+ if(u.status.legBind>0&&!prepMode){notify('脚封じで移動できません');return}
  if(u.rank===rank&&col(u)===gridCol){closeSheet();return}
+ if(!prepMode&&gridCol!==col(u)){notify('通常移動は同じ縦列のみです');return}
+ const dist=Math.abs(RANKS.indexOf(u.rank)-RANKS.indexOf(rank));if(!prepMode&&dist>terrainMoveLimit(u)){notify('この地形ではそこまで移動できません');return}
  const other=live(party).find(x=>x.id!==u.id&&x.rank===rank&&col(x)===gridCol);
- u.defending=false;
- u.queued={type:'move',rank,gridCol,swapId:other?.id||null};
- closeSheet();advance();
+ if(prepMode){const oldRank=u.rank,oldCol=col(u);if(other){other.rank=oldRank;other.gridCol=oldCol;syncLegacyRow(other)}u.rank=rank;u.gridCol=gridCol;syncLegacyRow(u);persistBattlefield();render();if(window.updateFormationBoard)window.updateFormationBoard();return}
+ u.defending=false;u.queued={type:'move',rank,gridCol,swapId:other?.id||null};closeSheet();advance();
 }
 const sheet=$('choiceSheet');
 function closeSheet(){if(sheet.open)sheet.close()}
@@ -666,7 +667,7 @@ function openSheet(mode='skills'){sheet.dataset.mode=mode;
    for(let c=1;c<=3;c++){
     const occ=party.find(x=>x.alive&&x.rank===rank&&col(x)===c);
     const b=document.createElement('button');b.type='button';b.className='formation-cell'+(occ?' occupied':' empty')+(occ?.id===u.id?' current':'');
-    b.setAttribute('aria-label',RANK_LABEL[rank]+' '+c+(occ?' '+occ.name:' 空き'));
+    const pv=movePreview(u,rank,c);b.setAttribute('aria-label',RANK_LABEL[rank]+' '+c+(occ?' '+occ.name:' 空き')+'。'+pv);b.title=pv;
     b.innerHTML=occ?faceMarkup(occ)+'<span>'+esc(occ.name)+'</span>':'<span class="formation-plus">＋</span>';
     if(u.status.legBind>0)b.disabled=true;
     b.addEventListener('click',()=>queueMove(rank,c));cells.append(b);
@@ -681,7 +682,9 @@ function openSheet(mode='skills'){sheet.dataset.mode=mode;
    b.addEventListener('click',()=>{closeSheet();selectActor(m.id)});list.append(b);
   }
  }else if(mode==='terrain'){
-  const p=document.createElement('p');p.className='terrain-detail';p.textContent=terrain.desc;list.append(p);
+  const tags=EXPCTX?.terrainTags||battlefield?.terrainTags||[];const p=document.createElement('p');p.className='terrain-detail';p.textContent=(EXPCTX?.place?EXPCTX.place+' / ':'')+(tags.length?tags.map(x=>terrainApi()?.terrainName?.(x)||x).join('・'):terrain.name)+'\n'+terrain.desc;list.append(p);
+  if(terrainFocus){const d=document.createElement('p');d.className='terrain-detail selected-tile';d.textContent=terrainFocus.name+'\n'+terrainFocus.text;list.append(d)}
+  if(battlefield?.conditionTerrain){const cond=document.createElement('p');cond.className='terrain-detail condition-terrain';cond.textContent='条件：'+(terrainApi()?.terrainName?.(battlefield.conditionTerrain)||battlefield.conditionTerrain);list.append(cond)}
  }else if(mode==='more'){
   const entries=[['fast','表示速度',()=>{$('pace').click();closeSheet()},false],['restart','新しい戦闘',()=>fresh(),false],['book','履歴',()=>{closeSheet();toggleHistory()},false],['exit','逃走',()=>{closeSheet();simpleCommand('escape')},!editable()||u?.status.legBind>0]];
   for(const [ic,label,fn,disabled]of entries){const b=document.createElement('button');b.type='button';b.className='menu-action';b.innerHTML=icon(ic)+esc(label);b.disabled=disabled;b.addEventListener('click',fn);list.append(b)}
@@ -754,7 +757,7 @@ async function execute(u,q,token){check(token);if(!u.alive)return;displayActorId
   await defeated(victim,token);
  }
 }
-async function finish(type,token){if(over)return;over=true;phase='done';render();if(EXPCTX){EXPCTX.result=type;EXPCTX.vitals=HT.map((source,i)=>{const old=EXPCTX.vitals?.[i]||{},u=party.find(x=>x.id===source.id);return u?{...old,hp:Math.max(0,u.hp),sp:Math.max(0,u.sp),mp:Math.max(0,u.mp),status:{...(old.status||{}),...u.status}}:old});RPG_STORE.setItem('rpg.exploreBattle',JSON.stringify(EXPCTX));$('returnExplore').hidden=false}const text={win:'勝利',lose:'敗北',escape:'撤退成功'}[type];await say(text,token,type==='win'?'ok':type==='lose'?'bad':'sys');$('history').dataset.result=type}
+async function finish(type,token){if(over)return;over=true;phase='done';render();if(EXPCTX){EXPCTX.result=type;EXPCTX.battlefield=battlefield;EXPCTX.vitals=HT.map((source,i)=>{const old=EXPCTX.vitals?.[i]||{},u=party.find(x=>x.id===source.id);return u?{...old,hp:Math.max(0,u.hp),sp:Math.max(0,u.sp),mp:Math.max(0,u.mp),status:{...(old.status||{}),...u.status}}:old});RPG_STORE.setItem('rpg.exploreBattle',JSON.stringify(EXPCTX));$('returnExplore').hidden=false}const text={win:'勝利',lose:'敗北',escape:'撤退成功'}[type];await say(text,token,type==='win'?'ok':type==='lose'?'bad':'sys');$('history').dataset.result=type}
 async function checkEnd(token){if(over)return true;if(!live(enemies).length){await finish('win',token);return true}if(!live(party).length){await finish('lose',token);return true}return false}
 async function resolve(){if(!editable()||!live(party).every(u=>u.queued))return;cancelTarget();commandOpen=false;const token=session;displayActorId=null;activeTurnId=null;turnSequence=[];busy=true;phase='resolve';paused=false;skip=false;closeSheet();setBattle(true);render();try{
  for(const u of live(party)){
@@ -764,16 +767,16 @@ async function resolve(){if(!editable()||!live(party).every(u=>u.queued))return;
   if(other){other.rank=oldRank;other.gridCol=oldCol;syncLegacyRow(other)}
   u.rank=q.rank;u.gridCol=q.gridCol;syncLegacyRow(u);
   displayActorId=u.id;activeTurnId=u.id;render();
-  await say(u.name+'が '+RANK_LABEL[u.rank]+' '+u.gridCol+' へ移動。',token,'sys',{actorId:u.id});
+  persistBattlefield();await say(u.name+'が '+RANK_LABEL[u.rank]+' '+u.gridCol+' へ移動。'+(movePreview(u,u.rank,u.gridCol)!=='地形変化なし'?' '+movePreview(u,u.rank,u.gridCol):''),token,'sys',{actorId:u.id});
  }
  for(const u of live(party).filter(u=>u.defending)){displayActorId=u.id;activeTurnId=u.id;render();await say(u.name+'は身を守っている。',token,'sys',{actorId:u.id})}
  const order=[...live(party).filter(u=>!['swap','move','defend'].includes(u.queued.type)).map(u=>({u,q:u.queued,s:speed(u,u.queued)})),...live(enemies).map(u=>({u,q:null,s:speed(u,null)}))].sort((a,b)=>b.s-a.s);
  turnSequence=order.map(e=>e.u.id);renderOrder();
- for(const entry of order){check(token);if(!entry.u.alive)continue;let q=entry.q;if(entry.u.enemy){const a=entry.u.spell||normal(entry.u),ts=live(party).filter(t=>canReach(entry.u,t,a.range)),t=entry.u.ai==='archer'?[...ts].sort((a,b)=>a.hp-b.hp)[0]:ts[Math.floor(Math.random()*ts.length)];q={type:a.kind==='attack'?'attack':'skill',action:a,targetId:t?.id}}await execute(entry.u,q,token);if(await checkEnd(token))break}
- if(!over){for(const u of [...party,...enemies]){check(token);if(!u.alive)continue;if(u.status.poison>0){displayActorId=null;activeTurnId=null;const n=Math.max(1,Math.floor(u.maxHp*.04));u.hp=Math.max(0,u.hp-n);render();await say(u.name+'は猛毒で '+n+' ダメージ。',token,'bad',{targetId:u.id,value:n});await defeated(u,token)}for(const[k]of STATUS)if(u.status[k]>0)u.status[k]--}if(!await checkEnd(token)){for(const u of [...party,...enemies]){u.queued=null;u.defending=false}round++;idx=party.reduce((best,u,i)=>u.alive&&(best<0||speed(u,null)>speed(party[best],null))?i:best,-1);commandOpen=idx>=0;phase='command';log('―― Round '+round+' ――','sys')}}
+ for(const entry of order){check(token);if(!entry.u.alive)continue;let q=entry.q;if(entry.u.enemy){const a=entry.u.spell||normal(entry.u),mv=enemyMovePlan(entry.u,a);if(mv){await executeEnemyMove(entry.u,mv,token);if(await checkEnd(token))break;continue}const ts=live(party).filter(t=>canReach(entry.u,t,a.range)),t=entry.u.ai==='archer'?[...ts].sort((a,b)=>a.hp-b.hp)[0]:ts[Math.floor(Math.random()*ts.length)];q={type:a.kind==='attack'?'attack':'skill',action:a,targetId:t?.id}}await execute(entry.u,q,token);if(await checkEnd(token))break}
+ if(!over){for(const u of [...party,...enemies]){check(token);if(!u.alive)continue;await terrainRoundEffect(u,token);if(!u.alive)continue;if(u.status.poison>0){displayActorId=null;activeTurnId=null;const n=Math.max(1,Math.floor(u.maxHp*.04));u.hp=Math.max(0,u.hp-n);render();await say(u.name+'は猛毒で '+n+' ダメージ。',token,'bad',{targetId:u.id,value:n});await defeated(u,token)}for(const[k]of STATUS)if(u.status[k]>0)u.status[k]--}terrainApi()?.decayTempTiles?.(battlefield);persistBattlefield();if(!await checkEnd(token)){for(const u of [...party,...enemies]){u.queued=null;u.defending=false}round++;idx=party.reduce((best,u,i)=>u.alive&&(best<0||speed(u,null)>speed(party[best],null))?i:best,-1);commandOpen=idx>=0;phase='command';log('―― Round '+round+' ――','sys')}}
  }catch(e){if(e!==CANCEL){console.error(e);notify('戦闘処理でエラーが発生しました。新しい戦闘で再開してください。');over=true;phase='done'}}finally{if(token===session){busy=false;paused=false;displayActorId=null;activeTurnId=null;turnSequence=[];setBattle(false);render()}}}
 function autoRound(){if(!editable())return;cancelTarget();const policy=EXPCTX?.autoPolicy||'ガンガン使う';for(const u of live(party)){if(u.queued)continue;const wounded=live(party).filter(x=>x.hp/x.maxHp<.55).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0];if(policy==='命を大事に'&&wounded){const heal=u.skills.find(s=>s.heal&&s.target==='ally'&&!unavailable(u,s)&&targets(u,s).includes(wounded));if(heal){u.queued={type:'skill',action:heal,targetId:wounded.id};u.defending=false;continue}if(u.hp/u.maxHp<.35){u.queued={type:'defend'};u.defending=true;continue}}if(policy==='ガンガン使う'){const s=u.skills.find(s=>s.target==='enemy'&&!unavailable(u,s));if(s){u.queued={type:'skill',action:s,targetId:targets(u,s)[0].id};u.defending=false;continue}}const a=normal(u),t=targets(u,a)[0];if(t){u.queued={type:'attack',action:a,targetId:t.id};u.defending=false;continue}u.queued={type:'defend'};u.defending=true}phase='ready';render();resolve()}
-function fresh(randomTerrain=true){session++;displayActorId=null;activeTurnId=null;turnSequence=[];commandOpen=false;for(const anim of activeAnimations)anim.cancel();activeAnimations.clear();closeSheet();clearEffects();nodes.clear();for(const id of ['eb','ef','partyStrip'])$(id).replaceChildren();drafts.clear();replacementUsed.party.clear();replacementUsed.enemies.clear();party=HT.map(u=>initUnit(u));enemies=ET.map(u=>initUnit(u,true));terrain=TERRAINS[randomTerrain?Math.floor(Math.random()*TERRAINS.length):0];applyExploreContext();round=1;idx=party.reduce((best,u,i)=>u.alive&&(best<0||speed(u,null)>speed(party[best],null))?i:best,-1);phase='command';commandOpen=idx>=0;busy=false;over=false;paused=false;skip=false;targetMode=null;commandFocus='attack';logCount=0;clearTimeout(noticeTimer);$('pause').innerHTML=icon('pause');$('pause').setAttribute('aria-pressed','false');$('log').replaceChildren();$('history').open=false;delete $('history').dataset.result;$('notice').hidden=true;setBattle(false);log('戦闘開始 · '+terrain.name,'sys');render()}
+function fresh(randomTerrain=true){session++;displayActorId=null;activeTurnId=null;turnSequence=[];commandOpen=false;for(const anim of activeAnimations)anim.cancel();activeAnimations.clear();closeSheet();clearEffects();nodes.clear();for(const id of ['eb','ef','partyStrip'])$(id).replaceChildren();drafts.clear();replacementUsed.party.clear();replacementUsed.enemies.clear();party=HT.map(u=>initUnit(u));enemies=ET.map(u=>initUnit(u,true));terrain=TERRAINS[randomTerrain?Math.floor(Math.random()*TERRAINS.length):0];battlefield=null;prepMode=false;applyExploreContext();if(!battlefield&&terrainApi()){const place={placeType:'分岐路',primaryTerrain:'TR10',secondaryTerrains:[],conditionTerrain:null,terrainTags:['TR10'],fieldTags:[],battleOverlay:false};battlefield=terrainApi().createBattlefield(place,12345,'normal','森林')}round=1;idx=party.reduce((best,u,i)=>u.alive&&(best<0||speed(u,null)>speed(party[best],null))?i:best,-1);phase=prepMode?'prep':'command';commandOpen=!prepMode&&idx>=0;busy=false;over=false;paused=false;skip=false;targetMode=null;commandFocus='attack';logCount=0;clearTimeout(noticeTimer);$('pause').innerHTML=icon('pause');$('pause').setAttribute('aria-pressed','false');$('log').replaceChildren();$('history').open=false;delete $('history').dataset.result;$('notice').hidden=true;setBattle(false);log('戦闘開始 · '+terrain.name,'sys');render()}
 $('returnExplore')?.addEventListener('click',()=>{location.href=RPG_NAV.href('exploration/index.html?resume=1',['rpg.exploreBattle','rpg.exploration.save'+(RPG_STORE.getItem('rpg.exploration.activeSlot')==='2'?2:1),'rpg.exploration.activeSlot'])});$('new').addEventListener('click',()=>fresh());$('actor').addEventListener('click',()=>openSheet('members'));$('skills').addEventListener('click',()=>openSheet());$('more').addEventListener('click',()=>openSheet('more'));$('closeSheet').addEventListener('click',closeSheet);sheet.addEventListener('click',e=>{const r=sheet.getBoundingClientRect();if(e.target===sheet&&(e.clientY<r.top||e.clientX<r.left||e.clientX>r.right))closeSheet()});$('attack').addEventListener('click',attack);$('swap').addEventListener('click',()=>openSheet('formation'));$('defend').addEventListener('click',()=>simpleCommand('defend'));$('switch').addEventListener('click',switchWeapon);$('resolve').addEventListener('click',resolve);$('auto').addEventListener('click',autoRound);$('cancelTarget').addEventListener('click',cancelTarget);$('pause').addEventListener('click',()=>{paused=!paused;$('pause').innerHTML=icon(paused?'play':'pause');$('pause').setAttribute('aria-label',paused?'再開':'一時停止');$('pause').setAttribute('aria-pressed',String(paused));for(const anim of activeAnimations)paused?anim.pause():anim.play();$('actorJob').textContent=''});$('pace').addEventListener('click',()=>{paceIndex=(paceIndex+1)%3;$('pace').textContent=['1×','1.4×','2.5×'][paceIndex];$('pace').title=paceOptions[paceIndex].name;try{localStorage.setItem('rpg.pace.v31',paceIndex)}catch(_){}});$('history').addEventListener('toggle',()=>{$('historyButton').setAttribute('aria-expanded',String($('history').open));if($('history').open)$('log').scrollTop=$('log').scrollHeight});$('historyButton').addEventListener('click',toggleHistory);$('terrainButton').addEventListener('click',()=>openSheet('terrain'));
 $('cancelActionDescription').addEventListener('click',cancelTarget);
 $('enemyStage').addEventListener('click',e=>{if(!e.target.closest('.enemy-unit'))closeCommands()});
@@ -783,7 +786,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!sheet.open&&editab
 if(typeof ResizeObserver==='function')new ResizeObserver(fitScene).observe($('enemyStage'));
 window.addEventListener('resize',fitScene);
 fresh(false);document.documentElement.dataset.ready='true';$('bootStatus')?.remove();$('engineStatus').classList.add('ready');$('engineStatus').title='JavaScript動作中 · UI v44';
-window.RPGDemo={version:'51',focusCommandUI:(id)=>focusCommand(id),selectActorUI:(id)=>selectActor(id),moveActorUI:(rank,c)=>queueMove(rank,c),snapshot:()=>({round,phase,busy,over,commandOpen,targetMode:targetMode?.key||null,active:current()?.id,party:party.map(u=>({id:u.id,hp:u.hp,sp:u.sp,mp:u.mp,row:u.row,rank:u.rank,col:col(u),slot:u.slot,queued:u.queued?.type||null,target:u.queued?.targetId,weapon:u.weapon.name})),enemies:enemies.map(u=>({id:u.id,hp:u.hp,row:u.row,slot:u.slot}))})};
+function startPreparedBattle(){if(!prepMode)return;prepMode=false;phase='command';idx=party.reduce((best,u,i)=>u.alive&&(best<0||speed(u,null)>speed(party[best],null))?i:best,-1);commandOpen=idx>=0;persistBattlefield();render();closeSheet()}
+window.RPGDemo={version:'52-terrain',focusCommandUI:(id)=>focusCommand(id),selectActorUI:(id)=>selectActor(id),moveActorUI:(rank,c)=>queueMove(rank,c),startPreparedBattle,showTileUI:setTerrainFocus,snapshot:()=>({round,phase,busy,over,commandOpen,prepMode,targetMode:targetMode?.key||null,active:current()?.id,battlefield:JSON.parse(JSON.stringify(battlefield||{})),party:party.map(u=>({id:u.id,hp:u.hp,sp:u.sp,mp:u.mp,row:u.row,rank:u.rank,col:col(u),slot:u.slot,queued:u.queued?.type||null,target:u.queued?.targetId,weapon:u.weapon.name})),enemies:enemies.map(u=>({id:u.id,hp:u.hp,row:u.row,slot:u.slot}))})};
 if(window.__RPG_TEST__)window.__test={get units(){return{party,enemies}},fresh,render,defeated,animateSwap,resolve,autoRound,selectActor,toggleActor,closeCommands,openSheet,simpleCommand,getDraft,chooseSkill,attack,canReach,cancelTarget,setPace:i=>{paceIndex=i},runDeath:async u=>{displayActorId=null;busy=true;setBattle(true);await defeated(u,session);busy=false;setBattle(false);render()}};
 })();
 
