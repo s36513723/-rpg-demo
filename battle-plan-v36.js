@@ -327,7 +327,7 @@ function fitScene(){
 }
 let displayActorId=null,activeTurnId=null,turnSequence=[],commandOpen=false;
 const icon=n=>'<svg class="icon" aria-hidden="true"><use href="#i-'+n+'"/></svg>';
-const rangeName=r=>({near:'近距離',mid:'中距離',far:'遠距離',all:'全域'}[r]||r);
+const rangeName=r=>({near:'近距離',mid:'中距離',far:'遠距離',long:'長距離',global:'全域',all:'全域'}[r]||r);
 const scopeName=s=>({single:'単体',row:'1列',all:'全体',random:'ランダム複数',pierce:'前後貫通',adjacent:'隣接'}[s.scope||'single']);
 const skillIcon=a=>a.heal?'heart':a.attr==='火'?'fire':a.kind==='spell'?'scroll':a.range==='far'?'bow':a.attr==='壊'?'hammer':'sword';
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -786,7 +786,7 @@ if(typeof ResizeObserver==='function')new ResizeObserver(fitScene).observe($('en
 window.addEventListener('resize',fitScene);
 fresh(false);document.documentElement.dataset.ready='true';$('bootStatus')?.remove();$('engineStatus').classList.add('ready');$('engineStatus').title='JavaScript動作中 · UI v44';
 function startPreparedBattle(){if(!prepMode)return;prepMode=false;phase='command';idx=party.reduce((best,u,i)=>u.alive&&(best<0||speed(u,null)>speed(party[best],null))?i:best,-1);commandOpen=idx>=0;persistBattlefield();render();closeSheet()}
-window.RPGDemo={version:'52-terrain',focusCommandUI:(id)=>focusCommand(id),selectActorUI:(id)=>selectActor(id),moveActorUI:(rank,c)=>queueMove(rank,c),startPreparedBattle,showTileUI:setTerrainFocus,snapshot:()=>({round,phase,busy,over,commandOpen,prepMode,targetMode:targetMode?.key||null,active:current()?.id,battlefield:JSON.parse(JSON.stringify(battlefield||{})),party:party.map(u=>({id:u.id,hp:u.hp,sp:u.sp,mp:u.mp,row:u.row,rank:u.rank,col:col(u),slot:u.slot,queued:u.queued?.type||null,target:u.queued?.targetId,weapon:u.weapon.name})),enemies:enemies.map(u=>({id:u.id,hp:u.hp,row:u.row,slot:u.slot}))})};
+window.RPGDemo={version:'52-terrain',focusCommandUI:(id)=>focusCommand(id),selectActorUI:(id)=>selectActor(id),moveActorUI:(rank,c)=>queueMove(rank,c),startPreparedBattle,showTileUI:setTerrainFocus,snapshot:()=>({round,phase,busy,over,commandOpen,prepMode,boss:!!EXPCTX?.boss,targetMode:targetMode?.key||null,active:current()?.id,battlefield:JSON.parse(JSON.stringify(battlefield||{})),party:party.map(u=>({id:u.id,hp:u.hp,sp:u.sp,mp:u.mp,row:u.row,rank:u.rank,col:col(u),slot:u.slot,queued:u.queued?.type||null,target:u.queued?.targetId,weapon:u.weapon.name})),enemies:enemies.map(u=>({id:u.id,hp:u.hp,row:u.row,slot:u.slot}))})};
 if(window.__RPG_TEST__)window.__test={get units(){return{party,enemies}},fresh,render,defeated,animateSwap,resolve,autoRound,selectActor,toggleActor,closeCommands,openSheet,simpleCommand,getDraft,chooseSkill,attack,canReach,cancelTarget,setPace:i=>{paceIndex=i},runDeath:async u=>{displayActorId=null;busy=true;setBattle(true);await defeated(u,session);busy=false;setBattle(false);render()}};
 })();
 
@@ -819,7 +819,7 @@ if(window.__RPG_TEST__)window.__test={get units(){return{party,enemies}},fresh,r
  }
  function refreshFormationBoard(){
   const q=window.RPGDemo.snapshot(),ally=[],foe=[],T=window.RPG_TERRAIN;
-  for(const rank of ['front','mid','rear'])for(let c=1;c<=3;c++){const u=q.party.find(x=>x.rank===rank&&x.col===c),ix=T?.cellIndex?.('ally',rank,c),cell=q.battlefield?.cells?.ally?.[ix],id=cell?.tempTile||cell?.baseTile||'TL00';ally.push({unit:u||null,current:!!u&&u.id===q.active,rank,col:c,tile:id,tileName:T?.tileName?.(id),tileText:T?.tileSummary?.(cell,!!EXPCTX?.boss)})}
+  for(const rank of ['front','mid','rear'])for(let c=1;c<=3;c++){const u=q.party.find(x=>x.rank===rank&&x.col===c),ix=T?.cellIndex?.('ally',rank,c),cell=q.battlefield?.cells?.ally?.[ix],id=cell?.tempTile||cell?.baseTile||'TL00';ally.push({unit:u||null,current:!!u&&u.id===q.active,rank,col:c,tile:id,tileName:T?.tileName?.(id),tileText:T?.tileSummary?.(cell,!!q.boss)})}
   for(const rank of ['rear','mid','front'])for(let c=1;c<=3;c++){const er=rank==='rear'?'back':rank,u=q.enemies.find(x=>x.row===er&&Number(document.querySelector('.enemy-unit[data-unit-id="'+x.id+'"]')?.dataset.col)===c),ix=T?.cellIndex?.('enemy',er,c),cell=q.battlefield?.cells?.enemy?.[ix],id=cell?.tempTile||cell?.baseTile||'TL00';foe.push({unit:u||null,current:false,rank:er,col:c,tile:id,tileName:T?.tileName?.(id),tileText:T?.tileSummary?.(cell,!!EXPCTX?.boss)})}
   drawFormationBoard(allyFormationBoard,ally,false,q.prepMode);drawFormationBoard(enemyFormationBoard,foe,true,false);
   prepStart.hidden=!q.prepMode;const cap=formationSheet.querySelector('.formation-caption');if(cap)cap.textContent=q.prepMode?'味方を選択 → 移動先を選択。配置変更は無料です。':'戦闘中の移動は同じ縦列へ1 ACTION。';
