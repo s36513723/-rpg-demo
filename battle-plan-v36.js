@@ -331,7 +331,7 @@ const rangeName=r=>({near:'近距離',mid:'中距離',far:'遠距離',all:'全�
 const scopeName=s=>({single:'単体',row:'1列',all:'全体',random:'ランダム複数',pierce:'前後貫通',adjacent:'隣接'}[s.scope||'single']);
 const skillIcon=a=>a.heal?'heart':a.attr==='火'?'fire':a.kind==='spell'?'scroll':a.range==='far'?'bow':a.attr==='壊'?'hammer':'sword';
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-let party=[],enemies=[],terrain=TERRAINS[0],round=1,idx=0,phase='command',busy=false,over=false;
+let party=[],enemies=[],terrain=TERRAINS[0],battlefield=null,terrainFocus=null,prepMode=false,round=1,idx=0,phase='command',busy=false,over=false;
 let session=0,paused=false,skip=false,paceIndex=0,logCount=0,noticeTimer=0,targetMode=null,commandFocus='attack';
 const paceOptions=[{name:'ゆっくり',scale:1},{name:'標準',scale:.72},{name:'早送り',scale:.4}];
 try{paceIndex=clamp(Number(localStorage.getItem('rpg.pace.v31'))||0,0,2)}catch(_){}
@@ -361,7 +361,7 @@ function applyExploreContext(){
   const seed=ET.find(e=>e.id===(magic?'mage':ranged?'arch':beast?'g3':'g1'));
   const src=JSON.parse(JSON.stringify(seed)),i=enemies.length;
   src.id='enc'+i;src.name=String(tag)+(ctx.boss?'':' '+(i+1));src.style=String(tag);src.row=row;src.gridCol=rowCount===1?2:rowCount===2?n*2+1:n+1;src.slot=i+1;
-  src.hp=(ctx.boss?1280:magic?100:ranged?110:/ゴーレム|重装/.test(tag)?170:135)+Math.max(0,(Number(ctx.threat)||1)-1)*10;
+  src.hp=(ctx.boss?1280:magic?100:ranged?110:/ゴーレム|重装/.test(tag)?170:135)+Math.max(0,(Number(ctx.threat)||1)-1)*10;src.terrainImmunity=flying?'ignore_ground_negative':/ゴーレム/.test(tag)?'ignore_poison_terrain':null;
   src.weak={};src.resist={};
   const art=enemyArchetypeArt(src);if(art){ENEMY_CINEMATIC[src.id]=art;ORDER_PORTRAITS[src.id]=art}PORTRAITS[src.id]=PORTRAITS[seed.id];
   enemies.push(initUnit(src,true));
@@ -369,7 +369,83 @@ function applyExploreContext(){
  enemies=[];front.slice(0,3).forEach((tag,n)=>makeEnemy(tag,'front',n,front.length));back.slice(0,3).forEach((tag,n)=>makeEnemy(tag,'back',n,back.length));
  if(ctx.battleType==='elite'&&enemies[0]){const u=enemies[0];u.hp=u.maxHp=Math.floor(u.maxHp*1.75);u.PHY+=10;u.physDef+=8}
  terrain=TERRAINS.find(t=>t.name===ctx.terrain)||{...TERRAINS[0],name:String(ctx.terrain||'開所'),desc:'探索地点の地形'};
+ const T=window.RPG_TERRAIN,place={placeType:ctx.placeType||'分岐路',primaryTerrain:ctx.primaryTerrain,secondaryTerrains:ctx.secondaryTerrains||[],conditionTerrain:ctx.conditionTerrain||null,terrainTags:ctx.terrainTags||[],fieldTags:ctx.fieldTags||[],battleOverlay:false};
+ battlefield=T?.migrateBattlefield?.(ctx.battlefield,place,ctx.encounterSeed||T.hashSeed?.(ctx.battleId),ctx.fieldEffects?.enemyAmbush?'ambush':ctx.battleType,ctx.theme)||ctx.battlefield||null;
+ if(ctx)ctx.battlefield=battlefield;
+ prepMode=!!ctx&&!ctx.fieldEffects?.enemyAmbush&&!ctx.result;
 }
+function terrainApi(){return window.RPG_TERRAIN||null}
+function unitCell(u,row=u.enemy?u.row:(u.rank||u.row),gridCol=col(u)){return terrainApi()?.cellFor?.(battlefield,u.enemy?'enemy':'ally',row,gridCol)||null}
+function unitTerrain(u){return terrainApi()?.unitTileEffect?.(battlefield,u)||{cell:null,effect:{}}}
+function terrainCondition(){return terrainApi()?.conditionEffect?.(battlefield)||{}}
+function rangeMax(a){return ({near:1,mid:2,far:3,long:4,global:5,all:5})[a?.range]||1}
+function physicalRanged(u,a){return a?.kind!=='spell'&&rangeMax(a)>=3}
+function terrainHitBonus(a,t,act){
+ const T=terrainApi();if(!T||!battlefield)return 0;const ae=unitTerrain(a).effect,te=unitTerrain(t).effect,cond=terrainCondition();let v=0;
+ if(physicalRanged(a,act)){v+=(ae.outgoingRangedHit||0)+(te.incomingRangedHit||0)+(cond.physicalRangedHit||0)}
+ if(rangeMax(act)>=3&&battlefield.conditionTerrain==='TR16'&&act.attr!=='光')v+=cond.rangedHit||0;
+ v-=te.evasion||0;if(ae.highAccuracy)v+=ae.highAccuracy;
+ return T.clampTerrainHit(v)
+}
+function terrainDamageMod(a,t,act){
+ const T=terrainApi();if(!T||!battlefield)return 0;const ae=unitTerrain(a).effect,te=unitTerrain(t).effect,cond=terrainCondition(),magic=act.kind==='spell'||['ARC','MND'].includes(act.stat),attrs=Array.isArray(act.attr)?act.attr:[act.attr];let v=0;
+ v+=magic?(te.incomingMagic||0):(te.incomingPhysical||0);if(ae.highDamage)v+=ae.highDamage;
+ if(attrs.includes('水'))v+=(ae.waterEffect||0)+(cond.waterDamage||0);if(attrs.includes('火'))v+=(te.incomingFire||0)+(cond.fireDamage||0);
+ return T.clampTerrainMultiplier(v)
+}
+function terrainHealMod(t){const T=terrainApi();if(!T||!battlefield)return 0;return T.clampTerrainMultiplier((unitTerrain(t).effect.healingReceived||0)+(terrainCondition().healing||0))}
+function terrainStatusDelta(a,t,key){
+ const ae=unitTerrain(a).effect,te=unitTerrain(t).effect,bind=['headBind','armBind','legBind'].includes(key);return (bind?(ae.bindApply||0)-(te.bindResist||0):(ae.statusApply||0)-(te.statusResist||0))-(terrainCondition()[bind?'bindResist':'statusResist']||0)
+}
+function terrainActionCost(u,a){
+ let cost=Number(a?.cost)||0;if(!a?.costType||!battlefield)return cost;const e=unitTerrain(u).effect,mastery=a.unlocks?.[0]?.mastery,category=window.RPG_RULES?.masteries?.[mastery]?.category;
+ if(category==='源泉'&&e.sourceSp)cost+=e.sourceSp;if(mastery==='機巧'&&e.kikouSp)cost+=e.kikouSp;return Math.max(1,cost)
+}
+function terrainMoveLimit(u){const e=unitTerrain(u).effect;return terrainApi()?.isFlying?.(u)?2:Math.max(1,Number(e.moveMax)||2)}
+function movePreview(u,row,gridCol){
+ const cur=unitTerrain(u).effect,next=terrainApi()?.tileEffect?.(unitCell(u,row,gridCol))||{},out=[];
+ const pct=(a,b)=>Math.round(((b||0)-(a||0))*100);
+ const sd=pct(cur.speed,next.speed);if(sd)out.push('速度 '+(sd>0?'+':'')+sd+'%');
+ const ev=(next.evasion||0)-(cur.evasion||0);if(ev)out.push('回避 '+(ev>0?'+':'')+ev+'pt');
+ const ip=pct(cur.incomingPhysical,next.incomingPhysical);if(ip)out.push('物理被ダメ '+(ip>0?'+':'')+ip+'%');
+ if(unitCell(u,row,gridCol)?.baseTile==='TL10'||unitCell(u,row,gridCol)?.tempTile==='TL10')out.push('危険縁');
+ return out.slice(0,3).join(' / ')||'地形変化なし'
+}
+function persistBattlefield(){
+ if(!EXPCTX||!battlefield)return;EXPCTX.battlefield=battlefield;EXPCTX.formation=HT.map((source,i)=>{const u=party.find(x=>x.id===source.id);return u?({front:0,mid:1,rear:2}[u.rank]??0)*3+(col(u)-1):EXPCTX.formation?.indexOf(i)}).reduce((arr,cell,i)=>{if(Number.isInteger(cell)&&cell>=0)arr[cell]=i;return arr},Array(9).fill(null));
+ try{RPG_STORE.setItem('rpg.exploreBattle',JSON.stringify(EXPCTX))}catch(_){}
+}
+function tileDetail(side,index){
+ const T=terrainApi(),cell=battlefield?.cells?.[side]?.[index];if(!T||!cell)return null;return {side,index,base:cell.baseTile,temp:cell.tempTile,remaining:cell.tempRemaining||0,name:[T.tileName(cell.baseTile),cell.tempTile?T.tileName(cell.tempTile):null].filter(Boolean).join('＋'),text:T.tileSummary(cell,!!EXPCTX?.boss),icon:T.TILE_ICON?.[cell.tempTile||cell.baseTile]||''}
+}
+function setTerrainFocus(side,index){terrainFocus=tileDetail(side,index);openSheet('terrain')}
+async function terrainRoundEffect(u,token){
+ if(!battlefield||!u.alive)return;const T=terrainApi(),x=T?.unitTileEffect?.(battlefield,u);if(!x)return;const ids=T.tileIds(x.cell),e=x.effect;if(T.isFlying?.(u)&&ids.some(id=>T.GROUND_NEGATIVE?.has?.(id)))return;
+ let pct=e.endRoundHp||0,label=e.endRoundHp?'地形':'';
+ if(e.endRoundFire){pct=Math.max(pct,e.endRoundFire);label='炎上'}
+ if(!pct)return;if(T.isGolem?.(u)&&ids.includes('TL06'))return;
+ const n=Math.max(1,Math.floor(u.maxHp*pct));u.hp=Math.max(0,u.hp-n);render();await say(u.name+'は'+label+'で '+n+' ダメージ。',token,'bad',{targetId:u.id,value:n});await defeated(u,token)
+}
+function forcedRows(u){return u.enemy?['front','mid','back']:['front','mid','rear']}
+async function terrainForceMove(u,direction,baseDistance,token){
+ const T=terrainApi();if(!T||!battlefield||!u.alive)return false;const rows=forcedRows(u),side=u.enemy?'enemy':'ally',current=rows.indexOf(u.enemy?u.row:u.rank),cell=unitCell(u),e=T.unitTileEffect(battlefield,u).effect;let dist=Math.max(0,Number(baseDistance)||1)+(Number(e.forcedDelta)||0);
+ if(battlefield.conditionTerrain==='TR17'&&battlefield.windDir){if(battlefield.windDir===direction)dist++;else if({front:'back',back:'front'}[battlefield.windDir]===direction)dist--}
+ dist=Math.max(0,Math.min(2,dist));let pos=current,moved=false;
+ for(let step=0;step<dist;step++){const next=pos+(direction==='back'?1:-1);if(next<0||next>=rows.length){if(cell?.baseTile==='TL10'&&cell.hazardDir===direction&&!T.isFlying?.(u)){const pct=EXPCTX?.boss?(T.TILE.TL10.bossEdgeDamage||.05):(T.TILE.TL10.edgeDamage||.15),n=Math.max(1,Math.floor(u.maxHp*pct));u.hp=Math.max(0,u.hp-n);await say(u.name+'は危険縁で '+n+' ダメージ。',token,'bad',{targetId:u.id,value:n});await defeated(u,token)}break}
+  const nr=rows[next],other=live(u.enemy?enemies:party).find(x=>x.id!==u.id&&(x.enemy?x.row:x.rank)===nr&&col(x)===col(u));if(other)break;
+  if(u.enemy)u.row=nr;else{u.rank=nr;syncLegacyRow(u)}pos=next;moved=true
+ }
+ if(moved){render();persistBattlefield();await say(u.name+'が地形の影響を受けて'+(direction==='back'?'後退':'前進')+'。',token,'sys',{actorId:u.id})}
+ return moved
+}
+function enemyMovePlan(u,a){
+ const T=terrainApi();if(!T||!battlefield)return null;const hasAttack=live(party).some(t=>canReach(u,t,a.range)),occ=new Map(live(enemies).filter(x=>x.id!==u.id).map(x=>[x.row+':'+col(x),x]));
+ return T.bestAiMove?.(battlefield,u,occ,hasAttack)||null
+}
+async function executeEnemyMove(u,p,token){
+ if(!p)return false;const other=live(enemies).find(x=>x.id!==u.id&&x.row===p.row&&col(x)===p.col),old=u.row;if(other)other.row=old;u.row=p.row;render();persistBattlefield();await say(u.name+'は地形を利用して移動。',token,'sys',{actorId:u.id});return true
+}
+
 function current(){return party[idx]}
 function normal(u){return{name:'通常攻撃',kind:'attack',range:u.weapon?.range||'near',attr:u.weapon?.attr||'壊',target:'enemy',scope:'single',mult:1,hit:0,speed:0}}
 function getDraft(u){if(!drafts.has(u.id))drafts.set(u.id,{key:'attack',targetId:null});return drafts.get(u.id)}
