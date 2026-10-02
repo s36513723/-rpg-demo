@@ -79,6 +79,16 @@ TR15:{水域:5,機械:3,遺物:1},TR16:{呪い:3,遺物:2,星象:2},TR17:{星象
 TR18:{水域:3,植物:2},TR19:{呪い:4,植物:2,獣:1}
 };
 
+const BOARD_TEMPLATE={
+BT01:{name:'通常戦・標準',safe:6,valueDiff:3,riskAlly:0,riskEnemy:1,prep:true},
+BT02:{name:'通常戦・地形強調',safe:6,valueDiff:3,riskAlly:1,riskEnemy:1,prep:true},
+BT03:{name:'強敵戦・要塞型',safe:6,valueDiff:5,riskAlly:1,riskEnemy:1,prep:true,enemyAdvantage:true},
+BT04:{name:'奇襲戦',safe:6,valueDiff:5,riskAlly:1,riskEnemy:1,prep:false,enemyAdvantage:true},
+BT05:{name:'ボス・アリーナ',safe:6,valueDiff:null,riskAlly:2,riskEnemy:2,prep:true},
+BT06:{name:'ボス・危険地帯',safe:6,valueDiff:null,riskAlly:4,riskEnemy:4,prep:true},
+BT07:{name:'ボス・盤面変化',safe:6,valueDiff:null,riskAlly:4,riskEnemy:4,prep:true},
+BT08:{name:'チュートリアル',safe:7,valueDiff:1,riskAlly:0,riskEnemy:0,prep:true,tutorial:true}
+};
 const BOSS={
 BF01:{name:'中立主室',template:'BT05',terrain:['TR13','TR14','TR10'],enemy:['TL00','TL08','TL00','TL00','TL00','TL00','TL09','TL00','TL08'],ally:['TL08','TL00','TL09','TL00','TL00','TL00','TL00','TL08','TL00']},
 BF02:{name:'断崖戦',template:'BT06',terrain:['TR07','TR08','TR17'],enemy:['TL09','TL10','TL07','TL07','TL08','TL09','TL00','TL07','TL10'],ally:['TL10','TL07','TL00','TL09','TL08','TL07','TL07','TL10','TL09']},
@@ -172,6 +182,21 @@ function bestAiMove(board,unit,occupied,hasAttack=true){
  for(const row of rows){if(row===unit.row)continue;const key=row+':'+unit.gridCol,other=occupied?.get(key);const val=aiTileValue(board,unit,row,unit.gridCol);cands.push({row,col:unit.gridCol,swapId:other?.id||null,value:val,delta:val-current})}
  cands.sort((a,b)=>b.delta-a.delta);return cands[0]?.delta>=threshold?cands[0]:null
 }
+function bossPhaseChange(board,hpRatio){
+ if(!board?.bossFieldId)return {changed:[],text:''};board.phaseFlags=board.phaseFlags||{};const changed=[];
+ const replace=(from,to,count=1,side=null)=>{const sides=side?[side]:['enemy','ally'];for(const s of sides)for(const c of board.cells?.[s]||[]){if(changed.length>=count)return;if(c.baseTile===from){c.baseTile=to;c.hazardDir=to==='TL10'?hazardDir(c.index,s):null;changed.push({side:s,index:c.index,from,to})}}};
+ let text='';
+ if(board.bossFieldId==='BF02'&&hpRatio<=.70&&!board.phaseFlags.p70){board.phaseFlags.p70=true;board.windDir=board.windDir==='front'?'back':'front';text='強風の向きが反転した。'}
+ else if(board.bossFieldId==='BF03'&&hpRatio<=.50&&!board.phaseFlags.p50){board.phaseFlags.p50=true;replace('TL00','TL04',2);text='浸水が進み、通常マス2つが浅瀬になった。'}
+ else if(board.bossFieldId==='BF04'&&hpRatio<=.50&&!board.phaseFlags.p50){board.phaseFlags.p50=true;replace('TL17','TL18',1);text='聖印の一つが呪刻へ反転した。'}
+ else if(board.bossFieldId==='BF06'&&hpRatio<=.50&&!board.phaseFlags.p50){board.phaseFlags.p50=true;replace('TL14','TL15',2);text='雪地2マスが氷面へ変化した。'}
+ return {changed,text}
+}
+function bossTerrainEvent(board,event){
+ if(!board?.bossFieldId)return {changed:[],text:''};const changed=[];
+ if(board.bossFieldId==='BF05'&&event==='device_break'){for(const c of board.cells?.enemy||[])if(c.baseTile==='TL19'){c.baseTile='TL00';changed.push({side:'enemy',index:c.index,from:'TL19',to:'TL00'});break}return {changed,text:changed.length?'敵側の機構床が停止した。':''}}
+ return {changed,text:''}
+}
 function migrateBattlefield(board,place,seed,battleType='normal',theme='森林'){
  if(!board||!board.cells?.enemy||!board.cells?.ally)return createBattlefield(place,seed,battleType,theme);
  const out=JSON.parse(JSON.stringify(board));out.version=2;out.windDir=out.windDir||null;
@@ -205,7 +230,7 @@ function generatePlace(theme,placeType,seed,battleType='normal'){
  return {placeTypeId:ps.id,primaryTerrain:primary,secondaryTerrains:secondary,conditionTerrain:condition,terrainTags,fieldTags,battleOverlay};
 }
 function addWeights(dst,src,m=1){for(const[k,v]of Object.entries(src||{}))dst[k]=(dst[k]||0)+Number(v||0)*m}
-function boardWeights(place){const w={};addWeights(w,TERRAIN[place.primaryTerrain]?.tiles,2);for(const t of place.secondaryTerrains||[])addWeights(w,TERRAIN[t]?.tiles,1);addWeights(w,placeSpec(place.placeType)?.tileAdd,1);if(!Object.keys(w).length)w.TL00=1;return w}
+function boardWeights(place){const w={};addWeights(w,TERRAIN[place.primaryTerrain]?.tiles,2);for(const t of place.secondaryTerrains||[])addWeights(w,TERRAIN[t]?.tiles,1);addWeights(w,placeSpec(place.placeType)?.tileAdd,1);if(place.conditionTerrain==='TR18'){w.TL03=(w.TL03||0)+1;w.TL04=(w.TL04||0)+1}if(place.conditionTerrain==='TR19'){w.TL06=(w.TL06||0)+1;w.TL18=(w.TL18||0)+1}if(!Object.keys(w).length)w.TL00=1;return w}
 function outerIndex(i){const r=Math.floor(i/3),c=i%3;return r===0||r===2||c===0||c===2}
 function hazardDir(i,side='enemy'){const r=Math.floor(i/3),c=i%3;if(r===0)return side==='ally'?'front':'back';if(r===2)return side==='ally'?'back':'front';return c===0?'left':'right'}
 function replaceSome(cells,ids,count,tile,rand,filter=()=>true){const ix=cells.map((_,i)=>i).filter(i=>ids.includes(cells[i].baseTile)&&filter(i));for(const i of ix.sort(()=>rand()-.5).slice(0,count))cells[i].baseTile=tile}
@@ -233,6 +258,11 @@ function applyFieldOverlay(cells,place,rand){
  if(place.fieldTags?.includes('機械'))options.push('TL19','TL19');
  for(const id of options.slice(0,2)){const i=Math.floor(rand()*cells.length);cells[i].baseTile=id}
 }
+function normalizeHazardEdges(cells,primary,side){
+ const repl=['TR06','TR07','TR08'].includes(primary)?'TL07':'TL00';
+ cells.forEach((c,i)=>{if(c.baseTile==='TL10'&&!outerIndex(i))c.baseTile=repl;if(c.baseTile==='TL10')c.hazardDir=hazardDir(i,side);else if(c.hazardDir)c.hazardDir=null});
+ return cells
+}
 function safeSide(cells,maxRisk3=0,minSafe=6){
  let risk3=cells.map((c,i)=>TILE[c.baseTile]?.risk>=3?i:-1).filter(i=>i>=0);
  for(const i of risk3.slice(maxRisk3))cells[i].baseTile='TL00';
@@ -255,7 +285,7 @@ function createBattlefield(place,seed,battleType='normal',theme='森林'){
  if(battleType==='boss')return fixedBoss(bossFieldFor(place,theme),seed);
  const rand=randomFrom(seed),weights=boardWeights(place),make=side=>Array.from({length:9},(_,i)=>({index:i,side,baseTile:weighted(weights,rand)||'TL00',overlay:null,hazardDir:null}));
  const all=[...make('enemy'),...make('ally')];enforceCoverage(all,place.primaryTerrain,rand);applyFieldOverlay(all,place,rand);
- const enemy=all.slice(0,9),ally=all.slice(9);for(const [name,side] of [['enemy',enemy],['ally',ally]])side.forEach((c,i)=>{if(c.baseTile==='TL10')c.hazardDir=hazardDir(i,name)});
+ const enemy=all.slice(0,9),ally=all.slice(9);normalizeHazardEdges(enemy,place.primaryTerrain,'enemy');normalizeHazardEdges(ally,place.primaryTerrain,'ally');
  if(place.primaryTerrain==='TR03'){for(const side of [enemy,ally]){let land=side.filter(c=>!['TL03','TL04'].includes(c.baseTile)).length;for(const c of side){if(land>=2)break;if(['TL03','TL04'].includes(c.baseTile)){c.baseTile='TL00';land++}}}}
  const templateId=battleType==='ambush'?'BT04':battleType==='elite'?'BT03':place.primaryTerrain&&['TR03','TR04','TR12'].includes(place.primaryTerrain)?'BT02':'BT01';
  safeSide(ally,battleType==='elite'||battleType==='ambush'?1:0,6);safeSide(enemy,1,battleType==='elite'||battleType==='ambush'?5:6);balanceSides(enemy,ally,battleType==='elite'||battleType==='ambush'?5:3);
@@ -267,6 +297,6 @@ function migrateNode(node,theme,runSeed,floor=1){
  let spec;if(node.primaryTerrain){spec={placeTypeId:node.placeTypeId||placeSpec(placeType).id,primaryTerrain:node.primaryTerrain,secondaryTerrains:node.secondaryTerrains||[],conditionTerrain:node.conditionTerrain||null,terrainTags:node.terrainTags||[node.primaryTerrain,...(node.secondaryTerrains||[]),node.conditionTerrain].filter(Boolean),fieldTags:node.fieldTags||[],battleOverlay:node.battleOverlay??false}}else spec=generatePlace(theme,placeType,seed,node.type);
  return Object.assign(node,{placeType,placeTypeId:spec.placeTypeId,primaryTerrain:spec.primaryTerrain,secondaryTerrains:spec.secondaryTerrains,conditionTerrain:spec.conditionTerrain,terrainTags:spec.terrainTags,fieldTags:spec.fieldTags,battleOverlay:spec.battleOverlay,encounterSeed:seed,terrain:terrainName(spec.primaryTerrain)});
 }
-const api={version:2,TILE,TERRAIN,THEME,PLACE,FIELD_BY_TERRAIN,BOSS,CONDITION,TILE_ICON,TACTICAL_VALUE,AI_VALUE,GROUND_NEGATIVE,hashSeed,randomFrom,weighted,terrainName,tileName,placeSpec,generatePlace,createBattlefield,migrateNode,migrateBattlefield,cellIndex,cellFor,tileEffect,tileIds,unitTileEffect,conditionEffect,clampTerrainHit,clampTerrainMultiplier,tileSummary,setTempTile,decayTempTiles,tacticalValue,sideValue,aiRole,aiTileValue,bestAiMove,isFlying,isGolem};
+const api={version:3,TILE,TERRAIN,THEME,PLACE,FIELD_BY_TERRAIN,BOSS,BOARD_TEMPLATE,CONDITION,TILE_ICON,TACTICAL_VALUE,AI_VALUE,GROUND_NEGATIVE,hashSeed,randomFrom,weighted,terrainName,tileName,placeSpec,generatePlace,createBattlefield,migrateNode,migrateBattlefield,cellIndex,cellFor,tileEffect,tileIds,unitTileEffect,conditionEffect,clampTerrainHit,clampTerrainMultiplier,tileSummary,setTempTile,decayTempTiles,tacticalValue,sideValue,aiRole,aiTileValue,bestAiMove,isFlying,isGolem,bossPhaseChange,bossTerrainEvent};
 if(typeof module!=='undefined')module.exports=api;root.RPG_TERRAIN=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
