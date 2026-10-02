@@ -371,7 +371,7 @@ function applyExploreContext(){
  terrain=TERRAINS.find(t=>t.name===ctx.terrain)||{...TERRAINS[0],name:String(ctx.terrain||'開所'),desc:'探索地点の地形'};
  const T=window.RPG_TERRAIN,place={placeType:ctx.placeType||'分岐路',primaryTerrain:ctx.primaryTerrain,secondaryTerrains:ctx.secondaryTerrains||[],conditionTerrain:ctx.conditionTerrain||null,terrainTags:ctx.terrainTags||[],fieldTags:ctx.fieldTags||[],battleOverlay:false};
  battlefield=T?.migrateBattlefield?.(ctx.battlefield,place,ctx.encounterSeed||T.hashSeed?.(ctx.battleId),ctx.fieldEffects?.enemyAmbush?'ambush':ctx.battleType,ctx.theme)||ctx.battlefield||null;
- if(ctx)ctx.battlefield=battlefield;
+ if(ctx)ctx.battlefield=battlefield;if(ctx&&(ctx.battleType==='elite'||ctx.fieldEffects?.enemyAmbush)&&!ctx.boss)optimizeEnemyStart(2);
  prepMode=!!ctx&&!ctx.fieldEffects?.enemyAmbush&&!ctx.result;
 }
 function terrainApi(){return window.RPG_TERRAIN||null}
@@ -390,7 +390,7 @@ function terrainHitBonus(a,t,act){
 function terrainDamageMod(a,t,act){
  const T=terrainApi();if(!T||!battlefield)return 0;const ae=unitTerrain(a).effect,te=unitTerrain(t).effect,cond=terrainCondition(),magic=act.kind==='spell'||['ARC','MND'].includes(act.stat),attrs=Array.isArray(act.attr)?act.attr:[act.attr];let v=0;
  v+=magic?(te.incomingMagic||0):(te.incomingPhysical||0);if(ae.highDamage)v+=ae.highDamage;
- if(attrs.includes('水'))v+=(ae.waterEffect||0)+(cond.waterDamage||0);if(attrs.includes('火'))v+=(te.incomingFire||0)+(cond.fireDamage||0);
+ if(attrs.includes('水'))v+=(ae.waterEffect||0)+(cond.waterDamage||0);if(attrs.includes('火'))v+=(te.incomingFire||0)+(cond.fireDamage||0);const mastery=act.unlocks?.[0]?.mastery,category=window.RPG_RULES?.masteries?.[mastery]?.category;if(category==='源泉')v+=ae.sourceEffect||0;
  return T.clampTerrainMultiplier(v)
 }
 function terrainHealMod(t){const T=terrainApi();if(!T||!battlefield)return 0;return T.clampTerrainMultiplier((unitTerrain(t).effect.healingReceived||0)+(terrainCondition().healing||0))}
@@ -428,16 +428,28 @@ async function terrainRoundEffect(u,token){
 }
 function forcedRows(u){return u.enemy?['front','mid','back']:['front','mid','rear']}
 async function terrainForceMove(u,direction,baseDistance,token){
- const T=terrainApi();if(!T||!battlefield||!u.alive)return false;const rows=forcedRows(u),side=u.enemy?'enemy':'ally',current=rows.indexOf(u.enemy?u.row:u.rank),cell=unitCell(u),e=T.unitTileEffect(battlefield,u).effect;let dist=Math.max(0,Number(baseDistance)||1)+(Number(e.forcedDelta)||0);
+ const T=terrainApi();if(!T||!battlefield||!u.alive)return false;const rows=forcedRows(u),side=u.enemy?'enemy':'ally',current=rows.indexOf(u.enemy?u.row:u.rank),start=T.unitTileEffect(battlefield,u).effect;let dist=Math.max(0,Number(baseDistance)||1)+(Number(start.forcedDelta)||0);
  if(battlefield.conditionTerrain==='TR17'&&battlefield.windDir){if(battlefield.windDir===direction)dist++;else if({front:'back',back:'front'}[battlefield.windDir]===direction)dist--}
  dist=Math.max(0,Math.min(2,dist));let pos=current,moved=false;
- for(let step=0;step<dist;step++){const next=pos+(direction==='back'?1:-1);if(next<0||next>=rows.length){if(cell?.baseTile==='TL10'&&cell.hazardDir===direction&&!T.isFlying?.(u)){const pct=EXPCTX?.boss?(T.TILE.TL10.bossEdgeDamage||.05):(T.TILE.TL10.edgeDamage||.15),n=Math.max(1,Math.floor(u.maxHp*pct));u.hp=Math.max(0,u.hp-n);await say(u.name+'は危険縁で '+n+' ダメージ。',token,'bad',{targetId:u.id,value:n});await defeated(u,token)}break}
+ for(let step=0;step<dist;step++){const cell=unitCell(u),next=pos+(direction==='back'?1:-1);if(next<0||next>=rows.length){if((cell?.baseTile==='TL10'||cell?.tempTile==='TL10')&&cell.hazardDir===direction&&!T.isFlying?.(u)){const pct=EXPCTX?.boss?(T.TILE.TL10.bossEdgeDamage||.05):(T.TILE.TL10.edgeDamage||.15),n=Math.max(1,Math.floor(u.maxHp*pct));u.hp=Math.max(0,u.hp-n);await say(u.name+'は危険縁で '+n+' ダメージ。',token,'bad',{targetId:u.id,value:n});await defeated(u,token)}break}
   const nr=rows[next],other=live(u.enemy?enemies:party).find(x=>x.id!==u.id&&(x.enemy?x.row:x.rank)===nr&&col(x)===col(u));if(other)break;
   if(u.enemy)u.row=nr;else{u.rank=nr;syncLegacyRow(u)}pos=next;moved=true
  }
  if(moved){render();persistBattlefield();await say(u.name+'が地形の影響を受けて'+(direction==='back'?'後退':'前進')+'。',token,'sys',{actorId:u.id})}
  return moved
 }
+function optimizeEnemyStart(maxMoves=2){
+ const T=terrainApi();if(!T||!battlefield)return;const occupied=new Map(live(enemies).map(u=>[u.row+':'+col(u),u]));let moved=0;
+ for(const u of live(enemies)){if(moved>=maxMoves)break;const cur=T.aiTileValue(battlefield,u,u.row,col(u));let best=null;
+  for(const row of ['front','mid','back'])for(let cc=1;cc<=3;cc++){const key=row+':'+cc,other=occupied.get(key);if(other&&other!==u)continue;const cell=T.cellFor(battlefield,'enemy',row,cc),risk=T.tileEffect(cell)?.risk||0;if(risk>=3&&!T.isFlying(u))continue;const value=T.aiTileValue(battlefield,u,row,cc);if(!best||value>best.value)best={row,col:cc,value}}
+  if(best&&best.value>cur){occupied.delete(u.row+':'+col(u));u.row=best.row;u.gridCol=best.col;occupied.set(best.row+':'+best.col,u);moved++}
+ }
+}
+async function maybeBossTerrainPhase(victim,token){
+ if(!EXPCTX?.boss||!victim?.enemy||!battlefield?.bossFieldId||victim.maxHp<=0)return;const T=terrainApi(),phase=T?.bossPhaseChange?.(battlefield,victim.hp/victim.maxHp);if(!phase?.text)return;
+ persistBattlefield();render();await say('地形変化：'+phase.text,token,'sys')
+}
+function triggerBossTerrainEvent(name){const x=terrainApi()?.bossTerrainEvent?.(battlefield,name);if(x?.text){persistBattlefield();render();log('地形変化：'+x.text,'sys')}return x}
 function enemyMovePlan(u,a){
  const T=terrainApi();if(!T||!battlefield)return null;const hasAttack=live(party).some(t=>canReach(u,t,a.range)),occ=new Map(live(enemies).filter(x=>x.id!==u.id).map(x=>[x.row+':'+col(x),x]));
  return T.bestAiMove?.(battlefield,u,occ,hasAttack)||null
@@ -751,6 +763,7 @@ async function execute(u,q,token){check(token);if(!u.alive)return;displayActorId
   if(!victim.enemy){displayActorId=victim.id;updatePortrait()}
   render();
   await say(victim.name+'に '+d.value+' ダメージ！'+(d.weak?'\n弱点を突いた！':'')+(d.crit?'\n会心の一撃！':''),token,u.enemy?'bad':d.weak?'ok':'',{targetId:victim.id,value:d.value,label:d.crit?'CRITICAL':d.weak?'WEAK':''});
+  await maybeBossTerrainPhase(victim,token);
   await applyStatuses(u,victim,a,token);
   if(victim.alive&&(a.push||a.pull))await terrainForceMove(victim,a.push?'back':'front',Math.max(Number(a.push)||0,Number(a.pull)||0,1),token);
   await defeated(victim,token);
@@ -786,7 +799,7 @@ if(typeof ResizeObserver==='function')new ResizeObserver(fitScene).observe($('en
 window.addEventListener('resize',fitScene);
 fresh(false);document.documentElement.dataset.ready='true';$('bootStatus')?.remove();$('engineStatus').classList.add('ready');$('engineStatus').title='JavaScript動作中 · UI v44';
 function startPreparedBattle(){if(!prepMode)return;prepMode=false;phase='command';idx=party.reduce((best,u,i)=>u.alive&&(best<0||speed(u,null)>speed(party[best],null))?i:best,-1);commandOpen=idx>=0;persistBattlefield();render();closeSheet()}
-window.RPGDemo={version:'52-terrain',focusCommandUI:(id)=>focusCommand(id),selectActorUI:(id)=>selectActor(id),moveActorUI:(rank,c)=>queueMove(rank,c),startPreparedBattle,showTileUI:setTerrainFocus,snapshot:()=>({round,phase,busy,over,commandOpen,prepMode,boss:!!EXPCTX?.boss,targetMode:targetMode?.key||null,active:current()?.id,battlefield:JSON.parse(JSON.stringify(battlefield||{})),party:party.map(u=>({id:u.id,hp:u.hp,sp:u.sp,mp:u.mp,row:u.row,rank:u.rank,col:col(u),slot:u.slot,queued:u.queued?.type||null,target:u.queued?.targetId,weapon:u.weapon.name})),enemies:enemies.map(u=>({id:u.id,hp:u.hp,row:u.row,slot:u.slot}))})};
+window.RPGDemo={version:'52-terrain',focusCommandUI:(id)=>focusCommand(id),selectActorUI:(id)=>selectActor(id),moveActorUI:(rank,c)=>queueMove(rank,c),startPreparedBattle,showTileUI:setTerrainFocus,triggerTerrainEvent:triggerBossTerrainEvent,snapshot:()=>({round,phase,busy,over,commandOpen,prepMode,boss:!!EXPCTX?.boss,targetMode:targetMode?.key||null,active:current()?.id,battlefield:JSON.parse(JSON.stringify(battlefield||{})),party:party.map(u=>({id:u.id,hp:u.hp,sp:u.sp,mp:u.mp,row:u.row,rank:u.rank,col:col(u),slot:u.slot,queued:u.queued?.type||null,target:u.queued?.targetId,weapon:u.weapon.name})),enemies:enemies.map(u=>({id:u.id,hp:u.hp,row:u.row,slot:u.slot}))})};
 if(window.__RPG_TEST__)window.__test={get units(){return{party,enemies}},fresh,render,defeated,animateSwap,resolve,autoRound,selectActor,toggleActor,closeCommands,openSheet,simpleCommand,getDraft,chooseSkill,attack,canReach,cancelTarget,setPace:i=>{paceIndex=i},runDeath:async u=>{displayActorId=null;busy=true;setBattle(true);await defeated(u,session);busy=false;setBattle(false);render()}};
 })();
 
