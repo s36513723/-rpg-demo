@@ -774,12 +774,12 @@ async function checkEnd(token){if(over)return true;if(!live(enemies).length){awa
 async function resolve(){if(!editable()||!live(party).every(u=>u.queued))return;cancelTarget();commandOpen=false;const token=session;displayActorId=null;activeTurnId=null;turnSequence=[];busy=true;phase='resolve';paused=false;skip=false;closeSheet();setBattle(true);render();try{
  for(const u of live(party)){
   if(u.queued.type!=='move'||u.status.legBind>0)continue;
-  const q=u.queued,oldRank=u.rank,oldCol=col(u);
+  const q=u.queued,oldRank=u.rank,oldCol=col(u),preview=movePreview(u,q.rank,q.gridCol);
   const other=party.find(x=>x.id!==u.id&&x.rank===q.rank&&col(x)===q.gridCol);
   if(other){other.rank=oldRank;other.gridCol=oldCol;syncLegacyRow(other)}
   u.rank=q.rank;u.gridCol=q.gridCol;syncLegacyRow(u);
   displayActorId=u.id;activeTurnId=u.id;render();
-  persistBattlefield();await say(u.name+'が '+RANK_LABEL[u.rank]+' '+u.gridCol+' へ移動。'+(movePreview(u,u.rank,u.gridCol)!=='地形変化なし'?' '+movePreview(u,u.rank,u.gridCol):''),token,'sys',{actorId:u.id});
+  persistBattlefield();await say(u.name+'が '+RANK_LABEL[u.rank]+' '+u.gridCol+' へ移動。'+(preview!=='地形変化なし'?' '+preview:''),token,'sys',{actorId:u.id});
  }
  for(const u of live(party).filter(u=>u.defending)){displayActorId=u.id;activeTurnId=u.id;render();await say(u.name+'は身を守っている。',token,'sys',{actorId:u.id})}
  const order=[...live(party).filter(u=>!['swap','move','defend'].includes(u.queued.type)).map(u=>({u,q:u.queued,s:speed(u,u.queued)})),...live(enemies).map(u=>({u,q:null,s:speed(u,null)}))].sort((a,b)=>b.s-a.s);
