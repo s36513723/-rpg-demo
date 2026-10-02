@@ -579,8 +579,7 @@ function render(){
  for(const u of party){const el=nodes.get(u.id);if(el){el.setAttribute('aria-expanded',String(commandOpen&&current()?.id===u.id&&!busy));el.setAttribute('aria-controls','commandPanel')}}
  for(const id of ['attack','skills','swap','defend','switch'])$(id).disabled=!editable();
  $('more').disabled=false;
- $('terrainEffect').textContent=terrain.name;
- $('terrainButton').title=terrain.desc;
+ const terrainTags=(EXPCTX?.terrainTags||battlefield?.terrainTags||[]).map(x=>terrainApi()?.terrainName?.(x)||x);$('terrainEffect').textContent=(EXPCTX?.place?EXPCTX.place+' · ':'')+(terrainTags.join(' / ')||terrain.name);$('terrainButton').title=terrainTags.join(' / ')+' · '+terrain.desc;
  $('pace').textContent=['1×','1.4×','2.5×'][paceIndex];
  $('pace').title=paceOptions[paceIndex].name;
  $('pace').setAttribute('aria-label','再生速度：'+paceOptions[paceIndex].name+'。押すと変更');
@@ -802,34 +801,39 @@ if(window.__RPG_TEST__)window.__test={get units(){return{party,enemies}},fresh,r
  document.addEventListener('click',e=>{const sheet=$('choiceSheet');if(sheet.open&&['skills','items'].includes(sheet.dataset.mode)&&!sheet.contains(e.target)&&!e.target.closest('#skills,#swap'))sheet.close()});
  const openPlanBook=e=>{e?.preventDefault();e?.stopImmediatePropagation();clearMoveMode();const sheet=$('choiceSheet'),list=$('sheetList');$('sheetKicker').textContent='';$('sheetTitle').textContent='BOOK';$('sheetHint').textContent='';list.replaceChildren();const help=document.createElement('button');help.type='button';help.className='menu-action';help.innerHTML='<span>操作の説明<small>戦闘操作・移動・対象選択</small></span>';help.addEventListener('click',()=>{list.innerHTML='<div class="plan-help"><b>基本操作</b><p>味方カードをタップして操作キャラを選択。同じカードをもう一度タップすると移動選択になり、空きマスで移動、別の味方カードで位置交換します。</p><p>ATTACK＝攻撃 / SKILL＝技 / ITEM＝道具・換装 / DEFEND＝防御。</p></div>'});const formation=document.createElement('button');formation.type='button';formation.className='menu-action';formation.innerHTML='<span>陣形<small>敵味方の3×3配置を確認・変更</small></span>';formation.addEventListener('click',()=>{sheet.close();$('formationButton').click()});const log=document.createElement('button');log.type='button';log.className='menu-action';log.innerHTML='<span>戦闘履歴<small>これまでの行動を確認</small></span>';log.addEventListener('click',()=>{sheet.close();$('history').open=true});const settings=document.createElement('button');settings.type='button';settings.className='menu-action';settings.innerHTML='<span>設定<small>戦闘表示・速度</small></span>';settings.addEventListener('click',()=>{list.replaceChildren();const speedButton=document.createElement('button');speedButton.type='button';speedButton.className='menu-action';speedButton.innerHTML='<span>戦闘速度<small>右下の速度と同じ設定</small></span>';speedButton.addEventListener('click',()=>{$('pace').click()});const display=document.createElement('button');display.type='button';display.className='menu-action';display.innerHTML='<span>コマンド表記<small>English</small></span>';display.disabled=true;list.append(speedButton,display)});list.append(help,formation,log,settings);if(!sheet.open)sheet.showModal()};$('historyButton')?.addEventListener('click',openPlanBook,true);$('more')?.addEventListener('click',openPlanBook,true);
 
- const formationSheet=$('formationSheet'),allyFormationBoard=$('allyFormationBoard'),enemyFormationBoard=$('enemyFormationBoard');
+ const formationSheet=$('formationSheet'),allyFormationBoard=$('allyFormationBoard'),enemyFormationBoard=$('enemyFormationBoard');let prepSelected=null;let prepStart=$('prepStart');if(!prepStart){prepStart=document.createElement('button');prepStart.id='prepStart';prepStart.type='button';prepStart.className='prep-start';prepStart.textContent='そのまま開始';formationSheet.querySelector('.formation-head')?.append(prepStart)}
  const DISPLAY_NAME={war:'ガルド',rog:'リゼ',run:'エルン',ran:'セナ',arc:'ミレア',mys:'ユナ',g1:'白銀騎士',g2:'聖域の番兵',g3:'月影の獣',g4:'白銀騎士B',g5:'聖域の番兵B',arch:'翼竜A',arch2:'翼竜B',arch3:'翼竜C',mage:'星詠み'};
  const ICON_SRC={war:'images/gald.svg',rog:'images/lize.svg',run:'images/ern.svg',ran:'images/sena.svg',arc:'images/mirea.svg',mys:'images/yuna.svg',g1:'images/enemy_guard.svg',g2:'images/enemy_guard.svg',g3:'images/enemy_guard.svg',g4:'images/enemy_guard.svg',g5:'images/enemy_guard.svg',arch:'images/enemy_archer.svg',arch2:'images/enemy_archer.svg',arch3:'images/enemy_archer.svg',mage:'images/enemy_mage.svg'};
- function drawFormationBoard(board,cells,enemy=false){
+ function drawFormationBoard(board,cells,enemy=false,prep=false){
   board.replaceChildren();
   for(const cell of cells){
-   const d=document.createElement('div');d.className='form-cell'+(cell.unit?'':' empty')+(enemy?' enemy':'')+(cell.current?' current':'');
+   const d=document.createElement('div');d.className='form-cell'+(cell.unit?'':' empty')+(enemy?' enemy':'')+(cell.current?' current':'')+(prep&&!enemy?' prep-cell':'');
+   if(cell.tile&&cell.tile!=='TL00'){d.dataset.tile=cell.tile;const mark=document.createElement('i');mark.className='form-terrain';mark.textContent=window.RPG_TERRAIN?.TILE_ICON?.[cell.tile]||'';mark.title=cell.tileName||'';d.append(mark)}
    if(cell.unit){
     const img=document.createElement('img');img.className='cell-face';img.src=ICON_SRC[cell.unit.id]||'';img.alt='';d.append(img);
     const n=document.createElement('span');n.className='cell-name';n.textContent=DISPLAY_NAME[cell.unit.id]||cell.unit.id;d.append(n);
    }
-   board.append(d);
+   if(prep&&!enemy){d.setAttribute('role','button');d.tabIndex=0;d.addEventListener('click',()=>{if(!prepSelected){if(!cell.unit)return;prepSelected=cell.unit.id;window.RPGDemo?.selectActorUI?.(cell.unit.id);refreshFormationBoard();return}window.RPGDemo?.selectActorUI?.(prepSelected);window.RPGDemo?.moveActorUI?.(cell.rank,cell.col);prepSelected=null;refreshFormationBoard()})}
+   d.title=[cell.tileName,cell.tileText].filter(Boolean).join(' · ');board.append(d);
   }
  }
  function refreshFormationBoard(){
-  const q=window.RPGDemo.snapshot(),ally=[],foe=[];
-  for(const rank of ['front','mid','rear'])for(let c=1;c<=3;c++){const u=q.party.find(x=>x.rank===rank&&x.col===c);ally.push({unit:u||null,current:!!u&&u.id===q.active})}
-  for(const rank of ['rear','mid','front'])for(let c=1;c<=3;c++){const u=q.enemies.find(x=>((x.row==='back'?'rear':x.row)===rank)&&Number(document.querySelector('.enemy-unit[data-unit-id="'+x.id+'"]')?.dataset.col)===c);foe.push({unit:u||null,current:false})}
-  drawFormationBoard(allyFormationBoard,ally,false);drawFormationBoard(enemyFormationBoard,foe,true);
+  const q=window.RPGDemo.snapshot(),ally=[],foe=[],T=window.RPG_TERRAIN;
+  for(const rank of ['front','mid','rear'])for(let c=1;c<=3;c++){const u=q.party.find(x=>x.rank===rank&&x.col===c),ix=T?.cellIndex?.('ally',rank,c),cell=q.battlefield?.cells?.ally?.[ix],id=cell?.tempTile||cell?.baseTile||'TL00';ally.push({unit:u||null,current:!!u&&u.id===q.active,rank,col:c,tile:id,tileName:T?.tileName?.(id),tileText:T?.tileSummary?.(cell,!!EXPCTX?.boss)})}
+  for(const rank of ['rear','mid','front'])for(let c=1;c<=3;c++){const er=rank==='rear'?'back':rank,u=q.enemies.find(x=>x.row===er&&Number(document.querySelector('.enemy-unit[data-unit-id="'+x.id+'"]')?.dataset.col)===c),ix=T?.cellIndex?.('enemy',er,c),cell=q.battlefield?.cells?.enemy?.[ix],id=cell?.tempTile||cell?.baseTile||'TL00';foe.push({unit:u||null,current:false,rank:er,col:c,tile:id,tileName:T?.tileName?.(id),tileText:T?.tileSummary?.(cell,!!EXPCTX?.boss)})}
+  drawFormationBoard(allyFormationBoard,ally,false,q.prepMode);drawFormationBoard(enemyFormationBoard,foe,true,false);
+  prepStart.hidden=!q.prepMode;const cap=formationSheet.querySelector('.formation-caption');if(cap)cap.textContent=q.prepMode?'味方を選択 → 移動先を選択。配置変更は無料です。':'戦闘中の移動は同じ縦列へ1 ACTION。';
  }
  window.updateFormationBoard=refreshFormationBoard;
- $('formationButton').addEventListener('click',()=>{const q=window.RPGDemo.snapshot();if(q.busy||q.over)return;refreshFormationBoard();formationSheet.showModal()});
+ $('formationButton').addEventListener('click',()=>{const q=window.RPGDemo.snapshot();if(q.busy||q.over)return;prepSelected=null;refreshFormationBoard();formationSheet.showModal()});prepStart.addEventListener('click',()=>{prepSelected=null;window.RPGDemo?.startPreparedBattle?.();formationSheet.close()});
  $('closeFormationSheet').addEventListener('click',()=>formationSheet.close());
  formationSheet.addEventListener('click',e=>{if(e.target===formationSheet)formationSheet.close()});
  let language='en';try{language=localStorage.getItem('rpg.command-language')==='ja'?'ja':'en'}catch(_){}
  const labels={attack:['ATTACK','ATTACK'],skills:['SKILL','SKILL'],defend:['DEFEND','DEFEND'],swap:['ITEM','ITEM'],switch:['EQUIP','EQUIP'],resolve:['EXECUTE','EXECUTE']};
  function localize(){for(const[id,pair]of Object.entries(labels)){const b=$(id).querySelector('b');if(b)b.textContent=pair[language==='en'?0:1]}}
  localize();$('more').addEventListener('click',()=>{const b=document.createElement('button');b.type='button';b.className='menu-action';b.textContent='コマンド：'+(language==='en'?'English':'日本語');b.addEventListener('click',()=>{language=language==='en'?'ja':'en';try{localStorage.setItem('rpg.command-language',language)}catch(_){}localize();b.textContent='コマンド：'+(language==='en'?'English':'日本語')});$('sheetList').append(b)});
+ // auto-open canonical battle preparation for non-ambush exploration battles.
+ setTimeout(()=>{const q=window.RPGDemo?.snapshot?.();if(q?.prepMode){prepSelected=null;refreshFormationBoard();if(!formationSheet.open)formationSheet.showModal()}},0);
  // An additional Escape dismisses the command overlay, without changing a reserved move.
  document.documentElement.dataset.presentation='plan36';
 }catch(error){console.error(error);const boot=$('bootStatus');if(boot){boot.style.display='block';boot.querySelector('p').textContent='読み込みに失敗しました。再読み込みしてください。';}window.__bootError=String(error)}
