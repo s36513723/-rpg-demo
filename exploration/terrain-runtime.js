@@ -207,7 +207,7 @@ function generatePlace(theme,placeType,seed,battleType='normal'){
 function addWeights(dst,src,m=1){for(const[k,v]of Object.entries(src||{}))dst[k]=(dst[k]||0)+Number(v||0)*m}
 function boardWeights(place){const w={};addWeights(w,TERRAIN[place.primaryTerrain]?.tiles,2);for(const t of place.secondaryTerrains||[])addWeights(w,TERRAIN[t]?.tiles,1);addWeights(w,placeSpec(place.placeType)?.tileAdd,1);if(!Object.keys(w).length)w.TL00=1;return w}
 function outerIndex(i){const r=Math.floor(i/3),c=i%3;return r===0||r===2||c===0||c===2}
-function hazardDir(i){const r=Math.floor(i/3),c=i%3;if(r===0)return'back';if(r===2)return'front';return c===0?'left':'right'}
+function hazardDir(i,side='enemy'){const r=Math.floor(i/3),c=i%3;if(r===0)return side==='ally'?'front':'back';if(r===2)return side==='ally'?'back':'front';return c===0?'left':'right'}
 function replaceSome(cells,ids,count,tile,rand,filter=()=>true){const ix=cells.map((_,i)=>i).filter(i=>ids.includes(cells[i].baseTile)&&filter(i));for(const i of ix.sort(()=>rand()-.5).slice(0,count))cells[i].baseTile=tile}
 function ensureAtLeast(cells,ids,min,tile,rand,filter=()=>true){let have=cells.filter(c=>ids.includes(c.baseTile)).length;if(have>=min)return;const candidates=cells.map((_,i)=>i).filter(i=>!ids.includes(cells[i].baseTile)&&filter(i)).sort(()=>rand()-.5);for(const i of candidates.slice(0,min-have))cells[i].baseTile=tile}
 function ensureAtMost(cells,ids,max,repl,rand){let ix=cells.map((c,i)=>ids.includes(c.baseTile)?i:-1).filter(i=>i>=0);if(ix.length<=max)return;for(const i of ix.sort(()=>rand()-.5).slice(max))cells[i].baseTile=repl}
@@ -240,7 +240,7 @@ function safeSide(cells,maxRisk3=0,minSafe=6){
  if(safe<minSafe){let need=minSafe-safe;for(const c of cells){if(need<=0)break;if((TILE[c.baseTile]?.risk||0)>1){c.baseTile='TL00';need--}}}
 }
 function fixedBoss(bfId,seed){
- const bf=BOSS[bfId]||BOSS.BF01,rand=randomFrom(seed),mk=(side,arr)=>arr.map((id,i)=>({index:i,side,baseTile:id,tempTile:null,tempRemaining:0,hazardDir:id==='TL10'?hazardDir(i):null}));
+ const bf=BOSS[bfId]||BOSS.BF01,rand=randomFrom(seed),mk=(side,arr)=>arr.map((id,i)=>({index:i,side,baseTile:id,tempTile:null,tempRemaining:0,hazardDir:id==='TL10'?hazardDir(i,side):null}));
  return {version:1,seed:Number(seed)>>>0,templateId:bf.template,bossFieldId:bfId,name:bf.name,primaryTerrain:bf.terrain[0],secondaryTerrains:bf.terrain.slice(1).filter(x=>!TERRAIN[x]?.condition),conditionTerrain:bf.terrain.find(x=>TERRAIN[x]?.condition)||null,terrainTags:bf.terrain.slice(),cells:{enemy:mk('enemy',bf.enemy),ally:mk('ally',bf.ally)},windDir:bf.terrain.includes('TR17')?(rand()<.5?'front':'back'):null,ambush:false,fixed:true}
 }
 function bossFieldFor(place,theme){
@@ -255,7 +255,7 @@ function createBattlefield(place,seed,battleType='normal',theme='森林'){
  if(battleType==='boss')return fixedBoss(bossFieldFor(place,theme),seed);
  const rand=randomFrom(seed),weights=boardWeights(place),make=side=>Array.from({length:9},(_,i)=>({index:i,side,baseTile:weighted(weights,rand)||'TL00',overlay:null,hazardDir:null}));
  const all=[...make('enemy'),...make('ally')];enforceCoverage(all,place.primaryTerrain,rand);applyFieldOverlay(all,place,rand);
- const enemy=all.slice(0,9),ally=all.slice(9);for(const side of [enemy,ally])side.forEach((c,i)=>{if(c.baseTile==='TL10')c.hazardDir=hazardDir(i)});
+ const enemy=all.slice(0,9),ally=all.slice(9);for(const [name,side] of [['enemy',enemy],['ally',ally]])side.forEach((c,i)=>{if(c.baseTile==='TL10')c.hazardDir=hazardDir(i,name)});
  if(place.primaryTerrain==='TR03'){for(const side of [enemy,ally]){let land=side.filter(c=>!['TL03','TL04'].includes(c.baseTile)).length;for(const c of side){if(land>=2)break;if(['TL03','TL04'].includes(c.baseTile)){c.baseTile='TL00';land++}}}}
  const templateId=battleType==='ambush'?'BT04':battleType==='elite'?'BT03':place.primaryTerrain&&['TR03','TR04','TR12'].includes(place.primaryTerrain)?'BT02':'BT01';
  safeSide(ally,battleType==='elite'||battleType==='ambush'?1:0,6);safeSide(enemy,1,battleType==='elite'||battleType==='ambush'?5:6);balanceSides(enemy,ally,battleType==='elite'||battleType==='ambush'?5:3);
