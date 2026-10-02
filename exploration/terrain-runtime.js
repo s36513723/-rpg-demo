@@ -199,7 +199,7 @@ function bossTerrainEvent(board,event){
 }
 function migrateBattlefield(board,place,seed,battleType='normal',theme='森林'){
  if(!board||!board.cells?.enemy||!board.cells?.ally)return createBattlefield(place,seed,battleType,theme);
- const out=JSON.parse(JSON.stringify(board));out.version=2;out.windDir=out.windDir||null;
+ const out=JSON.parse(JSON.stringify(board));out.version=3;out.windDir=out.windDir||null;
  for(const side of ['enemy','ally'])out.cells[side]=Array.from({length:9},(_,i)=>{const c=out.cells[side]?.[i]||{};return {index:i,side,baseTile:TILE[c.baseTile]?c.baseTile:'TL00',tempTile:TILE[c.tempTile]?.temp?c.tempTile:null,tempRemaining:Math.max(0,Number(c.tempRemaining)||0),hazardDir:c.hazardDir||null}});
  return out
 }
@@ -271,7 +271,7 @@ function safeSide(cells,maxRisk3=0,minSafe=6){
 }
 function fixedBoss(bfId,seed){
  const bf=BOSS[bfId]||BOSS.BF01,rand=randomFrom(seed),mk=(side,arr)=>arr.map((id,i)=>({index:i,side,baseTile:id,tempTile:null,tempRemaining:0,hazardDir:id==='TL10'?hazardDir(i,side):null}));
- return {version:1,seed:Number(seed)>>>0,templateId:bf.template,bossFieldId:bfId,name:bf.name,primaryTerrain:bf.terrain[0],secondaryTerrains:bf.terrain.slice(1).filter(x=>!TERRAIN[x]?.condition),conditionTerrain:bf.terrain.find(x=>TERRAIN[x]?.condition)||null,terrainTags:bf.terrain.slice(),cells:{enemy:mk('enemy',bf.enemy),ally:mk('ally',bf.ally)},windDir:bf.terrain.includes('TR17')?(rand()<.5?'front':'back'):null,ambush:false,fixed:true}
+ return {version:3,seed:Number(seed)>>>0,templateId:bf.template,bossFieldId:bfId,name:bf.name,primaryTerrain:bf.terrain[0],secondaryTerrains:bf.terrain.slice(1).filter(x=>!TERRAIN[x]?.condition),conditionTerrain:bf.terrain.find(x=>TERRAIN[x]?.condition)||null,terrainTags:bf.terrain.slice(),cells:{enemy:mk('enemy',bf.enemy),ally:mk('ally',bf.ally)},windDir:bf.terrain.includes('TR17')?(rand()<.5?'front':'back'):null,ambush:false,fixed:true}
 }
 function bossFieldFor(place,theme){
  if(place.primaryTerrain==='TR12')return'BF06';
@@ -281,7 +281,13 @@ function bossFieldFor(place,theme){
  if(place.fieldTags?.includes('呪い')||place.conditionTerrain==='TR16'||theme==='地下神殿')return'BF04';
  return'BF01'
 }
+function tutorialBoard(place,seed){
+ const mk=(side)=>Array.from({length:9},(_,i)=>({index:i,side,baseTile:'TL00',tempTile:null,tempRemaining:0,hazardDir:null}));
+ const enemy=mk('enemy'),ally=mk('ally');enemy[1].baseTile='TL09';ally[1].baseTile='TL09';
+ return {version:3,seed:Number(seed)>>>0,templateId:'BT08',bossFieldId:null,name:'地形訓練',primaryTerrain:place?.primaryTerrain||'TR10',secondaryTerrains:[],conditionTerrain:null,terrainTags:[place?.primaryTerrain||'TR10'],cells:{enemy,ally},windDir:null,ambush:false,fixed:true,tutorial:true}
+}
 function createBattlefield(place,seed,battleType='normal',theme='森林'){
+ if(battleType==='tutorial')return tutorialBoard(place,seed);
  if(battleType==='boss')return fixedBoss(bossFieldFor(place,theme),seed);
  const rand=randomFrom(seed),weights=boardWeights(place),make=side=>Array.from({length:9},(_,i)=>({index:i,side,baseTile:weighted(weights,rand)||'TL00',overlay:null,hazardDir:null}));
  const all=[...make('enemy'),...make('ally')];enforceCoverage(all,place.primaryTerrain,rand);applyFieldOverlay(all,place,rand);
@@ -289,7 +295,7 @@ function createBattlefield(place,seed,battleType='normal',theme='森林'){
  if(place.primaryTerrain==='TR03'){for(const side of [enemy,ally]){let land=side.filter(c=>!['TL03','TL04'].includes(c.baseTile)).length;for(const c of side){if(land>=2)break;if(['TL03','TL04'].includes(c.baseTile)){c.baseTile='TL00';land++}}}}
  const templateId=battleType==='ambush'?'BT04':battleType==='elite'?'BT03':place.primaryTerrain&&['TR03','TR04','TR12'].includes(place.primaryTerrain)?'BT02':'BT01';
  safeSide(ally,battleType==='elite'||battleType==='ambush'?1:0,6);safeSide(enemy,1,battleType==='elite'||battleType==='ambush'?5:6);balanceSides(enemy,ally,battleType==='elite'||battleType==='ambush'?5:3);
- return {version:1,seed:Number(seed)>>>0,templateId,bossFieldId:null,name:terrainName(place.primaryTerrain),primaryTerrain:place.primaryTerrain,secondaryTerrains:[...(place.secondaryTerrains||[])],conditionTerrain:place.conditionTerrain||null,terrainTags:[...(place.terrainTags||[])],cells:{enemy,ally},windDir:place.conditionTerrain==='TR17'?(rand()<.5?'front':'back'):null,ambush:battleType==='ambush',fixed:false}
+ return {version:3,seed:Number(seed)>>>0,templateId,bossFieldId:null,name:terrainName(place.primaryTerrain),primaryTerrain:place.primaryTerrain,secondaryTerrains:[...(place.secondaryTerrains||[])],conditionTerrain:place.conditionTerrain||null,terrainTags:[...(place.terrainTags||[])],cells:{enemy,ally},windDir:place.conditionTerrain==='TR17'?(rand()<.5?'front':'back'):null,ambush:battleType==='ambush',fixed:false}
 }
 function migrateNode(node,theme,runSeed,floor=1){
  const seed=node.encounterSeed??hashSeed(runSeed+':'+floor+':'+node.id);
@@ -297,6 +303,6 @@ function migrateNode(node,theme,runSeed,floor=1){
  let spec;if(node.primaryTerrain){spec={placeTypeId:node.placeTypeId||placeSpec(placeType).id,primaryTerrain:node.primaryTerrain,secondaryTerrains:node.secondaryTerrains||[],conditionTerrain:node.conditionTerrain||null,terrainTags:node.terrainTags||[node.primaryTerrain,...(node.secondaryTerrains||[]),node.conditionTerrain].filter(Boolean),fieldTags:node.fieldTags||[],battleOverlay:node.battleOverlay??false}}else spec=generatePlace(theme,placeType,seed,node.type);
  return Object.assign(node,{placeType,placeTypeId:spec.placeTypeId,primaryTerrain:spec.primaryTerrain,secondaryTerrains:spec.secondaryTerrains,conditionTerrain:spec.conditionTerrain,terrainTags:spec.terrainTags,fieldTags:spec.fieldTags,battleOverlay:spec.battleOverlay,encounterSeed:seed,terrain:terrainName(spec.primaryTerrain)});
 }
-const api={version:3,TILE,TERRAIN,THEME,PLACE,FIELD_BY_TERRAIN,BOSS,BOARD_TEMPLATE,CONDITION,TILE_ICON,TACTICAL_VALUE,AI_VALUE,GROUND_NEGATIVE,hashSeed,randomFrom,weighted,terrainName,tileName,placeSpec,generatePlace,createBattlefield,migrateNode,migrateBattlefield,cellIndex,cellFor,tileEffect,tileIds,unitTileEffect,conditionEffect,clampTerrainHit,clampTerrainMultiplier,tileSummary,setTempTile,decayTempTiles,tacticalValue,sideValue,aiRole,aiTileValue,bestAiMove,isFlying,isGolem,bossPhaseChange,bossTerrainEvent};
+const api={version:3,TILE,TERRAIN,THEME,PLACE,FIELD_BY_TERRAIN,BOSS,BOARD_TEMPLATE,CONDITION,TILE_ICON,TACTICAL_VALUE,AI_VALUE,GROUND_NEGATIVE,hashSeed,randomFrom,weighted,terrainName,tileName,placeSpec,generatePlace,createBattlefield,migrateNode,migrateBattlefield,cellIndex,cellFor,tileEffect,tileIds,unitTileEffect,conditionEffect,clampTerrainHit,clampTerrainMultiplier,tileSummary,setTempTile,decayTempTiles,tacticalValue,sideValue,aiRole,aiTileValue,bestAiMove,isFlying,isGolem,bossPhaseChange,bossTerrainEvent,tutorialBoard};
 if(typeof module!=='undefined')module.exports=api;root.RPG_TERRAIN=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
