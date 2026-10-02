@@ -38,9 +38,7 @@ function buildBattleGrid(container,side){
  });
  for(let i=0;i<9;i++){
   const c=document.createElement('span');
-  c.className='stage-cell';
-  c.dataset.index=String(i);
-  container.append(c);
+  c.className='stage-cell';c.dataset.index=String(i);c.dataset.side=side;c.setAttribute('role','button');c.tabIndex=-1;const mark=document.createElement('i');mark.className='terrain-mark';c.append(mark);c.addEventListener('click',e=>{if(c.dataset.targetId)return;e.stopPropagation();window.RPGDemo?.showTileUI?.(side,i)});container.append(c);
  }
 }
 function stageCell(side,row,col){
@@ -52,7 +50,9 @@ function stageCell(side,row,col){
 function paintBattleGrid(party,enemies,options){
  buildBattleGrid(enemyGrid,'enemy');
  buildBattleGrid(allyGrid,'ally');
- for(const g of [enemyGrid,allyGrid])g?.querySelectorAll('.stage-cell').forEach(x=>x.classList.remove('occupied','active-cell'));
+ for(const g of [enemyGrid,allyGrid])g?.querySelectorAll('.stage-cell').forEach(x=>{x.classList.remove('occupied','active-cell','terrain-active','terrain-temp','terrain-risk');x.removeAttribute('data-tile');x.removeAttribute('data-temp');const m=x.querySelector('.terrain-mark');if(m)m.textContent=''});
+ const T=window.RPG_TERRAIN,bf=options.battlefield;
+ for(const [side,grid] of [['enemy',enemyGrid],['ally',allyGrid]])for(const cell of bf?.cells?.[side]||[]){const el=grid?.querySelectorAll('.stage-cell')[cell.index];if(!el)continue;const id=cell.tempTile||cell.baseTile||'TL00',tile=T?.TILE?.[id];el.dataset.tile=cell.baseTile||'TL00';if(cell.tempTile)el.dataset.temp=cell.tempTile;el.classList.toggle('terrain-active',id!=='TL00');el.classList.toggle('terrain-temp',!!cell.tempTile);el.classList.toggle('terrain-risk',(tile?.risk||0)>=2);const mark=el.querySelector('.terrain-mark');if(mark)mark.textContent=T?.TILE_ICON?.[id]||'';const label=[T?.tileName?.(cell.baseTile),cell.tempTile?T?.tileName?.(cell.tempTile):null].filter(Boolean).join('＋');el.title=label+(T?.tileSummary?(' · '+T.tileSummary(cell,!!options.boss)):'');el.setAttribute('aria-label',el.title||'通常マス');el.tabIndex=id==='TL00'?-1:0}
  for(const u of enemies){
   if(!u.alive||u.hp<=0)continue;
   enemyGrid?.querySelectorAll('.stage-cell')[stageCell('enemy',u.row,u.gridCol||((u.slot-1)%3+1))]?.classList.add('occupied');
@@ -560,7 +560,7 @@ function updatePortrait(){
 function render(){
  if(editable()&&phase==='command'&&!busy){const cur=current();if(!cur?.alive||cur.queued){const auto=fastestPendingIndex();if(auto>=0){idx=auto;commandOpen=true}}}
  renderCards();renderOrder();updatePortrait();
- if(window.SanctuaryView)window.SanctuaryView.sync(party,enemies,{busy,over,commandOpen,displayActorId,activeTurnId,actorId:current()?.id,battlefield,prepMode});
+ if(window.SanctuaryView)window.SanctuaryView.sync(party,enemies,{busy,over,commandOpen,displayActorId,activeTurnId,actorId:current()?.id,battlefield,prepMode,boss:!!EXPCTX?.boss});
  const readyOnly=editable()&&!commandOpen&&phase==='ready';
  $('commandPanel').classList.toggle('command-open',editable()&&commandOpen);
  $('commandPanel').classList.toggle('command-closed',editable()&&!commandOpen&&!readyOnly);
