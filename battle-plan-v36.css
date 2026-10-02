@@ -1384,3 +1384,19 @@ html,body{height:100%;overflow:hidden}
 #game .enemy-unit .target-pointer{display:none!important}
 #game .enemy-unit.target-valid .enemy-visual,#game .enemy-unit.target-selected .enemy-visual,#game .enemy-unit.target-confirm .enemy-visual{filter:none!important}
 #game .enemy-unit:focus,#game .enemy-unit:focus-visible,#game .enemy-unit:active{outline:none!important;box-shadow:none!important}
+
+/* Terrain battlefield overlay v1 */
+#game .stage-cell{pointer-events:auto!important}
+#game .stage-cell.terrain-active{background:linear-gradient(135deg,rgba(239,236,221,.035),rgba(188,196,220,.10))!important}
+#game .stage-cell.terrain-risk{box-shadow:inset 0 0 0 1px rgba(225,176,126,.28)!important}
+#game .stage-cell.terrain-temp{box-shadow:inset 0 0 0 1px rgba(205,190,235,.42),0 0 7px rgba(173,150,218,.15)!important}
+#game .terrain-mark{position:absolute;z-index:3;right:4px;top:3px;display:block;min-width:12px;height:12px;font:10px/12px Georgia,serif;text-align:center;opacity:.78;text-shadow:0 1px 3px #10151f;pointer-events:none}
+#game .stage-cell[data-tile="TL10"] .terrain-mark{font-weight:700}
+#game .formation-sheet .form-cell{position:relative}
+#game .formation-sheet .form-terrain{position:absolute;right:3px;top:2px;font:10px/1 Georgia,serif;opacity:.78;pointer-events:none}
+#game .formation-sheet .prep-cell{cursor:pointer}
+#game .formation-sheet .prep-cell:focus-visible{outline:1px solid rgba(236,225,197,.8);outline-offset:-2px}
+#game .prep-start{min-height:34px;padding:5px 11px;border:1px solid rgba(227,215,190,.56);background:rgba(31,38,53,.56);color:#f5eee0;font:11px/1.2 var(--serif);letter-spacing:.05em}
+#game .terrain-detail{white-space:pre-line}
+#game .terrain-detail.selected-tile{border-left:2px solid rgba(222,205,169,.66);padding-left:9px}
+#game .terrain-detail.condition-terrain{opacity:.86}
