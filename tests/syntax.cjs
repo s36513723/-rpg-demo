@@ -1,8 +1,8 @@
 'use strict';
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),cp=require('node:child_process');
 const hubFiles=fs.readdirSync('exploration').filter(f=>f.endsWith('.js')).map(f=>'exploration/'+f);
-for(const file of ['battle-v29.js','skill-catalog-315.js','rpg-rules.js','sanctuary-v92.js','tests/battle-regression.js','tests/hub-regression.js',...hubFiles])cp.execFileSync(process.execPath,['--check',file]);
-for(const file of ['index.html','exploration/index.html']){
+for(const file of ['battle-v29.js','battle-plan-v36.js','skill-catalog-315.js','skill-catalog-437.js','rpg-rules.js','sanctuary-v92.js','tests/battle-regression.js','tests/hub-regression.js',...hubFiles])cp.execFileSync(process.execPath,['--check',file]);
+for(const file of ['index.html','battle-v44.html','exploration/index.html']){
  const html=fs.readFileSync(file,'utf8');
  for(const [i,m]of [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].entries())new vm.Script(m[1],{filename:file+':script'+i});
 }
@@ -62,6 +62,69 @@ assert(hubSource.includes("awardExperience(100,'章報告'"),'story EXP reward')
 assert(!/grant\(\{[^\n}]*stat:/.test(exploreSource),'exploration no longer grants Stat Pt directly');
 assert(!/grant\(\{[^\n}]*stat:/.test(hubSource),'hub no longer grants Stat Pt directly');
 console.log('Syntax, local assets, single canonical 437 SkillDB + derived 25 Field Skills and 31 masteries: PASS');
+
+const T=require('../exploration/terrain-runtime.js');
+assert.equal(Object.keys(T.TERRAIN).length,19,'TerrainDB must contain 19 terrain tags');
+assert.equal(Object.keys(T.TILE).length,26,'TileDB must contain 26 tile traits');
+assert.equal(Object.keys(T.BOARD_TEMPLATE).length,8,'BoardTemplateDB must contain 8 templates');
+assert.equal(Object.keys(T.BOSS).length,6,'BossBattlefield must contain 6 fixed examples');
+const baseTerrains=Object.keys(T.TERRAIN).filter(id=>!T.TERRAIN[id].condition);
+assert.equal(baseTerrains.length,15);
+const isOuter=i=>{const r=Math.floor(i/3),cc=i%3;return r===0||r===2||cc===0||cc===2};
+const stats={};
+for(const tr of baseTerrains){
+ let maxDiff=0,minSafe=9,maxAllyRisk3=0,maxEnemyRisk3=0,hazardErrors=0;
+ for(let seed=1;seed<=1000;seed++){
+  const place={placeType:'分岐路',primaryTerrain:tr,secondaryTerrains:[],conditionTerrain:null,terrainTags:[tr],fieldTags:[],battleOverlay:false};
+  const b=T.createBattlefield(place,seed,'normal','森林'),same=T.createBattlefield(place,seed,'normal','森林');
+  assert.equal(JSON.stringify(b),JSON.stringify(same),tr+' seeded board must be deterministic');
+  assert.equal(b.cells.enemy.length+b.cells.ally.length,18,tr+' board size');
+  for(const side of ['enemy','ally'])for(const cell of b.cells[side]){
+   assert(T.TILE[cell.baseTile],tr+' unknown tile '+cell.baseTile);
+   if(cell.baseTile==='TL10'&&(!isOuter(cell.index)||!cell.hazardDir))hazardErrors++;
+  }
+  const safe=b.cells.ally.filter(x=>(T.TILE[x.baseTile]?.risk||0)<=1).length;
+  const ar=b.cells.ally.filter(x=>(T.TILE[x.baseTile]?.risk||0)>=3).length;
+  const er=b.cells.enemy.filter(x=>(T.TILE[x.baseTile]?.risk||0)>=3).length;
+  const diff=Math.abs(T.sideValue(b.cells.enemy)-T.sideValue(b.cells.ally));
+  minSafe=Math.min(minSafe,safe);maxAllyRisk3=Math.max(maxAllyRisk3,ar);maxEnemyRisk3=Math.max(maxEnemyRisk3,er);maxDiff=Math.max(maxDiff,diff);
+  assert(safe>=6,tr+' ally safe cells '+safe);assert(ar===0,tr+' ally risk3 '+ar);assert(er<=1,tr+' enemy risk3 '+er);assert(diff<=3,tr+' tactical value diff '+diff);
+ }
+ assert.equal(hazardErrors,0,tr+' hazard edge placement');stats[tr]={maxDiff,minSafe,maxAllyRisk3,maxEnemyRisk3};
+}
+for(const cond of ['TR16','TR17','TR18','TR19']){
+ const place={placeType:'分岐路',primaryTerrain:'TR10',secondaryTerrains:[],conditionTerrain:cond,terrainTags:['TR10',cond],fieldTags:[],battleOverlay:false};
+ const b=T.createBattlefield(place,123,'normal','森林');assert.equal(b.conditionTerrain,cond);assert(T.CONDITION[cond]);
+}
+for(const type of ['elite','ambush','tutorial']){
+ const place={placeType:'分岐路',primaryTerrain:'TR10',secondaryTerrains:[],conditionTerrain:null,terrainTags:['TR10'],fieldTags:[],battleOverlay:false};
+ const b=T.createBattlefield(place,777,type,'森林');assert.equal(b.templateId,{elite:'BT03',ambush:'BT04',tutorial:'BT08'}[type]);assert.equal(b.cells.enemy.length+b.cells.ally.length,18);
+}
+for(const [id,bf] of Object.entries(T.BOSS)){
+ const b=T.createBattlefield({primaryTerrain:bf.terrain[0],terrainTags:bf.terrain,fieldTags:id==='BF05'?['機械']:[],placeType:'深部・主室'},100+Number(id.slice(2)),'boss',id==='BF02'?'山岳':id==='BF06'?'山岳':'地下神殿');
+ assert.equal(b.cells.enemy.length+b.cells.ally.length,18);assert(T.BOARD_TEMPLATE[b.templateId],id+' template');
+}
+{
+ const b=T.tutorialBoard({primaryTerrain:'TR10'},9),base=b.cells.ally[0].baseTile;assert(T.setTempTile(b,'ally',0,'TL20',2));assert.equal(b.cells.ally[0].baseTile,base);assert.equal(b.cells.ally[0].tempTile,'TL20');
+ assert(T.setTempTile(b,'ally',0,'TL21',2));assert.equal(b.cells.ally[0].tempTile,'TL21');T.decayTempTiles(b);assert.equal(b.cells.ally[0].tempRemaining,1);T.decayTempTiles(b);assert.equal(b.cells.ally[0].tempTile,null);
+}
+{
+ const old={cells:{enemy:Array.from({length:9},(_,i)=>({index:i,side:'enemy',baseTile:'TL00'})),ally:Array.from({length:9},(_,i)=>({index:i,side:'ally',baseTile:'TL00'}))}};
+ const m=T.migrateBattlefield(old,{placeType:'分岐路',primaryTerrain:'TR10',terrainTags:['TR10'],fieldTags:[]},11);assert.equal(m.version,3);assert(m.cells.ally.every(x=>'tempTile'in x&&'tempRemaining'in x));
+}
+{
+ const b=T.tutorialBoard({primaryTerrain:'TR10'},5);b.cells.enemy[T.cellIndex('enemy','front',1)].baseTile='TL00';b.cells.enemy[T.cellIndex('enemy','mid',1)].baseTile='TL09';
+ const u={id:'x',enemy:true,row:'front',gridCol:1,style:'弓兵',ai:'archer'};const mv=T.bestAiMove(b,u,new Map(),true);assert(mv&&mv.row==='mid'&&mv.delta>=20,'ranged AI should move for +20 high-ground gain');
+ b.cells.enemy[T.cellIndex('enemy','front',1)].baseTile='TL06';const fly={...u,style:'飛行',terrainImmunity:'ignore_ground_negative'},golem={...u,style:'ゴーレム',terrainImmunity:'ignore_poison_terrain'};
+ assert(!('endRoundHp'in T.unitTileEffect(b,fly).effect),'flying ignores ground negative');assert(!('endRoundHp'in T.unitTileEffect(b,golem).effect),'golem ignores poison swamp damage');
+}
+{
+ const b=T.fixedBoss?T.fixedBoss('BF02',1):T.createBattlefield({primaryTerrain:'TR07',terrainTags:['TR07','TR08','TR17'],fieldTags:[],placeType:'深部・主室'},1,'boss','山岳');
+ const before=b.windDir,x=T.bossPhaseChange(b,.69);assert(x.text&&b.windDir!==before,'BF02 wind phase');
+ const b3={...T.createBattlefield({primaryTerrain:'TR03',terrainTags:['TR03','TR13'],fieldTags:[],placeType:'深部・主室'},2,'boss','海上・船'),bossFieldId:'BF03',phaseFlags:{}};const p=T.bossPhaseChange(b3,.49);assert(p.changed.length<=4);
+}
+console.log('Terrain 19 / Tile 26 / 1000-board generation / templates / AI / temp/save migration: PASS',JSON.stringify(stats));
+
 
 const caster=[10,10,60,20],old=R.legacyDerived(caster),max=R.derived(caster);
 assert.equal(R.resourceVersion,2);assert.equal(max.sp,100);assert.equal(R.capacity(caster,[]),12);assert(!('mp' in max),'current derived vitals must not expose MP');
