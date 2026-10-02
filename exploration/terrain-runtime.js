@@ -88,6 +88,96 @@ BF05:{name:'機巧中枢',template:'BT07',terrain:['TR13','TR14'],enemy:['TL19',
 BF06:{name:'氷雪稜線',template:'BT07',terrain:['TR12','TR07','TR17'],enemy:['TL09','TL15','TL14','TL07','TL14','TL09','TL14','TL15','TL07'],ally:['TL07','TL14','TL15','TL09','TL14','TL07','TL15','TL09','TL14']}
 };
 const EXCLUDE=[['TR09','TR10'],['TR04','TR11'],['TR15','TR01'],['TR15','TR04'],['TR15','TR11'],['TR15','TR12']];
+const CONDITION={
+TR16:{name:'暗所',rangedHit:-10},
+TR17:{name:'強風',physicalRangedHit:-10,forceWithWind:1,forceAgainstWind:-1},
+TR18:{name:'豪雨',physicalRangedHit:-5,fireDamage:-.10,waterDamage:.10},
+TR19:{name:'瘴気',healing:-.15,statusResist:-10,bindResist:-10}
+};
+const TILE_ICON={TL01:'♣',TL02:'♧',TL03:'≈',TL04:'≋',TL05:'●',TL06:'☣',TL07:'◆',TL08:'▥',TL09:'▲',TL10:'!',TL11:'▧',TL12:'⋰',TL13:'⌁',TL14:'❄',TL15:'◇',TL16:'✧',TL17:'✦',TL18:'☾',TL19:'⚙',TL20:'❄',TL21:'♨',TL22:'≋',TL23:'◌',TL24:'◍',TL25:'▰'};
+const TACTICAL_VALUE={TL00:0,TL01:1,TL02:1,TL03:0,TL04:0,TL05:-2,TL06:-3,TL07:1,TL08:2,TL09:2,TL10:-3,TL11:0,TL12:-1,TL13:-3,TL14:-1,TL15:-2,TL16:1,TL17:2,TL18:0,TL19:2,TL20:-2,TL21:-3,TL22:-1,TL23:-1,TL24:1,TL25:2};
+const AI_VALUE={
+ melee:{TL07:10,TL11:5,TL05:-15,TL13:-25,TL10:-15},
+ ranged:{TL09:25,TL08:20,TL02:10,TL05:-10,TL10:-10},
+ tank:{TL07:20,TL11:15,TL08:10,TL09:5},
+ caster:{TL16:25,TL08:10},
+ support:{TL17:25,TL08:15,TL16:10}
+};
+const GROUND_NEGATIVE=new Set(['TL03','TL04','TL05','TL06','TL12','TL13','TL14','TL15','TL20']);
+function cellIndex(side,row,col){
+ const r=side==='enemy'?({back:0,rear:0,mid:1,front:2}[row]??0):({front:0,mid:1,rear:2,back:2}[row]??0);
+ return r*3+(Math.max(1,Math.min(3,Number(col)||1))-1)
+}
+function cellFor(board,side,row,col){return board?.cells?.[side]?.[cellIndex(side,row,col)]||null}
+function mergeEffect(a,b){
+ const out={...a};for(const [k,v]of Object.entries(b||{})){if(['name','temp','risk'].includes(k))continue;if(typeof v==='number'&&typeof out[k]==='number')out[k]=Math.abs(v)>Math.abs(out[k])?v:out[k];else if(out[k]===undefined)out[k]=v}
+ out.risk=Math.max(Number(a?.risk)||0,Number(b?.risk)||0);return out
+}
+function tileEffect(cell){
+ const base=TILE[cell?.baseTile]||TILE.TL00,temp=TILE[cell?.tempTile];
+ return temp?mergeEffect(base,temp):{...base}
+}
+function tileIds(cell){return [cell?.baseTile||'TL00',cell?.tempTile].filter(Boolean)}
+function isFlying(unit){return /飛行|翼|鳥/.test(String(unit?.style||''))||unit?.terrainImmunity==='ignore_ground_negative'}
+function isGolem(unit){return /ゴーレム|機械/.test(String(unit?.style||''))||unit?.terrainImmunity==='ignore_poison_terrain'}
+function unitTileEffect(board,unit){
+ const side=unit?.enemy?'enemy':'ally',row=unit?.enemy?unit.row:(unit.rank||unit.row),cell=cellFor(board,side,row,unit?.gridCol||1),e=tileEffect(cell);
+ if(isFlying(unit)){for(const k of ['speed','evasion','moveMax','endRoundHp','forcedDelta'])if(GROUND_NEGATIVE.has(cell?.tempTile)||GROUND_NEGATIVE.has(cell?.baseTile))delete e[k]}
+ if(isGolem(unit)&&tileIds(cell).includes('TL06'))delete e.endRoundHp;
+ return {cell,effect:e}
+}
+function conditionEffect(board){return CONDITION[board?.conditionTerrain]||{}}
+function clampTerrainHit(n){return Math.max(-30,Math.min(30,Number(n)||0))}
+function clampTerrainMultiplier(n){return Math.max(-.25,Math.min(.25,Number(n)||0))}
+function tileSummary(cell,boss=false){
+ const ids=tileIds(cell),parts=[];
+ for(const id of ids){const t=TILE[id];if(!t||id==='TL00')continue;const e=t;
+  if(e.speed)parts.push('速度 '+Math.round(e.speed*100)+'%');if(e.evasion)parts.push('回避 '+e.evasion+'pt');
+  if(e.incomingPhysical)parts.push('物理被ダメ '+Math.round(e.incomingPhysical*100)+'%');if(e.incomingRangedHit)parts.push('遠距離命中 '+e.incomingRangedHit+'pt');
+  if(e.highAccuracy)parts.push('高所命中 +'+e.highAccuracy+'pt');if(e.highDamage)parts.push('高所威力 +'+Math.round(e.highDamage*100)+'%');
+  if(e.endRoundHp)parts.push('R終了 HP-'+Math.round(e.endRoundHp*100)+'%');if(e.endRoundFire)parts.push('R終了 火'+Math.round(e.endRoundFire*100)+'%');
+  if(id==='TL10')parts.push('危険縁 '+Math.round((boss?e.bossEdgeDamage:e.edgeDamage)*100)+'%');
+ }
+ if(cell?.tempTile&&cell?.tempRemaining>0)parts.push('残り'+cell.tempRemaining+'R');
+ return parts.slice(0,4).join(' / ')||'特殊効果なし'
+}
+function setTempTile(board,side,index,id,remaining){
+ if(!board?.cells?.[side]?.[index]||!TILE[id]?.temp)return false;
+ const c=board.cells[side][index];c.tempTile=id;c.tempRemaining=Math.max(1,Number(remaining)||TILE[id].temp||1);return true
+}
+function decayTempTiles(board){
+ for(const side of ['enemy','ally'])for(const c of board?.cells?.[side]||[]){if(c.tempTile){c.tempRemaining=Math.max(0,(Number(c.tempRemaining)||TILE[c.tempTile]?.temp||1)-1);if(!c.tempRemaining){c.tempTile=null;c.tempRemaining=0}}}
+ return board
+}
+function tacticalValue(c){return TACTICAL_VALUE[c?.tempTile||c?.baseTile]||0}
+function sideValue(cells){return (cells||[]).reduce((n,c)=>n+tacticalValue(c),0)}
+function balanceSides(enemy,ally,maxDiff=3){
+ let guard=30;while(guard--&&Math.abs(sideValue(enemy)-sideValue(ally))>maxDiff){const high=sideValue(enemy)>sideValue(ally)?enemy:ally,low=high===enemy?ally:enemy;let a=high.map((c,i)=>[i,tacticalValue(c)]).sort((x,y)=>y[1]-x[1])[0],b=low.map((c,i)=>[i,tacticalValue(c)]).sort((x,y)=>x[1]-y[1])[0];if(a?.[1]>0)high[a[0]].baseTile='TL00';else if(b?.[1]<0)low[b[0]].baseTile='TL00';else break}
+}
+function aiRole(unit){
+ if(unit?.ai==='archer'||/弓|狙撃|飛行/.test(String(unit?.style||'')))return'ranged';
+ if(unit?.ai==='mage'||/魔術|術師|神官|精霊|死霊/.test(String(unit?.style||'')))return'caster';
+ if(/重装|盾|守護/.test(String(unit?.style||'')))return'tank';
+ if(/回復|支援/.test(String(unit?.style||'')))return'support';
+ return'melee'
+}
+function aiTileValue(board,unit,row,col){
+ const c=cellFor(board,'enemy',row,col),id=c?.tempTile||c?.baseTile||'TL00',role=aiRole(unit);let v=AI_VALUE[role]?.[id]||0;
+ if(role==='support'&&(TILE[id]?.risk||0)>=2)v-=25;
+ if(isFlying(unit)&&GROUND_NEGATIVE.has(id))v=Math.max(v,0);
+ return v
+}
+function bestAiMove(board,unit,occupied,hasAttack=true){
+ const rows=['front','mid','back'],current=aiTileValue(board,unit,unit.row,unit.gridCol),threshold=hasAttack?20:5,cands=[];
+ for(const row of rows){if(row===unit.row)continue;const key=row+':'+unit.gridCol,other=occupied?.get(key);const val=aiTileValue(board,unit,row,unit.gridCol);cands.push({row,col:unit.gridCol,swapId:other?.id||null,value:val,delta:val-current})}
+ cands.sort((a,b)=>b.delta-a.delta);return cands[0]?.delta>=threshold?cands[0]:null
+}
+function migrateBattlefield(board,place,seed,battleType='normal',theme='森林'){
+ if(!board||!board.cells?.enemy||!board.cells?.ally)return createBattlefield(place,seed,battleType,theme);
+ const out=JSON.parse(JSON.stringify(board));out.version=2;out.windDir=out.windDir||null;
+ for(const side of ['enemy','ally'])out.cells[side]=Array.from({length:9},(_,i)=>{const c=out.cells[side]?.[i]||{};return {index:i,side,baseTile:TILE[c.baseTile]?c.baseTile:'TL00',tempTile:TILE[c.tempTile]?.temp?c.tempTile:null,tempRemaining:Math.max(0,Number(c.tempRemaining)||0),hazardDir:c.hazardDir||null}});
+ return out
+}
 function hashSeed(v){let h=2166136261>>>0;for(const ch of String(v)){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
 function randomFrom(seed){let s=(Number(seed)>>>0)||1;return()=>{s+=0x6D2B79F5;let t=s;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
 function weighted(entries,rand){const a=Array.isArray(entries)?entries:Object.entries(entries||{}),sum=a.reduce((n,x)=>n+Math.max(0,Number(x[1])||0),0);if(!sum)return a[0]?.[0]||null;let p=rand()*sum;for(const [k,w] of a){p-=Math.max(0,Number(w)||0);if(p<=0)return k}return a[a.length-1]?.[0]||null}
@@ -150,8 +240,8 @@ function safeSide(cells,maxRisk3=0,minSafe=6){
  if(safe<minSafe){let need=minSafe-safe;for(const c of cells){if(need<=0)break;if((TILE[c.baseTile]?.risk||0)>1){c.baseTile='TL00';need--}}}
 }
 function fixedBoss(bfId,seed){
- const bf=BOSS[bfId]||BOSS.BF01,rand=randomFrom(seed),mk=(side,arr)=>arr.map((id,i)=>({index:i,side,baseTile:id,overlay:null,hazardDir:id==='TL10'?hazardDir(i):null}));
- return {version:1,seed:Number(seed)>>>0,templateId:bf.template,bossFieldId:bfId,name:bf.name,primaryTerrain:bf.terrain[0],secondaryTerrains:bf.terrain.slice(1).filter(x=>!TERRAIN[x]?.condition),conditionTerrain:bf.terrain.find(x=>TERRAIN[x]?.condition)||null,terrainTags:bf.terrain.slice(),cells:{enemy:mk('enemy',bf.enemy),ally:mk('ally',bf.ally)},windDir:bf.terrain.includes('TR17')?(rand()<.5?'left':'right'):null,ambush:false,fixed:true}
+ const bf=BOSS[bfId]||BOSS.BF01,rand=randomFrom(seed),mk=(side,arr)=>arr.map((id,i)=>({index:i,side,baseTile:id,tempTile:null,tempRemaining:0,hazardDir:id==='TL10'?hazardDir(i):null}));
+ return {version:1,seed:Number(seed)>>>0,templateId:bf.template,bossFieldId:bfId,name:bf.name,primaryTerrain:bf.terrain[0],secondaryTerrains:bf.terrain.slice(1).filter(x=>!TERRAIN[x]?.condition),conditionTerrain:bf.terrain.find(x=>TERRAIN[x]?.condition)||null,terrainTags:bf.terrain.slice(),cells:{enemy:mk('enemy',bf.enemy),ally:mk('ally',bf.ally)},windDir:bf.terrain.includes('TR17')?(rand()<.5?'front':'back'):null,ambush:false,fixed:true}
 }
 function bossFieldFor(place,theme){
  if(place.primaryTerrain==='TR12')return'BF06';
@@ -167,9 +257,9 @@ function createBattlefield(place,seed,battleType='normal',theme='森林'){
  const all=[...make('enemy'),...make('ally')];enforceCoverage(all,place.primaryTerrain,rand);applyFieldOverlay(all,place,rand);
  const enemy=all.slice(0,9),ally=all.slice(9);for(const side of [enemy,ally])side.forEach((c,i)=>{if(c.baseTile==='TL10')c.hazardDir=hazardDir(i)});
  if(place.primaryTerrain==='TR03'){for(const side of [enemy,ally]){let land=side.filter(c=>!['TL03','TL04'].includes(c.baseTile)).length;for(const c of side){if(land>=2)break;if(['TL03','TL04'].includes(c.baseTile)){c.baseTile='TL00';land++}}}}
- const templateId=battleType==='elite'?'BT03':place.primaryTerrain&&['TR03','TR04','TR12'].includes(place.primaryTerrain)?'BT02':'BT01';
- safeSide(ally,battleType==='elite'?1:0,6);safeSide(enemy,1,battleType==='elite'?5:6);
- return {version:1,seed:Number(seed)>>>0,templateId,bossFieldId:null,name:terrainName(place.primaryTerrain),primaryTerrain:place.primaryTerrain,secondaryTerrains:[...(place.secondaryTerrains||[])],conditionTerrain:place.conditionTerrain||null,terrainTags:[...(place.terrainTags||[])],cells:{enemy,ally},windDir:place.conditionTerrain==='TR17'?(rand()<.5?'left':'right'):null,ambush:false,fixed:false}
+ const templateId=battleType==='ambush'?'BT04':battleType==='elite'?'BT03':place.primaryTerrain&&['TR03','TR04','TR12'].includes(place.primaryTerrain)?'BT02':'BT01';
+ safeSide(ally,battleType==='elite'||battleType==='ambush'?1:0,6);safeSide(enemy,1,battleType==='elite'||battleType==='ambush'?5:6);balanceSides(enemy,ally,battleType==='elite'||battleType==='ambush'?5:3);
+ return {version:1,seed:Number(seed)>>>0,templateId,bossFieldId:null,name:terrainName(place.primaryTerrain),primaryTerrain:place.primaryTerrain,secondaryTerrains:[...(place.secondaryTerrains||[])],conditionTerrain:place.conditionTerrain||null,terrainTags:[...(place.terrainTags||[])],cells:{enemy,ally},windDir:place.conditionTerrain==='TR17'?(rand()<.5?'front':'back'):null,ambush:battleType==='ambush',fixed:false}
 }
 function migrateNode(node,theme,runSeed,floor=1){
  const seed=node.encounterSeed??hashSeed(runSeed+':'+floor+':'+node.id);
@@ -177,6 +267,6 @@ function migrateNode(node,theme,runSeed,floor=1){
  let spec;if(node.primaryTerrain){spec={placeTypeId:node.placeTypeId||placeSpec(placeType).id,primaryTerrain:node.primaryTerrain,secondaryTerrains:node.secondaryTerrains||[],conditionTerrain:node.conditionTerrain||null,terrainTags:node.terrainTags||[node.primaryTerrain,...(node.secondaryTerrains||[]),node.conditionTerrain].filter(Boolean),fieldTags:node.fieldTags||[],battleOverlay:node.battleOverlay??false}}else spec=generatePlace(theme,placeType,seed,node.type);
  return Object.assign(node,{placeType,placeTypeId:spec.placeTypeId,primaryTerrain:spec.primaryTerrain,secondaryTerrains:spec.secondaryTerrains,conditionTerrain:spec.conditionTerrain,terrainTags:spec.terrainTags,fieldTags:spec.fieldTags,battleOverlay:spec.battleOverlay,encounterSeed:seed,terrain:terrainName(spec.primaryTerrain)});
 }
-const api={version:1,TILE,TERRAIN,THEME,PLACE,FIELD_BY_TERRAIN,BOSS,hashSeed,randomFrom,weighted,terrainName,tileName,placeSpec,generatePlace,createBattlefield,migrateNode};
+const api={version:2,TILE,TERRAIN,THEME,PLACE,FIELD_BY_TERRAIN,BOSS,CONDITION,TILE_ICON,TACTICAL_VALUE,AI_VALUE,hashSeed,randomFrom,weighted,terrainName,tileName,placeSpec,generatePlace,createBattlefield,migrateNode,migrateBattlefield,cellIndex,cellFor,tileEffect,tileIds,unitTileEffect,conditionEffect,clampTerrainHit,clampTerrainMultiplier,tileSummary,setTempTile,decayTempTiles,tacticalValue,sideValue,aiRole,aiTileValue,bestAiMove,isFlying,isGolem};
 if(typeof module!=='undefined')module.exports=api;root.RPG_TERRAIN=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
