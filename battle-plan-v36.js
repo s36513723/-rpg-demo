@@ -679,7 +679,7 @@ function openSheet(mode='skills'){sheet.dataset.mode=mode;
     const occ=party.find(x=>x.alive&&x.rank===rank&&col(x)===c);
     const b=document.createElement('button');b.type='button';b.className='formation-cell'+(occ?' occupied':' empty')+(occ?.id===u.id?' current':'');
     const pv=movePreview(u,rank,c);b.setAttribute('aria-label',RANK_LABEL[rank]+' '+c+(occ?' '+occ.name:' 空き')+'。'+pv);b.title=pv;
-    b.innerHTML=occ?faceMarkup(occ)+'<span>'+esc(occ.name)+'</span>':'<span class="formation-plus">＋</span>';
+    b.innerHTML=(occ?faceMarkup(occ)+'<span>'+esc(occ.name)+'</span>':'<span class="formation-plus">＋</span>')+(pv!=='地形変化なし'?'<small class="move-preview">'+esc(pv)+'</small>':'');
     if(u.status.legBind>0)b.disabled=true;
     b.addEventListener('click',()=>queueMove(rank,c));cells.append(b);
    }
