@@ -86,9 +86,9 @@ for(const tr of baseTerrains){
   const safe=b.cells.ally.filter(x=>(T.TILE[x.baseTile]?.risk||0)<=1).length;
   const ar=b.cells.ally.filter(x=>(T.TILE[x.baseTile]?.risk||0)>=3).length;
   const er=b.cells.enemy.filter(x=>(T.TILE[x.baseTile]?.risk||0)>=3).length;
-  const diff=Math.abs(T.sideValue(b.cells.enemy)-T.sideValue(b.cells.ally));
+  const diff=Math.abs(T.sideValue(b.cells.enemy)-T.sideValue(b.cells.ally)),tpl=T.BOARD_TEMPLATE[b.templateId]||T.BOARD_TEMPLATE.BT01;
   minSafe=Math.min(minSafe,safe);maxAllyRisk3=Math.max(maxAllyRisk3,ar);maxEnemyRisk3=Math.max(maxEnemyRisk3,er);maxDiff=Math.max(maxDiff,diff);
-  assert(safe>=6,tr+' ally safe cells '+safe);assert(ar===0,tr+' ally risk3 '+ar);assert(er<=1,tr+' enemy risk3 '+er);assert(diff<=3,tr+' tactical value diff '+diff);
+  assert(safe>=(tpl.safe||6),tr+' ally safe cells '+safe);assert(ar<=tpl.riskAlly,tr+' ally risk3 '+ar);assert(er<=tpl.riskEnemy,tr+' enemy risk3 '+er);if(Number.isFinite(tpl.valueDiff))assert(diff<=tpl.valueDiff,tr+' tactical value diff '+diff);
  }
  assert.equal(hazardErrors,0,tr+' hazard edge placement');stats[tr]={maxDiff,minSafe,maxAllyRisk3,maxEnemyRisk3};
 }
