@@ -361,6 +361,10 @@ function applyExploreContext(){
   const seed=ET.find(e=>e.id===(magic?'mage':ranged?'arch':beast?'g3':'g1'));
   const src=JSON.parse(JSON.stringify(seed)),i=enemies.length;
   src.id='enc'+i;src.name=String(tag)+(ctx.boss?'':' '+(i+1));src.style=String(tag);src.row=row;src.gridCol=rowCount===1?2:rowCount===2?n*2+1:n+1;src.slot=i+1;
+  src.terrainRole=magic?'caster':ranged?'ranged':/重装|守護|盾/.test(tag)?'tank':/呪術|弱体|制御/.test(tag)?'control':'melee';
+  src.terrainPrefer=src.terrainRole==='ranged'?['TL09','TL08','TL02']:src.terrainRole==='caster'?['TL16','TL08']:src.terrainRole==='tank'?['TL07','TL11','TL08']:src.terrainRole==='control'?['TL18','TL08']:['TL07','TL11'];
+  src.terrainAvoid=['TL10','TL13'].concat(src.terrainRole==='ranged'?['TL05']:[]);
+
   src.hp=(ctx.boss?1280:magic?100:ranged?110:/ゴーレム|重装/.test(tag)?170:135)+Math.max(0,(Number(ctx.threat)||1)-1)*10;src.terrainImmunity=flying?'ignore_ground_negative':/ゴーレム/.test(tag)?'ignore_poison_terrain':null;
   src.weak={};src.resist={};
   const art=enemyArchetypeArt(src);if(art){ENEMY_CINEMATIC[src.id]=art;ORDER_PORTRAITS[src.id]=art}PORTRAITS[src.id]=PORTRAITS[seed.id];
@@ -379,7 +383,7 @@ function unitCell(u,row=u.enemy?u.row:(u.rank||u.row),gridCol=col(u)){return ter
 function unitTerrain(u){return terrainApi()?.unitTileEffect?.(battlefield,u)||{cell:null,effect:{}}}
 function terrainCondition(){return terrainApi()?.conditionEffect?.(battlefield)||{}}
 function rangeMax(a){return ({near:1,mid:2,far:3,long:4,global:5,all:5})[a?.range]||1}
-function physicalRanged(u,a){return a?.kind!=='spell'&&rangeMax(a)>=3}
+function physicalRanged(u,a){return a?.kind!=='spell'&&rangeMax(a)>=3&&['弓','銃','投擲'].includes(weaponMasteryName(u))}
 function terrainHitBonus(a,t,act){
  const T=terrainApi();if(!T||!battlefield)return 0;const at=unitTerrain(a),tt=unitTerrain(t),ae=at.effect,te=tt.effect,cond=terrainCondition();let v=0,r=rangeMax(act),linear=['single','pierce'].includes(act.scope||'single');
  if(r>=2)v+=ae.outgoingRangedHit||0;
@@ -724,7 +728,7 @@ function openSheet(mode='skills'){sheet.dataset.mode=mode;
  }else if(mode==='terrain'){
   const tags=EXPCTX?.terrainTags||battlefield?.terrainTags||[];const p=document.createElement('p');p.className='terrain-detail';p.textContent=(EXPCTX?.place?EXPCTX.place+' / ':'')+(tags.length?tags.map(x=>terrainApi()?.terrainName?.(x)||x).join('・'):terrain.name)+'\n'+terrain.desc;list.append(p);
   if(terrainFocus){const d=document.createElement('p');d.className='terrain-detail selected-tile';d.textContent=terrainFocus.name+'\n'+terrainFocus.text;list.append(d)}
-  if(battlefield?.conditionTerrain){const cond=document.createElement('p');cond.className='terrain-detail condition-terrain';cond.textContent='条件：'+(terrainApi()?.terrainName?.(battlefield.conditionTerrain)||battlefield.conditionTerrain);list.append(cond)}
+  if(battlefield?.conditionTerrain){const cond=document.createElement('p'),ce=terrainApi()?.CONDITION?.[battlefield.conditionTerrain];cond.className='terrain-detail condition-terrain';cond.textContent='条件：'+(terrainApi()?.terrainName?.(battlefield.conditionTerrain)||battlefield.conditionTerrain)+(ce?.desc?'\n'+ce.desc:'');list.append(cond)}
  }else if(mode==='more'){
   const entries=[['fast','表示速度',()=>{$('pace').click();closeSheet()},false],['restart','新しい戦闘',()=>fresh(),false],['book','履歴',()=>{closeSheet();toggleHistory()},false],['exit','逃走',()=>{closeSheet();simpleCommand('escape')},!editable()||u?.status.legBind>0]];
   for(const [ic,label,fn,disabled]of entries){const b=document.createElement('button');b.type='button';b.className='menu-action';b.innerHTML=icon(ic)+esc(label);b.disabled=disabled;b.addEventListener('click',fn);list.append(b)}
