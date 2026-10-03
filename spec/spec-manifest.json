@@ -9,9 +9,9 @@
       "requested_scope": "non-skill battlefield terrain / TerrainTest",
       "repository_mirror": "updated",
       "workbook_binary": "blocked",
-      "reason": "The latest Library workbook has no authorized raw-byte materialization path in the current tool session, so artifact_tool cannot safely edit the existing .xlsx without reconstructing and risking loss of workbook structure/style.",
+      "reason": "2026-10-04再確認でもLibrary正本にauthorized raw-byte materialization pathがなく、既存.xlsxを安全に直接更新できない。リポジトリ側の正本ミラーと実装は同期済み。",
       "pending_rows": "TerrainTest implementation-state cells only; canonical rules/content were not blocked and were used directly through indexed workbook retrieval.",
-      "retry_action": "When raw-byte materialization becomes available, update TERR-001..014 and TERR-019..025 to 実装済み; leave TERR-015..018 as Skill-scope 未実装."
+      "retry_action": "Raw-byte materializationが利用可能になった時点でTERR-001..014およびTERR-019..025の実装状態セルのみ実装済みへ同期する。TERR-015..018はスキル個別効果scopeのため意図的保留。"
     }
   },
   "repository_mirror": {
@@ -595,7 +595,7 @@
     "implementation": "tests/battle-audit.js, tests/battle-audit.py, exploration/explore.js, tests/hub-regression.js",
     "report": "spec/battle-audit-2026-09-30.md",
     "results": "battle-audit-results.json",
-    "validation": "主エンジンの53戦は決着53/53、独立逃走53試行は31成功。旧敗北時の素材・希少装備半減を修正し、通常ブラウザ回帰746/746成功。battle-v44はまだ旧296カタログ・固定12技で、315個別実戦と初期化アイテム、3層連続攻略は未達。",
+    "validation": "2026-09-30監査履歴：主エンジン53戦は決着53/53、独立逃走53試行は31成功。当時のbattle-v44は旧296カタログ・固定12技だった。その後battle-v44は315互換層の上にskill-catalog-437.jsを読み込み、RPG_RULES側も437件・catalogVersion 437へ移行済み。個別スキル効果の実戦確認は意図的保留。",
     "workbook_sync": "監査時点では敗北時の戦利品保持を既定仕様として扱っていたが、2026-09-30の正本更新で一時的に未決定へ変更。その後の正本更新で、敗北時も獲得済み戦利品・EXPを保持して帰還時に精算する仕様へ確定済み。監査記録は履歴として参照する。"
   },
   "skill_effect_design_84_2026_09_29": {
