@@ -7,7 +7,7 @@ This file is the persistent operating contract for every AI/Work session that mo
 The human-facing specification workbook is the canonical game specification.
 Its current logical name is:
 
-- `RPG制作_仕様正本_同期版.xlsx`
+- `RPG制作_仕様正本_戦場地形完全設計_2026-10-01.xlsx`
 
 The repository mirror under `spec/` exists so coding agents can reliably consume the current confirmed rules.
 
