@@ -404,8 +404,8 @@ function terrainHealMod(a,t,act){
  if((Array.isArray(act?.attr)?act.attr:[act?.attr]).includes('水')||mastery==='海神')v+=ae.waterEffect||0;
  if(mastery==='森羅')v+=ae.shinraEffect||0;if(['源泉','術法'].includes(category))v+=ae.sourceEffect||0;return T.clampTerrainMultiplier(v)
 }
-function terrainStatusDelta(a,t,key){
- const ae=unitTerrain(a).effect,te=unitTerrain(t).effect,bind=['headBind','armBind','legBind'].includes(key),mastery=arguments[3]?.unlocks?.[0]?.mastery;let add=bind?(ae.bindApply||0)-(te.bindResist||0):(ae.statusApply||0)-(te.statusResist||0);
+function terrainStatusDelta(a,t,key,act){
+ const ae=unitTerrain(a).effect,te=unitTerrain(t).effect,bind=['headBind','armBind','legBind'].includes(key),mastery=act?.unlocks?.[0]?.mastery;let add=bind?(ae.bindApply||0)-(te.bindResist||0):(ae.statusApply||0)-(te.statusResist||0);
  if(mastery==='森羅')add+=ae.shinraStatus||0;return add-(terrainCondition()[bind?'bindResist':'statusResist']||0)
 }
 function terrainActionCost(u,a){
