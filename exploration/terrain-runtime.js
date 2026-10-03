@@ -132,7 +132,7 @@ function tileIds(cell){return [cell?.baseTile||'TL00',cell?.tempTile].filter(Boo
 function isFlying(unit){return /飛行|翼|鳥/.test(String(unit?.style||''))||unit?.terrainImmunity==='ignore_ground_negative'}
 function isGolem(unit){return /ゴーレム|機械/.test(String(unit?.style||''))||unit?.terrainImmunity==='ignore_poison_terrain'}
 function unitTileEffect(board,unit){
- const side=unit?.enemy?'enemy':'ally',row=unit?.enemy?unit.row:(unit.rank||unit.row),cell=cellFor(board,side,row,unit?.gridCol||1),e=tileEffect(cell);
+ if(!unit)return {cell:null,effect:{}};const side=unit.enemy?'enemy':'ally',row=unit.enemy?unit.row:(unit.rank||unit.row),cell=cellFor(board,side,row,unit.gridCol||1),e=tileEffect(cell);
  if(isFlying(unit)){for(const k of ['speed','evasion','moveMax','endRoundHp','forcedDelta'])if(GROUND_NEGATIVE.has(cell?.tempTile)||GROUND_NEGATIVE.has(cell?.baseTile))delete e[k]}
  if(isGolem(unit)&&tileIds(cell).includes('TL06'))delete e.endRoundHp;
  return {cell,effect:e}
