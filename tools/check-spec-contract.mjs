@@ -8,6 +8,7 @@ const balance = JSON.parse(fs.readFileSync("spec/balance-review.json", "utf8"));
 const skillTarget = JSON.parse(fs.readFileSync("spec/skill-catalog-target.json", "utf8"));
 const skillMigration = JSON.parse(fs.readFileSync("spec/skill-migration-296-to-315.json", "utf8"));
 const skillNormalization = JSON.parse(fs.readFileSync("spec/skill-normalization-status.json", "utf8"));
+const terrainRuntime = JSON.parse(fs.readFileSync("spec/terrain-runtime-status.json", "utf8"));
 
 const errors = [];
 const mustEqual = [
@@ -62,6 +63,18 @@ if (manifest.implementation_inventory?.skill_catalog_target?.runtime_replacement
 if (skillNormalization.canonical_count !== 437) errors.push("normalized SkillDB must contain 437 canonical rows");
 if (skillNormalization.schema_normalized !== 437 || skillNormalization.needs_special_review !== 0) errors.push("SkillDB normalization coverage must remain 437 normalized / 0 special review until the canonical workbook changes");
 if (skillNormalization.special_review?.length !== 0) errors.push("SkillDB special-review list must be empty after full normalization");
+if (terrainRuntime.runtime?.terrain_tags !== 19) errors.push("terrain runtime must contain 19 terrain tags");
+if (terrainRuntime.runtime?.tile_traits !== 26) errors.push("terrain runtime must contain 26 Tile traits");
+if (terrainRuntime.runtime?.board_templates !== 8) errors.push("terrain runtime must contain 8 board templates");
+if (terrainRuntime.runtime?.boss_battlefields !== 6) errors.push("terrain runtime must contain 6 Boss battlefields");
+if (terrainRuntime.runtime?.battlefield_schema !== 3) errors.push("battlefield schema must be v3");
+if (terrainRuntime.implemented_test_ids?.length !== 21) errors.push("non-skill TerrainTest coverage must contain 21 implemented IDs");
+for (const id of ["TERR-001","TERR-014","TERR-019","TERR-025"]) if (!terrainRuntime.implemented_test_ids?.includes(id)) errors.push("missing terrain test "+id);
+for (const id of ["TERR-015","TERR-016","TERR-017","TERR-018"]) if (!terrainRuntime.excluded_skill_test_ids?.includes(id)) errors.push("Skill terrain test must remain explicitly deferred: "+id);
+if (manifest.implementation_inventory?.battlefield_terrain?.non_skill_runtime_complete !== true) errors.push("manifest must mark non-skill battlefield terrain complete");
+if (status.current_runtime?.battlefield_terrain?.non_skill_runtime_complete !== true) errors.push("status registry must mark non-skill battlefield terrain complete");
+if (status.current_runtime?.battlefield_terrain?.skill_terrain_links_complete !== false) errors.push("Skill terrain links must remain separate/incomplete for this task");
+
 
 for (const token of ["Mandatory workflow","Definition of done","canonical specification workbook"]) {
   if (!contract.includes(token)) errors.push(`AGENTS contract missing: ${token}`);
