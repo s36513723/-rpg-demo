@@ -449,6 +449,12 @@
       "current_runtime_count": 437,
       "exact_catalog_available": true,
       "note": "Canonical workbook 08_SkillDB / skill-catalog-437.js is the single active runtime catalog. 15/16 are derived views."
+    },
+    "battlefield_terrain": {
+      "source": "spec/terrain-runtime-status.json",
+      "status": "構造確定",
+      "implementation": "非スキル実装済み",
+      "skill_link_scope": "別タスク"
     }
   },
   "confirmed_values": {
@@ -493,7 +499,18 @@
     "skill_count": 437,
     "skill_catalog": "skill-catalog-437.js",
     "skill_catalog_status": "構造確定",
-    "legacy_save_policy": "296/315 legacy skills migrate by stable ID/name aliases; removed skills are archived and refunded"
+    "legacy_save_policy": "296/315 legacy skills migrate by stable ID/name aliases; removed skills are archived and refunded",
+    "battlefield_terrain": {
+      "runtime_file": "exploration/terrain-runtime.js",
+      "battle_file": "battle-plan-v36.js",
+      "terrain_tags": 19,
+      "tile_traits": 26,
+      "board_templates": 8,
+      "boss_battlefields": 6,
+      "non_skill_runtime_complete": true,
+      "skill_terrain_links_complete": false,
+      "battlefield_schema": 3
+    }
   },
   "battle_ui_targeting_2026_09_29": {
     "status": "確定",
