@@ -6,7 +6,7 @@ for(const file of ['index.html','battle-v44.html','exploration/index.html']){
  const html=fs.readFileSync(file,'utf8');
  for(const [i,m]of [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].entries())new vm.Script(m[1],{filename:file+':script'+i});
 }
-const battleUi=fs.readFileSync('sanctuary-v92.js','utf8'),battleCss=fs.readFileSync('sanctuary-v92.css','utf8'),battleV44=fs.readFileSync('battle-v44.html','utf8');
+const battleUi=fs.readFileSync('sanctuary-v92.js','utf8'),battleCss=fs.readFileSync('sanctuary-v92.css','utf8'),battleV44=fs.readFileSync('battle-v44.html','utf8'),explorationIndex=fs.readFileSync('exploration/index.html','utf8');
 assert(fs.existsSync('images/paladin-turn.webp'),'Paladin turn-order art missing');
 assert(fs.existsSync('images/paladin-battle.webp'),'Paladin battle art missing');
 assert(battleUi.includes("run:'images/paladin-turn.webp'"),'Paladin formation/icon mapping missing');
@@ -14,6 +14,10 @@ assert(battleUi.includes('DIRECT_FACE_SRC'),'Paladin direct face source missing'
 assert(battleUi.includes("run:['images/paladin-battle.webp',168,226]"),'Paladin battle portrait mapping missing');
 assert(battleV44.includes('skill-catalog-437.js'),'battle-v44 canonical 437 catalog missing');
 assert(battleV44.includes('unified-sp.css'),'battle-v44 must hide obsolete MP display');
+assert(explorationIndex.includes('terrain-runtime.js?v=4'),'exploration terrain runtime cache version must be current');
+assert(explorationIndex.includes('state.js?v=47')&&explorationIndex.includes('explore.js?v=53')&&explorationIndex.includes('hub.js?v=75'),'exploration terrain UI cache versions must be current');
+assert(battleV44.includes('exploration/terrain-runtime.js?v=4'),'battle-v44 terrain runtime cache version must be current');
+assert(battleV44.includes('battle-plan-v36.js?v=44-exploration-6'),'battle-v44 terrain battle runtime cache version must be current');
 assert(battleCss.includes('data-actor-id="run"]::before{background-image:url("images/paladin-turn.webp")}'),'Paladin turn-order CSS mapping missing');
 const C315=require('../skill-catalog-315.js'),C=require('../skill-catalog-437.js'),F=require('../exploration/field-skills-437.js'),R=require('../rpg-rules.js');
 assert.equal(C315.count,315);assert.equal(C.count,437);assert.equal(F.count,25);assert.equal(Object.keys(R.skills).length,437);assert.equal(Object.keys(R.masteries).length,31);assert.equal(R.catalogVersion,437);assert.equal(R.fieldCatalogVersion,437);
