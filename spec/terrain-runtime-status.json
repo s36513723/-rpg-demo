@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "source": "RPG制作_仕様正本_戦場地形完全設計_2026-10-01.xlsx / sheets 19-29 + TerrainTest",
+  "scope": "non-skill battlefield terrain runtime",
+  "runtime": {
+    "terrain_tags": 19,
+    "tile_traits": 26,
+    "board_templates": 8,
+    "boss_battlefields": 6,
+    "continuous_board": "3 lanes x 6 depth / displayed as two 3x3 sides",
+    "runtime_file": "exploration/terrain-runtime.js",
+    "battle_file": "battle-plan-v36.js",
+    "battle_entry": "battle-v44.html",
+    "battlefield_schema": 3,
+    "status": "実装済み"
+  },
+  "implemented_test_ids": [
+    "TERR-001",
+    "TERR-002",
+    "TERR-003",
+    "TERR-004",
+    "TERR-005",
+    "TERR-006",
+    "TERR-007",
+    "TERR-008",
+    "TERR-009",
+    "TERR-010",
+    "TERR-011",
+    "TERR-012",
+    "TERR-013",
+    "TERR-014",
+    "TERR-019",
+    "TERR-020",
+    "TERR-021",
+    "TERR-022",
+    "TERR-023",
+    "TERR-024",
+    "TERR-025"
+  ],
+  "excluded_skill_test_ids": [
+    "TERR-015",
+    "TERR-016",
+    "TERR-017",
+    "TERR-018"
+  ],
+  "implemented": {
+    "generation": true,
+    "deterministic_seed": true,
+    "coverage_and_fairness": true,
+    "terrain_conditions": true,
+    "generic_tile_effects": true,
+    "normal_move_same_column": true,
+    "move_limit_ground_tiles": true,
+    "forced_move_stepwise": true,
+    "hazard_edge": true,
+    "temp_overlay_storage_and_decay": true,
+    "temp_overlay_generic_resolution": true,
+    "enemy_terrain_ai": true,
+    "airborne_and_golem_exceptions": true,
+    "board_templates": true,
+    "boss_fixed_boards": true,
+    "boss_phase_changes": true,
+    "prebattle_deployment": true,
+    "terrain_and_tile_ui": true,
+    "normal_move_preview": true,
+    "forced_move_preview": true,
+    "battle_save_fields": true,
+    "legacy_save_migration": true,
+    "generation_statistics_1000_each_terrain": true
+  },
+  "intentionally_not_implemented": {
+    "skill_terrain_links": "26_TerrainSkillLink / individual Skill create_tile, ignore_ground, ignore_cover, etc. User explicitly excluded skills from this task.",
+    "skill_specific_temp_tile_generation": "TL20-TL25 generation by individual skills is deferred with skill implementation."
+  },
+  "balance_status": {
+    "hit_cap": "初期実装値 -30..+30pt",
+    "damage_heal_cap": "初期実装値 -25%..+25%",
+    "ai_move_threshold": "初期実装値 +20 with valid attack / +5 without attack",
+    "regular_edge_damage": "確定 15% max HP",
+    "boss_edge_damage": "確定 5% max HP"
+  }
+}
