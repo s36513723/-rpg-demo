@@ -261,6 +261,28 @@ function applyFieldOverlay(cells,place,rand){
  if(place.fieldTags?.includes('機械'))options.push('TL19','TL19');
  for(const id of options.slice(0,2)){const i=Math.floor(rand()*cells.length);cells[i].baseTile=id}
 }
+function repairCanonicalCoverage(enemy,ally,primary,rand){
+ const all=[...enemy,...ally],pick=(side,filter)=>side.map((c,i)=>filter(c,i)?i:-1).filter(i=>i>=0).sort(()=>rand()-.5),count=ids=>all.filter(c=>ids.includes(c.baseTile)).length;
+ const addBalanced=(tile,filter=()=>true)=>{const ev=sideValue(enemy),av=sideValue(ally),side=ev>av?enemy:ally;let ix=pick(side,(c,i)=>filter(c,i));if(!ix.length)ix=pick(side===enemy?ally:enemy,(c,i)=>filter(c,i));if(ix.length)side[ix[0]].baseTile=tile};
+ if(primary==='TR03'){
+  while(count(['TL03','TL04'])<4)addBalanced('TL04',c=>!['TL03','TL04'].includes(c.baseTile));
+  while(count(['TL03','TL04'])>9){const side=sideValue(enemy)<sideValue(ally)?enemy:ally,ix=pick(side,c=>['TL03','TL04'].includes(c.baseTile));if(!ix.length)break;side[ix[0]].baseTile='TL00'}
+  for(const side of [enemy,ally]){let land=side.filter(c=>!['TL03','TL04'].includes(c.baseTile)).length;for(const c of side){if(land>=2)break;if(['TL03','TL04'].includes(c.baseTile)){c.baseTile='TL00';land++}}}
+ }
+ if(primary==='TR04'){
+  ensureAtMost(all,['TL06'],2,'TL05',rand);while(count(['TL03','TL04','TL05','TL06'])<7)addBalanced('TL04',c=>!['TL03','TL04','TL05','TL06'].includes(c.baseTile));
+  ensureAtMost(all,['TL03','TL04','TL05','TL06'],13,'TL01',rand)
+ }
+ if(primary==='TR07'){while(count(['TL09'])<2)addBalanced('TL09',c=>c.baseTile!=='TL09');ensureAtMost(all,['TL09'],4,'TL07',rand)}
+ if(primary==='TR08'){
+  normalizeHazardEdges(enemy,primary,'enemy');normalizeHazardEdges(ally,primary,'ally');
+  while(count(['TL10'])<2){const ev=sideValue(enemy),av=sideValue(ally),side=ev>av?enemy:ally,ix=pick(side,(c,i)=>c.baseTile!=='TL10'&&outerIndex(i));if(ix.length){side[ix[0]].baseTile='TL10';side[ix[0]].hazardDir=hazardDir(ix[0],side===enemy?'enemy':'ally')}else break}
+  ensureAtMost(all,['TL10'],4,'TL07',rand);normalizeHazardEdges(enemy,primary,'enemy');normalizeHazardEdges(ally,primary,'ally')
+ }
+ if(primary==='TR11'){while(count(['TL12','TL13'])<8)addBalanced('TL12',c=>!['TL12','TL13'].includes(c.baseTile));ensureAtMost(all,['TL12','TL13'],14,'TL00',rand);ensureAtMost(all,['TL13'],3,'TL12',rand)}
+ if(primary==='TR12'){while(count(['TL14','TL15'])<8)addBalanced('TL14',c=>!['TL14','TL15'].includes(c.baseTile));ensureAtMost(all,['TL14','TL15'],14,'TL00',rand);ensureAtMost(all,['TL15'],4,'TL14',rand)}
+ return {enemy,ally}
+}
 function normalizeHazardEdges(cells,primary,side){
  const repl=['TR06','TR07','TR08'].includes(primary)?'TL07':'TL00';
  cells.forEach((c,i)=>{if(c.baseTile==='TL10'&&!outerIndex(i))c.baseTile=repl;if(c.baseTile==='TL10')c.hazardDir=hazardDir(i,side);else if(c.hazardDir)c.hazardDir=null});
@@ -296,8 +318,8 @@ function createBattlefield(place,seed,battleType='normal',theme='森林'){
  const all=[...make('enemy'),...make('ally')];enforceCoverage(all,place.primaryTerrain,rand);applyFieldOverlay(all,place,rand);
  const enemy=all.slice(0,9),ally=all.slice(9);normalizeHazardEdges(enemy,place.primaryTerrain,'enemy');normalizeHazardEdges(ally,place.primaryTerrain,'ally');
  if(place.primaryTerrain==='TR03'){for(const side of [enemy,ally]){let land=side.filter(c=>!['TL03','TL04'].includes(c.baseTile)).length;for(const c of side){if(land>=2)break;if(['TL03','TL04'].includes(c.baseTile)){c.baseTile='TL00';land++}}}}
- const templateId=battleType==='ambush'?'BT04':battleType==='elite'?'BT03':place.primaryTerrain&&['TR03','TR04','TR12'].includes(place.primaryTerrain)?'BT02':'BT01';
- safeSide(ally,battleType==='elite'||battleType==='ambush'?1:0,6);safeSide(enemy,1,battleType==='elite'||battleType==='ambush'?5:6);balanceSides(enemy,ally,battleType==='elite'||battleType==='ambush'?5:3);
+ const templateId=battleType==='ambush'?'BT04':battleType==='elite'?'BT03':place.primaryTerrain&&['TR03','TR04','TR08','TR12'].includes(place.primaryTerrain)?'BT02':'BT01';
+ const tpl=BOARD_TEMPLATE[templateId]||BOARD_TEMPLATE.BT01;safeSide(ally,tpl.riskAlly,Math.min(9,tpl.safe||6));safeSide(enemy,tpl.riskEnemy,battleType==='elite'||battleType==='ambush'?5:6);balanceSides(enemy,ally,tpl.valueDiff??5);repairCanonicalCoverage(enemy,ally,place.primaryTerrain,rand);
  return {version:3,seed:Number(seed)>>>0,templateId,bossFieldId:null,name:terrainName(place.primaryTerrain),primaryTerrain:place.primaryTerrain,secondaryTerrains:[...(place.secondaryTerrains||[])],conditionTerrain:place.conditionTerrain||null,terrainTags:[...(place.terrainTags||[])],cells:{enemy,ally},windDir:place.conditionTerrain==='TR17'?(rand()<.5?'front':'back'):null,ambush:battleType==='ambush',fixed:false}
 }
 function migrateNode(node,theme,runSeed,floor=1){
