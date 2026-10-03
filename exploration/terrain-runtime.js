@@ -179,6 +179,7 @@ function balanceSides(enemy,ally,maxDiff=3){
  let guard=30;while(guard--&&Math.abs(sideValue(enemy)-sideValue(ally))>maxDiff){const high=sideValue(enemy)>sideValue(ally)?enemy:ally,low=high===enemy?ally:enemy;let a=high.map((c,i)=>[i,tacticalValue(c)]).sort((x,y)=>y[1]-x[1])[0],b=low.map((c,i)=>[i,tacticalValue(c)]).sort((x,y)=>x[1]-y[1])[0];if(a?.[1]>0)high[a[0]].baseTile='TL00';else if(b?.[1]<0)low[b[0]].baseTile='TL00';else break}
 }
 function aiRole(unit){
+ if(unit?.terrainRole)return unit.terrainRole;
  if(unit?.ai==='archer'||/弓|狙撃|飛行/.test(String(unit?.style||'')))return'ranged';
  if(/呪術|制御|妨害|弱体/.test(String(unit?.style||'')))return'control';
  if(unit?.ai==='mage'||/魔術|術師|神官|精霊|死霊|海神|森羅|機巧/.test(String(unit?.style||'')))return'caster';
@@ -188,6 +189,7 @@ function aiRole(unit){
 }
 function aiTileValue(board,unit,row,col){
  const c=cellFor(board,'enemy',row,col),id=c?.tempTile||c?.baseTile||'TL00',role=aiRole(unit),style=String(unit?.style||'');let v=AI_VALUE[role]?.[id]||0;
+ if(unit?.terrainPrefer?.includes(id))v+=10;if(unit?.terrainAvoid?.includes(id))v-=15;
  if(role==='caster'){if(/海神|水/.test(style)){if(id==='TL03')v+=20;if(id==='TL04')v+=10}if(/森羅/.test(style)){if(id==='TL01')v+=10;if(id==='TL02')v+=15}if(/機巧/.test(style)&&id==='TL19')v+=25}
  if(role==='support'&&(TILE[id]?.risk||0)>=2)v-=25;
  if(isFlying(unit)&&GROUND_NEGATIVE.has(id))v=Math.max(v,0);
