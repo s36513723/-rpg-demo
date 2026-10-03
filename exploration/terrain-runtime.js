@@ -241,7 +241,7 @@ function ensureAtLeast(cells,ids,min,tile,rand,filter=()=>true){let have=cells.f
 function ensureAtMost(cells,ids,max,repl,rand){let ix=cells.map((c,i)=>ids.includes(c.baseTile)?i:-1).filter(i=>i>=0);if(ix.length<=max)return;for(const i of ix.sort(()=>rand()-.5).slice(max))cells[i].baseTile=repl}
 function enforceCoverage(cells,primary,rand){
  if(primary==='TR03'){ensureAtLeast(cells,['TL03','TL04'],4,'TL04',rand);ensureAtMost(cells,['TL03','TL04'],9,'TL00',rand)}
- if(primary==='TR04'){ensureAtLeast(cells,['TL03','TL04','TL05','TL02'],7,'TL05',rand);ensureAtMost(cells,['TL03','TL04','TL05','TL02'],13,'TL01',rand);ensureAtMost(cells,['TL06'],2,'TL05',rand)}
+ if(primary==='TR04'){ensureAtLeast(cells,['TL03','TL04','TL05','TL06'],7,'TL05',rand);ensureAtMost(cells,['TL06'],2,'TL05',rand);ensureAtMost(cells,['TL03','TL04','TL05','TL06'],13,'TL01',rand)}
  if(primary==='TR05'){ensureAtLeast(cells,['TL05'],5,'TL05',rand);ensureAtMost(cells,['TL05'],10,'TL04',rand)}
  if(primary==='TR07'){ensureAtLeast(cells,['TL09'],2,'TL09',rand);ensureAtMost(cells,['TL09'],4,'TL07',rand)}
  if(primary==='TR08'){ensureAtLeast(cells,['TL10'],2,'TL10',rand,outerIndex);ensureAtMost(cells,['TL10'],4,'TL07',rand);cells.forEach((c,i)=>{if(c.baseTile==='TL10'&&!outerIndex(i))c.baseTile='TL07'})}
