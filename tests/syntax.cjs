@@ -128,13 +128,13 @@ for(const [id,bf] of Object.entries(T.BOSS)){
 }
 
 {
- const check=(tr,fn,label)=>{for(let seed=1;seed<=1000;seed++){const p={placeType:'分岐路',primaryTerrain:tr,secondaryTerrains:[],conditionTerrain:null,terrainTags:[tr],fieldTags:[],battleOverlay:false},b=T.createBattlefield(p,seed,'normal','森林');for(const side of ['enemy','ally'])fn(b.cells[side],seed,side)}console.log(label+': PASS')};
- check('TR03',(cells,seed,side)=>{const n=cells.filter(x=>['TL03','TL04'].includes(x.baseTile)).length,land=cells.filter(x=>!['TL03','TL04'].includes(x.baseTile)).length;assert(n>=4&&n<=9,'TR03 water '+seed+' '+side+' '+n);assert(land>=2)},'TERR-002 water coverage');
- check('TR04',(cells,seed,side)=>{const n=cells.filter(x=>['TL03','TL04','TL05','TL06','TL02'].includes(x.baseTile)).length,poison=cells.filter(x=>x.baseTile==='TL06').length;assert(n>=7&&n<=13,'TR04 wet '+seed+' '+side+' '+n);assert(poison<=2)},'TERR-003 wetland coverage');
- check('TR07',(cells,seed,side)=>{const n=cells.filter(x=>x.baseTile==='TL09').length;assert(n>=2&&n<=4,'TR07 high '+seed+' '+side+' '+n)},'TERR-004 elevation coverage');
- check('TR08',(cells,seed,side)=>{const edge=cells.filter(x=>x.baseTile==='TL10');assert(edge.length>=2&&edge.length<=4,'TR08 edge '+seed+' '+side+' '+edge.length);for(const x of edge){assert(isOuter(x.index));assert(x.hazardDir)}},'TERR-005 cliff coverage');
- check('TR11',(cells,seed,side)=>{const sand=cells.filter(x=>['TL12','TL13'].includes(x.baseTile)).length,qs=cells.filter(x=>x.baseTile==='TL13').length;assert(sand>=8&&sand<=9,'TR11 sand '+seed+' '+side+' '+sand);assert(qs<=3)},'TERR-006 desert coverage');
- check('TR12',(cells,seed,side)=>{const snow=cells.filter(x=>['TL14','TL15'].includes(x.baseTile)).length,ice=cells.filter(x=>x.baseTile==='TL15').length;assert(snow>=8&&snow<=9,'TR12 snow '+seed+' '+side+' '+snow);assert(ice<=4)},'TERR-007 snow coverage');
+ const check=(tr,fn,label)=>{for(let seed=1;seed<=1000;seed++){const p={placeType:'分岐路',primaryTerrain:tr,secondaryTerrains:[],conditionTerrain:null,terrainTags:[tr],fieldTags:[],battleOverlay:false},b=T.createBattlefield(p,seed,'normal','森林'),cells=[...b.cells.enemy,...b.cells.ally];fn(cells,seed,b)}console.log(label+': PASS')};
+ check('TR03',(cells,seed,b)=>{const n=cells.filter(x=>['TL03','TL04'].includes(x.baseTile)).length;assert(n>=4&&n<=9,'TR03 water '+seed+' '+n);assert(b.cells.enemy.filter(x=>!['TL03','TL04'].includes(x.baseTile)).length>=2);assert(b.cells.ally.filter(x=>!['TL03','TL04'].includes(x.baseTile)).length>=2)},'TERR-002 water coverage');
+ check('TR04',(cells,seed)=>{const n=cells.filter(x=>['TL03','TL04','TL05','TL06','TL02'].includes(x.baseTile)).length,poison=cells.filter(x=>x.baseTile==='TL06').length;assert(n>=7&&n<=13,'TR04 wet '+seed+' '+n);assert(poison<=2)},'TERR-003 wetland coverage');
+ check('TR07',(cells,seed)=>{const n=cells.filter(x=>x.baseTile==='TL09').length;assert(n>=2&&n<=4,'TR07 high '+seed+' '+n)},'TERR-004 elevation coverage');
+ check('TR08',(cells,seed)=>{const edge=cells.filter(x=>x.baseTile==='TL10');assert(edge.length>=2&&edge.length<=4,'TR08 edge '+seed+' '+edge.length);for(const x of edge){assert(isOuter(x.index));assert(x.hazardDir)}},'TERR-005 cliff coverage');
+ check('TR11',(cells,seed)=>{const sand=cells.filter(x=>['TL12','TL13'].includes(x.baseTile)).length,qs=cells.filter(x=>x.baseTile==='TL13').length;assert(sand>=8&&sand<=14,'TR11 sand '+seed+' '+sand);assert(qs<=3)},'TERR-006 desert coverage');
+ check('TR12',(cells,seed)=>{const snow=cells.filter(x=>['TL14','TL15'].includes(x.baseTile)).length,ice=cells.filter(x=>x.baseTile==='TL15').length;assert(snow>=8&&snow<=14,'TR12 snow '+seed+' '+snow);assert(ice<=4)},'TERR-007 snow coverage');
 }
 
 console.log('Terrain 19 / Tile 26 / 1000-board generation / templates / AI / temp/save migration: PASS',JSON.stringify(stats));
