@@ -137,6 +137,30 @@ for(const [id,bf] of Object.entries(T.BOSS)){
  check('TR12',(cells,seed)=>{const snow=cells.filter(x=>['TL14','TL15'].includes(x.baseTile)).length,ice=cells.filter(x=>x.baseTile==='TL15').length;assert(snow>=8&&snow<=14,'TR12 snow '+seed+' '+snow);assert(ice<=4)},'TERR-007 snow coverage');
 }
 
+
+{
+ const old={id:4,type:'battle',placeType:'高所・低所',links:[8],roll:.5},m=T.migrateNode(old,'山岳',1234,2);
+ assert(m.primaryTerrain&&Array.isArray(m.terrainTags)&&m.terrainTags.length>=1&&Number.isInteger(m.encounterSeed),'TERR-025 legacy node migration');
+ assert.equal(m.placeType,'崖道・段丘');
+}
+{
+ const b=T.tutorialBoard({primaryTerrain:'TR08'},17),ix=0,cell=b.cells.ally[ix];cell.baseTile='TL10';cell.hazardDir='front';T.setTempTile(b,'ally',ix,'TL20',2);
+ const e=T.tileEffect(cell);assert.equal(cell.baseTile,'TL10');assert.equal(cell.tempTile,'TL20');assert.equal(cell.hazardDir,'front');assert.equal(e.forcedDelta,1);assert.equal(e.risk,3,'TERR-013 overlay keeps stronger base risk');
+}
+{
+ for(const id of ['BF01','BF02','BF03','BF04','BF05','BF06']){const bf=T.BOSS[id],b=T.createBattlefield({placeType:'深部・主室',primaryTerrain:bf.terrain[0],secondaryTerrains:bf.terrain.slice(1).filter(x=>!T.TERRAIN[x]?.condition),conditionTerrain:bf.terrain.find(x=>T.TERRAIN[x]?.condition)||null,terrainTags:bf.terrain,fieldTags:[],battleOverlay:false},99,'boss','地下神殿'),safe=b.cells.ally.filter(x=>(T.TILE[x.baseTile]?.risk||0)<=1).length;assert(safe>=6,id+' TERR-021 ally safe '+safe)}
+ const b4={...T.createBattlefield({placeType:'深部・主室',primaryTerrain:'TR13',terrainTags:['TR13','TR14','TR16'],fieldTags:[],battleOverlay:false},4,'boss','地下神殿'),bossFieldId:'BF04',phaseFlags:{}};assert(T.bossPhaseChange(b4,.49).changed.length<=4);
+ const b5={...T.createBattlefield({placeType:'深部・主室',primaryTerrain:'TR13',terrainTags:['TR13','TR14'],fieldTags:[],battleOverlay:false},5,'boss','地下神殿'),bossFieldId:'BF05'};assert(T.bossTerrainEvent(b5,'device_break').changed.length<=1);
+ const b6={...T.createBattlefield({placeType:'深部・主室',primaryTerrain:'TR12',terrainTags:['TR12','TR07','TR17'],fieldTags:[],battleOverlay:false},6,'boss','山岳'),bossFieldId:'BF06',phaseFlags:{}};assert(T.bossPhaseChange(b6,.49).changed.length<=4);
+}
+{
+ const b=T.tutorialBoard({primaryTerrain:'TR10'},31),u={id:'arch',enemy:true,row:'front',gridCol:2,style:'弓兵',ai:'archer'};
+ b.cells.enemy[T.cellIndex('enemy','front',2)].baseTile='TL00';b.cells.enemy[T.cellIndex('enemy','mid',2)].baseTile='TL09';b.cells.enemy[T.cellIndex('enemy','back',2)].baseTile='TL10';
+ const p=T.bestAiMove(b,u,new Map(),true);assert(p&&p.row==='mid'&&p.delta>=20,'TERR-019 ranged AI high-ground threshold');
+ b.cells.enemy[T.cellIndex('enemy','mid',2)].baseTile='TL00';const noRisk=T.bestAiMove(b,u,new Map(),false);assert(!noRisk||noRisk.row!=='back','AI must avoid risk-3 without immunity');
+ const fly={...u,style:'飛行',terrainImmunity:'ignore_ground_negative'};const flyMove=T.bestAiMove(b,fly,new Map(),false);assert(flyMove===null||typeof flyMove==='object','TERR-020 airborne AI');
+}
+
 console.log('Terrain 19 / Tile 26 / 1000-board generation / templates / AI / temp/save migration: PASS',JSON.stringify(stats));
 
 
