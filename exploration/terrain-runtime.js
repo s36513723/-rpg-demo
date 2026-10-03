@@ -111,7 +111,8 @@ const AI_VALUE={
  ranged:{TL09:25,TL08:20,TL02:10,TL05:-10,TL10:-10},
  tank:{TL07:20,TL11:15,TL08:10,TL09:5},
  caster:{TL16:25,TL08:10},
- support:{TL17:25,TL08:15,TL16:10}
+ support:{TL17:25,TL08:15,TL16:10},
+ control:{TL18:20,TL08:10}
 };
 const GROUND_NEGATIVE=new Set(['TL03','TL04','TL05','TL06','TL12','TL13','TL14','TL15','TL20']);
 function cellIndex(side,row,col){
@@ -166,20 +167,22 @@ function balanceSides(enemy,ally,maxDiff=3){
 }
 function aiRole(unit){
  if(unit?.ai==='archer'||/弓|狙撃|飛行/.test(String(unit?.style||'')))return'ranged';
- if(unit?.ai==='mage'||/魔術|術師|神官|精霊|死霊/.test(String(unit?.style||'')))return'caster';
+ if(/呪術|制御|妨害|弱体/.test(String(unit?.style||'')))return'control';
+ if(unit?.ai==='mage'||/魔術|術師|神官|精霊|死霊|海神|森羅|機巧/.test(String(unit?.style||'')))return'caster';
  if(/重装|盾|守護/.test(String(unit?.style||'')))return'tank';
  if(/回復|支援/.test(String(unit?.style||'')))return'support';
  return'melee'
 }
 function aiTileValue(board,unit,row,col){
- const c=cellFor(board,'enemy',row,col),id=c?.tempTile||c?.baseTile||'TL00',role=aiRole(unit);let v=AI_VALUE[role]?.[id]||0;
+ const c=cellFor(board,'enemy',row,col),id=c?.tempTile||c?.baseTile||'TL00',role=aiRole(unit),style=String(unit?.style||'');let v=AI_VALUE[role]?.[id]||0;
+ if(role==='caster'){if(/海神|水/.test(style)){if(id==='TL03')v+=20;if(id==='TL04')v+=10}if(/森羅/.test(style)){if(id==='TL01')v+=10;if(id==='TL02')v+=15}if(/機巧/.test(style)&&id==='TL19')v+=25}
  if(role==='support'&&(TILE[id]?.risk||0)>=2)v-=25;
  if(isFlying(unit)&&GROUND_NEGATIVE.has(id))v=Math.max(v,0);
  return v
 }
 function bestAiMove(board,unit,occupied,hasAttack=true){
  const rows=['front','mid','back'],current=aiTileValue(board,unit,unit.row,unit.gridCol),threshold=hasAttack?20:5,cands=[];
- for(const row of rows){if(row===unit.row)continue;const key=row+':'+unit.gridCol,other=occupied?.get(key);const val=aiTileValue(board,unit,row,unit.gridCol);cands.push({row,col:unit.gridCol,swapId:other?.id||null,value:val,delta:val-current})}
+ for(const row of rows){if(row===unit.row)continue;const key=row+':'+unit.gridCol,other=occupied?.get(key),cell=cellFor(board,'enemy',row,unit.gridCol),id=cell?.tempTile||cell?.baseTile||'TL00',risk=TILE[id]?.risk||0;if(risk>=3&&!isFlying(unit))continue;const val=aiTileValue(board,unit,row,unit.gridCol);cands.push({row,col:unit.gridCol,swapId:other?.id||null,value:val,delta:val-current,risk})}
  cands.sort((a,b)=>b.delta-a.delta);return cands[0]?.delta>=threshold?cands[0]:null
 }
 function bossPhaseChange(board,hpRatio){
