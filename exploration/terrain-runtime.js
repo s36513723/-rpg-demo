@@ -292,7 +292,7 @@ function tutorialBoard(place,seed){
 function createBattlefield(place,seed,battleType='normal',theme='森林'){
  if(battleType==='tutorial')return tutorialBoard(place,seed);
  if(battleType==='boss')return fixedBoss(bossFieldFor(place,theme),seed);
- const rand=randomFrom(seed),weights=boardWeights(place),make=side=>Array.from({length:9},(_,i)=>({index:i,side,baseTile:weighted(weights,rand)||'TL00',overlay:null,hazardDir:null}));
+ const rand=randomFrom(seed),weights=boardWeights(place),make=side=>Array.from({length:9},(_,i)=>({index:i,side,baseTile:weighted(weights,rand)||'TL00',tempTile:null,tempRemaining:0,hazardDir:null}));
  const all=[...make('enemy'),...make('ally')];enforceCoverage(all,place.primaryTerrain,rand);applyFieldOverlay(all,place,rand);
  const enemy=all.slice(0,9),ally=all.slice(9);normalizeHazardEdges(enemy,place.primaryTerrain,'enemy');normalizeHazardEdges(ally,place.primaryTerrain,'ally');
  if(place.primaryTerrain==='TR03'){for(const side of [enemy,ally]){let land=side.filter(c=>!['TL03','TL04'].includes(c.baseTile)).length;for(const c of side){if(land>=2)break;if(['TL03','TL04'].includes(c.baseTile)){c.baseTile='TL00';land++}}}}
