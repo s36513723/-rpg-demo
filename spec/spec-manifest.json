@@ -344,13 +344,26 @@
       "source": "08_SkillDB",
       "runtime": "skill-catalog-437.js",
       "field_view": "derived"
+    },
+    "battlefield_terrain": {
+      "source_sheets": "19-29",
+      "terrain_tags": 19,
+      "tile_traits": 26,
+      "board_templates": 8,
+      "boss_battlefields": 6,
+      "continuous_board": "3 lanes x 6 depth",
+      "field_tags_direct_battle_bonus": false,
+      "regular_edge_damage_maxhp": 0.15,
+      "boss_edge_damage_maxhp": 0.05,
+      "prebattle_redeploy": "normal/elite/boss yes; ambush no",
+      "status": "構造確定"
     }
   },
   "workstreams": {
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "canonical_437_skilldb_exploration_runtime_2026-10-02",
+  "last_sync_status": "non_skill_battlefield_terrain_runtime_complete_2026-10-03",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
@@ -452,6 +465,21 @@
         "battle_portrait_asset": "images/paladin-battle.webp",
         "runtime_status": "implemented"
       }
+    },
+    "battlefield_terrain": {
+      "runtime": "exploration/terrain-runtime.js",
+      "battle_runtime": "battle-plan-v36.js",
+      "entry": "battle-v44.html",
+      "battlefield_schema": 3,
+      "non_skill_runtime_complete": true,
+      "terrain_tests_implemented": [
+        "TERR-001..014",
+        "TERR-019..025"
+      ],
+      "skill_tests_deferred": [
+        "TERR-015..018"
+      ],
+      "status_file": "spec/terrain-runtime-status.json"
     }
   },
   "legacy_compatibility": {
