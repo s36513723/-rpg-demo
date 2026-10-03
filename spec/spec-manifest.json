@@ -4,7 +4,15 @@
     "type": "xlsx",
     "logical_name": "RPG制作_仕様正本_戦場地形完全設計_2026-10-01.xlsx",
     "owner": "user",
-    "editing_policy": "User gives natural-language decisions; assistant updates workbook and propagates to repo implementation."
+    "editing_policy": "User gives natural-language decisions; assistant updates workbook and propagates to repo implementation.",
+    "runtime_implementation_status_sync": {
+      "requested_scope": "non-skill battlefield terrain / TerrainTest",
+      "repository_mirror": "updated",
+      "workbook_binary": "blocked",
+      "reason": "The latest Library workbook has no authorized raw-byte materialization path in the current tool session, so artifact_tool cannot safely edit the existing .xlsx without reconstructing and risking loss of workbook structure/style.",
+      "pending_rows": "TerrainTest implementation-state cells only; canonical rules/content were not blocked and were used directly through indexed workbook retrieval.",
+      "retry_action": "When raw-byte materialization becomes available, update TERR-001..014 and TERR-019..025 to 実装済み; leave TERR-015..018 as Skill-scope 未実装."
+    }
   },
   "repository_mirror": {
     "current_spec": "spec/CURRENT_SPEC.md",
@@ -363,7 +371,7 @@
     "battle_demo": "戦闘デモワーク",
     "base": "拠点ワーク"
   },
-  "last_sync_status": "non_skill_battlefield_terrain_runtime_complete_2026-10-03",
+  "last_sync_status": "non_skill_battlefield_terrain_runtime_complete_workbook_status_cells_pending_materialization_2026-10-03",
   "blocked_steps": [],
   "implementation_balance_proposal": {
     "two_hand_weight_reduction": 0.2,
