@@ -61,6 +61,22 @@ Canonical workbook: RPG制作_仕様正本_戦場地形完全設計_2026-10-01.x
 - Casting pays SP at start and normally resolves at the actor's next-round turn. Head bind, stun and sleep interrupt it.
 - HP/SP persist after victory. Battle-only binds/ailments/buffs/debuffs and summons end after battle; KO persists.
 
+## Battlefield terrain runtime
+- Canonical terrain data comes from sheets 19-29: **19 terrain tags, 26 Tile traits, 8 board templates and 6 Boss battlefield examples**.
+- Every battle uses an 18-cell battlefield (enemy 3x3 + ally 3x3, internally 3 lanes x 6 depth). The board is generated deterministically from the encounter seed and the current place's primary/secondary/condition terrain.
+- Field tags remain exploration data and do not directly grant battle bonuses.
+- Normal battle fairness: ally side guarantees at least 6 risk-0/1 cells; normal side tactical-value difference is kept within |3|. Elite/ambush boards may favor the enemy up to +5.
+- Generic Tile/condition effects are active in `battle-v44.html`: hit, evasion, speed, physical/magic mitigation, high ground, cover, water/fire modifiers, healing received, status/bind modifiers, movement limits, forced movement, round-end terrain damage and temporary overlays. Terrain hit contribution is clamped to -30..+30pt and terrain damage/heal contribution to -25%..+25% as initial implementation values.
+- Normal movement costs 1 action, stays in the same column, and may swap with an ally in the destination cell. Mud/quicksand and equivalent ground restrictions can reduce normal-move maximum to one cell. Forced movement resolves one cell at a time and respects occupancy, side boundaries, rock/snow/ice modifiers, strong wind and hazard-edge direction.
+- Hazard edge damage is 15% max HP in ordinary battles and 5% in Boss battles; the unit remains on the edge cell after the failed push. Natural flying enemies ignore ground-derived negatives and hazard-edge fall damage. Golems ignore poison-swamp round damage only.
+- Temporary Tile state stores `baseTile + tempTile + tempRemaining`; base Tile remains underneath. Temporary Tiles overwrite only the previous temporary layer, decay by rounds, and generic fire/water resolution can clear ice/fire overlays while preserving the base Tile.
+- Enemy terrain AI evaluates attack value + survival + terrain value + position value. Movement-only threshold is +20 when a valid attack exists and +5 when no valid attack exists. Role values cover melee, ranged, tank, caster, support and control; risk-3 cells are normally avoided.
+- Board templates BT01-BT08 cover standard, terrain-emphasis, elite, ambush, Boss and tutorial cases. Ambush prevents free prebattle redeployment; non-ambush exploration battles show a free deployment screen with the place name, terrain tags, all 18 cells, enemy layout and ally layout.
+- Boss fields BF01-BF06 use fixed/semifixed boards. Implemented phase behavior includes wind reversal, flooding, holy-to-curse conversion, machinery shutdown hook and snow-to-ice conversion; phase changes are announced before the next choice and do not deal immediate phase-change damage.
+- Battle UI shows compact terrain tags near the management bar. Non-normal Tiles show pattern/icon; tapping a cell shows Tile name/effects/remaining rounds. Normal-move preview shows up to three major changes; forced-move preview shows destination plus ice/wind/hazard-edge consequences.
+- Exploration save data retains terrain tags and encounter seed. Active battle context retains the 18 base Tiles, temporary Tiles, remaining rounds, hazard directions and wind direction. Old exploration runs without terrain data are safely migrated from dungeon theme + place type.
+- Automated terrain regression covers the non-skill TerrainTest rows **TERR-001..014 and TERR-019..025**, including at least 1000 generated boards for each of all 19 terrain tags. Individual Skill-to-terrain rows TERR-015..018 and the Skill-specific rows in sheet 26 remain outside this task by explicit user request.
+
 ## Growth / dungeon
 - No conventional displayed level with automatic stat growth.
 - EXP creates pending growth; inn rest settles pending Stat Pt / Mastery Pt. Exact EXP curve and reward quantities are balance-controlled.
