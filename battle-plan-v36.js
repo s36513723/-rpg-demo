@@ -401,7 +401,8 @@ function terrainDamageMod(a,t,act){
  return T.clampTerrainMultiplier(v)
 }
 function terrainHealMod(a,t,act){
- const T=terrainApi();if(!T||!battlefield)return 0,ae=unitTerrain(a).effect,te=unitTerrain(t).effect,mastery=act?.unlocks?.[0]?.mastery,category=window.RPG_RULES?.masteries?.[mastery]?.category;let v=(te.healingReceived||0)+(terrainCondition().healing||0);
+ const T=terrainApi();if(!T||!battlefield)return 0;
+ const ae=unitTerrain(a).effect,te=unitTerrain(t).effect,mastery=act?.unlocks?.[0]?.mastery,category=window.RPG_RULES?.masteries?.[mastery]?.category;let v=(te.healingReceived||0)+(terrainCondition().healing||0);
  if((Array.isArray(act?.attr)?act.attr:[act?.attr]).includes('水')||mastery==='海神')v+=ae.waterEffect||0;
  if(mastery==='森羅')v+=ae.shinraEffect||0;if(['源泉','術法'].includes(category))v+=ae.sourceEffect||0;return T.clampTerrainMultiplier(v)
 }
