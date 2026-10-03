@@ -381,25 +381,36 @@ function terrainCondition(){return terrainApi()?.conditionEffect?.(battlefield)|
 function rangeMax(a){return ({near:1,mid:2,far:3,long:4,global:5,all:5})[a?.range]||1}
 function physicalRanged(u,a){return a?.kind!=='spell'&&rangeMax(a)>=3}
 function terrainHitBonus(a,t,act){
- const T=terrainApi();if(!T||!battlefield)return 0;const ae=unitTerrain(a).effect,te=unitTerrain(t).effect,cond=terrainCondition();let v=0;
- if(physicalRanged(a,act)){v+=(ae.outgoingRangedHit||0)+(te.incomingRangedHit||0)+(cond.physicalRangedHit||0)}
- if(rangeMax(act)>=3&&battlefield.conditionTerrain==='TR16'&&act.attr!=='光')v+=cond.rangedHit||0;
- v-=te.evasion||0;if(ae.highAccuracy)v+=ae.highAccuracy;
+ const T=terrainApi();if(!T||!battlefield)return 0;const at=unitTerrain(a),tt=unitTerrain(t),ae=at.effect,te=tt.effect,cond=terrainCondition();let v=0,r=rangeMax(act),linear=['single','pierce'].includes(act.scope||'single');
+ if(physicalRanged(a,act))v+=(ae.outgoingRangedHit||0)+(cond.physicalRangedHit||0);
+ if(r>=2&&linear)v+=te.incomingRangedHit||0;
+ if(r>=3&&battlefield.conditionTerrain==='TR16'&&act.attr!=='光')v+=cond.rangedHit||0;
+ v-=te.evasion||0;
+ const attackerHigh=T.tileIds(at.cell).includes('TL09'),targetHigh=T.tileIds(tt.cell).includes('TL09');if(r>=2&&attackerHigh&&!targetHigh)v+=ae.highAccuracy||0;
  return T.clampTerrainHit(v)
 }
 function terrainDamageMod(a,t,act){
- const T=terrainApi();if(!T||!battlefield)return 0;const ae=unitTerrain(a).effect,te=unitTerrain(t).effect,cond=terrainCondition(),magic=act.kind==='spell'||['ARC','MND'].includes(act.stat),attrs=Array.isArray(act.attr)?act.attr:[act.attr];let v=0;
- v+=magic?(te.incomingMagic||0):(te.incomingPhysical||0);if(ae.highDamage)v+=ae.highDamage;
- if(attrs.includes('水'))v+=(ae.waterEffect||0)+(cond.waterDamage||0);if(attrs.includes('火'))v+=(te.incomingFire||0)+(cond.fireDamage||0);const mastery=act.unlocks?.[0]?.mastery,category=window.RPG_RULES?.masteries?.[mastery]?.category;if(category==='源泉')v+=ae.sourceEffect||0;
+ const T=terrainApi();if(!T||!battlefield)return 0;const at=unitTerrain(a),tt=unitTerrain(t),ae=at.effect,te=tt.effect,cond=terrainCondition(),magic=act.kind==='spell'||['ARC','MND'].includes(act.stat),attrs=Array.isArray(act.attr)?act.attr:[act.attr],mastery=act.unlocks?.[0]?.mastery,category=window.RPG_RULES?.masteries?.[mastery]?.category;let v=0,r=rangeMax(act);
+ v+=magic?(te.incomingMagic||0):(te.incomingPhysical||0);
+ const attackerHigh=T.tileIds(at.cell).includes('TL09'),targetHigh=T.tileIds(tt.cell).includes('TL09');if(r>=2&&attackerHigh&&!targetHigh)v+=ae.highDamage||0;
+ if(attrs.includes('水')||mastery==='海神')v+=ae.waterEffect||0;
+ if(attrs.includes('水'))v+=cond.waterDamage||0;if(attrs.includes('火'))v+=(te.incomingFire||0)+(cond.fireDamage||0);
+ if(mastery==='森羅')v+=ae.shinraEffect||0;
+ if(['源泉','術法'].includes(category))v+=ae.sourceEffect||0;
  return T.clampTerrainMultiplier(v)
 }
-function terrainHealMod(t){const T=terrainApi();if(!T||!battlefield)return 0;return T.clampTerrainMultiplier((unitTerrain(t).effect.healingReceived||0)+(terrainCondition().healing||0))}
+function terrainHealMod(a,t,act){
+ const T=terrainApi();if(!T||!battlefield)return 0,ae=unitTerrain(a).effect,te=unitTerrain(t).effect,mastery=act?.unlocks?.[0]?.mastery,category=window.RPG_RULES?.masteries?.[mastery]?.category;let v=(te.healingReceived||0)+(terrainCondition().healing||0);
+ if((Array.isArray(act?.attr)?act.attr:[act?.attr]).includes('水')||mastery==='海神')v+=ae.waterEffect||0;
+ if(mastery==='森羅')v+=ae.shinraEffect||0;if(['源泉','術法'].includes(category))v+=ae.sourceEffect||0;return T.clampTerrainMultiplier(v)
+}
 function terrainStatusDelta(a,t,key){
- const ae=unitTerrain(a).effect,te=unitTerrain(t).effect,bind=['headBind','armBind','legBind'].includes(key);return (bind?(ae.bindApply||0)-(te.bindResist||0):(ae.statusApply||0)-(te.statusResist||0))-(terrainCondition()[bind?'bindResist':'statusResist']||0)
+ const ae=unitTerrain(a).effect,te=unitTerrain(t).effect,bind=['headBind','armBind','legBind'].includes(key),mastery=arguments[3]?.unlocks?.[0]?.mastery;let add=bind?(ae.bindApply||0)-(te.bindResist||0):(ae.statusApply||0)-(te.statusResist||0);
+ if(mastery==='森羅')add+=ae.shinraStatus||0;return add-(terrainCondition()[bind?'bindResist':'statusResist']||0)
 }
 function terrainActionCost(u,a){
  let cost=Number(a?.cost)||0;if(!a?.costType||!battlefield)return cost;const e=unitTerrain(u).effect,mastery=a.unlocks?.[0]?.mastery,category=window.RPG_RULES?.masteries?.[mastery]?.category;
- if(category==='源泉'&&e.sourceSp)cost+=e.sourceSp;if(mastery==='機巧'&&e.kikouSp)cost+=e.kikouSp;return Math.max(1,cost)
+ if(['源泉','術法'].includes(category)&&e.sourceSp)cost+=e.sourceSp;if(mastery==='機巧'&&e.kikouSp)cost+=e.kikouSp;return Math.max(1,cost)
 }
 function terrainMoveLimit(u){const e=unitTerrain(u).effect;return terrainApi()?.isFlying?.(u)?2:Math.max(1,Number(e.moveMax)||2)}
 function movePreview(u,row,gridCol){
@@ -746,7 +757,7 @@ async function defeated(u,token){
  used.add(c);const reserve=live(enemies).find(x=>x.row==='back'&&col(x)===c);
  if(reserve)await animateSwap(u,reserve,reserve.name+'が前列へ交代。',token);
 }
-async function applyStatuses(a,t,act,token){if(t.hp<=0)return;if(!a.enemy&&EXPCTX?.fieldEffects?.poisonTool&&act.kind==='attack'&&!act.poison&&Math.random()*100<30){t.status.poison=Math.max(t.status.poison||0,3);render();await say(t.name+'に猛毒！',token,'sys')}for(const[k,n]of STATUS){if(!act[k])continue;let st=k==='stun'?a.PHY:a.SKL;if(act.stat==='ARC')st=a.ARC;if(act.stat==='MND')st=a.MND;if(Math.random()*100<clamp(act[k]+.75*(st-t.MND)+terrainStatusDelta(a,t,k),5,95)){t.status[k]=k==='poison'?3:k==='stun'?1:2;render();await say(t.name+'に'+n+'！',token,'sys')}}}
+async function applyStatuses(a,t,act,token){if(t.hp<=0)return;if(!a.enemy&&EXPCTX?.fieldEffects?.poisonTool&&act.kind==='attack'&&!act.poison&&Math.random()*100<30){t.status.poison=Math.max(t.status.poison||0,3);render();await say(t.name+'に猛毒！',token,'sys')}for(const[k,n]of STATUS){if(!act[k])continue;let st=k==='stun'?a.PHY:a.SKL;if(act.stat==='ARC')st=a.ARC;if(act.stat==='MND')st=a.MND;if(Math.random()*100<clamp(act[k]+.75*(st-t.MND)+terrainStatusDelta(a,t,k,act),5,95)){t.status[k]=k==='poison'?3:k==='stun'?1:2;render();await say(t.name+'に'+n+'！',token,'sys')}}}
 function affectedTargets(a,primary,candidates){
  const scope=a.scope||'single';
  if(scope==='all')return candidates;
@@ -766,7 +777,7 @@ async function execute(u,q,token){check(token);if(!u.alive)return;displayActorId
  for(const victim of affectedTargets(a,t,ts)){
   check(token);
   if(!victim.alive)continue;
-  if(a.heal){const n=Math.min(victim.maxHp-victim.hp,Math.max(1,Math.floor((12+u.MND*.8)*(1+terrainHealMod(victim)))));victim.hp+=n;render();await say(victim.name+'のHPが '+n+' 回復。',token,'ok',{targetId:victim.id,heal:true,value:n});continue}
+  if(a.heal){const n=Math.min(victim.maxHp-victim.hp,Math.max(1,Math.floor((12+u.MND*.8)*(1+terrainHealMod(u,victim,a)))));victim.hp+=n;render();await say(victim.name+'のHPが '+n+' 回復。',token,'ok',{targetId:victim.id,heal:true,value:n});continue}
   if(Math.random()*100>hit(u,victim,a)){render();await say(victim.name+'は攻撃をかわした！',token,'sys');continue}
   const d=damage(u,victim,a);
   victim.hp=Math.max(0,victim.hp-d.value);
