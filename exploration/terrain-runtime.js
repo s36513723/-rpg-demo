@@ -99,10 +99,10 @@ BF06:{name:'氷雪稜線',template:'BT07',terrain:['TR12','TR07','TR17'],enemy:[
 };
 const EXCLUDE=[['TR09','TR10'],['TR04','TR11'],['TR15','TR01'],['TR15','TR04'],['TR15','TR11'],['TR15','TR12']];
 const CONDITION={
-TR16:{name:'暗所',rangedHit:-10},
-TR17:{name:'強風',physicalRangedHit:-10,forceWithWind:1,forceAgainstWind:-1},
-TR18:{name:'豪雨',physicalRangedHit:-5,fireDamage:-.10,waterDamage:.10},
-TR19:{name:'瘴気',healing:-.15,statusResist:-10,bindResist:-10}
+TR16:{name:'暗所',rangedHit:-10,desc:'射程3以上の攻撃は命中-10pt。光属性攻撃は低下を受けない。'},
+TR17:{name:'強風',physicalRangedHit:-10,forceWithWind:1,forceAgainstWind:-1,desc:'射程3以上の弓・銃・投擲は命中-10pt。強制移動は風下+1、風上-1（通常0〜2へClamp）。'},
+TR18:{name:'豪雨',physicalRangedHit:-5,fireDamage:-.10,waterDamage:.10,desc:'火属性ダメージ-10%、水属性ダメージ+10%。射程3以上の弓・銃・投擲は命中-5pt。'},
+TR19:{name:'瘴気',healing:-.15,statusResist:-10,bindResist:-10,desc:'HP回復量-15%。状態異常・封じ耐性-10pt。'}
 };
 const TILE_ICON={TL01:'♣',TL02:'♧',TL03:'≈',TL04:'≋',TL05:'●',TL06:'☣',TL07:'◆',TL08:'▥',TL09:'▲',TL10:'!',TL11:'▧',TL12:'⋰',TL13:'⌁',TL14:'❄',TL15:'◇',TL16:'✧',TL17:'✦',TL18:'☾',TL19:'⚙',TL20:'❄',TL21:'♨',TL22:'≋',TL23:'◌',TL24:'◍',TL25:'▰'};
 const TACTICAL_VALUE={TL00:0,TL01:1,TL02:1,TL03:0,TL04:0,TL05:-2,TL06:-3,TL07:1,TL08:2,TL09:2,TL10:-3,TL11:0,TL12:-1,TL13:-3,TL14:-1,TL15:-2,TL16:1,TL17:2,TL18:0,TL19:2,TL20:-2,TL21:-3,TL22:-1,TL23:-1,TL24:1,TL25:2};
@@ -142,15 +142,28 @@ function clampTerrainHit(n){return Math.max(-30,Math.min(30,Number(n)||0))}
 function clampTerrainMultiplier(n){return Math.max(-.25,Math.min(.25,Number(n)||0))}
 function tileSummary(cell,boss=false){
  const ids=tileIds(cell),parts=[];
- for(const id of ids){const t=TILE[id];if(!t||id==='TL00')continue;const e=t;
+ for(const id of ids){const e=TILE[id];if(!e||id==='TL00')continue;
+  if(e.shinraEffect)parts.push('森羅のダメージ・回復 +'+Math.round(e.shinraEffect*100)+'%');
+  if(e.shinraStatus)parts.push('森羅の状態/封じ +'+e.shinraStatus+'pt');
+  if(e.waterEffect)parts.push('水/海神のダメージ・回復 +'+Math.round(e.waterEffect*100)+'%');
   if(e.speed)parts.push('速度 '+Math.round(e.speed*100)+'%');if(e.evasion)parts.push('回避 '+e.evasion+'pt');
-  if(e.incomingPhysical)parts.push('物理被ダメ '+Math.round(e.incomingPhysical*100)+'%');if(e.incomingRangedHit)parts.push('遠距離命中 '+e.incomingRangedHit+'pt');
-  if(e.highAccuracy)parts.push('高所命中 +'+e.highAccuracy+'pt');if(e.highDamage)parts.push('高所威力 +'+Math.round(e.highDamage*100)+'%');
+  if(e.moveMax)parts.push('通常移動 最大'+e.moveMax+'マス');
+  if(e.incomingPhysical)parts.push('物理被ダメ '+Math.round(e.incomingPhysical*100)+'%');
+  if(e.incomingMagic)parts.push('魔法被ダメ +'+Math.round(e.incomingMagic*100)+'%');
+  if(e.incomingFire)parts.push('火被ダメ '+Math.round(e.incomingFire*100)+'%');
+  if(e.incomingRangedHit)parts.push('射程2+被命中 '+e.incomingRangedHit+'pt');if(e.outgoingRangedHit)parts.push('射程2+与命中 '+e.outgoingRangedHit+'pt');
+  if(e.highAccuracy)parts.push('高所：射程2+命中 +'+e.highAccuracy+'pt');if(e.highDamage)parts.push('高所：射程2+威力 +'+Math.round(e.highDamage*100)+'%');
+  if(e.forcedDelta)parts.push('強制移動 '+(e.forcedDelta>0?'+':'')+e.forcedDelta);
+  if(e.sourceSp)parts.push('源泉/術法 SP '+e.sourceSp);if(e.sourceEffect)parts.push('源泉/術法 効果 +'+Math.round(e.sourceEffect*100)+'%');
+  if(e.kikouSp)parts.push('機巧 SP '+e.kikouSp);if(e.deviceRounds)parts.push('召喚/装置 +'+e.deviceRounds+'R');
+  if(e.healingReceived)parts.push('回復被効果 +'+Math.round(e.healingReceived*100)+'%');
+  if(e.statusApply)parts.push('状態付与 +'+e.statusApply+'pt');if(e.bindApply)parts.push('封じ付与 +'+e.bindApply+'pt');
+  if(e.statusResist)parts.push('状態耐性 '+(e.statusResist>0?'+':'')+e.statusResist+'pt');if(e.bindResist)parts.push('封じ耐性 '+(e.bindResist>0?'+':'')+e.bindResist+'pt');
   if(e.endRoundHp)parts.push('R終了 HP-'+Math.round(e.endRoundHp*100)+'%');if(e.endRoundFire)parts.push('R終了 火'+Math.round(e.endRoundFire*100)+'%');
   if(id==='TL10')parts.push('危険縁 '+Math.round((boss?e.bossEdgeDamage:e.edgeDamage)*100)+'%');
  }
  if(cell?.tempTile&&cell?.tempRemaining>0)parts.push('残り'+cell.tempRemaining+'R');
- return parts.slice(0,4).join(' / ')||'特殊効果なし'
+ return parts.slice(0,7).join(' / ')||'特殊効果なし'
 }
 function setTempTile(board,side,index,id,remaining){
  if(!board?.cells?.[side]?.[index]||!TILE[id]?.temp)return false;
@@ -357,6 +370,6 @@ function migrateNode(node,theme,runSeed,floor=1){
  let spec;if(node.primaryTerrain){spec={placeTypeId:node.placeTypeId||placeSpec(placeType).id,primaryTerrain:node.primaryTerrain,secondaryTerrains:node.secondaryTerrains||[],conditionTerrain:node.conditionTerrain||null,terrainTags:node.terrainTags||[node.primaryTerrain,...(node.secondaryTerrains||[]),node.conditionTerrain].filter(Boolean),fieldTags:node.fieldTags||[],battleOverlay:node.battleOverlay??false}}else spec=generatePlace(theme,placeType,seed,node.type);
  return Object.assign(node,{placeType,placeTypeId:spec.placeTypeId,primaryTerrain:spec.primaryTerrain,secondaryTerrains:spec.secondaryTerrains,conditionTerrain:spec.conditionTerrain,terrainTags:spec.terrainTags,fieldTags:spec.fieldTags,battleOverlay:spec.battleOverlay,encounterSeed:seed,terrain:terrainName(spec.primaryTerrain)});
 }
-const api={version:3,TILE,TERRAIN,THEME,PLACE,FIELD_BY_TERRAIN,BOSS,BOARD_TEMPLATE,CONDITION,TILE_ICON,TACTICAL_VALUE,AI_VALUE,GROUND_NEGATIVE,hashSeed,randomFrom,weighted,terrainName,tileName,placeSpec,generatePlace,createBattlefield,migrateNode,migrateBattlefield,cellIndex,cellFor,tileEffect,tileIds,unitTileEffect,conditionEffect,clampTerrainHit,clampTerrainMultiplier,tileSummary,setTempTile,decayTempTiles,tacticalValue,sideValue,aiRole,aiTileValue,bestAiMove,isFlying,isGolem,bossPhaseChange,bossTerrainEvent,tutorialBoard};
+const api={version:4,TILE,TERRAIN,THEME,PLACE,FIELD_BY_TERRAIN,BOSS,BOARD_TEMPLATE,CONDITION,TILE_ICON,TACTICAL_VALUE,AI_VALUE,GROUND_NEGATIVE,hashSeed,randomFrom,weighted,terrainName,tileName,placeSpec,generatePlace,createBattlefield,migrateNode,migrateBattlefield,cellIndex,cellFor,tileEffect,tileIds,unitTileEffect,conditionEffect,clampTerrainHit,clampTerrainMultiplier,tileSummary,setTempTile,decayTempTiles,tacticalValue,sideValue,aiRole,aiTileValue,bestAiMove,isFlying,isGolem,bossPhaseChange,bossTerrainEvent,tutorialBoard};
 if(typeof module!=='undefined')module.exports=api;root.RPG_TERRAIN=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
