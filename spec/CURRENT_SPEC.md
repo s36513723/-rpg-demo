@@ -1,5 +1,7 @@
 # Current RPG Specification Mirror
 
+> GitHub review: [437-skill readable catalog](./review/skills-437-readable.md) | [review index](./review/README.md)
+
 Canonical workbook: RPG制作_仕様正本_戦場地形完全設計_2026-10-01.xlsx. Confirmed/structural rules here override old implementation values.
 
 ## Core
