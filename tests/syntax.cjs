@@ -1,7 +1,7 @@
 'use strict';
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),cp=require('node:child_process');
 const hubFiles=fs.readdirSync('exploration').filter(f=>f.endsWith('.js')).map(f=>'exploration/'+f);
-for(const file of ['battle-v29.js','battle-plan-v36.js','skill-catalog-315.js','skill-catalog-437.js','rpg-rules.js','sanctuary-v92.js','tests/battle-regression.js','tests/hub-regression.js',...hubFiles])cp.execFileSync(process.execPath,['--check',file]);
+for(const file of ['battle-v29.js','battle-plan-v36.js','canonical-db.js','skill-catalog-315.js','skill-catalog-437.js','rpg-rules.js','sanctuary-v92.js','tests/battle-regression.js','tests/hub-regression.js',...hubFiles])cp.execFileSync(process.execPath,['--check',file]);
 for(const file of ['index.html','battle-v44.html','exploration/index.html']){
  const html=fs.readFileSync(file,'utf8');
  for(const [i,m]of [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].entries())new vm.Script(m[1],{filename:file+':script'+i});
@@ -46,6 +46,13 @@ const hubNames=hubFiles.flatMap(file=>[...fs.readFileSync(file,'utf8').matchAll(
 assert.equal(new Set(hubNames).size,hubNames.length,'hub duplicate function definitions');
 const path=require('node:path');
 for(const m of fs.readFileSync('exploration/index.html','utf8').matchAll(/(?:src|href)="([^"]+)"/g)){const target=m[1].split('?')[0];if(target.startsWith('#'))continue;assert(!/^https?:/.test(target),'hub dependency must be local');assert(fs.existsSync(path.resolve('exploration',target)),'missing hub resource '+target);}
+const canonicalDb=fs.readFileSync('canonical-db.js','utf8');
+assert(canonicalDb.includes("equipment:normalizedEquipment")&&canonicalDb.includes("enemies:normalizedEnemies"),'canonical equipment/enemy DB missing');
+assert(battleV44.includes('canonical-db.js'),'battle-v44 must load canonical DB');
+assert(explorationIndex.includes('../canonical-db.js'),'hub must load canonical DB');
+const battlePlan=fs.readFileSync('battle-plan-v36.js','utf8');
+assert(battlePlan.includes('canonicalEnemyId=rec.id'),'battle runtime must use canonical Enemy DB');
+assert(battlePlan.includes('canonicalWeaponByName'),'battle runtime must use canonical Equipment DB');
 const battleSource=fs.readFileSync('index.html','utf8');
 assert(battleSource.includes("dagger:{name:'短剣',normalStat:'SKL'"),'dagger normal attack must scale with SKL');
 assert(battleSource.includes("bow:{name:'長弓',normalStat:'SKL'"),'bow normal attack must scale with SKL');
