@@ -350,7 +350,7 @@ function applyExploreContext(){
   if(armorKey)u.armor=armorKey;
   if(gear){const mainName=equipmentName(gear,0),reserveName=equipmentName(gear,2),main=weaponKeyByName(mainName),reserve=weaponKeyByName(reserveName),cm=canonicalWeaponByName(mainName),cr=canonicalWeaponByName(reserveName);u.weapons=[main,reserve];u.canonicalWeapons=[cm,cr];u.wi=0;u.weapon=cm||W[main]||W.unarmed;u.currentOffhand=equipmentName(gear,1);u.reserveOffhand=equipmentName(gear,3);const ca=window.RPG_CANONICAL_DB?.byEquipmentName?.[equipmentName(gear,4)];if(ca?.kind==='armor'){u.canonicalArmorId=ca.id;u.physDef=ca.base+u.PHY*1.5;u.magDef=ca.magicDefense+u.MND*1.5;}}
   if(Array.isArray(ctx.skillSet?.[i]))u.skills=ctx.skillSet[i].map(canonicalAction).filter(Boolean);
-  if(Array.isArray(a)&&a.length>=4){[u.PHY,u.SKL,u.ARC,u.MND]=a.map(Number);const d=window.RPG_RULES?.derived(a)||derived(...a);u.maxHp=d.hp;u.maxSp=d.sp;u.maxMp=d.mp;u.physDef=u.PHY+ARM[u.armor].p;u.magDef=u.ARC+u.MND+ARM[u.armor].m}
+  if(Array.isArray(a)&&a.length>=4){[u.PHY,u.SKL,u.ARC,u.MND]=a.map(Number);const d=window.RPG_RULES?.derived(a)||derived(...a);u.maxHp=d.hp;u.maxSp=d.sp;u.maxMp=d.mp;const ca=window.RPG_CANONICAL_DB?.byEquipmentId?.[u.canonicalArmorId];u.physDef=ca?ca.base+u.PHY*1.5:u.PHY+ARM[u.armor].p;u.magDef=ca?ca.magicDefense+u.MND*1.5:u.ARC+u.MND+ARM[u.armor].m}
   if(v){u.hp=clamp(Number(v.hp)||0,0,u.maxHp);u.sp=clamp(Number(v.sp)||0,0,u.maxSp);u.mp=clamp(Number(v.mp)||0,0,u.maxMp);u.status={...u.status,...(v.status||{})};u.alive=u.hp>0}
   const cell=ctx.formation?.indexOf(i)??-1;
   if(cell>=0){u.rank=['front','mid','rear'][Math.floor(cell/3)]||'front';u.gridCol=cell%3+1;u.row=u.rank==='front'?'front':'back';u.slot=cell+1}
