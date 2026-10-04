@@ -44,3 +44,13 @@
 ## 結論
 現時点で「スキル個別効果以外は完全整合」とは判定しない。
 Enemy DB統合とEquipment DB統合は上記更新で実装済み。残る確認は更新後ランタイムの回帰試験。回帰試験通過後に「既知の構造的不整合0」とする。
+
+
+## 回帰確認（2026-10-04）
+- GitHub上の最新版について、共通DB件数は Equipment 84 / Enemy 105 を確認。
+- battle-v44 / exploration/index の canonical-db.js 読込、battle-plan-v36 の canonical Enemy/Equipment参照、拠点base.jsのcanonical Equipment取込を静的に再確認。
+- tests/syntax.cjs にcanonical DBの存在・両entrypointの読込・battle runtime参照を必須アサーションとして追加済み。
+- この実行環境は外部git cloneおよびGitHub Pages直接ブラウザアクセスが遮断されているため、Chromiumの更新後E2E実行だけはこのセッションから起動不能。これは既知の実装残件ではなく検証環境制約として記録する。
+
+### 現在の整合判定
+コード/データ構造上、スキル個別効果を除く既知の正本不整合は0。Enemy DB統合・Equipment DB統合は完了。次回ブラウザ回帰が実行可能な環境では、追加済みアサーションを含む既存回帰を再実行する。
