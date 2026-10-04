@@ -14,6 +14,15 @@
 - 再配分の書：章ボス初回・q3-5、能力/Mastery/習得/源泉の初期化とPt返還。
 - 旧探索デモはlegacy扱い。
 
+## 2026-10-04 実装更新
+
+- 正本09/10から `canonical-db.js` を生成。Equipment 84件（武器69＋防具15）、Enemy 105件を収録。
+- 拠点はcanonical Equipment DBを装備定義へ取り込む。
+- 戦闘はcanonical Equipment DBから武器Base/主能力/属性/射程/命中/速度/重量、防具物防/魔防を参照する。
+- 探索戦闘の敵はcanonical Enemy DBからタイプ×段階×派生を選択し、HP/PHY/SKL/ARC/MND/物防/魔防/命中/回避/EXP/enemy_weapon_base/耐性/terrain AIを参照する。
+- `battle-v44.html` と `exploration/index.html` は共通 `canonical-db.js` をロードする。
+- 静的整合テストにcanonical DB読込・参照アサーションを追加。
+
 ## スキル個別効果以外の実装残件
 
 ### A. Enemy DB統合
@@ -34,5 +43,4 @@
 
 ## 結論
 現時点で「スキル個別効果以外は完全整合」とは判定しない。
-実装上の残件は **Enemy DB統合** と **Equipment DB統合** の2系統。
-この2系統を実装・回帰試験した後、再監査して初めて「既知の構造的不整合0」とする。
+Enemy DB統合とEquipment DB統合は上記更新で実装済み。残る確認は更新後ランタイムの回帰試験。回帰試験通過後に「既知の構造的不整合0」とする。
