@@ -359,16 +359,14 @@ function applyExploreContext(){
  const makeEnemy=(tag,row,n,rowCount)=>{
   const magic=/魔術|呪術|神官|精霊|死霊/.test(tag),flying=/飛行|翼|鳥/.test(tag),ranged=flying||/弓|狙撃/.test(tag),beast=/獣|狼|植物/.test(tag);
   const seed=ET.find(e=>e.id===(magic?'mage':ranged?'arch':beast?'g3':'g1'));
-  const src=JSON.parse(JSON.stringify(seed)),i=enemies.length;
+  const src=JSON.parse(JSON.stringify(seed)),i=enemies.length,db=window.RPG_CANONICAL_DB;
+  const canonicalType=/ゴーレム|機械|石像/.test(tag)?'ゴーレム':flying?'飛行':/弓|狙撃/.test(tag)?'弓':magic?'魔術師':/重装|騎士|番兵|守護|盾/.test(tag)?'重装':/軽装|斥候|海賊/.test(tag)?'軽装':'獣';
+  const tier=Math.max(1,Math.min(5,Number(ctx.threat)||1)),variant=['基礎型','派生型','上位型'][n%3];
+  const rec=db?.enemies?.find(e=>e.type===canonicalType&&e.tier===tier&&e.variant===variant)||db?.enemies?.find(e=>e.type===canonicalType&&e.tier===tier);
   src.id='enc'+i;src.name=String(tag)+(ctx.boss?'':' '+(i+1));src.style=String(tag);src.row=row;src.gridCol=rowCount===1?2:rowCount===2?n*2+1:n+1;src.slot=i+1;
-  src.terrainRole=magic?'caster':ranged?'ranged':/重装|守護|盾/.test(tag)?'tank':/呪術|弱体|制御/.test(tag)?'control':'melee';
-  src.terrainPrefer=src.terrainRole==='ranged'?['TL09','TL08','TL02']:src.terrainRole==='caster'?['TL16','TL08']:src.terrainRole==='tank'?['TL07','TL11','TL08']:src.terrainRole==='control'?['TL18','TL08']:['TL07','TL11'];
-  src.terrainAvoid=['TL10','TL13'].concat(src.terrainRole==='ranged'?['TL05']:[]);
-
-  src.hp=(ctx.boss?1280:magic?100:ranged?110:/ゴーレム|重装/.test(tag)?170:135)+Math.max(0,(Number(ctx.threat)||1)-1)*10;src.terrainImmunity=flying?'ignore_ground_negative':/ゴーレム/.test(tag)?'ignore_poison_terrain':null;
-  src.weak={};src.resist={};
-  const art=enemyArchetypeArt(src);if(art){ENEMY_CINEMATIC[src.id]=art;ORDER_PORTRAITS[src.id]=art}PORTRAITS[src.id]=PORTRAITS[seed.id];
-  enemies.push(initUnit(src,true));
+  if(rec){src.canonicalEnemyId=rec.id;src.hp=rec.hp;src.PHY=rec.stats.PHY;src.SKL=rec.stats.SKL;src.ARC=rec.stats.ARC;src.MND=rec.stats.MND;src.physDef=rec.physDef;src.magDef=rec.magDef;src.hit=rec.hit;src.evade=rec.evade;src.exp=rec.exp;src.skillProfile=rec.skillProfile;src.resistanceProfile=rec.resistanceProfile;src.statusResist=JSON.parse(JSON.stringify(rec.statusResist));src.terrainRole=rec.terrainAI.role;src.terrainPrefer=rec.terrainAI.prefer.map(x=>x.slice(0,4));src.terrainAvoid=rec.terrainAI.avoid.map(x=>x.slice(0,4));src.terrainImmunity=rec.terrainAI.immunity;src.weapon={...(src.weapon||{}),name:canonicalType+'_weapon',power:rec.enemyWeaponBase,range:rec.range.includes('遠')?'far':rec.range.includes('中')?'mid':'near'};}
+  else{src.terrainRole=magic?'caster':ranged?'ranged':/重装|守護|盾/.test(tag)?'tank':'melee';src.terrainPrefer=[];src.terrainAvoid=['TL10','TL13'];src.hp=(magic?100:ranged?110:/ゴーレム|重装/.test(tag)?170:135)+Math.max(0,tier-1)*10;}
+  src.weak={};src.resist={};const art=enemyArchetypeArt(src);if(art){ENEMY_CINEMATIC[src.id]=art;ORDER_PORTRAITS[src.id]=art}PORTRAITS[src.id]=PORTRAITS[seed.id];enemies.push(initUnit(src,true));
  };
  enemies=[];front.slice(0,3).forEach((tag,n)=>makeEnemy(tag,'front',n,front.length));back.slice(0,3).forEach((tag,n)=>makeEnemy(tag,'back',n,back.length));
  if(ctx.battleType==='elite'&&enemies[0]){const u=enemies[0];u.hp=u.maxHp=Math.floor(u.maxHp*1.75);u.PHY+=10;u.physDef+=8}
